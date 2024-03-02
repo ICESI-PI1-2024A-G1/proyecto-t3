@@ -1,0 +1,58 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="56D849A2-4D2B-A069-77C9-589FAFE22128" name="DEPARTAMENTO">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:04:50 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="codigo" id="0DC53285-E973-118B-8D16-47A3D1F3BA44">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:05:08 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nombre" id="DC9BC945-55F5-5CEC-B4D6-7C03FB6F590D">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:05:50 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>BBAE8FE6-F616-570E-BD4B-56C95934DB1E</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="7F95E84C-AADA-C169-2C0A-8534CB39CD92" name="DEPARTAMENTO PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:05:25 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="false"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>0DC53285-E973-118B-8D16-47A3D1F3BA44</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

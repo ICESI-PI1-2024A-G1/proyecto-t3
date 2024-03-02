@@ -1,0 +1,48 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="9F483D2D-B295-D4AF-9918-ACBF738E9D6E" name="CIUDAD">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>47D08755-FD87-3B9C-A42E-88DCEC019270</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="504BFCFA-3B1E-A0D6-A89A-1214C327682A">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>5A3A4B71-9048-69C9-70B5-BFD97796C505</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ciudad" id="3C6E2D14-2656-5590-D8C5-D20555A0A574">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>BEDE8FB6-4489-2607-6C54-E94956EA6F3C</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C7CF9F7B-32DE-F91E-FBE7-CBA2E317E388</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="8C739BC3-12EC-914A-FF4A-7678B9DF1F6F" name="CIUDAD_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>16E92A9D-02F9-BFB3-1F27-8A3984446133</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="504BFCFA-3B1E-A0D6-A89A-1214C327682A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

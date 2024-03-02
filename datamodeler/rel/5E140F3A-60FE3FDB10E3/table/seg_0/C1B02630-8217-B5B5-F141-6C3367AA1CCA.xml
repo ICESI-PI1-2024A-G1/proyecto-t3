@@ -1,0 +1,73 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C1B02630-8217-B5B5-F141-6C3367AA1CCA" name="DIRECTOR">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>18E66835-4FAD-0B87-9379-C3C2BD9AC615</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="cedula" id="7F47A13D-4442-931E-39BE-0908DBF7FAFB">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>09CBE3B1-CC1E-D26B-588C-54B11FF370A0</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="B7644657-AB81-1FBC-056B-4877500D349C" referredColumn="C769C4A3-B912-168A-D531-27D9B7076B97"/>
+</associations>
+</Column>
+<Column name="id" id="6E605BCA-AE2C-4EA9-31CF-3729E88FAC35">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>1CFBC8E7-24E6-E5D8-C61E-3943FF1C34A4</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C7F38EA2-C404-A737-427C-F55C02824DFD" name="DIRECTOR_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>9A57CB2C-E275-43DB-8B21-7D3926927595</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7F47A13D-4442-931E-39BE-0908DBF7FAFB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="034E3813-26ED-A1EF-D0D4-38B1EA02C130" name="DIRECTOR_PKv1">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>6BA805DC-3669-9463-7F6F-E5B7AAA330D5</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="6E605BCA-AE2C-4EA9-31CF-3729E88FAC35"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="C7391D75-017F-B863-094B-6FDD5C74EB53" name="DIRECTOR_Persona_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>35086505-56A1-8A8C-E8D5-BA874A807259</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7F47A13D-4442-931E-39BE-0908DBF7FAFB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

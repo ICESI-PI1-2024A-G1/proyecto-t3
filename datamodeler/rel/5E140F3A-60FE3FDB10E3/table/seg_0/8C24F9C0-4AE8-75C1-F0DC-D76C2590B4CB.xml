@@ -1,0 +1,102 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="8C24F9C0-4AE8-75C1-F0DC-D76C2590B4CB" name="CONTRATO">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>E4A5090B-C025-631D-5D39-DF306A472D6E</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="codigo" id="8137E8F0-4B7A-2819-3B61-D30DAC1A60EB">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>C322F59C-0D8A-2519-0DFA-87DB623BC8E2</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="fecha_elaboracion" id="FC1314C1-20B0-D3D6-FBD7-90FC11119D65">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>1ADB8309-60CB-DB46-EA52-9AF1D2CC8A4A</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="TIPO_CONTRATO_id" id="AC7E8D3B-4F3A-2A46-BF21-6BD4898116AD">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>9CCE1944-5EB8-6DE6-08DF-6EF2F3555423</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="0E1AFE24-0CCB-1EDC-41CD-7CEDA8CD2C19" referredColumn="A957B1F6-B1ED-A144-D391-DB52ECE7A3FB"/>
+</associations>
+</Column>
+<Column name="ESTADO_CONTRATO_id" id="58EE4C59-5835-55F7-F8B3-694496D273BB">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>23273259-01AD-21A8-483E-38873970962B</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="A21513C0-7C68-D5B8-0C78-28B097AAC2E1" referredColumn="35643015-C25C-F2AB-9CDD-54F0E9D8F075"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="63B898B4-A1D7-BF68-2542-EFBF87408CE7" name="CONTRATO_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>2D89E986-3BDA-F2E0-09BF-E5B9E8471462</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="8137E8F0-4B7A-2819-3B61-D30DAC1A60EB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="02CA8AAB-AAE0-C7C5-9FB3-C5C4F533B48A" name="CONTRATO_TIPO_CONTRATO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>88F8D2BB-1290-3316-DB93-5EBEF4ABADAD</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="AC7E8D3B-4F3A-2A46-BF21-6BD4898116AD"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="FB9FD97D-B5E0-0FA4-41C3-1D924A22B125" name="CONTRATO_ESTADO_CONTRATO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>3D47EEF6-85CF-3A29-DCFB-30EC40876225</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="58EE4C59-5835-55F7-F8B3-694496D273BB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -1,0 +1,100 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="2827F58B-EE9F-1CBA-40FC-46B212DED9C2" name="MATERIA">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:02:25 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="codigo" id="06F2FC08-18D7-B853-9D43-4049FC0B7C5E">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:02:31 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="nombre" id="10D23AFC-6CAB-8041-834A-71F466D9F5BB">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:02:36 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>BBAE8FE6-F616-570E-BD4B-56C95934DB1E</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="creditos" id="46FC88BA-9D8D-6960-005E-922E59E6D108">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:03:38 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="codigo1" id="78B6CC59-D7F2-51D5-8DDA-48E0ABBAD6C6">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 23:01:57 UTC</createdTime>
+<generatorID>CABD5523-7FF4-6E50-34CC-960058F0406F</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>0DC53285-E973-118B-8D16-47A3D1F3BA44</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="tipo" id="DCB4E56E-DD60-E2BC-49FD-236C1C0C2BFC">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 23:02:52 UTC</createdTime>
+<generatorID>774FA316-8B25-BFF3-0045-FB5DD53BFAB5</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>854FBA63-5D71-B681-40D5-ECB4FC309A01</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="AAEFE1C6-33C3-8D11-E553-452742BE70E3" name="Materia PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:03:30 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="false"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>06F2FC08-18D7-B853-9D43-4049FC0B7C5E</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

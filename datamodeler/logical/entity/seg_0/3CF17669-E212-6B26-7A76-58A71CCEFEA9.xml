@@ -1,0 +1,85 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="3CF17669-E212-6B26-7A76-58A71CCEFEA9" name="SOLICITUD_CONTABLE">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 03:14:33 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<hierarchicalParent>B813A0E9-B92C-8320-1806-4732364F5CCA</hierarchicalParent>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="id" id="19803BDA-5B83-8770-7AC0-90941822BC19">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 03:14:44 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="presupuesto" id="351E225E-D0F0-9614-BB10-224EE79E924B">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 03:15:02 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT020</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="cuenta_cobro" id="CCAC6508-AB2A-9383-88E5-9F8780E6580D">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 04:09:00 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id1" id="44257404-BB2D-272C-62F2-AB5248267050">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 03:54:47 UTC</createdTime>
+<generatorID>A98966F4-BD8B-E1B4-7D3D-46C46F873FD6</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>F3BF5936-1A0B-CCC2-88A2-46A06295864C</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="C245F635-89B3-373C-982B-A6AD533FD6DB" name="SOLICITUD_CONTABLE PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 03:14:58 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>19803BDA-5B83-8770-7AC0-90941822BC19</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

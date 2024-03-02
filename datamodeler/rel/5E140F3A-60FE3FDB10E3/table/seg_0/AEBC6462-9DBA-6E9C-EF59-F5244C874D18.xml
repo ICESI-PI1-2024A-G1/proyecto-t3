@@ -1,0 +1,113 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="AEBC6462-9DBA-6E9C-EF59-F5244C874D18" name="CURSO">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>CB7285B9-88AB-6F07-431A-028128213BFF</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="nrc" id="073D1226-C0CC-0104-0C60-59E3B3929FD6">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>728C0686-BA07-EC40-4995-D5D3CA51EDB7</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="grupo" id="F59A19C7-3077-303D-6C1A-9A8360BE8ABB">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>90817913-78B9-CE41-B662-6AC5A658ABDF</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="cupo" id="AEF16D33-C0D9-B4A5-4100-BC2A5D503A65">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>B22ADCDA-27BE-11D0-35B2-ED23BDFAEF39</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="MATERIA_codigo" id="F68489F4-0868-AF6B-10F0-C219F0BDD4CF">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>DC7C09B3-1946-77D8-78A4-2036A081E522</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="06A37AD2-CD0F-92CF-95C2-5A161A0B20A6" referredColumn="4CE53124-0D50-3D55-5A5C-10A151527632"/>
+</associations>
+</Column>
+<Column name="USUARIO_identificacion" id="9ACEA42B-804A-1710-A606-A08FA43F6D6B">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>43624358-EBB0-9576-C63A-4F3CFD67FE2B</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="DBAF9E72-139D-F33B-ABD5-930FE6FB9A42" referredColumn="FFCE3C5F-B3F8-4B73-FB2C-6E167D7F37A1"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="A2B51708-818A-0642-B4EB-8803F5A6B0CD" name="CURSO_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>B9820A65-C4E5-9B4D-C339-B63D3AC5AA66</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="073D1226-C0CC-0104-0C60-59E3B3929FD6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="545E9292-6638-BE05-A7B2-D97F1F85E709" name="CURSO_MATERIA_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>2566140D-EACD-BFBC-5937-8749561FBF8A</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F68489F4-0868-AF6B-10F0-C219F0BDD4CF"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="442E84BB-95FA-412E-C36E-2BB8DD763B6B" name="CURSO_USUARIO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>FB572837-4EB8-282F-161D-2141B2A54DB4</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9ACEA42B-804A-1710-A606-A08FA43F6D6B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -1,0 +1,169 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="D6E4658E-850A-E84B-85B3-8B9B8DC6446E" name="PROGRAMA">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>1295CFB6-366E-EA95-37A4-11952DF652A0</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="codigo" id="B84BF8F9-1918-4492-2EB4-BAE3E5D52902">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>B54108FD-21C2-50B0-1245-933C4A33B1A3</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<structuredType>47E390DE-0671-C4B1-8428-0F45CBEE18F8</structuredType>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>10 CHAR</dataTypeSize>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>10 CHAR,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="nombre" id="4D6E9117-8278-9AA7-5A05-CE4854D43158">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>F4701CE9-149E-E77B-A1B2-C59694F4F2B0</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>200 CHAR</dataTypeSize>
+<domain>BBAE8FE6-F616-570E-BD4B-56C95934DB1E</domain>
+<ownDataTypeParameters>200 CHAR,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FACULTAD_id" id="32BC18B3-2ACB-C852-DDB4-83E9D8625852">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>7D7B3ED6-459A-41C1-66C7-383602DC43CC</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="070C419D-125C-4739-FD2D-4EFF6406B08A" referredColumn="7D821192-41CA-8556-A16B-B919625AABFF"/>
+</associations>
+</Column>
+<Column name="TIPO_DE_PROGRAMA_tipo" id="B10ED0EF-93A9-35DC-CE86-3468F6F2062F">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>3B82B342-2754-57B2-05C4-EB284A28AB23</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="EBBED485-1138-AA05-5BDF-2D6BA22F2114" referredColumn="F5A2EEBF-978D-8274-9220-56AC23D46E81"/>
+</associations>
+</Column>
+<Column name="DIRECTOR_id" id="4971179F-EC04-0FE6-47BD-19116EC6F151">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>3F73AC6B-3300-A1AC-D2D7-59A5E544159A</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E320AB45-FDD7-C7A3-76E4-C848FB2A8B0B" referredColumn="6E605BCA-AE2C-4EA9-31CF-3729E88FAC35"/>
+</associations>
+</Column>
+<Column name="ESTADO_SOLICITUD_estado" id="BC1CA632-58CA-DF1C-4BB7-E6EB7747B401">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>62307A26-3A34-4E65-71BC-894DF3BE04B9</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="F31BF69E-063E-E2F9-0366-29F6E8099160" referredColumn="7DE3FDED-9BEB-56BB-C75D-5109725CFD9E"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="E5F20DE1-BF36-A443-220C-1F959C528FBB" name="PROGRAMA_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>AA9D9F5C-B869-E7B8-93E8-4C0EFD54D448</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B84BF8F9-1918-4492-2EB4-BAE3E5D52902"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="7DDA53B2-9A5D-259E-A043-3F08B97F3A2F" name="PROGRAMA__IDX">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<relationGeneratorID>9FD84896-F735-B9E2-7016-80C43A2CEC40</relationGeneratorID>
+<indexColumnUsage>
+<colUsage columnID="4971179F-EC04-0FE6-47BD-19116EC6F151"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="F6EE33A8-7F81-00B7-D381-A9E5628DC1AC" name="PROGRAMA_FACULTAD_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>2CAB055D-5D35-5A2A-7EEE-E8D5EC580CF3</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="32BC18B3-2ACB-C852-DDB4-83E9D8625852"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="CFD98392-5625-4F18-C027-0A4817DC3C2F" name="PROGRAMA_DIRECTOR_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>9FD84896-F735-B9E2-7016-80C43A2CEC40</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4971179F-EC04-0FE6-47BD-19116EC6F151"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="DD78D8DB-8FC7-130B-9446-04A98644BA2C" name="PROGRAMA_ESTADO_SOLICITUD_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>4939C56D-0E6B-966F-3E1C-1382AFACA6D2</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="BC1CA632-58CA-DF1C-4BB7-E6EB7747B401"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="DFFB9F2D-21EB-2358-F4E9-67AEC49BE667" name="PROGRAMA_TIPO_DE_PROGRAMA_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>EECF7417-1DFE-E05E-2D2B-1B8FAEC77DC0</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B10ED0EF-93A9-35DC-CE86-3468F6F2062F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

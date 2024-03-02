@@ -1,0 +1,75 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="FDFFB869-3F38-EEAA-6B4F-10BC100AEA01" name="DOCENTE">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:43:20 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<hierarchicalParent>BF25E318-4D71-C0F2-826D-68FD326C2726</hierarchicalParent>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="numero" id="4FF4E9C8-FDF4-EDC7-4FA4-5DFA440BC20D">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 04:42:20 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id" id="AEEF918A-E312-FC85-B997-7B28F304557F">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 23:07:26 UTC</createdTime>
+<generatorID>B0B64DFF-D01A-652D-CA51-533E4EB89F73</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>5A3A4B71-9048-69C9-70B5-BFD97796C505</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="codigo" id="B67CA67D-9157-3B64-DB29-EBED24BECEA3">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 23:08:17 UTC</createdTime>
+<generatorID>78FD5AB7-95C4-E773-17BB-E54F377CEFAC</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<referedAttribute>C322F59C-0D8A-2519-0DFA-87DB623BC8E2</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="315B1157-4A70-EC96-76E2-37F06B5967BD" name="DOCENTE PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 22:45:13 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>4FF4E9C8-FDF4-EDC7-4FA4-5DFA440BC20D</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

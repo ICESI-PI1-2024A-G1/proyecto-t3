@@ -1,0 +1,88 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="65C43951-7F17-A80D-FF32-E2E09BB5DAE0" name="PERMISO">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 04:05:48 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="id" id="FCD5F86A-C40B-91B0-3BA6-4244BBD598FE">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 04:05:54 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="proceso" id="4CDC304A-7A6B-9A3F-8953-5E2ABF4A0E5C">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 04:06:06 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C7CF9F7B-32DE-F91E-FBE7-CBA2E317E388</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="codigo" id="3BD01D88-431B-8059-18E3-F605F7DB2BEF">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 04:18:10 UTC</createdTime>
+<generatorID>F39B3E43-9F70-93E2-E7AB-964A66ED355F</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>1FFD42CA-ED8B-2D63-C6A7-2D8974540F02</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id1" id="5772CE01-14EC-D4DD-6E9C-49699DD0FBC4">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 04:24:49 UTC</createdTime>
+<generatorID>749C3F7C-B29A-EEDF-65C5-76A114B4C6C7</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>E8290441-7536-0192-5B97-BC4BB38CBFEC</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="8FEC3DC1-5E18-F5C4-8103-4BDC4A837407" name="PERMISO PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 04:06:03 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="false"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>FCD5F86A-C40B-91B0-3BA6-4244BBD598FE</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

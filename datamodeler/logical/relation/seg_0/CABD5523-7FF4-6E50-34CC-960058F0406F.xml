@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="MATERIA_EN_DEPARTAMENTO" directorySegmentName="seg_0" id="CABD5523-7FF4-6E50-34CC-960058F0406F">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 23:01:57 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<sourcePk>7F95E84C-AADA-C169-2C0A-8534CB39CD92</sourcePk>
+<identifying>false</identifying>
+<optionalSource>false</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>56D849A2-4D2B-A069-77C9-589FAFE22128</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>2827F58B-EE9F-1CBA-40FC-46B212DED9C2</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

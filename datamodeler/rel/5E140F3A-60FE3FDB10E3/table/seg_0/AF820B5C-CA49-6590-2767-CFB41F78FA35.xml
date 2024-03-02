@@ -1,0 +1,120 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="AF820B5C-CA49-6590-2767-CFB41F78FA35" name="MATERIA_PROGRAMA">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>2FEA8BE4-1B35-437E-2DD6-3159D04D2F8F</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="92B77F6E-D5ED-23FE-1C6D-977DDCA74C40">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>F394058F-A0AA-7BE2-88F5-50ED6DB5EFB3</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="PERIODO_ACADEMICO_semestre" id="2B55CB3C-BB59-F1EE-541A-10D5CAAB09D7">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>2F69D6C9-8771-4AD0-013B-8E95045D3928</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="C9D28A00-8175-3353-1B26-BECB67015F83" referredColumn="E41CE57B-94D4-9BE3-1594-5181E87CFF98"/>
+</associations>
+</Column>
+<Column name="PROGRAMA_codigo" id="553670E7-C965-61D0-D31D-0C356DFE55B8">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>291376D6-280A-A0AC-603B-8B09DF795306</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<structuredType>47E390DE-0671-C4B1-8428-0F45CBEE18F8</structuredType>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>10 CHAR</dataTypeSize>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="FF5E5A37-A9B5-5172-8CF1-6423A8C2D806" referredColumn="B84BF8F9-1918-4492-2EB4-BAE3E5D52902"/>
+</associations>
+</Column>
+<Column name="MATERIA_codigo" id="8B15E686-DEE5-57CC-89B9-136427113A45">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>4E132A29-56D6-C3EB-C402-1633783C2B29</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="9628C1B5-0DD3-8CDC-A235-AFAAFF50C8D5" referredColumn="4CE53124-0D50-3D55-5A5C-10A151527632"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="3C841CAF-9856-94A8-FA24-2C31A0EDF3EA" name="MATERIA_PROGRAMA_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>22B62092-ADD4-1BE7-01CE-C3FF3CA1B8A3</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="92B77F6E-D5ED-23FE-1C6D-977DDCA74C40"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="69870D90-281F-E08D-2E08-C178A8228DB0" name="MATERIA_PROGRAMA_PROGRAMA_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>02AFE7D2-A033-3EE4-0E1C-E87F9B210A26</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="553670E7-C965-61D0-D31D-0C356DFE55B8"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="11A4AC6C-69B8-7BB4-A12A-D47794B00926" name="MATERIA_PROGRAMA_MATERIA_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>1888DFF3-2999-FC54-D0AF-4BAF9627A57F</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="8B15E686-DEE5-57CC-89B9-136427113A45"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="61A0C68F-6180-7D12-C2C8-7DB5F13D0458" name="MATERIA_PROGRAMA_PERIODO_ACADEMICO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>CDD3FBDB-FC0C-AEE2-2B38-802A937529E9</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="2B55CB3C-BB59-F1EE-541A-10D5CAAB09D7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

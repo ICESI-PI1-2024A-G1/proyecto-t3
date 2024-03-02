@@ -1,0 +1,123 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="FE31BA50-EDA5-399A-696A-7E505E28F7BD" name="DOCENTE">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>FDFFB869-3F38-EEAA-6B4F-10BC100AEA01</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="cedula" id="B6B53F8B-BCF1-D1FA-D50A-391793877A70">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>09CBE3B1-CC1E-D26B-588C-54B11FF370A0</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="2A2E88E0-91B3-3671-35BC-B997BD9E2C81" referredColumn="C769C4A3-B912-168A-D531-27D9B7076B97"/>
+</associations>
+</Column>
+<Column name="numero" id="FB8506CD-8C74-6679-1689-F7167037E45F">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>4FF4E9C8-FDF4-EDC7-4FA4-5DFA440BC20D</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="id" id="7F883C24-3E36-9BA2-2033-A445560BD60C">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>AEEF918A-E312-FC85-B997-7B28F304557F</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CONTRATO_codigo" id="F498393E-3C05-19F3-BFBC-D127A08E134C">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>B67CA67D-9157-3B64-DB29-EBED24BECEA3</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="6D35C0BB-7182-5D1C-B744-AC3ABABD4016" referredColumn="8137E8F0-4B7A-2819-3B61-D30DAC1A60EB"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="A86A39E8-78F4-44DB-B25D-DFED31A8B91B" name="DOCENTE_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>9A57CB2C-E275-43DB-8B21-7D3926927595</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B6B53F8B-BCF1-D1FA-D50A-391793877A70"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="0BB33C44-A170-5927-F568-8E10B47AADA6" name="DOCENTE_PKv1">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>315B1157-4A70-EC96-76E2-37F06B5967BD</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="FB8506CD-8C74-6679-1689-F7167037E45F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="28956586-28F8-2538-4941-385398AB44E5" name="DOCENTE__IDX">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<relationGeneratorID>78FD5AB7-95C4-E773-17BB-E54F377CEFAC</relationGeneratorID>
+<indexColumnUsage>
+<colUsage columnID="F498393E-3C05-19F3-BFBC-D127A08E134C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="4FF20316-F0D2-07DD-AF78-8BFF224F2FBC" name="DOCENTE_Persona_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>17978B37-1C9B-0864-ED92-A3D0F56D3429</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B6B53F8B-BCF1-D1FA-D50A-391793877A70"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="6CEBD9D4-49C2-7C80-C52A-7598D60F94DE" name="DOCENTE_CONTRATO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>78FD5AB7-95C4-E773-17BB-E54F377CEFAC</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F498393E-3C05-19F3-BFBC-D127A08E134C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

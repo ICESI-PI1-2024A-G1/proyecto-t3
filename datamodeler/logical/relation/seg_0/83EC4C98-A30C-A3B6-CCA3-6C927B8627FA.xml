@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="CURSO_TIENE_CLASE" directorySegmentName="seg_0" id="83EC4C98-A30C-A3B6-CCA3-6C927B8627FA">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-01 23:05:05 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<sourcePk>B9820A65-C4E5-9B4D-C339-B63D3AC5AA66</sourcePk>
+<identifying>false</identifying>
+<optionalSource>false</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>CB7285B9-88AB-6F07-431A-028128213BFF</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>8C3F235A-A9F7-F210-DC06-EC4A628EE126</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

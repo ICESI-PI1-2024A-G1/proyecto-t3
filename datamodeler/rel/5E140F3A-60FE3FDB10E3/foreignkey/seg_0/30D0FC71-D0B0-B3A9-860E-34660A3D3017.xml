@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="30D0FC71-D0B0-B3A9-860E-34660A3D3017" containerWithKeyObject="A55581FF-A8F8-F508-9833-2C0C2783AC2D" localFKIndex="4DCCF138-3780-920F-59F9-4ADDA7E4E7B2" name="PERMISO_MODULO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>F39B3E43-9F70-93E2-E7AB-964A66ED355F</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<referredTableLongName>MODULO</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>13D3DAB4-4B24-540F-9ADD-4810E9AE0C8D</referredTableID>
+<keyObject>F3FDFC87-35CA-F0A6-9385-1C4FE60E67BF</keyObject>
+<referredKeyID>F3FDFC87-35CA-F0A6-9385-1C4FE60E67BF</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>codigo</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

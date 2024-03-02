@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="B7644657-AB81-1FBC-056B-4877500D349C" containerWithKeyObject="C1B02630-8217-B5B5-F141-6C3367AA1CCA" localFKIndex="C7391D75-017F-B863-094B-6FDD5C74EB53" name="DIRECTOR_Persona_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>35086505-56A1-8A8C-E8D5-BA874A807259</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<referredTableLongName>PERSONA</referredTableLongName>
+<arc>CE8C9479-A8D4-108D-D456-BF3CA09AABEB</arc>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>F0B48946-869B-DCA8-D9F2-24C9DE9AE673</referredTableID>
+<keyObject>312454C2-BDD9-CEC1-F054-805FE0BF82D0</keyObject>
+<referredKeyID>312454C2-BDD9-CEC1-F054-805FE0BF82D0</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>cedula</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

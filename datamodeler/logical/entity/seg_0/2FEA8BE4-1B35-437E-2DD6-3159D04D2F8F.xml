@@ -1,0 +1,92 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="2FEA8BE4-1B35-437E-2DD6-3159D04D2F8F" name="MATERIA_PROGRAMA">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 19:26:19 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="id" id="F394058F-A0AA-7BE2-88F5-50ED6DB5EFB3">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 19:26:58 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="semestre" id="2F69D6C9-8771-4AD0-013B-8E95045D3928">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 19:27:57 UTC</createdTime>
+<generatorID>CDD3FBDB-FC0C-AEE2-2B38-802A937529E9</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>8519DA85-6FC7-42E1-143F-4E94B4CFF7F2</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="codigo" id="291376D6-280A-A0AC-603B-8B09DF795306">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 19:29:03 UTC</createdTime>
+<generatorID>02AFE7D2-A033-3EE4-0E1C-E87F9B210A26</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>B54108FD-21C2-50B0-1245-933C4A33B1A3</referedAttribute>
+<use>0</use>
+<structuredType>47E390DE-0671-C4B1-8428-0F45CBEE18F8</structuredType>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>10 CHAR</dataTypeSize>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="codigo1" id="4E132A29-56D6-C3EB-C402-1633783C2B29">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 19:29:43 UTC</createdTime>
+<generatorID>1888DFF3-2999-FC54-D0AF-4BAF9627A57F</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>06F2FC08-18D7-B853-9D43-4049FC0B7C5E</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="22B62092-ADD4-1BE7-01CE-C3FF3CA1B8A3" name="MATERIA_PROGRAMA PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 19:27:35 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>F394058F-A0AA-7BE2-88F5-50ED6DB5EFB3</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

@@ -1,0 +1,102 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="A55581FF-A8F8-F508-9833-2C0C2783AC2D" name="PERMISO">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>65C43951-7F17-A80D-FF32-E2E09BB5DAE0</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="A72AE44D-00C3-D94A-D71B-D4FB748F1515">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>FCD5F86A-C40B-91B0-3BA6-4244BBD598FE</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="proceso" id="E88F3D5B-21AF-7E0C-E92A-BCB6C640A217">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>4CDC304A-7A6B-9A3F-8953-5E2ABF4A0E5C</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C7CF9F7B-32DE-F91E-FBE7-CBA2E317E388</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="MODULO_codigo" id="5455D83A-2012-B3F7-11D0-E17ACB1AB3D3">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>3BD01D88-431B-8059-18E3-F605F7DB2BEF</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="30D0FC71-D0B0-B3A9-860E-34660A3D3017" referredColumn="02FD03C5-4DC1-320A-257D-E640F7923181"/>
+</associations>
+</Column>
+<Column name="ASISTENTE_id" id="B5112255-F53B-919B-519A-8152AF9E6E23">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>5772CE01-14EC-D4DD-6E9C-49699DD0FBC4</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="5491A078-3927-C872-4863-97E7C93E949B" referredColumn="91AE2B50-37F4-8549-D06B-AC2E906B242F"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="58948F1A-AA63-509E-76B6-27E7F4906426" name="PERMISO_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>8FEC3DC1-5E18-F5C4-8103-4BDC4A837407</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A72AE44D-00C3-D94A-D71B-D4FB748F1515"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="4DCCF138-3780-920F-59F9-4ADDA7E4E7B2" name="PERMISO_MODULO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>F39B3E43-9F70-93E2-E7AB-964A66ED355F</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="5455D83A-2012-B3F7-11D0-E17ACB1AB3D3"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="441280A0-3E3F-F2EE-4639-841743B25619" name="PERMISO_ASISTENTE_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>749C3F7C-B29A-EEDF-65C5-76A114B4C6C7</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B5112255-F53B-919B-519A-8152AF9E6E23"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

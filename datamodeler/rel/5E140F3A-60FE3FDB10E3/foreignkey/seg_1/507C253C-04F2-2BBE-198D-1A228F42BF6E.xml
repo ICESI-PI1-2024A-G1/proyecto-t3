@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_1" id="507C253C-04F2-2BBE-198D-1A228F42BF6E" containerWithKeyObject="D09BF321-7BCF-7181-EE20-90CFCCCF89EB" localFKIndex="94AC11D0-2953-A906-0FCE-4AE5CAFAF7D7" name="SOLICITUD_ESTADO_SOLICITUD_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>ABD0F5A8-423B-8B64-A39A-033BE5504584</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<referredTableLongName>ESTADO_SOLICITUD</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>2A9406DE-DE17-ECDC-0154-7CEF89C526B3</referredTableID>
+<keyObject>77239A10-915E-DB8B-9266-3FD7E6ED84A0</keyObject>
+<referredKeyID>77239A10-915E-DB8B-9266-3FD7E6ED84A0</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>estado</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -1,0 +1,154 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="7DB36A41-D42A-63CD-6CD6-ECBB7C13C958" name="CLASE">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>8C3F235A-A9F7-F210-DC06-EC4A628EE126</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="A73ED138-CE0B-95D3-39F5-723ECDC11344">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>7A5B9899-6B1B-7870-C3A7-4BDBD6B00458</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="fecha_inicio" id="A42CC8B4-97BC-CCBB-C921-E0EBE4A821AB">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>6C16D92B-1560-72B5-2EDB-0F08D6CE9045</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="fecha_fin" id="DE7A707E-72FA-207D-0E0A-96C7FC1F2EF4">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>370196B3-9DEC-020F-BB03-864C338C6634</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="espacio_asignado" id="09FD4F2A-8BFB-59E6-678B-E6E9627A0716">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>C8A9BE52-608C-88AB-5767-C30F81059DDB</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>BBAE8FE6-F616-570E-BD4B-56C95934DB1E</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CURSO_nrc" id="37EFD63A-2437-B308-77C4-0FD7331B0624">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>6853789A-46D1-A541-BD06-77F373C1A58A</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="40CF92D8-58DA-2A6F-9380-FBB804EF3173" referredColumn="073D1226-C0CC-0104-0C60-59E3B3929FD6"/>
+</associations>
+</Column>
+<Column name="MODALIDAD_id" id="1C4FE786-C51E-CD10-0586-BBDA44F22FA7">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>B7114E98-D86B-E24D-20E0-26B9D9BD5506</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="60549D9E-8566-88FF-242C-87FD8673A5E0" referredColumn="242C4A24-1C9E-D57B-EF8A-81B4EB455D79"/>
+</associations>
+</Column>
+<Column name="ESPACIO_id" id="637F0C27-DF96-8CA1-DA18-DA8AC3CE5BD7">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>ADF40A8C-67C5-5208-DD14-525962A30C1A</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="78A6F0B2-2E91-E8F1-6A51-F190F0C5FABB" referredColumn="907B50B0-FAD5-FD6E-6B96-FB96667600B3"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="BC6CB565-338F-4E69-FC5E-09B554E96AD8" name="CLASE_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>141F5CE1-DC76-95FE-BB6D-FBADAC702474</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A73ED138-CE0B-95D3-39F5-723ECDC11344"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="0754858F-1225-7EB3-30B9-30D34201FCB2" name="CLASE_CURSO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>83EC4C98-A30C-A3B6-CCA3-6C927B8627FA</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="37EFD63A-2437-B308-77C4-0FD7331B0624"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="A23ED069-AC66-325D-BF4F-4FB143147B48" name="CLASE_MODALIDAD_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>3F504A59-487C-410A-69AA-FA8B9BF7A9FA</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1C4FE786-C51E-CD10-0586-BBDA44F22FA7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="A6903ADE-76E8-0316-E553-7147DC9DD635" name="CLASE_ESPACIO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>9CC18F5C-241A-2E5D-9B39-5A983F56F348</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="637F0C27-DF96-8CA1-DA18-DA8AC3CE5BD7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

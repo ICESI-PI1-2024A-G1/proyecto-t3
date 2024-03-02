@@ -1,0 +1,113 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="D09BF321-7BCF-7181-EE20-90CFCCCF89EB" name="SOLICITUD">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>B813A0E9-B92C-8320-1806-4732364F5CCA</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="ED4DC21D-F742-5BD0-E51C-4BF9CA4FA4DD">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>0E57E46B-7EC1-7554-CF0A-517D69A2DBE9</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="descripcion" id="DF28B02E-7C33-4DB3-CD61-5D35D4CA91AB">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>B506D53A-31AE-B7CC-4C57-36CCAE9707AE</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>2524ABC2-400E-6306-2080-D8627C3A8489</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="fecha_solicitud" id="37DBB1FF-4ED8-B73F-DC43-8C7E0ABC3561">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>7D1F01F8-2770-1F31-0439-AACF09339FD7</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="USUARIO_identificacion" id="CF3E6362-DE29-B436-F298-2662B4721F43">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>3A6C8853-994E-AB46-9784-CF19993FC62D</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E31249F0-CE0B-34B3-B1EC-6CFCB96D3563" referredColumn="FFCE3C5F-B3F8-4B73-FB2C-6E167D7F37A1"/>
+</associations>
+</Column>
+<Column name="ESTADO_SOLICITUD_estado" id="AD16E1CF-A374-6A84-B611-E36818739E88">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>793709A8-07E1-6D36-F1A0-AD3A0EFD9755</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="507C253C-04F2-2BBE-198D-1A228F42BF6E" referredColumn="7DE3FDED-9BEB-56BB-C75D-5109725CFD9E"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="5B80313D-FB0D-B59A-0E28-F3F51EBC79A0" name="SOLICITUD_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>0813A793-183F-A4C9-7516-6FA76B28F086</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="ED4DC21D-F742-5BD0-E51C-4BF9CA4FA4DD"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="94AC11D0-2953-A906-0FCE-4AE5CAFAF7D7" name="SOLICITUD_ESTADO_SOLICITUD_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>ABD0F5A8-423B-8B64-A39A-033BE5504584</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="AD16E1CF-A374-6A84-B611-E36818739E88"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="75773831-6CE3-4D9F-DE6F-ED705FE1E9CB" name="SOLICITUD_USUARIO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>6B56DF20-1E9C-4DCB-B9E9-F13AF22478F9</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="CF3E6362-DE29-B436-F298-2662B4721F43"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -1,0 +1,75 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C44D0801-DD7A-19DD-A76B-618F5B68C7B3" name="Relation_18">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="DOCENTE_cedula" id="E28F3709-BFF2-A4CE-C441-F8910961D90A">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="4FCE2FF4-B97C-9E68-5ED1-0C6FC949D9A6" referredColumn="B6B53F8B-BCF1-D1FA-D50A-391793877A70"/>
+</associations>
+</Column>
+<Column name="SOLICITUD_CONTABLE_id" id="7F515567-5181-8982-D812-3A6DDAB1B98A">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="1E33F8FE-E5A8-8E5E-55EF-00BA51C869CC" referredColumn="703DDE6C-5630-F7C6-E118-B28595D9E891"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="AFB3403D-A0A9-9D7C-C18C-9AA7B0A0BDDD" name="Relation_18_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E28F3709-BFF2-A4CE-C441-F8910961D90A"/>
+<colUsage columnID="7F515567-5181-8982-D812-3A6DDAB1B98A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="97A00664-983D-B731-ACCF-F82E72CECF4B" name="Relation_18_DOCENTE_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>63927BB2-9C56-FCFE-206C-9E75B9270D88</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E28F3709-BFF2-A4CE-C441-F8910961D90A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="1D77CB26-B0E5-A691-D488-D009C4ECFF13" name="Relation_18_SOLICITUD_CONTABLE_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-02 22:22:22 UTC</createdTime>
+<generatorID>63927BB2-9C56-FCFE-206C-9E75B9270D88</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7F515567-5181-8982-D812-3A6DDAB1B98A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>
