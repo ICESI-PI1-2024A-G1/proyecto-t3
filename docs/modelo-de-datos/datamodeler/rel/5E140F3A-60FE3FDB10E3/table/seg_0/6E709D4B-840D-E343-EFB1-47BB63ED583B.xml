@@ -1,0 +1,45 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="6E709D4B-840D-E343-EFB1-47BB63ED583B" name="TIPO_SOLICITUD">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:32:14 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<ordsAlias>table_34</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="CA4E6CDF-CD31-3A0F-173D-A254C5F27AFD">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:33:45 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="solicitud" id="A62DC247-CF27-935C-19BC-B3245F3B290F">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:33:45 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>CF4FFF98-A578-3B13-88D2-8787BB20679F</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="E31A9F60-7692-F80B-E9A7-7DCABA4D0D0F" name="TIPO_SOLICITUD_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:33:45 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="CA4E6CDF-CD31-3A0F-173D-A254C5F27AFD"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

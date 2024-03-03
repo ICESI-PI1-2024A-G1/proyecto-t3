@@ -1,5 +1,5 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="3CF17669-E212-6B26-7A76-58A71CCEFEA9" name="SOLICITUD_CONTABLE">
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="3CF17669-E212-6B26-7A76-58A71CCEFEA9" name="CONTABLE">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 03:14:33 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>

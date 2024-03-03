@@ -1,9 +1,10 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="B6B6AF4A-AD1B-7163-72EE-DC7A5148D20C" name="SOLICITUD_CONTABLE">
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="B6B6AF4A-AD1B-7163-72EE-DC7A5148D20C" name="CONTABLE">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>3CF17669-E212-6B26-7A76-58A71CCEFEA9</generatorID>
 <ownerDesignName>datamodeler</ownerDesignName>
+<ordsAlias>solicitud_contable</ordsAlias>
 <allowColumnReorder>false</allowColumnReorder>
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
@@ -18,6 +19,7 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
+<isDiscriminatorColumn>true</isDiscriminatorColumn>
 <associations>
 <colAssociation fkAssociation="BDFAAEAF-4101-3FE0-7BE2-73D2CD2D479D" referredColumn="ED4DC21D-F742-5BD0-E51C-4BF9CA4FA4DD"/>
 </associations>
@@ -96,7 +98,7 @@
 <colUsage columnID="218C1BB4-96C9-F2E6-53BB-4402353351F5"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="683F9658-5C65-C390-17F8-64DBA8B72B90" name="SOLICITUD_CONTABLE_SOLICITUD_FK">
+<ind_PK_UK id="683F9658-5C65-C390-17F8-64DBA8B72B90" name="CONTABLE_SOLICITUD_FK">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>C1E811C9-C8D4-DE45-8FF4-A1E2BA87ECB4</generatorID>
@@ -107,7 +109,7 @@
 <colUsage columnID="703DDE6C-5630-F7C6-E118-B28595D9E891"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="6802D76A-A470-17C5-A15F-3E0A1AE9304B" name="SOLICITUD_CONTABLE_TIPO_CONTABLE_FK">
+<ind_PK_UK id="6802D76A-A470-17C5-A15F-3E0A1AE9304B" name="CONTABLE_TIPO_CONTABLE_FK">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>A98966F4-BD8B-E1B4-7D3D-46C46F873FD6</generatorID>
