@@ -14,5 +14,6 @@
 <refColNames>id</refColNames>
 <transferable>true</transferable>
 <rely>false</rely>
+<discriminatorValue>ESPACIO</discriminatorValue>
 <columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
 </FKIndexAssociation>

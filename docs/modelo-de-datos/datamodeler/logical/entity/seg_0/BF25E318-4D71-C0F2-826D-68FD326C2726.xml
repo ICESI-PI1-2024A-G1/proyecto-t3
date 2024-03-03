@@ -78,6 +78,21 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="id1" id="3216240D-5AD8-C741-0E49-9BBAA59ED64D">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:30:38 UTC</createdTime>
+<generatorID>EE7639FD-B0FB-8C70-99F5-986A3AB96D8F</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>65AFBD7E-92C4-6559-3C95-A739BE8F0601</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="9A57CB2C-E275-43DB-8B21-7D3926927595" name="Persona PK">

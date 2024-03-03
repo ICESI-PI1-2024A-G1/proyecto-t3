@@ -39,6 +39,21 @@
 <domain>C7CF9F7B-32DE-F91E-FBE7-CBA2E317E388</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="id" id="92C99DDC-4138-175E-ADFA-5BD325BD5BA5">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:31:19 UTC</createdTime>
+<generatorID>6E721460-4E29-C0D0-9780-1A28AAAAF6B9</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>6FA19A47-A4AB-67D1-B719-1C1B86DEC28F</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="51D722F7-9415-5F5F-B1C2-75C39C9F0A4B" name="USUARIO PK">

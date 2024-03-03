@@ -1,7 +1,7 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="185DFBD9-FA2F-C1BE-4D69-5D3669F859D4" name="PERIODO">
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="F5D46CA3-4E2D-B694-CC6C-02812BD4A636" name="TIPO_SOLICITUD">
 <createdBy>andre</createdBy>
-<createdTime>2024-03-02 18:50:13 UTC</createdTime>
+<createdTime>2024-03-03 14:29:17 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
 <engineerTo>
 <item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
@@ -15,54 +15,42 @@
 <minVolumes>0</minVolumes>
 <normalForm>Third</normalForm>
 <attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
-<Attribute name="semestre" id="8519DA85-6FC7-42E1-143F-4E94B4CFF7F2">
+<Attribute name="id" id="942E04C4-2483-E0E8-4615-20CEC144A1AC">
 <createdBy>andre</createdBy>
-<createdTime>2024-03-02 18:50:22 UTC</createdTime>
+<createdTime>2024-03-03 14:29:28 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="solicitud" id="C486EF7B-AE6D-0CAD-E028-DA0101790A8C">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:29:34 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
 <engineerTo>
 <item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
 </engineerTo>
 <use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
-<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="fecha_inicio" id="4AD7320F-4EA8-FDDA-E8EB-FF8D116AC4C2">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 18:50:31 UTC</createdTime>
-<ownerDesignName>datamodeler</ownerDesignName>
-<engineerTo>
-<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
-</engineerTo>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT008</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="fecha_fin" id="987C2812-E89B-D88D-C02A-39B23104DBB0">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 18:51:58 UTC</createdTime>
-<ownerDesignName>datamodeler</ownerDesignName>
-<engineerTo>
-<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
-</engineerTo>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT008</logicalDatatype>
+<domain>CF4FFF98-A578-3B13-88D2-8787BB20679F</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
-<identifier id="B25844DD-2D41-D50F-C5F5-73B41B08B288" name="PERIODO_ACADEMICO PK">
+<identifier id="16E49AEF-FB50-1B1E-A48D-AF3F44E59D34" name="TIPO_SOLICITUD PK">
 <createdBy>andre</createdBy>
-<createdTime>2024-03-02 18:50:29 UTC</createdTime>
+<createdTime>2024-03-03 14:29:33 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
 <engineerTo>
 <item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
 </engineerTo>
 <pk>true</pk>
 <usedAttributes>
-<attributeRef>8519DA85-6FC7-42E1-143F-4E94B4CFF7F2</attributeRef>
+<attributeRef>942E04C4-2483-E0E8-4615-20CEC144A1AC</attributeRef>
 </usedAttributes>
 </identifier>
 </identifiers>

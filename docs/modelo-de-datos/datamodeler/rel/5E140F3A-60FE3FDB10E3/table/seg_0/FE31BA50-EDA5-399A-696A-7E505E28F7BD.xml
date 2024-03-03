@@ -18,6 +18,7 @@
 <domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
+<isDiscriminatorColumn>true</isDiscriminatorColumn>
 <associations>
 <colAssociation fkAssociation="2A2E88E0-91B3-3671-35BC-B997BD9E2C81" referredColumn="C769C4A3-B912-168A-D531-27D9B7076B97"/>
 </associations>

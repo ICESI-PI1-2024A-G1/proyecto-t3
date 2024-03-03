@@ -18,6 +18,7 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
+<isDiscriminatorColumn>true</isDiscriminatorColumn>
 <associations>
 <colAssociation fkAssociation="CCFDBE9D-8342-E7BA-462F-35F649CEA41D" referredColumn="ED4DC21D-F742-5BD0-E51C-4BF9CA4FA4DD"/>
 </associations>
@@ -48,6 +49,26 @@
 <associations>
 <colAssociation fkAssociation="087AF9A4-00CF-A2E0-3311-2EA550C92416" referredColumn="907B50B0-FAD5-FD6E-6B96-FB96667600B3"/>
 </associations>
+</Column>
+<Column name="fecha_inicio" id="5A101BB8-0586-A78A-E3D1-E2F3A3747B15">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:08:51 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="fecha_fin" id="79CCC3F6-C007-2D0B-93B3-5AA054102E40">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:09:38 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">

@@ -14,5 +14,6 @@
 <refColNames>cedula</refColNames>
 <transferable>true</transferable>
 <rely>false</rely>
+<discriminatorValue>DOCENTE</discriminatorValue>
 <columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
 </FKIndexAssociation>
