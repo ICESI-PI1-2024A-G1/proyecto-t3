@@ -30,6 +30,21 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
+<Column name="TIPO_USUARIO_id" id="1ABA9E7F-DF47-044E-DBED-2E7843614C75">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:36:37 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<isDiscriminatorColumn>true</isDiscriminatorColumn>
+<associations>
+<colAssociation fkAssociation="8BDDFA3E-0FD3-4808-2A70-05497B0D8C41" referredColumn="364105B5-F8F1-D7A0-D79B-82BED57BB71B"/>
+</associations>
+</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="69650EB3-FBD4-D064-A38E-E28FFA0B839D" name="USUARIO_PK">
@@ -42,6 +57,16 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="FFCE3C5F-B3F8-4B73-FB2C-6E167D7F37A1"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="C11181EF-C23F-69D6-0FBB-4748C1896F14" name="USUARIO_TIPO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:36:37 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1ABA9E7F-DF47-044E-DBED-2E7843614C75"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

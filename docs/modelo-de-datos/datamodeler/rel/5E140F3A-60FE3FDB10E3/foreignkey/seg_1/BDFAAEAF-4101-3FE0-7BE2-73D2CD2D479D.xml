@@ -1,5 +1,5 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_1" id="BDFAAEAF-4101-3FE0-7BE2-73D2CD2D479D" containerWithKeyObject="B6B6AF4A-AD1B-7163-72EE-DC7A5148D20C" localFKIndex="683F9658-5C65-C390-17F8-64DBA8B72B90" name="SOLICITUD_CONTABLE_SOLICITUD_FK">
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_1" id="BDFAAEAF-4101-3FE0-7BE2-73D2CD2D479D" containerWithKeyObject="B6B6AF4A-AD1B-7163-72EE-DC7A5148D20C" localFKIndex="683F9658-5C65-C390-17F8-64DBA8B72B90" name="CONTABLE_SOLICITUD_FK">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>C1E811C9-C8D4-DE45-8FF4-A1E2BA87ECB4</generatorID>
@@ -14,5 +14,6 @@
 <refColNames>id</refColNames>
 <transferable>true</transferable>
 <rely>false</rely>
+<discriminatorValue>CONTABLE</discriminatorValue>
 <columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
 </FKIndexAssociation>

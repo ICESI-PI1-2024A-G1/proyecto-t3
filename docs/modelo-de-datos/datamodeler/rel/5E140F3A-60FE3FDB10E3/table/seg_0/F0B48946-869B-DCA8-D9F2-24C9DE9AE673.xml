@@ -68,6 +68,21 @@
 <colAssociation fkAssociation="30C060B6-64AC-D52B-B890-CA8FB9F11B3C" referredColumn="504BFCFA-3B1E-A0D6-A89A-1214C327682A"/>
 </associations>
 </Column>
+<Column name="TIPO_PERSONA_id" id="37576DD4-3689-CFEA-3A4D-F2E5B101D607">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:37:18 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<isDiscriminatorColumn>true</isDiscriminatorColumn>
+<associations>
+<colAssociation fkAssociation="3F563262-C598-7C54-D371-D97AF5FF719E" referredColumn="51EB079C-247F-2FE8-8577-8D40424FA08E"/>
+</associations>
+</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="312454C2-BDD9-CEC1-F054-805FE0BF82D0" name="Persona_PK">
@@ -91,6 +106,16 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="C3A29FAD-D8A2-1742-590F-35EBD82DBC79"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="A9909EFA-27B7-6064-F6AB-675389294AA4" name="PERSONA_TIPO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:37:18 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="37576DD4-3689-CFEA-3A4D-F2E5B101D607"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

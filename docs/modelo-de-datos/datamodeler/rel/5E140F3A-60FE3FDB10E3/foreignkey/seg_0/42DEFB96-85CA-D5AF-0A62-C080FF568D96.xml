@@ -14,5 +14,6 @@
 <refColNames>identificacion</refColNames>
 <transferable>true</transferable>
 <rely>false</rely>
+<discriminatorValue>ASISTENTE</discriminatorValue>
 <columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
 </FKIndexAssociation>

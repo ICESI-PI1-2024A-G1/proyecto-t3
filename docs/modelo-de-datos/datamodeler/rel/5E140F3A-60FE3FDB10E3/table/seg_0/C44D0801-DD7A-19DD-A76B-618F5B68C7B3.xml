@@ -1,8 +1,9 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C44D0801-DD7A-19DD-A76B-618F5B68C7B3" name="Relation_18">
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C44D0801-DD7A-19DD-A76B-618F5B68C7B3" name="SOLICITA">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
+<ordsAlias>relation_18</ordsAlias>
 <allowColumnReorder>false</allowColumnReorder>
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
@@ -60,7 +61,7 @@
 <colUsage columnID="E28F3709-BFF2-A4CE-C441-F8910961D90A"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="1D77CB26-B0E5-A691-D488-D009C4ECFF13" name="Relation_18_SOLICITUD_CONTABLE_FK">
+<ind_PK_UK id="1D77CB26-B0E5-A691-D488-D009C4ECFF13" name="SOLICITA_CONTABLE_FK">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>63927BB2-9C56-FCFE-206C-9E75B9270D88</generatorID>

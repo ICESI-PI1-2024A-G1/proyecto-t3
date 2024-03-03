@@ -81,6 +81,21 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="id1" id="95AF34D0-6E75-F626-0BDB-01CB6A5CFBE6">
+<createdBy>andre</createdBy>
+<createdTime>2024-03-03 14:31:08 UTC</createdTime>
+<generatorID>E510546E-1196-198D-8512-F69B704AF3E7</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>942E04C4-2483-E0E8-4615-20CEC144A1AC</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="0813A793-183F-A4C9-7516-6FA76B28F086" name="SOLICITUD PK">
