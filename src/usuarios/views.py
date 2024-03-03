@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render
 
@@ -14,3 +14,7 @@ def login_page(request):
     return render(request, 'login.html', {
         'form': AuthenticationForm
     })
+
+def log_out(request):
+    logout(request)
+    return render(request, "login.html", {"form": AuthenticationForm})
