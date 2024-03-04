@@ -20,6 +20,8 @@ El módulo de programación académica es una herramienta informática que facil
    3. [Modelo de datos](https://github.com/ICESI-PI1-2024A-G1/proyecto-t3/blob/main/docs/modelo-de-datos)
    4. [Diagramas de secuencia](https://github.com/ICESI-PI1-2024A-G1/proyecto-t3/blob/main/docs/diagrama-de-secuencias)
    5. [Diagramas de clase](https://github.com/ICESI-PI1-2024A-G1/proyecto-t3/blob/main/docs/diagrama-de-clases)
+   6. [Mockups del software](https://www.figma.com/file/oTIc7p5ozw3cuBbPs0kh8f/Project-CCSA?type=design&node-id=497%3A10919&mode=design&t=DAL51mH1yFFMP4df-1)
+   7. [Historias de usuario](https://github.com/ICESI-PI1-2024A-G1/proyecto-t3/blob/main/docs/Historias%20de%20usuario.pdf)
 2. [Código fuente](https://github.com/ICESI-PI1-2024A-G1/proyecto-t3/blob/main/src)
    1. [Configuración principal](https://github.com/ICESI-PI1-2024A-G1/proyecto-t3/blob/main/src/ccsa_project)
    2. [App módulo académico](https://github.com/ICESI-PI1-2024A-G1/proyecto-t3/blob/main/src/academico)
