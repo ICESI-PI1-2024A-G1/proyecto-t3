@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Ciudad(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     ciudad = models.CharField(max_length=128)
 
 
@@ -13,7 +13,7 @@ class TipoPersona(models.Model):
 class Persona(models.Model):
     cedula = models.CharField(primary_key=True, max_length=30)
     nombre = models.CharField(max_length=128)
-    email = models.CharField(max_length=255)
+    email = models.EmailField()
     telefono = models.CharField(max_length=13)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE)
 

@@ -15,12 +15,12 @@ class TipoDePrograma(models.Model):
 
 
 class Facultad(models.Model):
-    id = models.IntegerField(primary_key=True, auto_created=True, serialize=True)
+    id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
 
 
 class Modalidad(models.Model):
-    id = models.IntegerField(primary_key=True, auto_created=True, serialize=True)
+    id = models.AutoField(primary_key=True)
     metodologia = models.CharField(max_length=32)
 
 
@@ -31,7 +31,7 @@ class Periodo(models.Model):
 
 
 class Espacio(models.Model):
-    id = models.IntegerField(primary_key=True, auto_created=True, serialize=True)
+    id = models.AutoField(primary_key=True)
     tipo = models.CharField(max_length=10)
     capacidad = models.IntegerField()
 
@@ -62,8 +62,11 @@ class Materia(models.Model):
         Departamento, on_delete=models.CASCADE, to_field="codigo"
     )
     tipo_de_materia = models.ForeignKey(
-        TipoDeMateria, on_delete=models.CASCADE, to_field="tipo"
+        TipoDeMateria,
+        on_delete=models.CASCADE,
+        to_field="tipo",
     )
+    programas = models.ManyToManyField(Programa)
 
 
 class Curso(models.Model):
@@ -71,14 +74,23 @@ class Curso(models.Model):
     grupo = models.IntegerField()
     cupo = models.IntegerField()
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE, to_field="codigo")
+    periodo = models.ForeignKey(
+        Periodo, on_delete=models.CASCADE, to_field="semestre", default=1
+    )
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["nrc", "periodo"], name="unique_nrc_periodo"
+            )
+        ]
     # usuario_identificacion = models.CharField(max_length=30)
 
 
 class Clase(models.Model):
-    id = models.IntegerField(primary_key=True, auto_created=True)
+    id = models.AutoField(primary_key=True)
     fecha_inicio = models.DateTimeField(null=True)
     fecha_fin = models.DateTimeField(null=True)
     espacio_asignado = models.CharField(max_length=255, null=True)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="nrc")
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, to_field="id")
-    espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE, to_field="id")
+    espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
