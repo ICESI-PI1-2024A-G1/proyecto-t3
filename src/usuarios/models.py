@@ -1,13 +1,26 @@
 from django.db import models
 
 
+class TipoContrato(models.Model):
+    id = models.AutoField(primary_key=True)
+    tipo = models.CharField(max_length=128)
+
+
+class EstadoContrato(models.Model):
+    id = models.AutoField(primary_key=True)
+    estado = models.CharField(max_length=128)
+
+
+class Contrato(models.Model):
+    codigo = models.CharField(primary_key=True, max_length=30)
+    fecha_elaboracion = models.DateField()
+    tipo_contrato = models.ForeignKey(TipoContrato, on_delete=models.CASCADE)
+    estado = models.ForeignKey(EstadoContrato, on_delete=models.CASCADE)
+
+
 class Ciudad(models.Model):
     id = models.AutoField(primary_key=True)
     ciudad = models.CharField(max_length=128)
-
-
-class TipoPersona(models.Model):
-    tipo = models.CharField(max_length=32, primary_key=True)
 
 
 class Persona(models.Model):
@@ -17,22 +30,10 @@ class Persona(models.Model):
     telefono = models.CharField(max_length=13)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE)
 
-    class Meta:
-        abstract = True
-
 
 class Director(Persona):
-    id = models.IntegerField(unique=True)
-    tipo_persona = models.OneToOneField(
-        TipoPersona, on_delete=models.CASCADE, related_name="director"
-    )
+    oficina = models.CharField(max_length=30)
 
 
 class Docente(Persona):
-    numero = models.IntegerField()
     contrato_codigo = models.CharField(max_length=30)
-    tipo_persona = models.OneToOneField(
-        TipoPersona, on_delete=models.CASCADE, related_name="docente"
-    )
-
-

@@ -1,7 +1,11 @@
 from django.db import models
 
-from solicitud.models import EstadoSolicitud
 from usuarios.models import Director
+
+
+class EstadoSolicitud(models.Model):
+    estado = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=128)
 
 
 class TipoDeMateria(models.Model):
@@ -43,7 +47,7 @@ class Programa(models.Model):
     tipo_de_programa = models.ForeignKey(
         TipoDePrograma, on_delete=models.CASCADE, to_field="tipo"
     )
-    director = models.ForeignKey(Director, on_delete=models.CASCADE, to_field="cedula")
+    director = models.ForeignKey(Director, on_delete=models.CASCADE)
     estado_solicitud = models.ForeignKey(
         EstadoSolicitud, on_delete=models.CASCADE, to_field="estado"
     )
@@ -66,8 +70,18 @@ class Materia(models.Model):
         on_delete=models.CASCADE,
         to_field="tipo",
     )
-    programas = models.ManyToManyField(Programa)
+    programas = models.ManyToManyField(Programa, through="MallaCurricular")
 
+class MallaCurricular(models.Model):
+    materia = models.ForeignKey(Materia, on_delete=models.CASCADE, to_field="codigo")
+    programa = models.ForeignKey(Programa, on_delete=models.CASCADE, to_field="codigo")
+    periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, to_field="semestre")
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["materia", "programa", "periodo"], name="unique_materia_programa_periodo"
+            )
+        ]
 
 class Curso(models.Model):
     nrc = models.IntegerField(primary_key=True)
