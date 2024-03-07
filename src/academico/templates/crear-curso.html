@@ -1,0 +1,18 @@
+<!-- crear-curso.html -->
+<h1>Crear curso</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <label for="nrc">NRC</label></br>
+    <input type="text" id="nrc" name="nrc"></br>
+
+    <label for="grupo">Grupo</label></br>
+    <input type="text" id="grupo" name="group"></br>
+
+    <label for="cantidad_de_cupos">Cantidad de cupos</label></br>
+    <input type="text" id="cantidad_de_cupos" name="cantidad_de_cupos"> </br>
+
+    <input type="submit" value="Crear curso">
+</form>
