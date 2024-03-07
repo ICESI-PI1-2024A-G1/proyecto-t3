@@ -54,7 +54,7 @@ class Ciudad(models.Model):
     """
 
     id = models.AutoField(primary_key=True)
-    ciudad = models.CharField(max_length=128)
+    ciudad = models.CharField(max_length=128,unique=True)
 
 
 class Persona(models.Model):

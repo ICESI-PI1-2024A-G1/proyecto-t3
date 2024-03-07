@@ -25,7 +25,7 @@ class TipoDeMateria(models.Model):
         nombre (CharField): Nombre descriptivo del tipo de materia.
     """
 
-    tipo = models.IntegerField(primary_key=True, auto_created=True, serialize=True)
+    tipo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=32)
 
 
@@ -38,7 +38,7 @@ class TipoDePrograma(models.Model):
         nombre (CharField): Nombre descriptivo del tipo de programa.
     """
 
-    tipo = models.IntegerField(primary_key=True, auto_created=True, serialize=True)
+    tipo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=32)
 
 
@@ -176,6 +176,7 @@ class MallaCurricular(models.Model):
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE, to_field="codigo")
     programa = models.ForeignKey(Programa, on_delete=models.CASCADE, to_field="codigo")
     periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, to_field="semestre")
+    semestre = models.IntegerField()
 
     class Meta:
         constraints = [
