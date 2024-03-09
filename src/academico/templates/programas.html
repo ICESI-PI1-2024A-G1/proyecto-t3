@@ -12,7 +12,7 @@
 
     <!-- Formulario para búsqueda -->
     <form method="GET" action="{% url 'programas' %}">
-        <input type="text" name="q" placeholder="Buscar por nombre, facultad o director">
+        <input type="text" name="q" placeholder="Buscar por nombre de programa o director">
         <button type="submit">Buscar</button>
     </form>
 
@@ -22,7 +22,6 @@
         <select name="ordenar_por" id="ordenar_por" onchange="toggleFiltrado()">
             <option value="">Sin orden</option>
             <option value="facultad">Facultad</option>
-            <option value="modalidad">Modalidad</option>
             <option value="estado_solicitud">Estado de Solicitud</option>
         </select>
 
@@ -33,17 +32,6 @@
                 <option value="">Todas las facultades</option>
                 {% for facultad in facultades %}
                     <option value="{{ facultad.id }}">{{ facultad.nombre }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <!-- Filtrado por Modalidad -->
-        <div id="modalidadDiv" style="display: none;">
-            <label for="modalidad">Filtrar por Modalidad:</label>
-            <select name="modalidad">
-                <option value="">Todas las modalidades</option>
-                {% for modalidad in modalidades %}
-                    <option value="{{ modalidad.id }}">{{ modalidad.metodologia }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -59,7 +47,7 @@
             </select>
         </div>
 
-        <button type="submit">Aplicar filtro</button>
+        <button type="submit">Filtrar</button>
     </form>
 
     <!-- Tabla de programas -->

@@ -3,7 +3,7 @@ from django.db.models import Q
 
 from .forms import MateriaForm
 
-from .models import EstadoSolicitud, Materia, Modalidad, Programa, Facultad
+from .models import EstadoSolicitud, Materia, Programa, Facultad
 from .models import Periodo
 
 # Create your views here.
@@ -26,7 +26,6 @@ def programas(request):
     programas = Programa.objects.all()
     periodos_academicos = Periodo.objects.all()
     facultades = Facultad.objects.all()
-    modalidades = Modalidad.objects.all()  
     estados = EstadoSolicitud.objects.all() 
 
     # Búsqueda y filtrado
@@ -34,7 +33,6 @@ def programas(request):
         periodo_seleccionado = request.GET.get('periodo', None)
         query = request.GET.get('q', None)
         facultad = request.GET.get('facultad', None)
-        modalidad = request.GET.get('modalidad', None)
         estado = request.GET.get('estado', None)
         ordenar_por = request.GET.get('ordenar_por', None)
 
@@ -51,8 +49,6 @@ def programas(request):
 
         if facultad:
             programas = programas.filter(facultad__id=facultad)
-        if modalidad:
-            programas = programas.filter(modalidad__id=modalidad)
         if estado:
             programas = programas.filter(estado_solicitud__estado=estado)
 
@@ -64,6 +60,5 @@ def programas(request):
         'programas': programas,
         'periodos_academicos': periodos_academicos,
         'facultades': facultades,
-        'modalidades': modalidades,
         'estados': estados,
     })
