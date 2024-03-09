@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Clase</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Planeación de Curso</h1>
+        <button id="nuevaClaseBtn">Nueva Clase</button>
+    </div>
+
+    <!-- Popup para seleccionar dia y horario -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2>Seleccionar día y horario</h2>
+            <form id="classForm">
+                <label for="day">Día:</label>
+                <input type="date" id="day" name="day"><br><br>
+                <label for="time">Horario:</label>
+                <input type="time" id="time" name="time"><br><br>
+                <label for="weeks">Número de semanas:</label>
+                <input type="number" id="weeks" name="weeks" min="1" value="1"><br><br>
+                <button type="submit">Crear Clases</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var popup = document.getElementById("popup");
+
+        // Mostrar popup al hacer clic en "Nueva Clase"
+        document.getElementById("nuevaClaseBtn").onclick = function() {
+            popup.style.display = "block";
+        }
+
+        // Cerrar popup al hacer clic en el botón de cerrar
+        function closePopup() {
+            popup.style.display = "none";
+        }
+
+        // Cerrar popup al dar click afuera
+        window.onclick = function(event) {
+            if (event.target == popup) {
+                popup.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
