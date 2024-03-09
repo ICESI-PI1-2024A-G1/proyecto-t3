@@ -1,8 +1,9 @@
 from django.shortcuts import render
+from django.db.models import Q
 
 from .forms import MateriaForm
 
-from .models import Materia
+from .models import EstadoSolicitud, Materia, Modalidad, Programa, Facultad
 from .models import Periodo
 
 # Create your views here.
@@ -20,3 +21,49 @@ def crear_curso(request):
     periodos = Periodo.objects.all()
 
     return render(request, 'crear-curso.html', {'form': form, 'materias': materias, 'periodos': periodos})
+
+def programas(request):
+    programas = Programa.objects.all()
+    periodos_academicos = Periodo.objects.all()
+    facultades = Facultad.objects.all()
+    modalidades = Modalidad.objects.all()  
+    estados = EstadoSolicitud.objects.all() 
+
+    # Búsqueda y filtrado
+    if request.method == 'GET':
+        periodo_seleccionado = request.GET.get('periodo', None)
+        query = request.GET.get('q', None)
+        facultad = request.GET.get('facultad', None)
+        modalidad = request.GET.get('modalidad', None)
+        estado = request.GET.get('estado', None)
+        ordenar_por = request.GET.get('ordenar_por', None)
+
+        if periodo_seleccionado:
+            programas = programas.filter(periodo__semestre=periodo_seleccionado)
+
+        if query:
+            programas = programas.filter(
+                Q(nombre__icontains=query) |
+                Q(facultad__nombre__icontains=query) |
+                Q(director__nombre__icontains=query) |
+                Q(nombre__icontains=query) 
+            )
+
+        if facultad:
+            programas = programas.filter(facultad__id=facultad)
+        if modalidad:
+            programas = programas.filter(modalidad__id=modalidad)
+        if estado:
+            programas = programas.filter(estado_solicitud__estado=estado)
+
+        if ordenar_por:
+            programas = programas.order_by(ordenar_por)
+
+
+    return render(request, 'programas.html', {
+        'programas': programas,
+        'periodos_academicos': periodos_academicos,
+        'facultades': facultades,
+        'modalidades': modalidades,
+        'estados': estados,
+    })

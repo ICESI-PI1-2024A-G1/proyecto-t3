@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Programas</title>
+    {% load static %}
+    <script src="{% static 'js/programas.js' %}"></script>
+</head>
+<body>
+    <h1>Lista de Programas</h1>
+
+    <!-- Formulario para búsqueda -->
+    <form method="GET" action="{% url 'programas' %}">
+        <input type="text" name="q" placeholder="Buscar por nombre, facultad o director">
+        <button type="submit">Buscar</button>
+    </form>
+
+    <!-- Formulario para filtrado y ordenamiento -->
+    <form method="GET" action="{% url 'programas' %}">
+        <label for="ordenar_por">Ordenar por:</label>
+        <select name="ordenar_por" id="ordenar_por" onchange="toggleFiltrado()">
+            <option value="">Sin orden</option>
+            <option value="facultad">Facultad</option>
+            <option value="modalidad">Modalidad</option>
+            <option value="estado_solicitud">Estado de Solicitud</option>
+        </select>
+
+        <!-- Filtrado por Facultad -->
+        <div id="facultadDiv" style="display: none;">
+            <label for="facultad">Filtrar por Facultad:</label>
+            <select name="facultad">
+                <option value="">Todas las facultades</option>
+                {% for facultad in facultades %}
+                    <option value="{{ facultad.id }}">{{ facultad.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Filtrado por Modalidad -->
+        <div id="modalidadDiv" style="display: none;">
+            <label for="modalidad">Filtrar por Modalidad:</label>
+            <select name="modalidad">
+                <option value="">Todas las modalidades</option>
+                {% for modalidad in modalidades %}
+                    <option value="{{ modalidad.id }}">{{ modalidad.metodologia }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Filtrado por Estado de Solicitud -->
+        <div id="estadoDiv" style="display: none;">
+            <label for="estado">Filtrar por Estado de Solicitud:</label>
+            <select name="estado">
+                <option value="">Todos los estados</option>
+                {% for estado in estados %}
+                    <option value="{{ estado.id }}">{{ estado.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit">Aplicar filtro</button>
+    </form>
+
+    <!-- Tabla de programas -->
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre del Programa</th>
+                <th>Facultad</th>
+                <th>Tipo de Programa</th>
+                <th>Director</th>
+                <th>Estado de Solicitud</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for programa in programas %}
+                <tr>
+                    <td>{{ programa.codigo }}</td>
+                    <td>{{ programa.nombre }}</td>
+                    <td>{{ programa.facultad.nombre }}</td>
+                    <td>{{ programa.tipo_de_programa.nombre }}</td>
+                    <td>{{ programa.director.nombre }}</td>
+                    <td>{{ programa.estado_solicitud.nombre }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
