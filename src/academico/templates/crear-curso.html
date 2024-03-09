@@ -1,0 +1,31 @@
+<!-- crear-curso.html -->
+<h1>Crear curso</h1>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label for="nrc">NRC</label></br>
+    <input type="text" id="nrc" name="nrc"></br>
+
+    <label for="grupo">Grupo</label></br>
+    <input type="text" id="grupo" name="group"></br>
+
+    <label for="cantidad_de_cupos">Cantidad de cupos</label></br>
+    <input type="text" id="cantidad_de_cupos" name="cantidad_de_cupos"> </br>
+    
+    <label for="materia">Materia</label><br>
+    <select name="materia" id="materia">
+        {% for materia in materias %}
+            <option value="{{ materia.codigo }}">{{ materia.nombre }}</option>
+        {% endfor %}
+    </select><br>
+
+    <label for="periodo">Periodo Académico</label><br>
+    <select name="periodo" id="periodo">
+        {% for periodo in periodos %}
+            <option value="{{ periodo.id }}">{{ periodo.semestre }}</option>
+        {% endfor %}
+    </select><br>
+
+    <input type="submit" value="Crear curso">
+</form>
