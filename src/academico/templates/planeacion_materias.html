@@ -10,27 +10,46 @@
     <div class="container">
         <h1>Planeación de Curso</h1>
         <button id="nuevaClaseBtn">Nueva Clase</button>
+        
+        <!-- Sección para mostrar las clases creadas -->
+        <div id="clasesCreadas">
+            <h2>Clases Creadas</h2>
+            <ul id="listaClases">
+                <!-- Aquí se añadirán las clases creadas dinámicamente -->
+            </ul>
+        </div>
     </div>
 
-    <!-- Popup para seleccionar dia y horario -->
+    <!-- Popup para seleccionar día y horario -->
     <div id="popup" class="popup">
         <div class="popup-content">
             <span class="close" onclick="closePopup()">&times;</span>
             <h2>Seleccionar día y horario</h2>
-            <form id="classForm">
-                <label for="day">Día:</label>
-                <input type="date" id="day" name="day"><br><br>
+
+            <form id="classForm" action="{% url 'crear_clase' %}" method="post">
+                <label for="day">Fecha de inicio de clase:</label>
+                <input type="date" id="start_day" name="start_day"><br><br>
+                <label for="day">Fecha final de clase:</label>
+                <input type="date" id="end_day" name="end_day"><br><br>
                 <label for="time">Horario:</label>
                 <input type="time" id="time" name="time"><br><br>
                 <label for="weeks">Número de semanas:</label>
                 <input type="number" id="weeks" name="weeks" min="1" value="1"><br><br>
+                <label for="mode">Modalidad:</label>
+                <select name="mode" id="mode">  
+                    <option value="1">Presencial</option>
+                    <option value="2">Virtual</option>
+                </select><br><br>
+                <input type="hidden" id="cursoId" name="cursoId" value="1">
                 <button type="submit">Crear Clases</button>
             </form>
         </div>
     </div>
 
+    <!-- Script para mostrar/ocultar el popup y manejar la creación de clases -->
     <script>
         var popup = document.getElementById("popup");
+        var listaClases = document.getElementById("listaClases");
 
         // Mostrar popup al hacer clic en "Nueva Clase"
         document.getElementById("nuevaClaseBtn").onclick = function() {
@@ -42,11 +61,29 @@
             popup.style.display = "none";
         }
 
-        // Cerrar popup al dar click afuera
+        // Cerrar popup al hacer clic fuera de él
         window.onclick = function(event) {
             if (event.target == popup) {
                 popup.style.display = "none";
             }
+        }
+
+        // Función para manejar la creación de clases
+        document.getElementById("classForm").onsubmit = function(event) {
+            event.preventDefault(); // Evitar que el formulario se envíe
+            var day = document.getElementById("day").value;
+            var time = document.getElementById("time").value;
+            var weeks = document.getElementById("weeks").value;
+
+            // Crear el elemento de la lista con la información de la clase
+            var listItem = document.createElement("li");
+            listItem.textContent = "Clase el " + day + " a las " + time + " durante " + weeks + " semanas";
+
+            // Agregar el elemento a la lista de clases creadas
+            listaClases.appendChild(listItem);
+
+            // Cerrar el popup
+            popup.style.display = "none";
         }
     </script>
 </body>
