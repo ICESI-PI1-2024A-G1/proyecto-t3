@@ -2,6 +2,9 @@ from django.shortcuts import render
 
 from .forms import MateriaForm
 
+from .models import Materia
+from .models import Periodo
+
 # Create your views here.
 
 def crear_curso(request):
@@ -13,4 +16,7 @@ def crear_curso(request):
     else:
         form = MateriaForm()
 
-    return render(request, 'crear-curso.html', {'form': form})
+    materias = Materia.objects.all()
+    periodos = Periodo.objects.all()
+
+    return render(request, 'crear-curso.html', {'form': form, 'materias': materias, 'periodos': periodos})
