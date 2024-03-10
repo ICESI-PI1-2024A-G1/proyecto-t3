@@ -8,10 +8,12 @@
 </head>
 <body>
     <div class="container">
+        <!-- Titulo -->>
         <h1>Planeación de Curso</h1>
+        
         <button id="nuevaClaseBtn">Nueva Clase</button>
         
-        <!-- Sección para mostrar las clases creadas -->
+        <!-- Seccion para mostrar las clases creadas -->
         <div id="clasesCreadas">
             <h2>Clases Creadas</h2>
             <ul id="listaClases">
@@ -25,7 +27,7 @@
         <div class="popup-content">
             <span class="close" onclick="closePopup()">&times;</span>
             <h2>Seleccionar día y horario</h2>
-
+            <!-- Formulario que parametros recibe-->>
             <form id="classForm" action="{% url 'crear_clase' %}" method="post">
                 <label for="day">Fecha de inicio de clase:</label>
                 <input type="date" id="start_day" name="start_day"><br><br>
@@ -46,7 +48,7 @@
         </div>
     </div>
 
-    <!-- Script para mostrar/ocultar el popup y manejar la creación de clases -->
+    <!-- //Script para mostrar/ocultar el popup y manejar la creación de clases -->
     <script>
         var popup = document.getElementById("popup");
         var listaClases = document.getElementById("listaClases");
