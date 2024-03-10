@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block content %}
+
+<head>
+  {% load static %}
+  <script src="{% static 'js/programa.js' %}"></script>
+</head>
+<div class="container">
+    
+    <h2><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
+    <label class="col"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
+    <div class="row">
+        <label class="col" style="text-align: start;"><strong>Director:</strong> {{ programa.director.nombre }}</label>
+        <label class="col" style="text-align: start;"><strong>Email:</strong> {{ programa.director.email }}</label>
+        <label class="col" style="text-align: start;"><strong>Teléfono:</strong> {{ programa.director.telefono }}</label>
+    </div>
+    <div class="form-inline">
+        <strong class="mr-2">Periodo selecionado: </strong>
+        <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
+            {% for periodo in periodos %} 
+            {% if periodo_selecionado == periodo.semestre %}
+        <option value="{{programa.codigo}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
+        {% else %}
+        <option value="{{programa.codigo}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>
+        {% endif %} 
+        {% endfor %}
+      </select>
+    </div>
+</div>
+
+{% endblock %}
