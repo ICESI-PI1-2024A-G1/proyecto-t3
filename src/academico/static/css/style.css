@@ -1,3 +1,115 @@
+[data-href] { cursor: pointer; }
+:root {
+  --buttonsbuttononhover: rgba(231, 231, 232, 1);
+  --structurebackground: rgba(255, 255, 255, 1);
+  --structurebackgroundaccent: rgba(240, 242, 245, 1);
+  --structureaccentcolor: rgba(32, 69, 137, 1);
+  --structureprimarycolor: rgba(41, 96, 195, 1);
+  --structuresecondarycolor: rgba(119, 193, 249, 1);
+  --structureinputbox: rgba(239, 243, 244, 1);
+  --structureblackover: rgba(15, 20, 25, 0.3);
+  --fontnormaltext: rgba(102, 117, 129, 1);
+  --fontboldtext: rgba(85, 102, 115, 1);
+  --fontaccenttext: rgba(15, 20, 25, 1);
+  --fontlabelinput: rgba(188, 188, 188, 1);
+  --iconsunselected: rgba(15, 20, 25, 1);
+  --buttononclick: rgba(203, 203, 205, 1);
+  --normal-text-font-family: "Poppins", Helvetica;
+  --normal-text-font-weight: 400;
+  --normal-text-font-size: 12px;
+  --normal-text-letter-spacing: 0px;
+  --normal-text-line-height: normal;
+  --normal-text-font-style: normal;
+  --buttons-text-font-family: "Poppins", Helvetica;
+  --buttons-text-font-weight: 600;
+  --buttons-text-font-size: 14px;
+  --buttons-text-letter-spacing: 0px;
+  --buttons-text-line-height: normal;
+  --buttons-text-font-style: normal;
+  --label-text-font-family: "Poppins", Helvetica;
+  --label-text-font-weight: 400;
+  --label-text-font-size: 8px;
+  --label-text-letter-spacing: 0px;
+  --label-text-line-height: normal;
+  --label-text-font-style: normal;
+  --links-text-font-family: "Poppins", Helvetica;
+  --links-text-font-weight: 500;
+  --links-text-font-size: 10px;
+  --links-text-letter-spacing: 0px;
+  --links-text-line-height: normal;
+  --links-text-font-style: normal;
+  --h1-font-family: "Poppins", Helvetica;
+  --h1-font-weight: 700;
+  --h1-font-size: 36px;
+  --h1-letter-spacing: 0px;
+  --h1-line-height: normal;
+  --h1-font-style: normal;
+  --h3-font-family: "Poppins", Helvetica;
+  --h3-font-weight: 700;
+  --h3-font-size: 16px;
+  --h3-letter-spacing: 0px;
+  --h3-line-height: normal;
+  --h3-font-style: normal;
+  --collection-1-border-radius: 8px;
+  --collection-1-state: 0px;
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  width: 145px;
+  height: 111px;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 19px;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.frame .div {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.frame .derecho {
+  position: relative;
+  margin-top: -1px;
+  font-family: var(--buttons-text-font-family);
+  font-weight: var(--buttons-text-font-weight);
+  color: var(--fontaccenttext);
+  font-size: var(--buttons-text-font-size);
+  letter-spacing: var(--buttons-text-letter-spacing);
+  line-height: var(--buttons-text-line-height);
+  font-style: var(--buttons-text-font-style);
+}
+
+.frame .p {
+  position: relative;
+  width: fit-content;
+  font-family: "Poppins-Bold", Helvetica;
+  font-weight: 400;
+  color: var(--fontnormaltext);
+  font-size: 8px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.frame .text-wrapper {
+  font-weight: 700;
+}
+
+.frame .span {
+  font-family: "Poppins-Regular", Helvetica;
+}
+
 .availability-item .availability_stash label {
     display: inline-block
 }
@@ -22117,8 +22229,7 @@ pre code {
 .row {
     display: flex;
     flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px
+    text-align: center;
 }
 
 .no-gutters {
@@ -22134,8 +22245,6 @@ pre code {
 .col-1,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-10,.col-11,.col-12,.col,.col-auto,.col-sm-1,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm,.col-sm-auto,.col-md-1,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-10,.col-md-11,.col-md-12,.col-md,.col-md-auto,.col-lmd-1,.col-lmd-2,.col-lmd-3,.col-lmd-4,.col-lmd-5,.col-lmd-6,.col-lmd-7,.col-lmd-8,.col-lmd-9,.col-lmd-10,.col-lmd-11,.col-lmd-12,.col-lmd,.col-lmd-auto,.col-lg-1,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg,.col-lg-auto,.col-xl-1,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9,.col-xl-10,.col-xl-11,.col-xl-12,.col-xl,.col-xl-auto,.col-xxl-1,.col-xxl-2,.col-xxl-3,.col-xxl-4,.col-xxl-5,.col-xxl-6,.col-xxl-7,.col-xxl-8,.col-xxl-9,.col-xxl-10,.col-xxl-11,.col-xxl-12,.col-xxl,.col-xxl-auto {
     position: relative;
     width: 100%;
-    padding-right: 15px;
-    padding-left: 15px
 }
 
 .col {
@@ -24843,7 +24952,7 @@ a.btn:after {
 }
 
 .btn,.collapseexpand,.actions p a,.backlink a,.addtagcoll a,.resettable a,#page-admin-grade-edit-letter-index .main-content .mdl-align a,.moreless-toggler,.ajax-contact-button,#message-user-button,.search-results .result-context-info a,.tool_dataprivacy-expand-all,[data-fieldtype="submit"] a,.path-admin-tag .addstandardtags a,.edit-link a,#core-cache-rescan-definitions a,.continuebutton a,.tour-actions>ul>li>a,.gradereport_history_usp .usp-finish input,.gradereport_history_usp .usp-search input[type="submit"],#siteconfiglink a,.cancel a,.forum-post-footer a,.comment-area .fd a,#enterlink a,.allcoursegrades a,.reportlink a,.gradingform_guide.editor .addcriterion input,.gradingform_guide.editor .addcomment input,.gradingform_rubric.editor .addlevel input,.path-tag .tagarea .controls .exclusivemode,.addbloglink a,.notesgroup p a,.progress-actions a,.path-mod-glossary .printicon,.path-mod-glossary .glossarypost .commands a,.rui-form-element-group a,#page-mod-quiz-report .toggleincludeauto a,#page-mod-quiz-report .gradetheselink,.mod_quiz-next-nav,.rui-quizattemptcounts a,.rui-quizattemptsummary .c3 a,.mod_quiz-prev-nav,#page-mod-quiz-report .bold .reviewlink,.categorypagingbarcontainer .paging a,.page_split_join,.midpad a,.wiki_right a,#enabletemplateeditor,.path-auth-oauth2 .main-content h2+a,#addcontrols input,#removecontrols input,#page-mod-forum-index .subscription .helplink:nth-of-type(1) a,#page-mod-forum-index .subscription .helplink:nth-of-type(2) a,#page-mod-forum-view .subscription .helplink a,.createstep,.endtestlink,.webservicestokenui+a,.chart-table-expand a,.export-actions a,.que .comment a,.path-mod-quiz .othernav a:not(.mod_quiz-next-nav),.modal-footer a:not(.btn-primary),#page-grade-edit-letter-index .mdl-align a,#page-mod-feedback-complete [align="center"] a,.commentlink a,.quizsummaryofattempt .c0 a,#changenumsections a,.itemnav a,#page-enrol-index .main-content [type="submit"],.rui-pre button,.pick.template,.action.remove,.helpdoclink a,#resetpagetour,.que .info .questionflag a,.path-mod-attendance .attbtn a,.section-collapsemenu,.path-mod-booking #gotop,.path-mod-booking #goenrol,.path-mod-booking #searchButton,.path-mod-booking #buttonclear,.addcomponent {
-    padding: .75rem 1.25rem;
+    padding: .25rem 1.25rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;

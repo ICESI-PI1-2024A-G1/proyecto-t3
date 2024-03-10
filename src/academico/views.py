@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from .forms import MateriaForm
-from .models import (Clase, EstadoSolicitud, Facultad, Materia, Periodo,
-                     Programa)
+from .models import (Clase, EstadoSolicitud, Facultad, MallaCurricular,
+                     Materia, Periodo, Programa)
 
 
 def crear_clase(request):
@@ -100,6 +100,16 @@ def programas(request):
 
 def programa(request, codigo, periodo):
     programa = Programa.objects.get(codigo=codigo)
+    materias = MallaCurricular.objects.filter(
+        programa__codigo=codigo, periodo__semestre=periodo
+    )
+    malla_curricular = {}
+    
+    for materia in materias:
+        if materia.semestre not in malla_curricular.keys():
+            malla_curricular[materia.semestre] = []
+        malla_curricular[materia.semestre].append(materia.materia)
+            
     return render(
         request,
         "programa.html",
@@ -107,5 +117,6 @@ def programa(request, codigo, periodo):
             "programa": programa,
             "periodos": Periodo.objects.all(),
             "periodo_selecionado": periodo,
+            "malla": malla_curricular,
         },
     )

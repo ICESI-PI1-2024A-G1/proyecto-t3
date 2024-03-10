@@ -5,17 +5,19 @@
   <script src="{% static 'js/programa.js' %}"></script>
 </head>
 <div class="container">
-    
-    <h2><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
-    <label class="col"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
-    <div class="row">
-        <label class="col" style="text-align: start;"><strong>Director:</strong> {{ programa.director.nombre }}</label>
-        <label class="col" style="text-align: start;"><strong>Email:</strong> {{ programa.director.email }}</label>
-        <label class="col" style="text-align: start;"><strong>Teléfono:</strong> {{ programa.director.telefono }}</label>
-    </div>
+  <h2 class="mt-2"><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
+  <label class="col"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
+  <div class="row">
+      <label class="col" style="text-align: start;"><strong>Director:</strong> {{ programa.director.nombre }}</label>
+      <label class="col" style="text-align: start;"><strong>Email:</strong> {{ programa.director.email }}</label>
+      <label class="col" style="text-align: start;"><strong>Teléfono:</strong> {{ programa.director.telefono }}</label>
+  </div>
+
+  <!-- Tabla de materias -->
+  <div class="block card card-body mt-3">
     <div class="form-inline">
-        <strong class="mr-2">Periodo selecionado: </strong>
-        <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
+      <strong class="mr-2">Periodo selecionado: </strong>
+      <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
             {% for periodo in periodos %} 
             {% if periodo_selecionado == periodo.semestre %}
         <option value="{{programa.codigo}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
@@ -24,7 +26,25 @@
         {% endif %} 
         {% endfor %}
       </select>
+
     </div>
+    <div class="mt-2 block card">
+    {% for semestre, materias in malla.items %}
+    <div class="pd-1 row align-items-center">
+        <div class="block card"><strong>{{ semestre }}°</strong></div>
+        {% for materia in materias %}
+        <div class="frame m-2" style="background-color: rgba(89, 96, 196, 0.773);">
+          <div class="div">
+            <div class="derecho">{{materia.nombre}}</div>
+            <p class="p"><span class="text-wrapper">Créditos: </span> <span class="span">{{materia.creditos}}</span></p>
+            <p class="p"><span class="text-wrapper">Código: </span> <span class="span">{{materia.codigo}}</span></p>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    </div>
+  </div>
 </div>
 
 {% endblock %}

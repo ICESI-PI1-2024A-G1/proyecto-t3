@@ -9,99 +9,35 @@
     <title>Proyecto CCSA</title>
   </head>
   <body>
-    <div id="topBar" class="rui-topbar-wrapper moodle-has-zindex d-print-none" style="height: 60;">
-      <div class="rui-topbar wrapper-page" id="yui_3_17_2_1_1710004491786_51">
-        <div id="topbarLeft" class="d-inline-flex align-items-center">
-          <div
-            class="d-inline-flex align-items-center"
-            id="yui_3_17_2_1_1710004491786_50"
-          >
-            <a
-              id="logo"
-              href="/"
-              class="d-none d-lmd-inline-flex align-items-center rui-navbar-brand rui-navbar-brand--img aabtn has-logo"
-            >
-              <span class="rui-logo dark-mode-logo">
-                <img
-                  src="{% static 'img/logo-app.jpg' %}"
-                  class="rui-custom-logo ml-2"
-                  alt="CCSA"
-                />
-                <img
-                  src="{% static 'img/logo-app.jpg' %}"
-                  class="rui-custom-dmlogo ml-2"
-                  alt="CCSA"
-                />
+    <div class="rui-topbar-wrapper">
+      <div class="rui-topbar wrapper-page">
+        <div class="d-inline-flex align-items-center">
+          <div>
+            <a href="/" class="rui-navbar-brand rui-navbar-brand--img">
+              <span class="rui-logo">
+                <img src="{% static 'img/logo-app.jpg' %}" alt="CCSA" />
               </span>
             </a>
           </div>
           <div class="rui-navbar-nav--sep d-inline-flex mx-1"></div>
         </div>
-
-        <ul class="rui-icon-menu rui-icon-menu--right ml-auto">
-          <li class="rui-icon-menu-search rui-drawer-search"></li>
-          <li class="rui-icon-menu-plugins m-0">
-            <div
-              class="popover-region collapsed popover-region-notifications"
-              id="nav-notification-popover-container"
+        <ul class="rui-icon-menu ml-auto">
+          <li>
+            <a class="btn btn-danger" href="/logout"> Cerrar sesion </a>
+            <a
+              class="popover-region-toggle rui-topbar-special-btn rui-tooltip--bottom ml-1 mr-1"
+              data-title="Notificaciones"
             >
-              <div
-                class="popover-region-toggle rui-topbar-special-btn rui-tooltip--bottom"
-                data-region="popover-region-toggle"
-                role="button"
-                data-title="Notificaciones"
-              >
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                    d="M17.25 12V10C17.25 7.1005 14.8995 4.75 12 4.75C9.10051 4.75 6.75 7.10051 6.75 10V12L4.75 16.25H19.25L17.25 12Z"
-                  ></path>
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                    d="M9 16.75C9 16.75 9 19.25 12 19.25C15 19.25 15 16.75 15 16.75"
-                  ></path>
-                </svg>
-              </div>
-            </div>
-            <div class="popover-region collapsed">
-              <a
-                id="message-drawer-toggle-65ec990b5592f65ec990a91f4c6"
-                class="rui-topbar-special-btn rui-tooltip--bottom"
-                href="#"
-                role="button"
-                aria-label="Mensajes"
-                data-placement="left"
-                data-title="Mensajes"
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9.99151 14.5101C12.7865 14.5101 15.233 12.9956 15.233 9.63003C15.233 6.26449 12.7865 4.75 9.99151 4.75C7.19653 4.75 4.75 6.26449 4.75 9.63003C4.75 10.8662 5.08005 11.8526 5.6362 12.606C5.83794 12.8793 5.79543 13.5163 5.63421 13.8153C5.24836 14.5309 5.97738 15.315 6.76977 15.1333C7.3629 14.9974 7.98504 14.8134 8.5295 14.5666C8.72883 14.4762 8.94893 14.4398 9.16641 14.4644C9.43657 14.4949 9.7123 14.5101 9.99151 14.5101Z"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                  <path
-                    d="M18.8088 10.0264C18.5473 9.70522 18.0748 9.65688 17.7537 9.91844C17.4325 10.18 17.3841 10.6524 17.6457 10.9736L18.8088 10.0264ZM18.3467 16.606L18.9501 17.0514L18.3467 16.606ZM15.4534 18.5666L15.1438 19.2497L15.1438 19.2497L15.4534 18.5666ZM17.2132 19.1333L17.3807 18.4023L17.3807 18.4023L17.2132 19.1333ZM14.8165 18.4644L14.9008 19.2096L14.9008 19.2096L14.8165 18.4644ZM10.9803 16.8944C10.6458 16.6501 10.1766 16.7231 9.93226 17.0575C9.6879 17.392 9.76093 17.8612 10.0954 18.1056L10.9803 16.8944ZM18.3487 17.8153L17.6886 18.1713L17.6886 18.1713L18.3487 17.8153ZM19.9829 13.63C19.9829 12.1584 19.5596 10.9483 18.8088 10.0264L17.6457 10.9736C18.151 11.5941 18.4829 12.4572 18.4829 13.63H19.9829ZM18.9501 17.0514C19.6137 16.1525 19.9829 15.0047 19.9829 13.63H18.4829C18.4829 14.7277 18.192 15.5527 17.7433 16.1606L18.9501 17.0514ZM15.1438 19.2497C15.7505 19.5247 16.4253 19.7222 17.0456 19.8644L17.3807 18.4023C16.8147 18.2725 16.2453 18.1021 15.7631 17.8835L15.1438 19.2497ZM13.9914 19.2601C14.2976 19.2601 14.6015 19.2435 14.9008 19.2096L14.7322 17.7191C14.4912 17.7464 14.2436 17.7601 13.9914 17.7601V19.2601ZM10.0954 18.1056C11.1905 18.9057 12.5779 19.2601 13.9914 19.2601V17.7601C12.8134 17.7601 11.759 17.4634 10.9803 16.8944L10.0954 18.1056ZM15.7631 17.8835C15.4442 17.739 15.0882 17.6789 14.7322 17.7191L14.9008 19.2096C14.9797 19.2007 15.064 19.2135 15.1438 19.2497L15.7631 17.8835ZM17.6886 18.1713C17.7076 18.2065 17.7058 18.2245 17.7043 18.2341C17.7019 18.2495 17.6921 18.2788 17.6617 18.3131C17.5963 18.3868 17.4894 18.4272 17.3807 18.4023L17.0456 19.8644C17.7293 20.0211 18.3831 19.7603 18.7839 19.3084C19.1945 18.8455 19.3725 18.1337 19.0089 17.4593L17.6886 18.1713ZM17.7433 16.1606C17.4917 16.5015 17.455 16.9378 17.4618 17.2191C17.4691 17.522 17.5335 17.8837 17.6886 18.1713L19.0089 17.4593C19.0109 17.4632 18.9979 17.4377 18.9842 17.3763C18.9716 17.3192 18.963 17.2514 18.9614 17.1829C18.9597 17.1133 18.9655 17.0587 18.9729 17.0242C18.9815 16.9836 18.9848 17.0045 18.9501 17.0514L17.7433 16.1606Z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              </a>
-            </div>
+              <img src="{% static 'img/notifications_white.png' %}" />
+            </a>
+            <a
+              class="popover-region-toggle rui-topbar-special-btn rui-tooltip--bottom mr-1"
+              data-title="Mensajes"
+            >
+              <img src="{% static 'img/messages_white.png' %}" />
+            </a>
           </li>
-          <li class="rui-icon-menu-user m-0">
+          <li class="m-0">
             <span class="userbutton"
               ><span class="avatars"
                 ><span class="avatar current"
@@ -113,84 +49,24 @@
         </ul>
       </div>
     </div>
-    </div>
-      {% block content %} {% endblock %}
+
+    {% block content %} {% endblock %}
     <footer id="s-page-footer" class="wrapper-page">
       <div class="wrapper-fw">
-        <div class="rui-footer--icons w-100">
+        <div>
           <ul class="rui-footer--contact">
             <li>
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="7.25"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                ></circle>
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M15.25 12C15.25 16.5 13.2426 19.25 12 19.25C10.7574 19.25 8.75 16.5 8.75 12C8.75 7.5 10.7574 4.75 12 4.75C13.2426 4.75 15.25 7.5 15.25 12Z"
-                ></path>
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M5 12H12H19"
-                ></path>
-              </svg>
+              <img src="{% static 'img/world.png' %}" />
               <a class="ml-1" href="link-por-agregar-pendiente"
                 >Oficina de servicios compartidos</a
               >
             </li>
             <li>
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M15.2502 19.25H8.75C7.64543 19.25 6.75 18.3546 6.75 17.25V6.75C6.75 5.64543 7.64543 4.75 8.75 4.75H15.2502C16.3548 4.75 17.2502 5.64543 17.2502 6.75V17.25C17.2502 18.3546 16.3548 19.25 15.2502 19.25Z"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-                <path
-                  d="M11.75 16.75H12.25"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
+              <img src="{% static 'img/phone.png' %}" />
               <span class="ml-1">Teléfono: 5552334 ext 4188</span>
             </li>
             <li>
-              <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M4.75 7.75C4.75 6.64543 5.64543 5.75 6.75 5.75H17.25C18.3546 5.75 19.25 6.64543 19.25 7.75V16.25C19.25 17.3546 18.3546 18.25 17.25 18.25H6.75C5.64543 18.25 4.75 17.3546 4.75 16.25V7.75Z"
-                ></path>
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M5.5 6.5L12 12.25L18.5 6.5"
-                ></path>
-              </svg>
+              <img src="{% static 'img/email.png' %}" />
               <a class="ml-1" href="mailto:Icesivirtual.ti@listas.icesi.edu.co"
                 >Icesivirtual.ti@listas.icesi.edu.co</a
               >
@@ -200,7 +76,6 @@
 
         <div class="rui-footer-copy rui-footer-content">
           <p style="text-align: center">
-            <i class="fas fa-user-circle"></i>
             <strong>Adaptación:</strong>&nbsp;&nbsp;
             <a
               style="color: #222"
@@ -239,11 +114,7 @@
               >
             </div>
           </div>
-          <div
-            class="rui-debug rui-footer-btns footer-content-debugging w-100 d-block mt-4 small"
-          ></div>
         </div>
-        <div class="tool_usertours-resettourcontainer"></div>
       </div>
     </footer>
   </body>
