@@ -1,8 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Docente
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
+
 from .forms import DocenteForm
+from .models import Docente
 
 # Create your views here.
 
@@ -20,18 +21,6 @@ def login_page(request):
 def log_out(request):
     logout(request)
     return render(request, "login.html", {"form": AuthenticationForm})
-
-def registrar_docente(request):
-    if request.method == 'POST':
-        form = DocenteForm(request.POST)
-        if form.is_valid():
-            pass
-    else:
-        form = DocenteForm()
-    docentes = Docente.objects.all()
-    return render(request, 'registrar_docente', {'form': form, 'docentes': docentes})
-
-
         
 
 def docente_Detail(request, cedula):

@@ -1,15 +1,12 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="greatContainer">
   <div class="header">
     <h1> Docentes </h1>
   </div>
   <div class="body">
-    <div class="path">
-      <a href="{% url '' %}" class="ml-2">Docentes posgrados</a>
-      <a href="{% url 'ver-docente' %}" class="ml-2">Ver Docente</a>
-    </div>
+    
     <div class="teacher">
       <div class="teacher-profile">
         <div class="teacher-profile-name">
@@ -17,8 +14,7 @@
         </div>
         <div class="teacher-profile-info">
           <div class="info">
-            <img src="/src/usuarios/static/img/d_AndresFelipeGalloSarria.jpg" alt="Teacher Photo">
-            <!--<img src="/src/usuarios/pics/d_{{docente.nombre}}.jpg" alt="Teacher Photo">-->
+            <img src="{% static 'img/d_AndresFelipeGalloSarria.jpg' %}" alt="Profesor docente">
           </div>
           <div class="info">
             <div class="info-text">
@@ -31,7 +27,7 @@
             </div>
             <div class="info-text">
               <div class="info-text-title"><h5>Ciudad</h5></div>
-              <div class="info-text-answer"><h6>{{docente.ciudad}}</h6></div>
+              <div class="info-text-answer"><h6>{{docente.ciudad.ciudad}}</h6></div>
             </div>
             <div class="info-text">
               <div class="info-text-title"><h5>Numero de telefono</h5></div>
@@ -41,7 +37,7 @@
           <div class="info">
             <div class="info-text">
               <div class="info-text-title"><h5>Fecha de nacimiento</h5></div>
-              <div class="info-text-answer"><h6>yyyy/mm/dd</h6></div>
+              <div class="info-text-answer"><h6>{{docente.fechaNacimiento}}</h6></div>
             </div>
             <!--<div class="info-text">
               <div class="info-text-title"><h5>Codigo</h5></div>
@@ -49,11 +45,11 @@
             </div>-->
             <div class="info-text">
               <div class="info-text-title"><h5>Contrato</h5></div>
-              <div class="info-text-answer"><h6>{{docente.contrato_codigo}}</h6></div>
+              <div class="info-text-answer"><h6>{{docente.contrato_codigo.tipo_contrato.tipo}}</h6></div>
             </div>
             <div class="info-text">
               <div class="info-text-title"><h5>Estado</h5></div>
-              <div class="info-text-answer"><h6>Activo</h6></div>
+              <div class="info-text-answer"><h6>{{docente.estado.estado}}</h6></div>
             </div>
           </div>
         </div>
