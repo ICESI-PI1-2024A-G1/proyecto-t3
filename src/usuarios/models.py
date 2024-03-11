@@ -56,7 +56,10 @@ class Ciudad(models.Model):
     id = models.AutoField(primary_key=True)
     ciudad = models.CharField(max_length=128,unique=True)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> eb493a6653e90db8106df8f7003931769e156749
 class Persona(models.Model):
     """
     Modelo para representar a las personas.
@@ -73,7 +76,10 @@ class Persona(models.Model):
     email = models.EmailField()
     telefono = models.CharField(max_length=13)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE)
+<<<<<<< HEAD
     #fechaNacimiento= models.DateField()
+=======
+>>>>>>> eb493a6653e90db8106df8f7003931769e156749
 
 class Director(Persona):
     """
