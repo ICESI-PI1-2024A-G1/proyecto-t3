@@ -56,9 +56,6 @@ class Ciudad(models.Model):
     id = models.AutoField(primary_key=True)
     ciudad = models.CharField(max_length=128,unique=True)
 
-class Codigo(models.Model):
-    codigoInstitucional = models.CharField(primary_key=True, max_length=30)
-
 class Persona(models.Model):
     """
     Modelo para representar a las personas.
@@ -71,12 +68,10 @@ class Persona(models.Model):
         ciudad (ForeignKey): Ciudad de residencia de la persona.
     """
     cedula = models.CharField(primary_key=True, max_length=30)
-    codigo = models.ForeignKey(Codigo, on_delete=models.CASCADE, to_field="codigoInstitucional")
     nombre = models.CharField(max_length=128)
     email = models.EmailField()
     telefono = models.CharField(max_length=13)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE)
-    fechaNacimiento= models.DateField()
 
 class Director(Persona):
     """
