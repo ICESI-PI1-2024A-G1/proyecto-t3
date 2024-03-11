@@ -28,7 +28,7 @@ def crear_clase(request):
 
         return redirect("visualizar clases")
     else:
-        return HttpResponse("Metodo no permitido")
+        return render(request, "planeacion_materias.html")
 
 
 # Create your views here.
