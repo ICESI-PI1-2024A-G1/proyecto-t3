@@ -34,8 +34,8 @@ def registrar_docente(request):
 
         
 
-def docente_Detail(request, docente_cedula):
+def docente_Detail(request, cedula):
     if request.method=='GET':
-        docente = get_object_or_404(Docente, cedula=docente_cedula)
+        docente = get_object_or_404(Docente, cedula=cedula)
         return render(request, "docenteProfile.html", {'docente': docente})
 
