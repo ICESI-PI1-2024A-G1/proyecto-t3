@@ -56,6 +56,8 @@ class Ciudad(models.Model):
     id = models.AutoField(primary_key=True)
     ciudad = models.CharField(max_length=128,unique=True)
 
+class Codigo(models.Model):
+    codigoInstitucional = models.CharField(primary_key=True, max_length=30)
 
 class Persona(models.Model):
     """
@@ -68,13 +70,13 @@ class Persona(models.Model):
         telefono (CharField): Número de teléfono de la persona.
         ciudad (ForeignKey): Ciudad de residencia de la persona.
     """
-
     cedula = models.CharField(primary_key=True, max_length=30)
+    codigo = models.ForeignKey(Codigo, on_delete=models.CASCADE, to_field="codigoInstitucional")
     nombre = models.CharField(max_length=128)
     email = models.EmailField()
     telefono = models.CharField(max_length=13)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE)
-
+    fechaNacimiento= models.DateField()
 
 class Director(Persona):
     """
@@ -95,4 +97,9 @@ class Docente(Persona):
         contrato_codigo (CharField): Código del contrato del docente.
     """
 
-    contrato_codigo = models.CharField(max_length=30)
+    contrato_codigo = models.ForeignKey(Contrato, on_delete=models.CASCADE, to_field="codigo")
+    estado_opciones = [
+        ('activo', 'Activo'),
+        ('inactivo', 'Inactivo'),
+    ]
+    estado = models.CharField(max_length=9, choices=estado_opciones, default="activo")
