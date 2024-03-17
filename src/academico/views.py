@@ -1,13 +1,13 @@
 import random
 
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import MateriaForm
-from .models import (Clase, EstadoSolicitud, Facultad, MallaCurricular,
-                     Materia, Periodo, Programa, Curso)
+from .models import (Clase, Curso, EstadoSolicitud, Facultad, MallaCurricular,
+                     Materia, Periodo, Programa)
 
 
 def crear_clase(request):
@@ -120,13 +120,23 @@ def programa(request, codigo, periodo):
     materias = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
     )
+
     malla_curricular = {}
-    
+    tamaño = 0
+    creditos_totales = 0
+    cursos_totales = 0
+
     for materia in materias:
+        materia.materia.color = color_suave()
+        creditos_totales += materia.materia.creditos
+        cursos_totales += 1
         if materia.semestre not in malla_curricular.keys():
+            tamaño = 1
             malla_curricular[materia.semestre] = []
         malla_curricular[materia.semestre].append(materia.materia)
-            
+
+    semestres = len(malla_curricular.keys())
+
     return render(
         request,
         "programa.html",
@@ -135,6 +145,10 @@ def programa(request, codigo, periodo):
             "periodos": Periodo.objects.all(),
             "periodo_selecionado": periodo,
             "malla": malla_curricular,
+            "tamaño": tamaño,
+            "creditos_totales": creditos_totales,
+            "cursos_totales": cursos_totales,
+            "semestres": semestres,
         },
     )
 
@@ -157,6 +171,7 @@ def color_suave():
     color = random.choice(colores)
     return color
 
+
 def visualizacion_materia(request, codigo, periodo):
     materia = Materia.objects.get(codigo=codigo)
     cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
@@ -173,3 +188,4 @@ def visualizacion_materia(request, codigo, periodo):
             "periodos": Periodo.objects.all(),  # Agregado
         },
     )
+    
