@@ -54,14 +54,80 @@
   --collection-1-state: 0px;
 }
 
+progress[value] {
+    /* Eliminar el estilo predeterminado del navegador */
+    -webkit-appearance: none;
+    appearance: none;
+
+    /* Aplicar el ancho y la altura deseados */
+    width: 100%;
+    height: 20px;
+
+    /* Aplicar el color de fondo */
+    background-color: #eee;
+}
+
+progress[value]::-webkit-progress-bar {
+    background-color: #eee;
+}
+
+progress[value]::-webkit-progress-value {
+    /* Cambiar el color de la barra de progreso */
+    background-color: #4CAF50;
+}
+
+progress[value]::-moz-progress-bar {
+    /* Cambiar el color de la barra de progreso */
+    background-color: #4CAF50;
+}
+
+.color-azul{
+    background-color: #74DEFF;
+}
+
+.color-rojo{
+    background-color: #ff7171;
+}
+
+.color-verde{
+    background-color: #7FFF74;
+}
+
+.color-amarillo{
+    background-color: #FFF174;
+}
+
+.color-naranja{
+    background-color: #ffc861;
+}
+
+.color-rosa{
+    background-color: #FFC0CB;
+}
+
+.color-violeta{
+    background-color: #ba81de;
+}
+
+.color-turquesa{
+    background-color: #85f5ea;
+}
+
+.outer-shadow{
+    box-shadow: 3px 3px 3px darkgray;
+}
+
+.inner-shadow{
+    box-shadow: darkgray 0px 0px 3px inset;
+}
+
 .frame {
   display: flex;
   flex-direction: column;
-  width: 145px;
   height: 111px;
   align-items: center;
   gap: 4px;
-  padding: 8px 19px;
+  padding: 16px;
   position: relative;
   border-radius: 8px;
   overflow: hidden;
@@ -79,25 +145,19 @@
   flex: 0 0 auto;
 }
 
-.frame .derecho {
-  position: relative;
-  margin-top: -1px;
-  font-family: var(--buttons-text-font-family);
-  font-weight: var(--buttons-text-font-weight);
-  color: var(--fontaccenttext);
-  font-size: var(--buttons-text-font-size);
-  letter-spacing: var(--buttons-text-letter-spacing);
-  line-height: var(--buttons-text-line-height);
-  font-style: var(--buttons-text-font-style);
+.frame .title {
+    font-size: 14px;
+    position: relative;
+    margin-top: 2px;
+    font-weight: bold;
 }
 
-.frame .p {
+.frame .span {
   position: relative;
   width: fit-content;
   font-family: "Poppins-Bold", Helvetica;
   font-weight: 400;
-  color: var(--fontnormaltext);
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 0;
   line-height: normal;
 }
