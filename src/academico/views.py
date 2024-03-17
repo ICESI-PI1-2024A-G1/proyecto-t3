@@ -130,6 +130,47 @@ def programas(request):
         },
     )
 
+def materias(request):
+    materias = Materia.objects.all()
+    programas = Programa.objects.all() 
+
+    # Búsqueda y filtrado
+    if request.method == "GET":
+        query = request.GET.get("q", None)
+        ordenar_por = request.GET.get("ordenar_por", None)
+        programa = request.GET.get("programa", None)  
+
+        if query:
+            materias = materias.filter(
+                Q(nombre__icontains=query)
+                | Q(departamento__nombre__icontains=query)
+            )
+
+        if programa:  
+            materias = materias.filter(programas__codigo=programa)
+
+        if ordenar_por:
+            materias = materias.order_by(ordenar_por)
+
+    paginator = Paginator(materias, 10) 
+
+    # Paginación
+    page_number = request.GET.get('page')
+    try:
+        materias = paginator.page(page_number)
+    except PageNotAnInteger:
+        materias = paginator.page(1)
+    except EmptyPage:
+        materias = paginator.page(paginator.num_pages)
+
+    return render(
+        request,
+        "materias.html",
+        {
+            "materias": materias,
+            "programas": programas, 
+        },
+    )
 
 def programa(request, codigo, periodo):
     programa = Programa.objects.get(codigo=codigo)

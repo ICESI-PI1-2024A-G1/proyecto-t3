@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container">
+    <h1 class="display-3 align-center">Lista de Materias</h1>
+
+    <!-- Formulario para búsqueda -->
+    <form id="search-form" method="GET" action="{% url 'materias' %}" class="form-inline mb-3">
+        <div class="form-group flex-grow-1 position-relative">
+            <label for="q" class="sr-only">Buscar por nombre de materia o departamento</label>
+            <input type="text" name="q" id="q" class="form-control w-100 pl-4"
+                placeholder="Buscar por nombre o departamento" />
+            <img src="{% static 'img/search.png' %}" alt="Buscar"
+                style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
+                onclick="document.getElementById('search-form').submit();">
+        </div>
+    </form>
+
+    <!-- Formulario para filtrado por programa -->
+    <form method="GET" action="{% url 'materias' %}" class="form-inline mb-3">
+        <div class="form-group flex-grow-1 mr-2">
+            <select name="programa" id="filtrar_por_programa" class="form-control w-100">
+                <option value="">Todos los programas</option>
+                {% for programa in programas %}
+                <option value="{{ programa.codigo }}">{{ programa.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+
+    <!-- Tabla de materias -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre de la Materia</th>
+                <th>Créditos</th>
+                <th>Departamento</th>
+                <th>Tipo de Materia</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for materia in materias %}
+            <tr onclick="window.location.href='materia/{{materia.codigo}}/detalle'">
+                <td>{{ materia.codigo }}</td>
+                <td>{{ materia.nombre }}</td>
+                <td>{{ materia.creditos }}</td>
+                <td>{{ materia.departamento.nombre }}</td>
+                <td>{{ materia.tipo_de_materia }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if materias.has_previous %}
+            <a href="?page=1">&laquo; Primero</a>
+            <a href="?page={{ materias.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span class="current">
+                Página {{ materias.number }} de {{ materias.paginator.num_pages }}.
+            </span>
+
+            {% if materias.has_next %}
+            <a href="?page={{ materias.next_page_number }}">Siguiente</a>
+            <a href="?page={{ materias.paginator.num_pages }}">Último &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+{% endblock %}
