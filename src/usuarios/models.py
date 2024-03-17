@@ -54,7 +54,7 @@ class Ciudad(models.Model):
     """
 
     id = models.AutoField(primary_key=True)
-    ciudad = models.CharField(max_length=128,unique=True)
+    ciudad = models.CharField(max_length=128, unique=True)
 
 
 class Persona(models.Model):
@@ -74,6 +74,7 @@ class Persona(models.Model):
     email = models.EmailField()
     telefono = models.CharField(max_length=13)
     ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE)
+    fechaNacimiento = models.DateField()
 
 
 class Director(Persona):
@@ -86,6 +87,17 @@ class Director(Persona):
 
     oficina = models.CharField(max_length=30)
 
+class EstadoDocente(models.Model):
+    """
+    Modelo para representar los estados de un docente.
+
+    Atributos:
+        id (AutoField): Identificador único del estado del docente.
+        estado (CharField): Descripción del estado del docente.
+    """
+
+    id = models.AutoField(primary_key=True)
+    estado = models.CharField(max_length=128)
 
 class Docente(Persona):
     """
@@ -95,4 +107,5 @@ class Docente(Persona):
         contrato_codigo (CharField): Código del contrato del docente.
     """
 
-    contrato_codigo = models.CharField(max_length=30)
+    contrato_codigo = models.ForeignKey(Contrato, on_delete=models.CASCADE, to_field="codigo")
+    estado = models.ForeignKey(EstadoDocente, on_delete=models.CASCADE)

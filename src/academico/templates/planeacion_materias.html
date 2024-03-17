@@ -1,90 +1,131 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nueva Clase</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Planeación de Curso</h1>
-        <button id="nuevaClaseBtn">Nueva Clase</button>
-        
-        <!-- Sección para mostrar las clases creadas -->
-        <div id="clasesCreadas">
-            <h2>Clases Creadas</h2>
-            <ul id="listaClases">
-                <!-- Aquí se añadirán las clases creadas dinámicamente -->
-            </ul>
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+  <h1>Planeación de Curso</h1>
+  <button id="nuevaClaseBtn" class="btn btn-primary">Nueva Clase</button>
+</div>
+
+<div id="popup" style="display: none">
+  <div class="modal moodle-has-zindex show background-shadow">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="popup-content form-group">
+
+          <span class="close" onclick="closePopup()"></span>
+          <h3 class="h2">Seleccionar día y horario</h3>
+          <form id="classForm"w>
+            
+            <h4 class="h4">Inicio</h4>
+            <div class="form-group row">
+              <label for="start_day">Día de inicio:</label>
+              <div class="col">
+                <input type="date" id="start_day" name="start_day" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="end_day">Día de fin:</label>
+              <div class="col">
+                <input type="date" id="end_day" name="end_day" />
+              </div>
+            </div>
+
+            <h4 class="h4">Horario Inicio</h4>
+            <div class="form-group row">
+              <label for="time">Horario:</label>
+              <div class="col">
+                <input type="time" id="time_I" name="time_I" />
+              </div>
+            </div>
+
+            <h4 class="h4">Horario Final</h4>
+            <div class="form-group row">
+              <label for="time">Horario:</label>
+              <div class="col">
+                <input type="time" id="time_F" name="time_F" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="weeks">Número de semanas:</label>
+              <div class="col">
+                <input
+                  class="form-control"
+                  type="number"
+                  id="weeks"
+                  name="weeks"
+                  min="1"
+                  value="1"
+                />
+              </div>
+            </div>
+
+            <!-- Modalidad y tipo de espacio -->
+            <div class="form-group row">
+              <label for="modalidad">Modalidad:</label>
+              <div class="col">
+                <select id="modalidad" name="mode">
+                  <option value="virtual">Virtual</option>
+                  <option value="presencial">Presencial</option>
+                </select>
+              </div>
+            </div>
+          
+            <div class="form-group row">
+              <label for="tipo_espacio">Tipo de espacio:</label>
+              <div class="col">
+                <select id="tipo_espacio" name="tipo_espacio">
+                  <option value="sala_estudio_8">Sala de Estudio (Max:8)</option>
+                  <option value="sala_estudio_5">Sala de Estudio (Max:5)</option>
+                  <option value="sala_computo">Sala de Computo</option>
+                  <option value="auditorio">Auditorio</option>
+                  <option value="sala_juntas">Sala de Juntas</option>
+                  <option value="sala_conferencias">Sala de Conferencias</option>
+                  <option value="lab_biologia">Laboratorio de Biología</option>
+                  <option value="lab_fisica">Laboratorio de Fisíca</option>
+                  <option value="lab_quimica">Laboratorio de Química</option>
+                  <option value="salon_20">Salón (Max:20)</option>
+                  <option value="salon_30">Salón (Max:30)</option>
+                  <option value="salon_40">Salón (Max:40)</option>
+                </select>
+              </div>
+            </div>
+            <!-- Modalidad y tipo de espacio -->                
+
+            <button class="btn btn-primary" type="submit">Crear Clases</button>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
+  <div
+    tabindex="-1"
+    style="position: fixed; top: 0px; left: 0px"
+    aria-hidden="true"
+    data-aria-hidden-tab-index="0"
+  ></div>
+</div>
 
-    <!-- Popup para seleccionar día y horario -->
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <h2>Seleccionar día y horario</h2>
+<!-- Popup para seleccionar día y horario -->
+<script>
+  var popup = document.getElementById("popup");
 
-            <form id="classForm" action="{% url 'crear_clase' %}" method="post">
-                <label for="day">Fecha de inicio de clase:</label>
-                <input type="date" id="start_day" name="start_day"><br><br>
-                <label for="day">Fecha final de clase:</label>
-                <input type="date" id="end_day" name="end_day"><br><br>
-                <label for="time">Horario:</label>
-                <input type="time" id="time" name="time"><br><br>
-                <label for="weeks">Número de semanas:</label>
-                <input type="number" id="weeks" name="weeks" min="1" value="1"><br><br>
-                <label for="mode">Modalidad:</label>
-                <select name="mode" id="mode">  
-                    <option value="1">Presencial</option>
-                    <option value="2">Virtual</option>
-                </select><br><br>
-                <input type="hidden" id="cursoId" name="cursoId" value="1">
-                <button type="submit">Crear Clases</button>
-            </form>
-        </div>
-    </div>
+  // Mostrar popup al hacer clic en "Nueva Clase"
+  document.getElementById("nuevaClaseBtn").onclick = function () {
+    popup.style.display = "block";
+  };
 
-    <!-- Script para mostrar/ocultar el popup y manejar la creación de clases -->
-    <script>
-        var popup = document.getElementById("popup");
-        var listaClases = document.getElementById("listaClases");
+  // Cerrar popup al hacer clic en el botón de cerrar
+  function closePopup() {
+    popup.style.display = "none";
+  }
 
-        // Mostrar popup al hacer clic en "Nueva Clase"
-        document.getElementById("nuevaClaseBtn").onclick = function() {
-            popup.style.display = "block";
-        }
-
-        // Cerrar popup al hacer clic en el botón de cerrar
-        function closePopup() {
-            popup.style.display = "none";
-        }
-
-        // Cerrar popup al hacer clic fuera de él
-        window.onclick = function(event) {
-            if (event.target == popup) {
-                popup.style.display = "none";
-            }
-        }
-
-        // Función para manejar la creación de clases
-        document.getElementById("classForm").onsubmit = function(event) {
-            event.preventDefault(); // Evitar que el formulario se envíe
-            var day = document.getElementById("day").value;
-            var time = document.getElementById("time").value;
-            var weeks = document.getElementById("weeks").value;
-
-            // Crear el elemento de la lista con la información de la clase
-            var listItem = document.createElement("li");
-            listItem.textContent = "Clase el " + day + " a las " + time + " durante " + weeks + " semanas";
-
-            // Agregar el elemento a la lista de clases creadas
-            listaClases.appendChild(listItem);
-
-            // Cerrar el popup
-            popup.style.display = "none";
-        }
-    </script>
-</body>
-</html>
+  // Cerrar popup al dar clic afuera
+  window.onclick = function (event) {
+    if (event.target == popup) {
+      popup.style.display = "none";
+    }
+  };
+</script>
+{% endblock %}

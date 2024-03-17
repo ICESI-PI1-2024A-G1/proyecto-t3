@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="greatContainer">
+  <div class="header">
+    <h1> Docentes </h1>
+  </div>
+  <div class="body">
+    
+    <div class="teacher">
+      <div class="teacher-profile">
+        <div class="teacher-profile-name">
+          <h2>{{docente.nombre}}</h2>
+        </div>
+        <div class="teacher-profile-info">
+          <div class="info">
+            <img src="{% static 'img/d_AndresFelipeGalloSarria.jpg' %}" alt="Profesor docente">
+          </div>
+          <div class="info">
+            <div class="info-text">
+              <div class="info-text-title"><h5>Correo electronico</h5></div>
+              <div class="info-text-answer"><h6>{{docente.email}}</h6></div>
+            </div>
+            <div class="info-text">
+              <div class="info-text-title"><h5>Cedula de ciudadania</h5></div>
+              <div class="info-text-answer"><h6>{{docente.cedula}}</h6></div>
+            </div>
+            <div class="info-text">
+              <div class="info-text-title"><h5>Ciudad</h5></div>
+              <div class="info-text-answer"><h6>{{docente.ciudad.ciudad}}</h6></div>
+            </div>
+            <div class="info-text">
+              <div class="info-text-title"><h5>Numero de telefono</h5></div>
+              <div class="info-text-answer"><h6>{{docente.telefono}}</h6></div>
+            </div>
+          </div>
+          <div class="info">
+            <div class="info-text">
+              <div class="info-text-title"><h5>Fecha de nacimiento</h5></div>
+              <div class="info-text-answer"><h6>{{docente.fechaNacimiento}}</h6></div>
+            </div>
+            <!--<div class="info-text">
+              <div class="info-text-title"><h5>Codigo</h5></div>
+              <div class="info-text-answer"><h6>{{docente.codigo}}</h6></div>
+            </div>-->
+            <div class="info-text">
+              <div class="info-text-title"><h5>Contrato</h5></div>
+              <div class="info-text-answer"><h6>{{docente.contrato_codigo.tipo_contrato.tipo}}</h6></div>
+            </div>
+            <div class="info-text">
+              <div class="info-text-title"><h5>Estado</h5></div>
+              <div class="info-text-answer"><h6>{{docente.estado.estado}}</h6></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="experience">
+        <div class="experience-title"> <h3>Experiencia/Títulos</h3></div>
+        <div clase="exp">
+          <div class="tit"><h5>xxxxxx</h5></div>
+          <div class="year"><h6>yyyy</h6></div>
+        </div>
+      </div>  
+    </div>
+    <div class="schedule">
+      <div class="day">
+        <h3>Lunes</h3>
+        <ul>
+          <li>7:00</li>
+          <li>7:30</li>
+          <li>8:00</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Repetir div.day para los otros días -->
+  </div>
+</div>  
+<div class="buttons">
+  <button>Anterior</button>
+  <button>Página Principal</button>
+</div>
+{% endblock %}
