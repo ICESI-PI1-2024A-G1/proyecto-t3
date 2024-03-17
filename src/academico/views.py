@@ -1,3 +1,5 @@
+import random
+
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -12,7 +14,8 @@ def crear_clase(request):
     if request.method == "POST":
         start_day = request.POST("start_day")
         end_day = request.POST("end_day")
-        time = request.POST.get("time")
+        time_I = request.POST.get("time_I")
+        time_F = request.POST.get("time_F")
         weeks = request.POST.get("weeks")
         mode = request.POST.get("mode")
         curso_id = request.POST.get("curso_id")
@@ -20,7 +23,8 @@ def crear_clase(request):
         new_class = Clase(
             start_day=start_day,
             end_day=end_day,
-            time=time,
+            time_I=time_I,
+            time_F=time_F,
             weeks=weeks,
             mode=mode,
             curso_id=curso_id,
@@ -131,5 +135,41 @@ def programa(request, codigo, periodo):
             "periodos": Periodo.objects.all(),
             "periodo_selecionado": periodo,
             "malla": malla_curricular,
+        },
+    )
+
+
+# Lista de colores
+colores = [
+    "azul",
+    "rojo",
+    "verde",
+    "amarillo",
+    "naranja",
+    "rosa",
+    "violeta",
+    "turquesa",
+]
+
+
+def color_suave():
+    # Seleccionar un color de la lista de forma aleatoria
+    color = random.choice(colores)
+    return color
+
+def visualizacion_materia(request, codigo, periodo):
+    materia = Materia.objects.get(codigo=codigo)
+    cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
+
+    periodos = Periodo.objects.all()
+
+    return render(
+        request,
+        "visualizacion_materias.html",
+        {
+            "materia": materia,
+            "cursos": cursos,
+            "periodo_seleccionado": periodo,  # Agregado
+            "periodos": Periodo.objects.all(),  # Agregado
         },
     )
