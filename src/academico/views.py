@@ -1,8 +1,9 @@
 import random
+from django.db import IntegrityError
 
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import MateriaForm
@@ -39,22 +40,37 @@ def crear_clase(request):
 # Create your views here.
 
 
-def crear_curso(request):
+def crear_curso(request, codigo, periodo):
     if request.method == "POST":
-        form = MateriaForm(request.POST)
-        if form.is_valid():
-            mensaje = "Curso creado exitosamente"
-            return render(request, "crear-curso.html", {"form": form, "mensaje": mensaje})
+        form = request.POST
+        cupo = form["cantidad_de_cupos"]
+        # NRC aleatorio
+        nrc = random.randint(10000, 99999)
+        # Grupo aleatorio
+        grupo = random.randint(1, 9)
+        grupo = int(f"00{grupo}")
+        
+        try:
+            Curso.objects.create(
+                cupo=cupo,
+                grupo=grupo,
+                nrc=nrc,
+                materia_id=codigo,
+                periodo_id=periodo,
+            )
+            return redirect("visualizacion_materias", codigo=codigo, periodo=periodo)
+        except IntegrityError as e:
+            print("Error al crear el curso. Por favor, inténtelo de nuevo.")           
+            print(e)  
     else:
         form = MateriaForm()
 
-    materias = Materia.objects.all()
-    periodos = Periodo.objects.all()
+    materia = get_object_or_404(Materia, codigo=codigo)
 
     return render(
         request,
         "crear-curso.html",
-        {"form": form, "materias": materias, "periodos": periodos},
+        {"form": form, "materia": materia, "periodo": periodo},
     )
 
 

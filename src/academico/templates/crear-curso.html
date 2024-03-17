@@ -18,21 +18,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="materia">Materia</label>
-                            <select name="materia" id="materia" class="form-control">
-                                {% for materia in materias %}
-                                <option value="{{ materia.codigo }}">{{ materia.nombre }}</option>
-                                {% endfor %}
-                            </select>
+                            <label for="materia">Materia: {{materia.nombre}}</label>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="periodo">Periodo Académico</label>
-                            <select name="periodo" id="periodo" class="form-control">
-                                {% for periodo in periodos %}
-                                <option value="{{ periodo.id }}">{{ periodo.semestre }}</option>
-                                {% endfor %}
-                            </select>
+                            <label for="periodo">Periodo Académico: {{periodo}}</label>
                         </div>
 
                         <div class="form-group">
