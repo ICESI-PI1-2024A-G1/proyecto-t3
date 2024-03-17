@@ -5,7 +5,10 @@ import random
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
+<<<<<<< HEAD
 >>>>>>> 9f1282a43cb10730a97310ebd92f5ce1ab3c09a6
+=======
+>>>>>>> 43c5dc7499e6fcb37e87aabaf78ca77e83132f2d
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -18,6 +21,7 @@ from .models import (Clase, Curso, EstadoSolicitud, Facultad, MallaCurricular,
 @login_required(login_url='/login')
 def crear_clase(request):
     if request.method == "POST":
+<<<<<<< HEAD
         start_day = request.POST("start_day")
         end_day = request.POST("end_day")
         time_I = request.POST.get("time_I")
@@ -33,9 +37,28 @@ def crear_clase(request):
             time_F=time_F,
             weeks=weeks,
             mode=mode,
+=======
+        start_day = request.POST.get("start_day")
+        end_day = request.POST.get("end_day")
+        
+        tipo_espacio = request.POST.get("tipo_espacio")
+        curso_id= int(request.POST.get("curso_id"))
+        espacio_id=int(request.POST.get("espacio_id"))
+        mode = int(request.POST.get("mode"))
+        #Ver que estaba enviando al sql, no borrar
+        print(f"time_I: {start_day}, time_F: {end_day}, tipo_espacio: {tipo_espacio}, curso_id: {curso_id}, espacio_id: {espacio_id}, mode: {mode}")
+
+        clase = Clase.objects.create(
+            fecha_inicio=start_day,
+            fecha_fin=end_day,
+            espacio_asignado=tipo_espacio,
+>>>>>>> 43c5dc7499e6fcb37e87aabaf78ca77e83132f2d
             curso_id=curso_id,
+            espacio_id=espacio_id,
+            modalidad_id=mode,
         )
-        new_class.save()
+
+        print(f"Clase creada: {clase}")
 
         return redirect("visualizar clases")
     else:
@@ -195,8 +218,11 @@ def programa(request, codigo, periodo):
             malla_curricular[materia.semestre] = []
         malla_curricular[materia.semestre].append(materia.materia)
 <<<<<<< HEAD
+<<<<<<< HEAD
             
 =======
+=======
+>>>>>>> 43c5dc7499e6fcb37e87aabaf78ca77e83132f2d
 
     semestres = len(malla_curricular.keys())
 
@@ -262,5 +288,9 @@ def args_principal(seleccionado):
     return {
         "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
         "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"}
+<<<<<<< HEAD
     }
 >>>>>>> 9f1282a43cb10730a97310ebd92f5ce1ab3c09a6
+=======
+    }
+>>>>>>> 43c5dc7499e6fcb37e87aabaf78ca77e83132f2d

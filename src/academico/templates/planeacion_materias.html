@@ -16,9 +16,14 @@
           <span class="close" onclick="closePopup()"></span>
           <h3 class="h2">Seleccionar día y horario</h3>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <form id="classForm"W>
 =======
           <form id="classForm"w>
+=======
+          <form id="classForm" action="{% url 'planeacion_materias' %}" method="POST">
+            {% csrf_token %}
+>>>>>>> 43c5dc7499e6fcb37e87aabaf78ca77e83132f2d
             
             <h4 class="h4">Inicio</h4>
 >>>>>>> 9f1282a43cb10730a97310ebd92f5ce1ab3c09a6
@@ -30,6 +35,7 @@
             </div>
             <div class="form-group row">
               <label for="end_day">Día de fin:</label>
+<<<<<<< HEAD
               <div class="col">
                 <input type="date" id="end_day" name="end_day" />
               </div>
@@ -50,18 +56,45 @@
               <label for="time">Horario:</label>
               <div class="col">
                 <input type="time" id="time_F" name="time_F" />
+=======
+              <div class="col">
+                <input type="date" id="end_day" name="end_day" />
+>>>>>>> 43c5dc7499e6fcb37e87aabaf78ca77e83132f2d
               </div>
             </div>
 
 >>>>>>> 9f1282a43cb10730a97310ebd92f5ce1ab3c09a6
             <div class="form-group row">
-              <label for="weeks">Número de semanas:</label>
+              <label for="tipo_espacio">Tipo de espacio:</label>
+              <div class="col">
+                <select id="tipo_espacio" name="tipo_espacio">
+                  <option value="Sala de Estudio (Max:8)">Sala de Estudio (Max:8)</option>
+                  <option value="Sala de Estudio (Max:5)">Sala de Estudio (Max:5)</option>
+                  <option value="Sala de Computo">Sala de Computo</option>
+                  <option value="Auditorio">Auditorio</option>
+                  <option value="Sala de Juntas">Sala de Juntas</option>
+                  <option value="Sala de Conferencias">Sala de Conferencias</option>
+                  <option value="Laboratorio de Biología">Laboratorio de Biología</option>
+                  <option value="Laboratorio de Fisíca">Laboratorio de Fisíca</option>
+                  <option value="Laboratorio de Química">Laboratorio de Química</option>
+                  <option value="Salón (Max:20)">Salón (Max:20)</option>
+                  <option value="Salón (Max:30)">Salón (Max:30)</option>
+                  <option value="Salón (Max:40)">Salón (Max:40)</option>
+                </select>
+              </div>
+            </div>
+
+           
+            
+            <!-- Nª tipo de espacio como 101A y esto es integer, hablarlo en grupo -->
+            <div class="form-group row">
+              <label for="espacio_id">Nª Espacio:</label>
               <div class="col">
                 <input
                   class="form-control"
                   type="number"
-                  id="weeks"
-                  name="weeks"
+                  id="espacio_id"
+                  name="espacio_id"
                   min="1"
                   value="1"
                 />
@@ -69,18 +102,44 @@
             </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+            <div class="form-group row">
+              <label for="curso_id">Id del curso:</label>
+              <div class="col">
+                <input
+                  class="form-control"
+                  type="number"
+                  id="curso_id"
+                  name="curso_id"
+                  min="1"
+                  value="0"
+                />
+              </div>
+            </div>
+
+            
+
+>>>>>>> 43c5dc7499e6fcb37e87aabaf78ca77e83132f2d
             <!-- Modalidad y tipo de espacio -->
             <div class="form-group row">
               <label for="modalidad">Modalidad:</label>
               <div class="col">
                 <select id="modalidad" name="mode">
+<<<<<<< HEAD
                   <option value="virtual">Virtual</option>
                   <option value="presencial">Presencial</option>
+=======
+                  <option value="1">Virtual Asincronica</option>
+                  <option value="2">Virtual Sincronica</option>
+                  <option value="3">Presencial</option>
+>>>>>>> 43c5dc7499e6fcb37e87aabaf78ca77e83132f2d
                 </select>
               </div>
             </div>
           
+<<<<<<< HEAD
             <div class="form-group row">
               <label for="tipo_espacio">Tipo de espacio:</label>
               <div class="col">
@@ -100,6 +159,9 @@
                 </select>
               </div>
             </div>
+=======
+           
+>>>>>>> 43c5dc7499e6fcb37e87aabaf78ca77e83132f2d
             <!-- Modalidad y tipo de espacio -->                
 
 >>>>>>> 9f1282a43cb10730a97310ebd92f5ce1ab3c09a6
