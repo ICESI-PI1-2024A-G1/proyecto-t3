@@ -2,9 +2,10 @@ import random
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, EstadoSolicitud, Facultad, MallaCurricular,
@@ -41,22 +42,37 @@ def crear_clase(request):
 # Create your views here.
 
 @login_required(login_url='/login')
-def crear_curso(request):
+def crear_curso(request, codigo, periodo):
     if request.method == "POST":
-        form = MateriaForm(request.POST)
-        if form.is_valid():
-            mensaje = "Curso creado exitosamente"
-            return render(request, "crear-curso.html", {"form": form, "mensaje": mensaje})
+        form = request.POST
+        cupo = form["cantidad_de_cupos"]
+        # NRC aleatorio
+        nrc = random.randint(10000, 99999)
+        # Grupo aleatorio
+        grupo = random.randint(1, 9)
+        grupo = int(f"00{grupo}")
+        
+        try:
+            Curso.objects.create(
+                cupo=cupo,
+                grupo=grupo,
+                nrc=nrc,
+                materia_id=codigo,
+                periodo_id=periodo,
+            )
+            return redirect("visualizacion_materias", codigo=codigo, periodo=periodo)
+        except IntegrityError as e:
+            print("Error al crear el curso. Por favor, inténtelo de nuevo.")           
+            print(e)  
     else:
         form = MateriaForm()
 
-    materias = Materia.objects.all()
-    periodos = Periodo.objects.all()
+    materia = get_object_or_404(Materia, codigo=codigo)
 
     return render(
         request,
         "crear-curso.html",
-        {"form": form, "materias": materias, "periodos": periodos},
+        {"form": form, "materia": materia, "periodo": periodo},
     )
 
 
@@ -119,6 +135,49 @@ def programas(request):
         },
     )
 
+def materias(request):
+    materias = Materia.objects.all()
+    programas = Programa.objects.all() 
+
+    # Búsqueda y filtrado
+    if request.method == "GET":
+        query = request.GET.get("q", None)
+        ordenar_por = request.GET.get("ordenar_por", None)
+        programa = request.GET.get("programa", None)  
+
+        if query:
+            materias = materias.filter(
+                Q(nombre__icontains=query)
+                | Q(departamento__nombre__icontains=query)
+            )
+
+        if programa:  
+            materias = materias.filter(programas__codigo=programa)
+
+        if ordenar_por:
+            materias = materias.order_by(ordenar_por)
+
+    paginator = Paginator(materias, 10) 
+
+    # Paginación
+    page_number = request.GET.get('page')
+    try:
+        materias = paginator.page(page_number)
+    except PageNotAnInteger:
+        materias = paginator.page(1)
+    except EmptyPage:
+        materias = paginator.page(paginator.num_pages)
+
+    return render(
+        request,
+        "materias.html",
+        {
+            "materias": materias,
+            "programas": programas, 
+            "side": "sidebar_principal.html",
+            "side_args": args_principal("materias"),
+        },
+    )
 
 @login_required(login_url="/login")
 def programa(request, codigo, periodo):
