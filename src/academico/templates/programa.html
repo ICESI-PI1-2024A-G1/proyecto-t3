@@ -7,82 +7,43 @@
 <div class="container">
   <h2 class="mt-2"><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
   <label class="col"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
-  <label class="col"><strong>Crétidos totales:</strong> {{ creditos_totales }}</label>
-  <label class="col"><strong>Cursos totales:</strong> {{ cursos_totales }}</label>
-  <div class="block card card-body mt-3 inner-shadow">
-    <div class="row align-items-center">
-      <div class="col">
-        <div class="row align-items-center">
-          <img class="rounded" src="{% static 'img/d_AndresFelipeGalloSarria.jpg' %}" style="width: 20%; height: 20%;">
-          <div class="col">
-            <label class="row m-3" style="text-align: start;"><strong>Director:</strong> {{ programa.director.nombre }}</label>
-            <label class="row m-3" style="text-align: start;"><strong>Email:</strong> {{ programa.director.email }}</label>
-            <label class="row m-3" style="text-align: start;"><strong>Teléfono:</strong> {{ programa.director.telefono }}</label>
-          </div>        
-        </div>
-      </div>
-      <div class="col">
-        <div class="row align-items-center">
-          <img class="rounded btn-warning p-2" src="{% static 'img/reloj.png' %}" style="width: 10%; height: 10%;">
-          <div class="col">
-            <label class="row m-3" style="text-align: start;"><strong>Duración: </strong> {{ semestres }} semestres </label>
-          </div>        
-        </div>
-        <div class="row align-items-center">
-          <img class="rounded btn-warning p-2" src="{% static 'img/dinero.png' %}" style="width: 10%; height: 10%;">
-          <div class="col">
-            <label class="row m-3" style="text-align: start;"><strong>Costo del semestre: </strong> 11.500.000 $ </label>
-          </div>        
-        </div>
-      </div>
-    </div>
-    <div class="row align-items-center">
-        <strong class="mr-2">Estado:</strong>
-        <progress class="rui-tooltip--bottom" data-title="{{programa.estado_solicitud.nombre}}"min="1" max="4" value={{programa.estado_solicitud.estado}}>este es un elemento de progreso no soportado por tu navegador, prueba con otro</progress>
-    </div>
+  <div class="row">
+      <label class="col" style="text-align: start;"><strong>Director:</strong> {{ programa.director.nombre }}</label>
+      <label class="col" style="text-align: start;"><strong>Email:</strong> {{ programa.director.email }}</label>
+      <label class="col" style="text-align: start;"><strong>Teléfono:</strong> {{ programa.director.telefono }}</label>
   </div>
 
   <!-- Tabla de materias -->
-  <div class="block card card-body mt-3 inner-shadow">
+  <div class="block card card-body mt-3">
     <div class="form-inline">
-      <div class="col">
-        <a class="btn-secondary rounded p-2 ml-2" href="#"><img class="icon" src="{% static 'img/pencil.png' %}"></a>
-        <strong>Malla curricular</strong>
-      </div>
-      <div class="justify-content-end">
-        Periodo selecionado:
-        <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
-              {% for periodo in periodos %} 
-              {% if periodo_selecionado == periodo.semestre %}
-          <option value="{{programa.codigo}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
-          {% else %}
-          <option value="{{programa.codigo}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>
-          {% endif %} 
-          {% endfor %}
-        </select>
-      </div>
+      <strong class="mr-2">Periodo selecionado: </strong>
+      <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
+            {% for periodo in periodos %} 
+            {% if periodo_selecionado == periodo.semestre %}
+        <option value="{{programa.codigo}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
+        {% else %}
+        <option value="{{programa.codigo}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>
+        {% endif %} 
+        {% endfor %}
+      </select>
 
     </div>
-    <div class="mt-2">
+    <div class="mt-2 block card">
     {% for semestre, materias in malla.items %}
-      <div class="rounded m-2 row" style="background-color: #d3d3d3;">
-        <div class="frame m-2 justify-content-center" style="background-color: rgba(120, 120, 120, 0.773);"><strong style="width: 25px;">{{ semestre }}°</strong></div>
+    <div class="pd-1 row align-items-center">
+        <div class="block card"><strong>{{ semestre }}°</strong></div>
         {% for materia in materias %}
-        
-        <div class="color-{{materia.color}} frame m-2 btn outer-shadow">
+        <div class="frame m-2" style="background-color: rgba(89, 96, 196, 0.773);">
           <div class="div">
-            <strong class="title">{{materia.nombre}}</strong>
-            <span class="text-wrapper span"><strong>Créditos:</strong> {{materia.creditos}}</span>
-            <span class="text-wrapper span"><strong>Código:</strong> {{materia.codigo}}</span>
+            <div class="derecho">{{materia.nombre}}</div>
+            <p class="p"><span class="text-wrapper">Créditos: </span> <span class="span">{{materia.creditos}}</span></p>
+            <p class="p"><span class="text-wrapper">Código: </span> <span class="span">{{materia.codigo}}</span></p>
           </div>
         </div>
         {% endfor %}
-      </div>
+    </div>
     {% endfor %}
     </div>
-    {% if tamaño == 1 %}
-    <a class="btn btn-primary">Exportar<img class="icon" src="{% static 'img/download.webp' %}"></a>
-    {% endif %}
   </div>
 </div>
 

@@ -1,5 +1,3 @@
-import random
-
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -105,23 +103,13 @@ def programa(request, codigo, periodo):
     materias = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
     )
-
     malla_curricular = {}
-    tamaño = 0
-    creditos_totales = 0
-    cursos_totales = 0
-
+    
     for materia in materias:
-        materia.materia.color = color_suave()
-        creditos_totales += materia.materia.creditos
-        cursos_totales += 1
         if materia.semestre not in malla_curricular.keys():
-            tamaño = 1
             malla_curricular[materia.semestre] = []
         malla_curricular[materia.semestre].append(materia.materia)
-    
-    semestres = len(malla_curricular.keys())
-
+            
     return render(
         request,
         "programa.html",
@@ -130,28 +118,5 @@ def programa(request, codigo, periodo):
             "periodos": Periodo.objects.all(),
             "periodo_selecionado": periodo,
             "malla": malla_curricular,
-            "tamaño": tamaño,
-            "creditos_totales": creditos_totales,
-            "cursos_totales": cursos_totales,
-            "semestres":semestres
         },
     )
-
-
-# Lista de colores
-colores = [
-    "azul",
-    "rojo",
-    "verde",
-    "amarillo",
-    "naranja",
-    "rosa",
-    "violeta",
-    "turquesa",
-]
-
-
-def color_suave():
-    # Seleccionar un color de la lista de forma aleatoria
-    color = random.choice(colores)
-    return color
