@@ -9,26 +9,35 @@ from .models import (Clase, EstadoSolicitud, Facultad, MallaCurricular,
                      Materia, Periodo, Programa, Curso)
 
 
+def generar_curso_id():
+    ultimo_curso = Curso.objects.all().order_by('-id').first()
+    if ultimo_curso is None:
+        return 1
+    else:
+        return ultimo_curso.curso_id + 1
+
 def crear_clase(request):
     if request.method == "POST":
-        start_day = request.POST("start_day")
-        end_day = request.POST("end_day")
-        time_I = request.POST.get("time_I")
-        time_F = request.POST.get("time_F")
-        weeks = request.POST.get("weeks")
-        mode = request.POST.get("mode")
-        curso_id = request.POST.get("curso_id")
+        start_day = request.POST.get("start_day")
+        end_day = request.POST.get("end_day")
+        
+        tipo_espacio = request.POST.get("tipo_espacio")
+        curso_id= int(request.POST.get("curso_id"))
+        espacio_id=int(request.POST.get("espacio_id"))
+        mode = int(request.POST.get("mode"))
+        #Ver que estaba enviando al sql, no borrar
+        print(f"time_I: {start_day}, time_F: {end_day}, tipo_espacio: {tipo_espacio}, curso_id: {curso_id}, espacio_id: {espacio_id}, mode: {mode}")
 
-        new_class = Clase(
-            start_day=start_day,
-            end_day=end_day,
-            time_I=time_I,
-            time_F=time_F,
-            weeks=weeks,
-            mode=mode,
+        clase = Clase.objects.create(
+            fecha_inicio=start_day,
+            fecha_fin=end_day,
+            espacio_asignado=tipo_espacio,
             curso_id=curso_id,
+            espacio_id=espacio_id,
+            modalidad_id=mode,
         )
-        new_class.save()
+
+        print(f"Clase creada: {clase}")
 
         return redirect("visualizar clases")
     else:

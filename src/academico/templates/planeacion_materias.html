@@ -15,7 +15,8 @@
 
           <span class="close" onclick="closePopup()"></span>
           <h3 class="h2">Seleccionar día y horario</h3>
-          <form id="classForm"w>
+          <form id="classForm" action="{% url 'planeacion_materias' %}" method="POST">
+            {% csrf_token %}
             
             <h4 class="h4">Inicio</h4>
             <div class="form-group row">
@@ -31,66 +32,72 @@
               </div>
             </div>
 
-            <h4 class="h4">Horario Inicio</h4>
             <div class="form-group row">
-              <label for="time">Horario:</label>
+              <label for="tipo_espacio">Tipo de espacio:</label>
               <div class="col">
-                <input type="time" id="time_I" name="time_I" />
+                <select id="tipo_espacio" name="tipo_espacio">
+                  <option value="Sala de Estudio (Max:8)">Sala de Estudio (Max:8)</option>
+                  <option value="Sala de Estudio (Max:5)">Sala de Estudio (Max:5)</option>
+                  <option value="Sala de Computo">Sala de Computo</option>
+                  <option value="Auditorio">Auditorio</option>
+                  <option value="Sala de Juntas">Sala de Juntas</option>
+                  <option value="Sala de Conferencias">Sala de Conferencias</option>
+                  <option value="Laboratorio de Biología">Laboratorio de Biología</option>
+                  <option value="Laboratorio de Fisíca">Laboratorio de Fisíca</option>
+                  <option value="Laboratorio de Química">Laboratorio de Química</option>
+                  <option value="Salón (Max:20)">Salón (Max:20)</option>
+                  <option value="Salón (Max:30)">Salón (Max:30)</option>
+                  <option value="Salón (Max:40)">Salón (Max:40)</option>
+                </select>
               </div>
             </div>
 
-            <h4 class="h4">Horario Final</h4>
+           
+            
+            <!-- Nª tipo de espacio como 101A y esto es integer, hablarlo en grupo -->
             <div class="form-group row">
-              <label for="time">Horario:</label>
-              <div class="col">
-                <input type="time" id="time_F" name="time_F" />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label for="weeks">Número de semanas:</label>
+              <label for="espacio_id">Nª Espacio:</label>
               <div class="col">
                 <input
                   class="form-control"
                   type="number"
-                  id="weeks"
-                  name="weeks"
+                  id="espacio_id"
+                  name="espacio_id"
                   min="1"
                   value="1"
                 />
               </div>
             </div>
 
+            <div class="form-group row">
+              <label for="curso_id">Id del curso:</label>
+              <div class="col">
+                <input
+                  class="form-control"
+                  type="number"
+                  id="curso_id"
+                  name="curso_id"
+                  min="1"
+                  value="0"
+                />
+              </div>
+            </div>
+
+            
+
             <!-- Modalidad y tipo de espacio -->
             <div class="form-group row">
               <label for="modalidad">Modalidad:</label>
               <div class="col">
                 <select id="modalidad" name="mode">
-                  <option value="virtual">Virtual</option>
-                  <option value="presencial">Presencial</option>
+                  <option value="1">Virtual Asincronica</option>
+                  <option value="2">Virtual Sincronica</option>
+                  <option value="3">Presencial</option>
                 </select>
               </div>
             </div>
           
-            <div class="form-group row">
-              <label for="tipo_espacio">Tipo de espacio:</label>
-              <div class="col">
-                <select id="tipo_espacio" name="tipo_espacio">
-                  <option value="sala_estudio_8">Sala de Estudio (Max:8)</option>
-                  <option value="sala_estudio_5">Sala de Estudio (Max:5)</option>
-                  <option value="sala_computo">Sala de Computo</option>
-                  <option value="auditorio">Auditorio</option>
-                  <option value="sala_juntas">Sala de Juntas</option>
-                  <option value="sala_conferencias">Sala de Conferencias</option>
-                  <option value="lab_biologia">Laboratorio de Biología</option>
-                  <option value="lab_fisica">Laboratorio de Fisíca</option>
-                  <option value="lab_quimica">Laboratorio de Química</option>
-                  <option value="salon_20">Salón (Max:20)</option>
-                  <option value="salon_30">Salón (Max:30)</option>
-                  <option value="salon_40">Salón (Max:40)</option>
-                </select>
-              </div>
-            </div>
+           
             <!-- Modalidad y tipo de espacio -->                
 
             <button class="btn btn-primary" type="submit">Crear Clases</button>
