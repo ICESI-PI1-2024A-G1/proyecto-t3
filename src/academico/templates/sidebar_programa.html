@@ -1,0 +1,29 @@
+{%load static %}
+<div class="side">
+  <div class="col">
+    <div class="border-bottom">
+        <div class="btn-secondary btn w-75 mt-2 mb-2" onclick="window.history.back();">
+            <img class="icon" src="{% static 'img/arrow_back.png' %}"> 
+            <strong>Anterior</strong>
+        </div>
+    </div>
+    <strong class="pt-3 pl-3 pr-3">{{programa.nombre}}</strong>
+    <div class="btn"></div>
+    <a class="section-button btn btn-secondary" href="/academico/programas/{{programa.codigo}}/{{periodo_seleccionado}}">
+      <div class="frame-wrapper">
+        <div class="state-btn">
+          <div class="state-{{info.seleccionado}}"></div>
+        </div>
+      </div>
+      <div class="nombre-de-seccion">Información general</div>
+    </a>
+    <a class="section-button btn btn-secondary" href="/academico/programas/{{programa.codigo}}/{{periodo_seleccionado}}/editar-malla">
+      <div class="frame-wrapper">
+        <div class="state-btn">
+          <div class="state-{{info.seleccionado}}"></div>
+        </div>
+      </div>
+      <div class="nombre-de-seccion">Malla curricular</div>
+    </a>
+  </div>
+</div>

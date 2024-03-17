@@ -114,7 +114,7 @@ def programas(request):
             "periodos_academicos": periodos_academicos,
             "facultades": facultades,
             "estados": estados,
-            "side": "side_bar_principal.html",
+            "side": "sidebar_principal.html",
             "side_args": args_principal("programas"),
         },
     )
@@ -149,12 +149,13 @@ def programa(request, codigo, periodo):
         {
             "programa": programa,
             "periodos": Periodo.objects.all(),
-            "periodo_selecionado": periodo,
+            "periodo_seleccionado": periodo,
             "malla": malla_curricular,
             "tamaño": tamaño,
             "creditos_totales": creditos_totales,
             "cursos_totales": cursos_totales,
             "semestres": semestres,
+            "side": "sidebar_programa.html",
         },
     )
 
@@ -197,6 +198,6 @@ def visualizacion_materia(request, codigo, periodo):
 
 def args_principal(seleccionado):
     return {
-        "Programas posgrado": {"url": "academico/programas", "seleccionado": seleccionado=="programas"},
-        "Materias posgrado": {"url": "academico/materias", "seleccionado": seleccionado=="materias"}
+        "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
+        "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"}
     }
