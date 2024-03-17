@@ -4,7 +4,8 @@
   {% load static %}
   <script src="{% static 'js/programa.js' %}"></script>
 </head>
-<div class="container">
+<div class="container" style="text-align: start;">
+
   <h2 class="mt-2"><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
   <label class="col"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
   <label class="col"><strong>Crétidos totales:</strong> {{ creditos_totales }}</label>
@@ -53,7 +54,7 @@
         Periodo selecionado:
         <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
               {% for periodo in periodos %} 
-              {% if periodo_selecionado == periodo.semestre %}
+              {% if periodo_seleccionado == periodo.semestre %}
           <option value="{{programa.codigo}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
           {% else %}
           <option value="{{programa.codigo}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>
@@ -69,7 +70,7 @@
         <div class="frame m-2 justify-content-center" style="background-color: rgba(120, 120, 120, 0.773);"><strong style="width: 25px;">{{ semestre }}°</strong></div>
         {% for materia in materias %}
         
-        <div class="color-{{materia.color}} frame m-2 btn outer-shadow">
+        <div class="color-{{materia.color}} frame m-2 btn outer-shadow" onclick="window.location.href='/academico/materias/{{materia.codigo}}/{{periodo_seleccionado}}'">
           <div class="div">
             <strong class="title">{{materia.nombre}}</strong>
             <span class="text-wrapper span"><strong>Créditos:</strong> {{materia.creditos}}</span>
