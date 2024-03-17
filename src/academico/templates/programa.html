@@ -4,7 +4,8 @@
   {% load static %}
   <script src="{% static 'js/programa.js' %}"></script>
 </head>
-<div class="container">
+<div class="container" style="text-align: start;">
+
   <h2 class="mt-2"><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
   <label class="col"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
   <div class="row">
@@ -16,6 +17,7 @@
   <!-- Tabla de materias -->
   <div class="block card card-body mt-3">
     <div class="form-inline">
+<<<<<<< HEAD
       <strong class="mr-2">Periodo selecionado: </strong>
       <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
             {% for periodo in periodos %} 
@@ -26,6 +28,24 @@
         {% endif %} 
         {% endfor %}
       </select>
+=======
+      <div class="col">
+        <a class="btn-secondary rounded p-2 ml-2" href="#"><img class="icon" src="{% static 'img/pencil.png' %}"></a>
+        <strong>Malla curricular</strong>
+      </div>
+      <div class="justify-content-end">
+        Periodo selecionado:
+        <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
+              {% for periodo in periodos %} 
+              {% if periodo_seleccionado == periodo.semestre %}
+          <option value="{{programa.codigo}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
+          {% else %}
+          <option value="{{programa.codigo}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>
+          {% endif %} 
+          {% endfor %}
+        </select>
+      </div>
+>>>>>>> 9f1282a43cb10730a97310ebd92f5ce1ab3c09a6
 
     </div>
     <div class="mt-2 block card">
@@ -33,7 +53,12 @@
     <div class="pd-1 row align-items-center">
         <div class="block card"><strong>{{ semestre }}°</strong></div>
         {% for materia in materias %}
+<<<<<<< HEAD
         <div class="frame m-2" style="background-color: rgba(89, 96, 196, 0.773);">
+=======
+        
+        <div class="color-{{materia.color}} frame m-2 btn outer-shadow" onclick="window.location.href='/academico/materias/{{materia.codigo}}/{{periodo_seleccionado}}'">
+>>>>>>> 9f1282a43cb10730a97310ebd92f5ce1ab3c09a6
           <div class="div">
             <div class="derecho">{{materia.nombre}}</div>
             <p class="p"><span class="text-wrapper">Créditos: </span> <span class="span">{{materia.creditos}}</span></p>
