@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 
 from .forms import MateriaForm
 from .models import (Clase, EstadoSolicitud, Facultad, MallaCurricular,
-                     Materia, Periodo, Programa)
+                     Materia, Periodo, Programa, Curso)
 
 
 def crear_clase(request):
@@ -157,3 +157,20 @@ def color_suave():
     # Seleccionar un color de la lista de forma aleatoria
     color = random.choice(colores)
     return color
+
+def visualizacion_materia(request, codigo, periodo):
+    materia = Materia.objects.get(codigo=codigo)
+    cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
+
+    periodos = Periodo.objects.all()
+
+    return render(
+        request,
+        "visualizacion_materias.html",
+        {
+            "materia": materia,
+            "cursos": cursos,
+            "periodo_seleccionado": periodo,  # Agregado
+            "periodos": Periodo.objects.all(),  # Agregado
+        },
+    )
