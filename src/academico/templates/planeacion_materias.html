@@ -15,33 +15,35 @@
 
           <span class="close" onclick="closePopup()"></span>
           <h3 class="h2">Seleccionar día y horario</h3>
-          <form id="classForm"W>
+          <form id="classForm"w>
             
             <h4 class="h4">Inicio</h4>
             <div class="form-group row">
-              <label for="day">Día:</label>
+              <label for="start_day">Día de inicio:</label>
               <div class="col">
-                <input type="date" id="day" name="day" />
+                <input type="date" id="start_day" name="start_day" />
               </div>
             </div>
             <div class="form-group row">
-              <label for="time">Horario:</label>
+              <label for="end_day">Día de fin:</label>
               <div class="col">
-                <input type="time" id="time" name="time" />
+                <input type="date" id="end_day" name="end_day" />
               </div>
             </div>
 
-            <h4 class="h4">Fin</h4>
-            <div class="form-group row">
-              <label for="day">Día:</label>
-              <div class="col">
-                <input type="date" id="day" name="day" />
-            </div>
-            </div>
+            <h4 class="h4">Horario Inicio</h4>
             <div class="form-group row">
               <label for="time">Horario:</label>
               <div class="col">
-                <input type="time" id="time" name="time" />
+                <input type="time" id="time_I" name="time_I" />
+              </div>
+            </div>
+
+            <h4 class="h4">Horario Final</h4>
+            <div class="form-group row">
+              <label for="time">Horario:</label>
+              <div class="col">
+                <input type="time" id="time_F" name="time_F" />
               </div>
             </div>
 
@@ -59,13 +61,13 @@
               </div>
             </div>
 
-            <!-- Modalidad y tipo de espacioo -->
+            <!-- Modalidad y tipo de espacio -->
             <div class="form-group row">
               <label for="modalidad">Modalidad:</label>
               <div class="col">
-                <select id="modalidad" name="modalidad">
-                  <option value="virtual">Virtual<option>
-                  <option value="presencial">Presencial<option>
+                <select id="modalidad" name="mode">
+                  <option value="virtual">Virtual</option>
+                  <option value="presencial">Presencial</option>
                 </select>
               </div>
             </div>
@@ -73,23 +75,23 @@
             <div class="form-group row">
               <label for="tipo_espacio">Tipo de espacio:</label>
               <div class="col">
-                <select id="modalidad" name="modalidad">
-                  <option value="sala_estudio_8">Sala de Estudio (Max:8)<option>
-                    <option value="sala_estudio_5">Sala de Estudio (Max:5)<option>
-                  <option value="sala_computo">Sala de Computo<option>
-                  <option value="auditorio">Auditorio<option>
-                  <option value="sala_juntas">Sala de Juntas<option>
-                  <option value="sala_conferencias">Sala de Conferencias<option>
-                  <option value="lab_biologia">Laboratorio de Biología<option>
-                  <option value="lab_fisica">Laboratorio de Fisíca<option>
-                  <option value="lab_quimica">Laboratorio de Química<option>
-                  <option value="salon_20">Salón (Max:20) <option>
-                    <option value="salon_30">Salón (Max:30)<option>
-                      <option value="salon_40">Salón (Max:40)<option>
+                <select id="tipo_espacio" name="tipo_espacio">
+                  <option value="sala_estudio_8">Sala de Estudio (Max:8)</option>
+                  <option value="sala_estudio_5">Sala de Estudio (Max:5)</option>
+                  <option value="sala_computo">Sala de Computo</option>
+                  <option value="auditorio">Auditorio</option>
+                  <option value="sala_juntas">Sala de Juntas</option>
+                  <option value="sala_conferencias">Sala de Conferencias</option>
+                  <option value="lab_biologia">Laboratorio de Biología</option>
+                  <option value="lab_fisica">Laboratorio de Fisíca</option>
+                  <option value="lab_quimica">Laboratorio de Química</option>
+                  <option value="salon_20">Salón (Max:20)</option>
+                  <option value="salon_30">Salón (Max:30)</option>
+                  <option value="salon_40">Salón (Max:40)</option>
                 </select>
               </div>
             </div>
-            <!-- Modalidad y tipo de espacioo -->                
+            <!-- Modalidad y tipo de espacio -->                
 
             <button class="btn btn-primary" type="submit">Crear Clases</button>
           </form>
@@ -105,7 +107,7 @@
   ></div>
 </div>
 
-<!-- Popup para seleccionar dia y horario -->
+<!-- Popup para seleccionar día y horario -->
 <script>
   var popup = document.getElementById("popup");
 
@@ -119,7 +121,7 @@
     popup.style.display = "none";
   }
 
-  // Cerrar popup al dar click afuera
+  // Cerrar popup al dar clic afuera
   window.onclick = function (event) {
     if (event.target == popup) {
       popup.style.display = "none";
