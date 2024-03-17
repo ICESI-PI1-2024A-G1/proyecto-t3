@@ -1,12 +1,13 @@
 import random
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from .forms import MateriaForm
-from .models import (Clase, EstadoSolicitud, Facultad, MallaCurricular,
+from .models import (Clase, Curso, EstadoSolicitud, Facultad, MallaCurricular,
                      Materia, Periodo, Programa)
 
 
@@ -15,7 +16,8 @@ def crear_clase(request):
     if request.method == "POST":
         start_day = request.POST("start_day")
         end_day = request.POST("end_day")
-        time = request.POST.get("time")
+        time_I = request.POST.get("time_I")
+        time_F = request.POST.get("time_F")
         weeks = request.POST.get("weeks")
         mode = request.POST.get("mode")
         curso_id = request.POST.get("curso_id")
@@ -23,7 +25,8 @@ def crear_clase(request):
         new_class = Clase(
             start_day=start_day,
             end_day=end_day,
-            time=time,
+            time_I=time_I,
+            time_F=time_F,
             weeks=weeks,
             mode=mode,
             curso_id=curso_id,
@@ -42,8 +45,8 @@ def crear_curso(request):
     if request.method == "POST":
         form = MateriaForm(request.POST)
         if form.is_valid():
-            # Aquí se guardará el curso en la base de datos
-            pass
+            mensaje = "Curso creado exitosamente"
+            return render(request, "crear-curso.html", {"form": form, "mensaje": mensaje})
     else:
         form = MateriaForm()
 
@@ -60,9 +63,6 @@ def crear_curso(request):
 @login_required(login_url="/login")
 def programas(request):
     programas = Programa.objects.all()
-    periodos_academicos = Periodo.objects.all()
-    facultades = Facultad.objects.all()
-    estados = EstadoSolicitud.objects.all()
 
     # Búsqueda y filtrado
     if request.method == "GET":
@@ -91,6 +91,21 @@ def programas(request):
         if ordenar_por:
             programas = programas.order_by(ordenar_por)
 
+    paginator = Paginator(programas, 10) 
+
+    # Paginación
+    page_number = request.GET.get('page')
+    try:
+        programas = paginator.page(page_number)
+    except PageNotAnInteger:
+        programas = paginator.page(1)
+    except EmptyPage:
+        programas = paginator.page(paginator.num_pages)
+
+    periodos_academicos = Periodo.objects.all()
+    facultades = Facultad.objects.all()
+    estados = EstadoSolicitud.objects.all()
+
     return render(
         request,
         "programas.html",
@@ -99,6 +114,8 @@ def programas(request):
             "periodos_academicos": periodos_academicos,
             "facultades": facultades,
             "estados": estados,
+            "side": "side_bar_principal.html",
+            "side_args": args_principal("programas"),
         },
     )
 
@@ -123,7 +140,7 @@ def programa(request, codigo, periodo):
             tamaño = 1
             malla_curricular[materia.semestre] = []
         malla_curricular[materia.semestre].append(materia.materia)
-    
+
     semestres = len(malla_curricular.keys())
 
     return render(
@@ -137,7 +154,7 @@ def programa(request, codigo, periodo):
             "tamaño": tamaño,
             "creditos_totales": creditos_totales,
             "cursos_totales": cursos_totales,
-            "semestres":semestres
+            "semestres": semestres,
         },
     )
 
@@ -159,3 +176,27 @@ def color_suave():
     # Seleccionar un color de la lista de forma aleatoria
     color = random.choice(colores)
     return color
+
+
+def visualizacion_materia(request, codigo, periodo):
+    materia = Materia.objects.get(codigo=codigo)
+    cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
+
+    periodos = Periodo.objects.all()
+
+    return render(
+        request,
+        "visualizacion_materias.html",
+        {
+            "materia": materia,
+            "cursos": cursos,
+            "periodo_seleccionado": periodo,  # Agregado
+            "periodos": Periodo.objects.all(),  # Agregado
+        },
+    )
+
+def args_principal(seleccionado):
+    return {
+        "Programas posgrado": {"url": "academico/programas", "seleccionado": seleccionado=="programas"},
+        "Materias posgrado": {"url": "academico/materias", "seleccionado": seleccionado=="materias"}
+    }

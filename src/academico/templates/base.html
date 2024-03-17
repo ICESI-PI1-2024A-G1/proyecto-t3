@@ -49,8 +49,16 @@
         </ul>
       </div>
     </div>
-
-    {% block content %} {% endblock %}
+    <div class="row">
+      <div class="col-2">
+        {% if side != null %}
+        {% include side %}
+        {% endif %}
+      </div>
+      <div class="container col">
+        {% block content %} {% endblock %}
+      </div>
+    </div>
     <footer id="s-page-footer" class="wrapper-page">
       <div class="wrapper-fw">
         <div>
