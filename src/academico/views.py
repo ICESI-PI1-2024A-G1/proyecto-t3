@@ -1,5 +1,6 @@
 import random
 
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -9,6 +10,7 @@ from .models import (Clase, EstadoSolicitud, Facultad, MallaCurricular,
                      Materia, Periodo, Programa)
 
 
+@login_required(login_url='/login')
 def crear_clase(request):
     if request.method == "POST":
         start_day = request.POST("start_day")
@@ -35,7 +37,7 @@ def crear_clase(request):
 
 # Create your views here.
 
-
+@login_required(login_url='/login')
 def crear_curso(request):
     if request.method == "POST":
         form = MateriaForm(request.POST)
@@ -55,6 +57,7 @@ def crear_curso(request):
     )
 
 
+@login_required(login_url="/login")
 def programas(request):
     programas = Programa.objects.all()
     periodos_academicos = Periodo.objects.all()
@@ -100,6 +103,7 @@ def programas(request):
     )
 
 
+@login_required(login_url="/login")
 def programa(request, codigo, periodo):
     programa = Programa.objects.get(codigo=codigo)
     materias = MallaCurricular.objects.filter(

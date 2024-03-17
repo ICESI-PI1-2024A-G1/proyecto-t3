@@ -81,6 +81,16 @@ progress[value]::-moz-progress-bar {
     background-color: #4CAF50;
 }
 
+.background-main-img{
+    background-image: url(https://www.sainc.co/wp-content/uploads/1987/08/IMG_0494-Icesi.jpg);
+    background-size: 100%;
+    height: 100%;
+}
+
+.color-principal{
+    background-color: #204589;
+}
+
 .color-azul{
     background-color: #74DEFF;
 }
