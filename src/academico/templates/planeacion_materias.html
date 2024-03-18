@@ -15,73 +15,39 @@
 
           <span class="close" onclick="closePopup()"></span>
           <h3 class="h2">Seleccionar día y horario</h3>
-          <form id="classForm" action="{% url 'planeacion_materias' %}" method="POST">
+          <form id="classForm"  method="POST">
             {% csrf_token %}
             
             <h4 class="h4">Inicio</h4>
             <div class="form-group row">
               <label for="start_day">Día de inicio:</label>
               <div class="col">
-                <input type="date" id="start_day" name="start_day" />
+                <input type="datetime-local" id="start_day" name="start_day" />
               </div>
             </div>
             <div class="form-group row">
               <label for="end_day">Día de fin:</label>
               <div class="col">
-                <input type="date" id="end_day" name="end_day" />
+                <input type="datetime-local" id="end_day" name="end_day" />
               </div>
             </div>
-
+            
             <div class="form-group row">
-              <label for="tipo_espacio">Tipo de espacio:</label>
+            <label for="tipo_espacio">Tipo de espacio:</label>
               <div class="col">
                 <select id="tipo_espacio" name="tipo_espacio">
-                  <option value="Sala de Estudio (Max:8)">Sala de Estudio (Max:8)</option>
-                  <option value="Sala de Estudio (Max:5)">Sala de Estudio (Max:5)</option>
-                  <option value="Sala de Computo">Sala de Computo</option>
-                  <option value="Auditorio">Auditorio</option>
-                  <option value="Sala de Juntas">Sala de Juntas</option>
-                  <option value="Sala de Conferencias">Sala de Conferencias</option>
-                  <option value="Laboratorio de Biología">Laboratorio de Biología</option>
-                  <option value="Laboratorio de Fisíca">Laboratorio de Fisíca</option>
-                  <option value="Laboratorio de Química">Laboratorio de Química</option>
-                  <option value="Salón (Max:20)">Salón (Max:20)</option>
-                  <option value="Salón (Max:30)">Salón (Max:30)</option>
-                  <option value="Salón (Max:40)">Salón (Max:40)</option>
+                  {% for espacio in espacios %}
+                    <option value="{{ espacio.id }}">{{ espacio.tipo }}</option>
+                  {% endfor %}
                 </select>
-              </div>
+              </div>   
+            
+      
             </div>
-
-           
+          
             
             <!-- Nª tipo de espacio como 101A y esto es integer, hablarlo en grupo -->
-            <div class="form-group row">
-              <label for="espacio_id">Nª Espacio:</label>
-              <div class="col">
-                <input
-                  class="form-control"
-                  type="number"
-                  id="espacio_id"
-                  name="espacio_id"
-                  min="1"
-                  value="1"
-                />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label for="curso_id">Id del curso:</label>
-              <div class="col">
-                <input
-                  class="form-control"
-                  type="number"
-                  id="curso_id"
-                  name="curso_id"
-                  min="1"
-                  value="0"
-                />
-              </div>
-            </div>
+          
 
             
 
@@ -94,6 +60,13 @@
                   <option value="2">Virtual Sincronica</option>
                   <option value="3">Presencial</option>
                 </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="num_semanas" class="col">Numero de semanas que se dara esta clase:</label>
+              <div class="col">
+                <input type="number" id="num_semanas" name="num_semanas"/> 
               </div>
             </div>
           
