@@ -8,12 +8,12 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MateriaForm
-from .models import (Clase, Curso, EstadoSolicitud, Facultad, MallaCurricular,
-                     Materia, Periodo, Programa, Espacio)
+from .models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
+                     MallaCurricular, Materia, Periodo, Programa)
 
 
 @login_required(login_url="/login")
-def crear_clase(request, curso_id,periodo):
+def crear_clase(request, curso_id):
     if request.method == "POST":
         start_day = request.POST.get("start_day")
         end_day = request.POST.get("end_day")
@@ -33,7 +33,7 @@ def crear_clase(request, curso_id,periodo):
         return redirect("visualizar clases")
     else:
         espacios = Espacio.objects.all()
-        return render(request, "planeacion_materias.html", {'espacios': espacios, "curso_id":curso_id, "periodo":periodo})
+        return render(request, "planeacion_materias.html", {'espacios': espacios, "curso_id":curso_id})
 
 
 # Create your views here.
@@ -44,8 +44,6 @@ def crear_curso(request, codigo, periodo):
     if request.method == "POST":
         form = request.POST
         cupo = form["cantidad_de_cupos"]
-        # NRC aleatorio
-        nrc = random.randint(10000, 99999)
         # Grupo aleatorio
         grupo = random.randint(1, 9)
         grupo = int(f"00{grupo}")
@@ -54,7 +52,6 @@ def crear_curso(request, codigo, periodo):
             Curso.objects.create(
                 cupo=cupo,
                 grupo=grupo,
-                nrc=nrc,
                 materia_id=codigo,
                 periodo_id=periodo,
             )
