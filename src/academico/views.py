@@ -253,9 +253,20 @@ def visualizacion_materia(request, codigo, periodo):
             "periodos": Periodo.objects.all(),  # Agregado
         },
     )
-
+    
 def args_principal(seleccionado):
     return {
         "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
         "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"}
-    }
+        }
+    
+def visualizacion_clase(request, nrc, id):
+    clase = Clase.objects.get(id=id, curso__nrc=nrc)
+
+    return render(
+        request,
+        "visualizacion_clases.html",
+        {
+            "clase": clase,
+        },
+    )
