@@ -228,7 +228,9 @@ class Clase(models.Model):
         modalidad (ForeignKey): Modalidad de enseñanza de la clase.
         espacio (ForeignKey): Espacio físico de la clase.
     """
-
+    # class Meta:
+    #    db_table = 'ejemplo01'
+    
     id = models.AutoField(primary_key=True)
     fecha_inicio = models.DateTimeField(null=True)
     fecha_fin = models.DateTimeField(null=True)

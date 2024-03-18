@@ -1,35 +1,42 @@
 import random
 
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, EstadoSolicitud, Facultad, MallaCurricular,
                      Materia, Periodo, Programa)
 
 
+@login_required(login_url="/login")
 def crear_clase(request):
     if request.method == "POST":
-        start_day = request.POST("start_day")
-        end_day = request.POST("end_day")
-        time_I = request.POST.get("time_I")
-        time_F = request.POST.get("time_F")
-        weeks = request.POST.get("weeks")
-        mode = request.POST.get("mode")
-        curso_id = request.POST.get("curso_id")
+        start_day = request.POST.get("start_day")
+        end_day = request.POST.get("end_day")
 
-        new_class = Clase(
-            start_day=start_day,
-            end_day=end_day,
-            time_I=time_I,
-            time_F=time_F,
-            weeks=weeks,
-            mode=mode,
-            curso_id=curso_id,
+        tipo_espacio = request.POST.get("tipo_espacio")
+        curso_id = int(request.POST.get("curso_id"))
+        espacio_id = int(request.POST.get("espacio_id"))
+        mode = int(request.POST.get("mode"))
+        # Ver que estaba enviando al sql, no borrar
+        print(
+            f"time_I: {start_day}, time_F: {end_day}, tipo_espacio: {tipo_espacio}, curso_id: {curso_id}, espacio_id: {espacio_id}, mode: {mode}"
         )
-        new_class.save()
+
+        clase = Clase.objects.create(
+            fecha_inicio=start_day,
+            fecha_fin=end_day,
+            espacio_asignado=tipo_espacio,
+            curso_id=curso_id,
+            espacio_id=espacio_id,
+            modalidad_id=mode,
+        )
+
+        print(f"Clase creada: {clase}")
 
         return redirect("visualizar clases")
     else:
@@ -39,25 +46,42 @@ def crear_clase(request):
 # Create your views here.
 
 
-def crear_curso(request):
+@login_required(login_url="/login")
+def crear_curso(request, codigo, periodo):
     if request.method == "POST":
-        form = MateriaForm(request.POST)
-        if form.is_valid():
-            mensaje = "Curso creado exitosamente"
-            return render(request, "crear-curso.html", {"form": form, "mensaje": mensaje})
+        form = request.POST
+        cupo = form["cantidad_de_cupos"]
+        # NRC aleatorio
+        nrc = random.randint(10000, 99999)
+        # Grupo aleatorio
+        grupo = random.randint(1, 9)
+        grupo = int(f"00{grupo}")
+
+        try:
+            Curso.objects.create(
+                cupo=cupo,
+                grupo=grupo,
+                nrc=nrc,
+                materia_id=codigo,
+                periodo_id=periodo,
+            )
+            return redirect("visualizacion_materias", codigo=codigo, periodo=periodo)
+        except IntegrityError as e:
+            print("Error al crear el curso. Por favor, inténtelo de nuevo.")
+            print(e)
     else:
         form = MateriaForm()
 
-    materias = Materia.objects.all()
-    periodos = Periodo.objects.all()
+    materia = get_object_or_404(Materia, codigo=codigo)
 
     return render(
         request,
         "crear-curso.html",
-        {"form": form, "materias": materias, "periodos": periodos},
+        {"form": form, "materia": materia, "periodo": periodo},
     )
 
 
+@login_required(login_url="/login")
 def programas(request):
     programas = Programa.objects.all()
 
@@ -88,10 +112,10 @@ def programas(request):
         if ordenar_por:
             programas = programas.order_by(ordenar_por)
 
-    paginator = Paginator(programas, 10) 
+    paginator = Paginator(programas, 10)
 
     # Paginación
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     try:
         programas = paginator.page(page_number)
     except PageNotAnInteger:
@@ -111,10 +135,57 @@ def programas(request):
             "periodos_academicos": periodos_academicos,
             "facultades": facultades,
             "estados": estados,
+            "side": "sidebar_principal.html",
+            "side_args": args_principal("programas"),
         },
     )
 
 
+def materias(request):
+    materias = Materia.objects.all()
+    programas = Programa.objects.all()
+
+    # Búsqueda y filtrado
+    if request.method == "GET":
+        query = request.GET.get("q", None)
+        ordenar_por = request.GET.get("ordenar_por", None)
+        programa = request.GET.get("programa", None)
+
+        if query:
+            materias = materias.filter(
+                Q(nombre__icontains=query) | Q(departamento__nombre__icontains=query)
+            )
+
+        if programa:
+            materias = materias.filter(programas__codigo=programa)
+
+        if ordenar_por:
+            materias = materias.order_by(ordenar_por)
+
+    paginator = Paginator(materias, 10)
+
+    # Paginación
+    page_number = request.GET.get("page")
+    try:
+        materias = paginator.page(page_number)
+    except PageNotAnInteger:
+        materias = paginator.page(1)
+    except EmptyPage:
+        materias = paginator.page(paginator.num_pages)
+
+    return render(
+        request,
+        "materias.html",
+        {
+            "materias": materias,
+            "programas": programas,
+            "side": "sidebar_principal.html",
+            "side_args": args_principal("materias"),
+        },
+    )
+
+
+@login_required(login_url="/login")
 def programa(request, codigo, periodo):
     programa = Programa.objects.get(codigo=codigo)
     materias = MallaCurricular.objects.filter(
@@ -143,12 +214,13 @@ def programa(request, codigo, periodo):
         {
             "programa": programa,
             "periodos": Periodo.objects.all(),
-            "periodo_selecionado": periodo,
+            "periodo_seleccionado": periodo,
             "malla": malla_curricular,
             "tamaño": tamaño,
             "creditos_totales": creditos_totales,
             "cursos_totales": cursos_totales,
             "semestres": semestres,
+            "side": "sidebar_programa.html",
         },
     )
 
@@ -186,17 +258,6 @@ def visualizacion_materia(request, codigo, periodo):
             "cursos": cursos,
             "periodo_seleccionado": periodo,  # Agregado
             "periodos": Periodo.objects.all(),  # Agregado
-        },
-    )
-    
-def visualizacion_clase(request, nrc, id):
-    clase = Clase.objects.get(id=id, curso__nrc=nrc)
-
-    return render(
-        request,
-        "visualizacion_clases.html",
-        {
-            "clase": clase,
         },
     )
     

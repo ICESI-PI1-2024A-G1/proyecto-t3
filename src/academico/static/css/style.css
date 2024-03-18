@@ -81,6 +81,16 @@ progress[value]::-moz-progress-bar {
     background-color: #4CAF50;
 }
 
+.background-main-img{
+    background-image: url(https://www.sainc.co/wp-content/uploads/1987/08/IMG_0494-Icesi.jpg);
+    background-size: 100%;
+    height: 100%;
+}
+
+.color-principal{
+    background-color: #204589;
+}
+
 .color-azul{
     background-color: #74DEFF;
 }
@@ -168,6 +178,118 @@ progress[value]::-moz-progress-bar {
 
 .frame .span {
   font-family: "Poppins-Regular", Helvetica;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  height:100%;
+  align-items: center;
+  position: relative;
+  background-color: var(--structurebackground);
+  border-right: #d5d5d5 1px solid;
+}
+
+.side .col .text-wrapper {
+  position: relative;
+  text-align: start;
+  align-self: stretch;
+  height: 22px;
+  margin-top: -1px;
+  font-family: var(--h3-font-family);
+  font-weight: var(--h3-font-weight);
+  color: #000000;
+  font-size: var(--h3-font-size);
+  letter-spacing: var(--h3-letter-spacing);
+  line-height: var(--h3-line-height);
+  font-style: var(--h3-font-style);
+}
+
+.side .section-navigator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  background-color: var(--structurebackground);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.side .section-button {
+  display: flex;
+  height: 39px;
+  align-items: center;
+  padding: 9px 16px;
+  position: relative;
+  background-color: var(--structurebackground);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.side .frame-wrapper {
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 0 0 auto;
+  display: inline-flex;
+  position: relative;
+}
+
+.side .state-btn {
+  display: flex;
+  flex-direction: column;
+  width: 14px;
+  height: 14px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 4px;
+  position: relative;
+  background-color: var(--structureprimarycolor);
+  border-radius: var(--collection-1-border-radius);
+  overflow: hidden;
+}
+
+.side .state-False {
+  flex: 1;
+  flex-grow: 1;
+  background-color: var(--structurebackground);
+  border-radius: var(--collection-1-border-radius);
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+}
+
+.side .nombre-de-seccion {
+  position: relative;
+  flex: 1;
+  align-self: stretch;
+  margin-top: -1px;
+  font-family: var(--normal-text-font-family);
+  font-weight: var(--normal-text-font-weight);
+  color: #000000;
+  font-size: var(--normal-text-font-size);
+  letter-spacing: var(--normal-text-letter-spacing);
+  line-height: var(--normal-text-line-height);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  font-style: var(--normal-text-font-style);
+}
+
+.side .state-True {
+  position: relative;
+  flex: 1;
+  align-self: stretch;
+  width: 100%;
+  flex-grow: 1;
+  background-color: var(--structureaccentcolor);
+  border-radius: var(--collection-1-border-radius);
 }
 
 .availability-item .availability_stash label {
@@ -23795,7 +23917,8 @@ pre code {
 }
 
 .table-bordered {
-    border: 1px solid #E1E1E1
+    border: 1px solid #E1E1E1;
+    background-color: #fff;
 }
 
 .theme-dark .table-bordered {
@@ -67981,11 +68104,10 @@ span[data-flexitour="container"] .modal-dialog .modal-content .modal-header.mini
 
 #s-page-footer {
     flex-shrink: 0;
-    margin-top: 30px;
-    margin-bottom: 30px;
     padding-top: 30px;
     padding-bottom: 30px;
     border-top: 1px solid #E1E1E1;
+
     color: #212121;
     padding-left: 0;
     padding-right: 0
