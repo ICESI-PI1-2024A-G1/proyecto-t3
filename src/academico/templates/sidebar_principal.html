@@ -1,0 +1,16 @@
+<div class="side">
+  <div class="col">
+    <div class="pt-3 pl-3 pr-3 text-wrapper">Secciones</div>
+    <div class="btn"></div>
+    {% for seccion, info in side_args.items %}
+    <a class="section-button btn btn-secondary" href="{{info.url}}">
+      <div class="frame-wrapper">
+        <div class="state-btn">
+          <div class="state-{{info.seleccionado}}"></div>
+        </div>
+      </div>
+      <div class="nombre-de-seccion">{{seccion}}</div>
+    </a>
+    {% endfor %}
+  </div>
+</div>

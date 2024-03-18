@@ -1,8 +1,46 @@
-<h1>Módulo de programación académica CCSA</h1>
-
-<form method=POST>
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Iniciar sesión">
-
-</form>
+<!DOCTYPE html>
+<html lang="es">
+  {% load static %}
+  <link rel="stylesheet" href="globals.css" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proyecto CCSA</title>
+  </head>
+  <body class="container-fluid background-main-img" style="padding: 0%">
+    <div class="modal moodle-has-zindex show background-shadow">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content pt-3 pb-5">
+          <div class="popup-content form-group h-75 w-100 ">
+            <div class="logo-icesi-container">
+              <img src="{% static 'img/logo-app.jpg' %}" />
+            </div>
+            <div class="container w-75 mt-3">
+              <form method="POST">
+                {% csrf_token %}
+                <input
+                  type="text"
+                  id="username"
+                  class="form-control mb-3"
+                  name="username"
+                  placeholder="Usuario"
+                />
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control mb-3 password-login"
+                  name="password"
+                  placeholder="Contraseña"
+                />
+                <button type="submit" class="btn btn-primary w-100" id="submit">
+                  <b>Iniciar sesión</b>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
