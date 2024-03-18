@@ -9,38 +9,31 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, EstadoSolicitud, Facultad, MallaCurricular,
-                     Materia, Periodo, Programa)
+                     Materia, Periodo, Programa, Espacio)
 
 
 @login_required(login_url="/login")
-def crear_clase(request):
+def crear_clase(request, curso_id,periodo):
     if request.method == "POST":
         start_day = request.POST.get("start_day")
         end_day = request.POST.get("end_day")
-
-        tipo_espacio = request.POST.get("tipo_espacio")
-        curso_id = int(request.POST.get("curso_id"))
-        espacio_id = int(request.POST.get("espacio_id"))
+        tipo_espacio = int(request.POST.get("tipo_espacio"))
         mode = int(request.POST.get("mode"))
-        # Ver que estaba enviando al sql, no borrar
-        print(
-            f"time_I: {start_day}, time_F: {end_day}, tipo_espacio: {tipo_espacio}, curso_id: {curso_id}, espacio_id: {espacio_id}, mode: {mode}"
-        )
-
-        clase = Clase.objects.create(
-            fecha_inicio=start_day,
-            fecha_fin=end_day,
-            espacio_asignado=tipo_espacio,
-            curso_id=curso_id,
-            espacio_id=espacio_id,
-            modalidad_id=mode,
-        )
-
-        print(f"Clase creada: {clase}")
+        num_semanas = int (request.POST.get("num_semanas"))
+        for _ in range(num_semanas):
+            clase = Clase.objects.create(
+                fecha_inicio=start_day,
+                fecha_fin=end_day,
+                espacio_asignado=None,
+                curso_id=curso_id,
+                espacio_id=tipo_espacio,
+                modalidad_id=mode,
+            )
 
         return redirect("visualizar clases")
     else:
-        return render(request, "planeacion_materias.html")
+        espacios = Espacio.objects.all()
+        return render(request, "planeacion_materias.html", {'espacios': espacios, "curso_id":curso_id, "periodo":periodo})
 
 
 # Create your views here.
@@ -260,9 +253,20 @@ def visualizacion_materia(request, codigo, periodo):
             "periodos": Periodo.objects.all(),  # Agregado
         },
     )
-
+    
 def args_principal(seleccionado):
     return {
         "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
         "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"}
-    }
+        }
+    
+def visualizacion_clase(request, nrc, id):
+    clase = Clase.objects.get(id=id, curso__nrc=nrc)
+
+    return render(
+        request,
+        "visualizacion_clases.html",
+        {
+            "clase": clase,
+        },
+    )
