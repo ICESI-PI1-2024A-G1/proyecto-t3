@@ -54,8 +54,6 @@
   --collection-1-state: 0px;
 }
 
-<<<<<<< HEAD
-=======
 progress[value] {
     /* Eliminar el estilo predeterminado del navegador */
     -webkit-appearance: none;
@@ -133,15 +131,13 @@ progress[value]::-moz-progress-bar {
     box-shadow: darkgray 0px 0px 3px inset;
 }
 
->>>>>>> 9f1282a43cb10730a97310ebd92f5ce1ab3c09a6
 .frame {
   display: flex;
   flex-direction: column;
-  width: 145px;
   height: 111px;
   align-items: center;
   gap: 4px;
-  padding: 8px 19px;
+  padding: 16px;
   position: relative;
   border-radius: 8px;
   overflow: hidden;
@@ -159,25 +155,19 @@ progress[value]::-moz-progress-bar {
   flex: 0 0 auto;
 }
 
-.frame .derecho {
-  position: relative;
-  margin-top: -1px;
-  font-family: var(--buttons-text-font-family);
-  font-weight: var(--buttons-text-font-weight);
-  color: var(--fontaccenttext);
-  font-size: var(--buttons-text-font-size);
-  letter-spacing: var(--buttons-text-letter-spacing);
-  line-height: var(--buttons-text-line-height);
-  font-style: var(--buttons-text-font-style);
+.frame .title {
+    font-size: 14px;
+    position: relative;
+    margin-top: 2px;
+    font-weight: bold;
 }
 
-.frame .p {
+.frame .span {
   position: relative;
   width: fit-content;
   font-family: "Poppins-Bold", Helvetica;
   font-weight: 400;
-  color: var(--fontnormaltext);
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 0;
   line-height: normal;
 }

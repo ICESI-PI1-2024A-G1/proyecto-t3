@@ -12,7 +12,7 @@ from .models import (Clase, Curso, EstadoSolicitud, Facultad, MallaCurricular,
                      Materia, Periodo, Programa)
 
 
-@login_required(login_url='/login')
+@login_required(login_url="/login")
 def crear_clase(request):
     if request.method == "POST":
         start_day = request.POST("start_day")
@@ -41,7 +41,8 @@ def crear_clase(request):
 
 # Create your views here.
 
-@login_required(login_url='/login')
+
+@login_required(login_url="/login")
 def crear_curso(request, codigo, periodo):
     if request.method == "POST":
         form = request.POST
@@ -51,7 +52,7 @@ def crear_curso(request, codigo, periodo):
         # Grupo aleatorio
         grupo = random.randint(1, 9)
         grupo = int(f"00{grupo}")
-        
+
         try:
             Curso.objects.create(
                 cupo=cupo,
@@ -62,8 +63,8 @@ def crear_curso(request, codigo, periodo):
             )
             return redirect("visualizacion_materias", codigo=codigo, periodo=periodo)
         except IntegrityError as e:
-            print("Error al crear el curso. Por favor, inténtelo de nuevo.")           
-            print(e)  
+            print("Error al crear el curso. Por favor, inténtelo de nuevo.")
+            print(e)
     else:
         form = MateriaForm()
 
@@ -107,10 +108,10 @@ def programas(request):
         if ordenar_por:
             programas = programas.order_by(ordenar_por)
 
-    paginator = Paginator(programas, 10) 
+    paginator = Paginator(programas, 10)
 
     # Paginación
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     try:
         programas = paginator.page(page_number)
     except PageNotAnInteger:
@@ -135,32 +136,32 @@ def programas(request):
         },
     )
 
+
 def materias(request):
     materias = Materia.objects.all()
-    programas = Programa.objects.all() 
+    programas = Programa.objects.all()
 
     # Búsqueda y filtrado
     if request.method == "GET":
         query = request.GET.get("q", None)
         ordenar_por = request.GET.get("ordenar_por", None)
-        programa = request.GET.get("programa", None)  
+        programa = request.GET.get("programa", None)
 
         if query:
             materias = materias.filter(
-                Q(nombre__icontains=query)
-                | Q(departamento__nombre__icontains=query)
+                Q(nombre__icontains=query) | Q(departamento__nombre__icontains=query)
             )
 
-        if programa:  
+        if programa:
             materias = materias.filter(programas__codigo=programa)
 
         if ordenar_por:
             materias = materias.order_by(ordenar_por)
 
-    paginator = Paginator(materias, 10) 
+    paginator = Paginator(materias, 10)
 
     # Paginación
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     try:
         materias = paginator.page(page_number)
     except PageNotAnInteger:
@@ -173,11 +174,12 @@ def materias(request):
         "materias.html",
         {
             "materias": materias,
-            "programas": programas, 
+            "programas": programas,
             "side": "sidebar_principal.html",
             "side_args": args_principal("materias"),
         },
     )
+
 
 @login_required(login_url="/login")
 def programa(request, codigo, periodo):
@@ -185,13 +187,20 @@ def programa(request, codigo, periodo):
     materias = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
     )
+
     malla_curricular = {}
-    
+    tamaño = 0
+    creditos_totales = 0
+    cursos_totales = 0
+
     for materia in materias:
+        materia.materia.color = color_suave()
+        creditos_totales += materia.materia.creditos
+        cursos_totales += 1
         if materia.semestre not in malla_curricular.keys():
+            tamaño = 1
             malla_curricular[materia.semestre] = []
         malla_curricular[materia.semestre].append(materia.materia)
-            
 
     semestres = len(malla_curricular.keys())
 
