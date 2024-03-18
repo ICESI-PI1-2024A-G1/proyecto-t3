@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block content %}
+
+<head>
+  {% load static %}
+  <script src="{% static 'js/curso.js' %}"></script>
+</head>
+<div class="container">
+  <h2 class="mt-2"><strong>{{ curso.materia.nombre }}:</strong> {{ curso.grupo }}</h2>
+  <label class="col"><strong>NRC:</strong> {{ curso.nrc }}</label>
+  <div class="row">
+      <label class="col" style="text-align: start;"><strong>Creditos:</strong> {{ curso.cupo }}</label>
+      <label class="col" style="text-align: start;"><strong>Tipo:</strong> {{ curso.periodo.semestre }}</label>
+  </div>
+
+  <!-- Tabla de clases -->
+  <div class="block card card-body mt-3">
+    <div class="form-inline">
+      <strong class="mr-2"> <span class="text-wrapper">Periodo: </span> <span class="span">{{curso.periodo.semestre}}</span></strong>
+    </div>
+    <div class="mt-2 block card">
+    
+    <div class="pd-1 row align-items-center">
+        {% for clase in clases %}
+          <div class="frame m-2" style="background-color: rgba(89, 96, 196, 0.773);">
+          <div class="div">
+            <div class="derecho"> ID: {{clase.id}}</div>
+            <p class="p"><span class="text-wrapper">Espacio Asignado: </span> <span class="span">{{clase.espacio_asignado}}</span></p>
+            <p class="p"><span class="text-wrapper">Tipo de Espacio: </span> <span class="span">{{clase.espacio.tipo}}</span></p>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

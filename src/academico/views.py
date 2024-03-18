@@ -189,3 +189,16 @@ def visualizacion_materia(request, codigo, periodo):
         },
     )
     
+
+def visualizacion_curso(request, nrc):
+    curso = Curso.objects.get(nrc = nrc)
+    clases = Clase.objects.filter(curso__nrc = nrc)
+
+    return render(
+        request,
+        "visualizacion_cursos.html",
+        {
+            "curso": curso,
+            "clases": clases,
+        },
+    )    
