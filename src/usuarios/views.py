@@ -1,21 +1,19 @@
 import random
 
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse
-
-from .models import (TipoContrato, EstadoContrato, EstadoDocente, Contrato, Ciudad,
-                     Persona, Director, Docente)
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, redirect, render
 
-from academico.views import programas
+from academico.views import args_principal
 
 from .forms import DocenteForm
-
+from .models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
+                     EstadoDocente, Persona, TipoContrato)
 
 # Create your views here.
 
@@ -95,7 +93,3 @@ def docentes(request):
         },
     )
 
-def args_principal(seleccionado):
-    return {
-        "Docentes posgrado": {"url": "/usuarios/docentes", "seleccionado": seleccionado=="docentes"}
-    }

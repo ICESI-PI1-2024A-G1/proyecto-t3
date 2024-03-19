@@ -254,7 +254,8 @@ def visualizacion_materia(request, codigo, periodo):
 def args_principal(seleccionado):
     return {
         "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
-        "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"}
+        "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"},
+        "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
         }
     
 def visualizacion_clase(request, nrc, id):

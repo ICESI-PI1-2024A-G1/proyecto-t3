@@ -70,7 +70,7 @@
     </thead>
     <tbody>
       {% for docente in docentes %}
-      <tr onclick="window.location.href='ver-docente/{{docente.cedula}}'">
+      <tr onclick="window.location.href='docentes/{{docente.cedula}}'">
         <td>{{ docente.cedula }}</td>
         <td>{{ docente.nombre }}</td>
         <td>{{ docente.email }}</td>
