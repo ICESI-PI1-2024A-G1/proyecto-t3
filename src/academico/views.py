@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Periodo, Programa)
+                     MallaCurricular, Materia, Periodo, Programa, Modalidad)
 
 
 @login_required(login_url="/login")
@@ -18,8 +18,9 @@ def crear_clase(request, curso_id):
         start_day = request.POST.get("start_day")
         end_day = request.POST.get("end_day")
         tipo_espacio = int(request.POST.get("tipo_espacio"))
-        mode = int(request.POST.get("mode"))
+        modalidad_clase = int(request.POST.get("modalidad_clase"))
         num_semanas = int (request.POST.get("num_semanas"))
+
         for _ in range(num_semanas):
             clase = Clase.objects.create(
                 fecha_inicio=start_day,
@@ -27,14 +28,14 @@ def crear_clase(request, curso_id):
                 espacio_asignado=None,
                 curso_id=curso_id,
                 espacio_id=tipo_espacio,
-                modalidad_id=mode,
+                modalidad_id=modalidad_clase,
             )
 
         return redirect("visualizar clases")
     else:
         espacios = Espacio.objects.all()
-        return render(request, "planeacion_materias.html", {'espacios': espacios, "curso_id":curso_id})
-
+        modalidades = Modalidad.objects.all()
+        return render(request, "planeacion_materias.html", {'espacios': espacios,'modalidades': modalidades, "curso_id":curso_id})
 
 # Create your views here.
 

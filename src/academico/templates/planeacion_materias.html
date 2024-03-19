@@ -55,13 +55,15 @@
             <div class="form-group row">
               <label for="modalidad">Modalidad:</label>
               <div class="col">
-                <select id="modalidad" name="mode">
-                  <option value="1">Virtual Asincronica</option>
-                  <option value="2">Virtual Sincronica</option>
-                  <option value="3">Presencial</option>
+                <select id="modalidad_clase" name="modalidad_clase">
+                  {% for modalidad in modalidades  %}
+                  <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
+                  {% endfor %}
                 </select>
               </div>
             </div>
+
+
 
             <div class="form-group row">
               <label for="num_semanas" class="col">Numero de semanas que se dara esta clase:</label>
