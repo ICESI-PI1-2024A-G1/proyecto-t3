@@ -1,6 +1,6 @@
 from django.db import models
 
-from usuarios.models import Director, Docente
+from usuarios.models import Director
 
 
 class EstadoSolicitud(models.Model):
@@ -236,4 +236,3 @@ class Clase(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="nrc")
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, to_field="id")
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
-    docente = models.ForeignKey(Docente, on_delete=models.CASCADE, null=True)
