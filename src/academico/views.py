@@ -6,17 +6,18 @@ from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from datetime import datetime, timedelta
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
                      MallaCurricular, Materia, Periodo, Programa, Modalidad, Docente)
-
+ 
 
 @login_required(login_url="/login")
 def crear_clase(request, curso_id):
     if request.method == "POST":
-        start_day = request.POST.get("start_day")
-        end_day = request.POST.get("end_day")
+        start_day = datetime.strptime(request.POST.get("start_day"), "%Y-%m-%dT%H:%M")
+        end_day = datetime.strptime(request.POST.get("end_day"), "%Y-%m-%dT%H:%M")
         tipo_espacio = int(request.POST.get("tipo_espacio"))
         modalidad_clase = int(request.POST.get("modalidad_clase"))
         num_semanas = int (request.POST.get("num_semanas"))
@@ -48,6 +49,8 @@ def crear_clase(request, curso_id):
                 docente = docente
 
             )
+            start_day += timedelta(days=7)
+            end_day += timedelta(days=7)   
 
         return redirect("visualizar clases")
     else:
