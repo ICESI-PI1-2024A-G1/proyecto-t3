@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<head>
+  {% load static %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="{% static 'js/programa.js' %}"></script>
+</head>
+
+<div class="container">
+    <h1 class="display-3 align-center">Malla curricular</h1>
+    <div class="row mb-2" style="justify-content: space-between;">
+        <div class="justify-content-center">
+            Periodo selecionado:
+            <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
+                {% for periodo in periodos %}
+                {% if periodo_seleccionado == periodo.semestre %}
+                <option value="{{programa.codigo}}/{{ periodo.semestre }}/editar-malla" selected="true">{{ periodo.semestre }}</option>
+                {% else %}
+                <option value="{{programa.codigo}}/{{ periodo.semestre }}/editar-malla">{{ periodo.semestre }}</option>
+                {% endif %} 
+                {% endfor %}
+            </select>
+        </div>
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn--disabled" id="btn-guardar" disabled="true" onclick="enviar_malla()">
+            Guardar cambios
+        </button>
+    </div>
+
+    <!-- Tabla de malla -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre de la Materia</th>
+                <th>Créditos</th>
+                <th>Departamento</th>
+                <th>Semestre</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for materia in malla %}
+            <tr>
+                <td>{{ materia.materia.codigo }}</td>
+                <td>{{ materia.materia.nombre }}</td>
+                <td>{{ materia.materia.creditos }}</td>
+                <td>{{ materia.materia.departamento.nombre }}</td>
+                <td>
+                    <select class="custom-select mr-2" id="{{materia.materia.codigo}}"onchange="activar_guardar(event)">
+                        {% for semestre in semestres %}
+                        {% if materia.semestre == semestre %}
+                        <option value="{{semestre}}" selected="true">{{ semestre }}</option>
+                        {% else %}
+                        <option value="{{semestre}}">{{ semestre }}</option>
+                        {% endif %} 
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Paginación -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if malla.has_previous %}
+            <a href="?page=1">&laquo; Primero</a>
+            <a href="?page={{ malla.previous_page_number }}">Anterior</a>
+            {% endif %}
+
+            <span class="current">
+                Página {{ malla.number }} de {{ malla.paginator.num_pages }}.
+            </span>
+
+            {% if malla.has_next %}
+            <a href="?page={{ malla.next_page_number }}">Siguiente</a>
+            <a href="?page={{ malla.paginator.num_pages }}">Último &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+{% endblock %}

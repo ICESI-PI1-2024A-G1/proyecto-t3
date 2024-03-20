@@ -65,20 +65,24 @@ progress[value] {
 
     /* Aplicar el color de fondo */
     background-color: #eee;
+    border-radius: 8px;
 }
 
 progress[value]::-webkit-progress-bar {
     background-color: #eee;
+    border-radius: 8px;
 }
 
 progress[value]::-webkit-progress-value {
     /* Cambiar el color de la barra de progreso */
-    background-color: #4CAF50;
+    background-color: #37943a;
+    border-radius: 8px;
 }
 
 progress[value]::-moz-progress-bar {
     /* Cambiar el color de la barra de progreso */
-    background-color: #4CAF50;
+    background-color: #37943a;
+    border-radius: 8px;
 }
 
 .background-main-img{
@@ -87,40 +91,16 @@ progress[value]::-moz-progress-bar {
     height: 100%;
 }
 
-.color-principal{
-    background-color: #204589;
+.color-1{
+    background-color: #edf2ff;
 }
 
-.color-azul{
-    background-color: #74DEFF;
+.color-2{
+    background-color: #b5cfff;
 }
 
-.color-rojo{
-    background-color: #ff7171;
-}
-
-.color-verde{
-    background-color: #7FFF74;
-}
-
-.color-amarillo{
-    background-color: #FFF174;
-}
-
-.color-naranja{
-    background-color: #ffc861;
-}
-
-.color-rosa{
-    background-color: #FFC0CB;
-}
-
-.color-violeta{
-    background-color: #ba81de;
-}
-
-.color-turquesa{
-    background-color: #85f5ea;
+.color-3{
+    background-color: #66b0ff;
 }
 
 .outer-shadow{
@@ -28226,7 +28206,6 @@ input.dropdown-item {
 }
 
 .card {
-    margin-bottom: 1rem;
     padding: 0;
     position: relative;
     display: flex;

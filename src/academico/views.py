@@ -1,3 +1,4 @@
+import json
 import random
 
 from django.contrib.auth.decorators import login_required
@@ -177,7 +178,7 @@ def materias(request):
 
 @login_required(login_url="/login")
 def programa(request, codigo, periodo):
-    programa = Programa.objects.get(codigo=codigo)
+    programa = get_object_or_404(Programa,codigo=codigo)
     materias = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
     )
@@ -211,26 +212,61 @@ def programa(request, codigo, periodo):
             "cursos_totales": cursos_totales,
             "semestres": semestres,
             "side": "sidebar_programa.html",
+            "modalidad": obtener_modalidad(materias),
+        },
+    )
+
+def actualizar_malla(request, codigo, periodo):
+    body = json.loads(request.body.decode('utf-8'))
+    for key in body:
+        if len(MallaCurricular.objects.filter(programa__codigo=codigo, periodo__semestre=periodo))<1:
+            continue
+        if MallaCurricular.objects.filter(materia__codigo=key,programa__codigo=codigo,periodo__semestre=periodo).exists():
+            malla = MallaCurricular.objects.get(materia__codigo=key, programa__codigo=codigo, periodo__semestre=periodo)
+            malla.semestre=body[key]
+            malla.save()
+    return redirect("programa",codigo=codigo,periodo=periodo)
+
+
+@login_required(login_url="/login")
+def malla_curricular(request, codigo, periodo):
+    programa= get_object_or_404(Programa,codigo=codigo)
+    malla = MallaCurricular.objects.filter(
+        programa__codigo=codigo, periodo__semestre=periodo
+    )
+
+    semestres = set()
+    for materia in malla:
+        semestres.add(materia.semestre)
+
+    paginator = Paginator(malla, 10)
+
+    # Paginación
+    page_number = request.GET.get("page")
+    try:
+        malla = paginator.page(page_number)
+    except PageNotAnInteger:
+        malla = paginator.page(1)
+    except EmptyPage:
+        malla = paginator.page(paginator.num_pages)
+
+    return render(
+        request,
+        "malla_programa.html",
+        {
+            "programa": programa,
+            "semestres": semestres,
+            "malla": malla,
+            "periodos": Periodo.objects.all(),
+            "periodo_seleccionado": periodo,
+            "side": "sidebar_programa.html",
         },
     )
 
 
-# Lista de colores
-colores = [
-    "azul",
-    "rojo",
-    "verde",
-    "amarillo",
-    "naranja",
-    "rosa",
-    "violeta",
-    "turquesa",
-]
-
-
 def color_suave():
     # Seleccionar un color de la lista de forma aleatoria
-    color = random.choice(colores)
+    color = random.choice([1, 2, 3])
     return color
 
 
@@ -268,3 +304,17 @@ def visualizacion_clase(request, nrc, id):
             "clase": clase,
         },
     )
+
+
+def obtener_modalidad(malla):
+    modalidades = ["NO ESPECIFICADO"]
+
+    for materia in malla:
+        try:
+            for curso in Curso.objects.get(materia__codigo=materia.codigo):
+                for clase in Clase.objects.get(curso_id=curso.id):
+                    modalidades.append(clase.modalidad)
+        except:
+            continue
+
+    return max(set(modalidades), key=modalidades.count)
