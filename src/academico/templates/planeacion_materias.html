@@ -63,6 +63,17 @@
               </div>
             </div>
 
+            <div class="form-group row">
+              <label for="modalidad">Docente Encargado:</label>
+              <div class="col">
+                <select id="docente_clase" name="docente_clase">
+                  {% for docente in docentes %}
+                  <option value="{{docente.cedula}}">{{docente.nombre}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
 
 
             <div class="form-group row">

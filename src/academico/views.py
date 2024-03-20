@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Periodo, Programa, Modalidad)
+                     MallaCurricular, Materia, Periodo, Programa, Modalidad, Docente)
 
 
 @login_required(login_url="/login")
@@ -20,6 +20,22 @@ def crear_clase(request, curso_id):
         tipo_espacio = int(request.POST.get("tipo_espacio"))
         modalidad_clase = int(request.POST.get("modalidad_clase"))
         num_semanas = int (request.POST.get("num_semanas"))
+        docente_cedula = (request.POST.get("docente_clase"))
+
+
+        if not Docente.objects.filter(cedula=docente_cedula).exists():
+            return render(request, "error.html", {"mensaje": "El docente no existe."})
+        
+        if not Curso.objects.filter(nrc=curso_id).exists():
+            return render(request, "error.html", {"mensaje": "El curso no existe."})
+
+        if not Espacio.objects.filter(id=tipo_espacio).exists():
+            return render(request, "error.html", {"mensaje": "El espacio no existe."})
+
+        if not Modalidad.objects.filter(id=modalidad_clase).exists():
+            return render(request, "error.html", {"mensaje": "La modalidad no existe."})
+        
+        docente = Docente.objects.get(cedula=docente_cedula)
 
         for _ in range(num_semanas):
             clase = Clase.objects.create(
@@ -29,13 +45,16 @@ def crear_clase(request, curso_id):
                 curso_id=curso_id,
                 espacio_id=tipo_espacio,
                 modalidad_id=modalidad_clase,
+                docente = docente
+
             )
 
         return redirect("visualizar clases")
     else:
         espacios = Espacio.objects.all()
         modalidades = Modalidad.objects.all()
-        return render(request, "planeacion_materias.html", {'espacios': espacios,'modalidades': modalidades, "curso_id":curso_id})
+        docentes = Docente.objects.all()
+        return render(request, "planeacion_materias.html", {'espacios': espacios,'modalidades': modalidades,'docentes': docentes, "curso_id":curso_id})
 
 # Create your views here.
 
