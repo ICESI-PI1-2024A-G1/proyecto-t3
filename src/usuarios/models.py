@@ -109,3 +109,4 @@ class Docente(Persona):
 
     contrato_codigo = models.ForeignKey(Contrato, on_delete=models.CASCADE, to_field="codigo")
     estado = models.ForeignKey(EstadoDocente, on_delete=models.CASCADE)
+    foto = models.URLField(max_length=200, blank=True, null=True)

@@ -1,6 +1,6 @@
 from django.db import models
 
-from usuarios.models import Director
+from usuarios.models import Director, Docente
 
 
 class EstadoSolicitud(models.Model):
@@ -199,20 +199,14 @@ class Curso(models.Model):
         periodo (ForeignKey): Periodo académico al que pertenece el curso.
     """
 
-    nrc = models.IntegerField(primary_key=True)
+    nrc = models.AutoField(primary_key=True)
     grupo = models.IntegerField()
     cupo = models.IntegerField()
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE, to_field="codigo")
-    periodo = models.ForeignKey(
-        Periodo, on_delete=models.CASCADE, to_field="semestre", default=1
-    )
+    periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, to_field="semestre", default=1)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["nrc", "periodo"], name="unique_nrc_periodo"
-            )
-        ]
+        unique_together = ('grupo', 'materia','periodo')
 
 
 class Clase(models.Model):
@@ -228,8 +222,6 @@ class Clase(models.Model):
         modalidad (ForeignKey): Modalidad de enseñanza de la clase.
         espacio (ForeignKey): Espacio físico de la clase.
     """
-    # class Meta:
-    #    db_table = 'ejemplo01'
     
     id = models.AutoField(primary_key=True)
     fecha_inicio = models.DateTimeField(null=True)
@@ -238,3 +230,4 @@ class Clase(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="nrc")
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, to_field="id")
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
+    docente = models.ForeignKey(Docente, on_delete=models.CASCADE, null=True)
