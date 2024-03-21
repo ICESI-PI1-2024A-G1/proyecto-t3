@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from datetime import datetime, timedelta
 
@@ -68,11 +69,27 @@ def crear_curso(request, codigo, periodo):
     if request.method == "POST":
         form = request.POST
         cupo = form["cantidad_de_cupos"]
-        # Grupo aleatorio
-        grupo = random.randint(1, 9)
-        grupo = int(f"00{grupo}")
+        
+        grupo_existente = True
+        intentos = 0
+        max_intentos = 10 
+        
+        while grupo_existente and intentos < max_intentos:
+            grupo = random.randint(1, 9)
+            grupo = int(f"00{grupo}")
+
+            if not Curso.objects.filter(grupo=grupo, periodo_id=periodo).exists():
+                grupo_existente = False
+            else:
+                intentos += 1
+
+        if grupo_existente:
+            return redirect("visualizacion_materias", codigo=codigo, periodo=periodo)
 
         try:
+            if not Periodo.objects.filter(semestre=periodo).exists():
+                raise Http404("El período especificado no existe.")
+            
             Curso.objects.create(
                 cupo=cupo,
                 grupo=grupo,
@@ -93,7 +110,6 @@ def crear_curso(request, codigo, periodo):
         "crear-curso.html",
         {"form": form, "materia": materia, "periodo": periodo},
     )
-
 
 @login_required(login_url="/login")
 def programas(request):
