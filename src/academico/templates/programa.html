@@ -2,26 +2,37 @@
 
 <head>
   {% load static %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="{% static 'js/programa.js' %}"></script>
 </head>
-<div class="container">
+<div class="container" style="text-align: start;">
+
   <h2 class="mt-2"><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
-  <label class="col"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
-  <label class="col"><strong>Crétidos totales:</strong> {{ creditos_totales }}</label>
-  <label class="col"><strong>Cursos totales:</strong> {{ cursos_totales }}</label>
-  <div class="block card card-body mt-3 inner-shadow">
+  <label class="col ml-3"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
+  <label class="col ml-3"><strong>Crétidos totales:</strong> {{ creditos_totales }}</label>
+  <label class="col ml-3"><strong>Cursos totales:</strong> {{ cursos_totales }}</label>
+  <div class="row">
     <div class="row align-items-center">
-      <div class="col">
+      <div class="col card block inner-shadow p-3 mr-2">
         <div class="row align-items-center">
           <img class="rounded" src="{% static 'img/d_AndresFelipeGalloSarria.jpg' %}" style="width: 20%; height: 20%;">
           <div class="col">
             <label class="row m-3" style="text-align: start;"><strong>Director:</strong> {{ programa.director.nombre }}</label>
             <label class="row m-3" style="text-align: start;"><strong>Email:</strong> {{ programa.director.email }}</label>
             <label class="row m-3" style="text-align: start;"><strong>Teléfono:</strong> {{ programa.director.telefono }}</label>
-          </div>        
+          </div>
+          <div class="col-2 h-100">
+            <a class="btn btn-primary h-100" title="Enviar para aprobación">
+              <img class="icon" src="{% static 'img/email.png' %}">
+            </a>
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <strong class="mr-2">Estado:</strong>
+          <progress class="rui-tooltip--bottom" data-title="{{programa.estado_solicitud.nombre}}"min="1" max="4" value={{programa.estado_solicitud.estado}}>este es un elemento de progreso no soportado por tu navegador, prueba con otro</progress>
         </div>
       </div>
-      <div class="col">
+      <div class="col card block inner-shadow  p-3 pt-4 pb-3 ml-2">
         <div class="row align-items-center">
           <img class="rounded btn-warning p-2" src="{% static 'img/reloj.png' %}" style="width: 10%; height: 10%;">
           <div class="col">
@@ -34,11 +45,13 @@
             <label class="row m-3" style="text-align: start;"><strong>Costo del semestre: </strong> 11.500.000 $ </label>
           </div>        
         </div>
+        <div class="row align-items-center">
+          <img class="rounded btn-warning p-2" src="{% static 'img/pc.png' %}" style="width: 10%; height: 10%;">
+          <div class="col">
+            <label class="row m-3" style="text-align: start;"><strong>Modalidad: </strong> {{modalidad}} </label>
+          </div>        
+        </div>
       </div>
-    </div>
-    <div class="row align-items-center">
-        <strong class="mr-2">Estado:</strong>
-        <progress class="rui-tooltip--bottom" data-title="{{programa.estado_solicitud.nombre}}"min="1" max="4" value={{programa.estado_solicitud.estado}}>este es un elemento de progreso no soportado por tu navegador, prueba con otro</progress>
     </div>
   </div>
 
@@ -46,14 +59,15 @@
   <div class="block card card-body mt-3 inner-shadow">
     <div class="form-inline">
       <div class="col">
-        <a class="btn-secondary rounded p-2 ml-2" href="#"><img class="icon" src="{% static 'img/pencil.png' %}"></a>
+        <a id="btn-editar" class="btn-secondary rounded p-2 ml-2"onclick="modo_edicion()"><img class="icon" src="{% static 'img/pencil.png' %}"></a>
+        <a id="btn-guardar" class="btn-primary rounded p-2 ml-2"onclick="guardar_malla()"style="display:none;"><img class="icon" src="{% static 'img/guardar.png' %}"></a>
         <strong>Malla curricular</strong>
       </div>
       <div class="justify-content-end">
         Periodo selecionado:
         <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
               {% for periodo in periodos %} 
-              {% if periodo_selecionado == periodo.semestre %}
+              {% if periodo_seleccionado == periodo.semestre %}
           <option value="{{programa.codigo}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
           {% else %}
           <option value="{{programa.codigo}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>
@@ -65,11 +79,11 @@
     </div>
     <div class="mt-2">
     {% for semestre, materias in malla.items %}
-      <div class="rounded m-2 row" style="background-color: #d3d3d3;">
+      <div id="{{semestre}}" class="rounded m-2 row semestre_malla" style="background-color: #ebeaea;">
         <div class="frame m-2 justify-content-center" style="background-color: rgba(120, 120, 120, 0.773);"><strong style="width: 25px;">{{ semestre }}°</strong></div>
         {% for materia in materias %}
         
-        <div class="color-{{materia.color}} frame m-2 btn outer-shadow">
+        <div id="{{materia.codigo}}" class="semestre_materia color-{{materia.color}} frame m-2 btn outer-shadow" onclick="window.location.href='/academico/materias/{{materia.codigo}}/{{periodo_seleccionado}}'">
           <div class="div">
             <strong class="title">{{materia.nombre}}</strong>
             <span class="text-wrapper span"><strong>Créditos:</strong> {{materia.creditos}}</span>

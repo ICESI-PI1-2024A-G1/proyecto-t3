@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 
 <head>
   <meta charset="UTF-8" />
@@ -9,57 +10,60 @@
 </head>
 
 <div class="container">
-  <h1>Lista de Programas</h1>
-  <!-- Formulario para búsqueda -->
-  <form method="GET" action="{% url 'programas' %}" class="form-inline mb-2">
-    <div class="form-group">
-      <label for="q" class="sr-only">Buscar por nombre de programa o director</label>
-      <input type="text" name="q" id="q" class="form-control" placeholder="Buscar por nombre o director" />
-    </div>
-    <button type="submit" class="btn btn-primary">Buscar</button>
-  </form>
+  <h1 class="display-3 align-center">Lista de Programas</h1>
+  <div class="mb-3">
 
-  <!-- Formulario para filtrado y ordenamiento -->
-  <form method="GET" action="{% url 'programas' %}" class="form-inline mb-2">
-    <div class="form-group">
-      <label for="ordenar_por" class="mr-2">Ordenar por:</label>
-      <select name="ordenar_por" id="ordenar_por" class="form-control mr-2" onchange="toggleFiltrado()">
-        <option value="">Sin orden</option>
-        <option value="facultad">Facultad</option>
-        <option value="estado_solicitud">Estado de Solicitud</option>
-      </select>
-
-      <!-- Contenedor para Filtrado por Facultad y Estado de Solicitud -->
-      <div class="d-flex align-items-end">
-        <!-- Filtrado por Facultad -->
-        <div id="facultadDiv" style="display: none" class="mr-2">
-          <label for="facultad">Filtrar por Facultad:</label>
-          <select name="facultad" class="form-control">
-            <option value="">Todas las facultades</option>
-            {% for facultad in facultades %}
-            <option value="{{ facultad.id }}">{{ facultad.nombre }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <!-- Filtrado por Estado de Solicitud -->
-        <div id="estadoDiv" style="display: none" class="mr-2">
-          <label for="estado">Filtrar por Estado de Solicitud:</label>
-          <select name="estado" class="form-control">
-            <option value="">Todos los estados</option>
-            {% for estado in estados %}
-            <option value="{{ estado.id }}">{{ estado.nombre }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+    <!-- Formulario para búsqueda -->
+    <form id="search-form" method="GET" action="{% url 'programas' %}" class="form-inline">
+      <div class="form-group flex-grow-1 position-relative">
+        <label for="q" class="sr-only">Buscar por nombre de programa o director</label>
+        <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por nombre o director" />
+        <img src="{% static 'img/search.png' %}" alt="Buscar"
+          style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
+          onclick="document.getElementById('search-form').submit();">
       </div>
-    </div>
-  </form>
+    </form>
+
+    <!-- Formulario para filtrado y ordenamiento -->
+    <form method="GET" action="{% url 'programas' %}" class="form-inline">
+      <div class="form-group mr-2 d-flex align-items-center">
+
+        <label for="ordenar_por" class="mr-2">Ordenar por:</label>
+        <select name="ordenar_por" id="ordenar_por" class="form-control mr-2" onchange="toggleFiltrado()">
+          <option value="">Sin orden</option>
+          <option value="facultad">Facultad</option>
+          <option value="estado_solicitud">Estado de Solicitud</option>
+        </select>
+
+        <!-- Contenedor para Filtrado por Facultad y Estado de Solicitud -->
+        <div id="filtradoDiv" class="d-flex align-items-center">
+          <div id="facultadDiv" style="display: none;" class="mr-2">
+            <select name="facultad" class="form-control">
+              <option value="">Todas las facultades</option>
+              {% for facultad in facultades %}
+              <option value="{{ facultad.id }}">{{ facultad.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Filtrado por Estado de Solicitud -->
+          <div id="estadoDiv" style="display: none;" class="mr-2">
+            <select name="estado" class="form-control">
+              <option value="">Todos los estados</option>
+              {% for estado in estados %}
+              <option value="{{ estado.id }}">{{ estado.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
+      </div>
+    </form>
+  </div>
 
   <!-- Tabla de programas -->
-  <table>
+  <table class="table table-bordered">
     <thead>
       <tr>
         <th>Código</th>
@@ -72,7 +76,7 @@
     </thead>
     <tbody>
       {% for programa in programas %}
-      <tr>
+      <tr onclick="window.location.href='programas/{{programa.codigo}}/202401'">
         <td>{{ programa.codigo }}</td>
         <td>{{ programa.nombre }}</td>
         <td>{{ programa.facultad.nombre }}</td>
@@ -83,5 +87,23 @@
       {% endfor %}
     </tbody>
   </table>
-</div>
-{% endblock %}
+
+  <!-- Paginación -->
+  <div class="pagination">
+    <span class="step-links">
+      {% if programas.has_previous %}
+      <a href="?page=1">&laquo; Primero</a>
+      <a href="?page={{ programas.previous_page_number }}">Anterior</a>
+      {% endif %}
+
+      <span class="current">
+        Página {{ programas.number }} de {{ programas.paginator.num_pages }}.
+      </span>
+
+      {% if programas.has_next %}
+      <a href="?page={{ programas.next_page_number }}">Siguiente</a>
+      <a href="?page={{ programas.paginator.num_pages }}">Último &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
+  {% endblock %}

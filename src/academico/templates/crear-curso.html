@@ -1,45 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <h1>Crear curso</h1>
+{% load static %}
+<div class="container mt-6">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">Crear curso</h1>
+                    <p class="card-text">Por favor complete todos los campos del siguiente formulario para crear un nuevo curso.</p>
 
-    <form method="POST">
-        {% csrf_token %}
+                    <form method="POST">
+                        {% csrf_token %}
 
-        <div class="form-group row">
-            <div class="col">
-                <label for="cantidad_de_cupos">Cantidad de cupos</label>
-                <input type="text" id="cantidad_de_cupos" name="cantidad_de_cupos" class="form-control">
+                        <div class="form-group">
+                            <label for="cantidad_de_cupos">Cantidad de cupos</label>
+                            <input type="text" id="cantidad_de_cupos" name="cantidad_de_cupos" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="materia">Materia: {{materia.nombre}}</label>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="periodo">Periodo Académico: {{periodo}}</label>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" value="Crear curso" class="btn btn-primary">
+                            <a href="{% url 'programas' %}" class="btn btn-danger">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-
-        <div class="form-group row">
-            <div class="col">
-                <label for="materia">Materia</label>
-                <select name="materia" id="materia" class="form-control">
-                    {% for materia in materias %}
-                    <option value="{{ materia.codigo }}">{{ materia.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group row mb-3">
-            <div class="col">
-                <label for="periodo">Periodo Académico</label>
-                <select name="periodo" id="periodo" class="form-control">
-                    {% for periodo in periodos %}
-                    <option value="{{ periodo.id }}">{{ periodo.semestre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col">
-                <input type="submit" value="Crear curso" class="btn btn-primary">
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
 {% endblock %}
