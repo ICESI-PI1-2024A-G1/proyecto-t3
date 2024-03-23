@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-6">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title bg-primary p-2 mb-4 text-white">Información básica del curso</h1>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="card-text"><img src="{% static 'img/hashtag.png' %}" class="icon" alt="NRC">
+                                <b>NRC: </b> {{ curso.nrc }}
+                            </p>
+                            <p class="card-text"><img src="{% static 'img/group.png' %}" class="icon" alt="Grupo">
+                                <b>Grupo: </b> {{ curso.grupo }}
+                            </p>
+                            <p class="card-text"><img src="{% static 'img/curso.png' %}" class="icon"
+                                    alt="Cantidad de Cupos"> <b>Cantidad de Cupos: </b> {{ curso.cupo }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="card-text"><img src="{% static 'img/book.png' %}" class="icon" alt="Materia">
+                                <b>Materia: </b>{{ curso.materia.nombre }}
+                            </p>
+                            <p class="card-text"><img src="{% static 'img/calendar.png' %}" class="icon" alt="Periodo">
+                                <b>Periodo: </b> {{ curso.periodo.semestre }}
+                            </p>
+                            <p class="card-text"><img src="{% static 'img/reloj.png' %}" class="icon"
+                                    alt="Total horas programadas"> <b>Total horas programadas: </b> {{
+                                total_horas_programadas }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title bg-primary p-2 mb-4 text-white">Docentes</h1>
+                    <div class="docentes-container" style="display: flex; flex-wrap: wrap;">
+                        {% for docente in docentes_con_clases %}
+                        <div class="col-md-6 docente-item"
+                            style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="docente-info">
+                                        <img src="{{ docente.foto }}" alt="{{ docente.nombre }}"
+                                            class="img-fluid docente-img" style="max-width: 100px; height: auto;">
+                                        <h5 style="margin-top: 10px;">{{ docente.nombre }}</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title bg-primary p-2 mb-4 text-white">Clases</h1>
+                    <div class="clases-container" style="display: flex; flex-wrap: wrap;">
+                        {% for clase in clases %}
+                        <div class="col-md-6 clase-item"
+                            style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Clase {{ forloop.counter }}</h5>
+                                    <p class="card-text">
+                                        <img src="{% static 'img/calendar.png' %}" class="icon" alt="Fecha de Inicio">
+                                        <strong>Fecha de Inicio:</strong> {{ clase.fecha_inicio }}
+                                    </p>
+                                    <p class="card-text">
+                                        <img src="{% static 'img/calendar.png' %}" class="icon" alt="Fecha de Fin">
+                                        <strong>Fecha de Fin:</strong> {{ clase.fecha_fin }}
+                                    </p>
+                                    <p class="card-text">
+                                        <img src="{% static 'img/reloj.png' %}" class="icon" alt="Horas programadas">
+                                        <strong>Horas programadas:</strong> {{ clase.horas_programadas }}
+                                    </p>
+                                    <p class="card-text">
+                                        <img src="{% static 'img/location.png' %}" class="icon" alt="Espacio Asignado">
+                                        <strong>Espacio Asignado:</strong> {{ clase.espacio_asignado }}
+                                    </p>
+                                    <p class="card-text">
+                                        <img src="{% static 'img/user.png' %}" class="icon" alt="Docente">
+                                        <strong>Docente:</strong> {{ clase.docente.nombre }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.db.models import Q
+from django.db.models import Count
 from django.http import Http404, HttpResponse
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
@@ -308,7 +309,6 @@ def color_suave():
     color = random.choice([1, 2, 3])
     return color
 
-
 def visualizacion_materia(request, codigo, periodo):
     materia = Materia.objects.get(codigo=codigo)
     cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
@@ -342,6 +342,25 @@ def visualizacion_clase(request, nrc, id):
         {
             "clase": clase,
         },
+    )
+
+@login_required(login_url="/login")
+def visualizacion_curso(request, curso_id):
+    curso = Curso.objects.get(nrc=curso_id)
+    clases = Clase.objects.filter(curso=curso).select_related('docente')
+
+    total_horas_programadas = timedelta()
+    for clase in clases:
+        horas_programadas = clase.fecha_fin - clase.fecha_inicio
+        clase.horas_programadas = horas_programadas
+        total_horas_programadas += horas_programadas
+
+    docentes_con_clases = Docente.objects.annotate(num_clases=Count('clase')).filter(num_clases__gt=0)
+
+    return render(
+        request,
+        "visualizar-curso.html",
+        {"curso": curso, "clases": clases, "docentes_con_clases": docentes_con_clases, "total_horas_programadas": total_horas_programadas}
     )
 
 
