@@ -298,6 +298,7 @@ def visualizacion_materia(request, codigo, periodo):
     cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
 
     periodos = Periodo.objects.all()
+    materia.color = color_suave()
 
     return render(
         request,
@@ -307,6 +308,7 @@ def visualizacion_materia(request, codigo, periodo):
             "cursos": cursos,
             "periodo_seleccionado": periodo,  # Agregado
             "periodos": Periodo.objects.all(),  # Agregado
+            "side": "sidebar_materias.html",
         },
     )
     
