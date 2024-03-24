@@ -314,7 +314,7 @@ def visualizacion_materia(request, codigo, periodo):
     cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
 
     periodos = Periodo.objects.all()
-    materia.color = color_suave()
+    cursos.color = color_suave()
 
     return render(
         request,

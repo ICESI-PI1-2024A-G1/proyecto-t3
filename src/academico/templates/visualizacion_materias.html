@@ -27,7 +27,7 @@
       <div class="pd-1 row align-items-center">
         <div class="frame m-2 justify-content-center" style="background-color: rgba(120, 120, 120, 0.773);"><strong style="width: 25px;"> </strong></div>
           {% for curso in cursos %} 
-          <div id="{{curso.nrc}}" class="semestre_materia color-{{materia.color}} frame m-2 btn outer-shadow" onclick="window.location.href='/academico/curso/{{materia.codigo}}/{{curso.nrc}}'" style="width: 100px;">
+          <div id="{{curso.nrc}}" class="color-{{cursos.color}} frame m-2 btn outer-shadow" onclick="window.location.href='/academico/cursos/{{curso.nrc}}/visualizar-curso'" style="width: 100px;">
             <div class="div">
               <span class="text-wrapper span"> NRC: {{curso.nrc}}</span>
               <span class="text-wrapper span"> Grupo:{{curso.grupo}}</span>
