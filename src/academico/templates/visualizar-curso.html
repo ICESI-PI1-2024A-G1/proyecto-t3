@@ -27,8 +27,7 @@
                                 <b>Periodo: </b> {{ curso.periodo.semestre }}
                             </p>
                             <p class="card-text"><img src="{% static 'img/reloj.png' %}" class="icon"
-                                    alt="Total horas programadas"> <b>Total horas programadas: </b> {{
-                                total_horas_programadas }}</p>
+                                alt="Total horas programadas"> <b>Total horas programadas: </b> {{total_horas_programadas }}</p>
                         </div>
                     </div>
                 </div>
@@ -41,6 +40,11 @@
                 <div class="card-body">
                     <h1 class="card-title bg-primary p-2 mb-4 text-white">Docentes</h1>
                     <div class="docentes-container" style="display: flex; flex-wrap: wrap;">
+                        {% if docentes_con_clases.count == 0 %}
+                        <div class="alert alert-warning w-100" role="alert">
+                            No hay docentes asignados a este curso.
+                        </div>
+                        {% endif %}
                         {% for docente in docentes_con_clases %}
                         <div class="col-md-6 docente-item"
                             style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
@@ -66,6 +70,11 @@
                 <div class="card-body">
                     <h1 class="card-title bg-primary p-2 mb-4 text-white">Clases</h1>
                     <div class="clases-container" style="display: flex; flex-wrap: wrap;">
+                        {% if clases.count == 0 %}
+                        <div class="alert alert-warning w-100" role="alert">
+                            No hay clases creadas para este curso
+                        </div>
+                        {% endif %}
                         {% for clase in clases %}
                         <div class="col-md-6 clase-item"
                             style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">

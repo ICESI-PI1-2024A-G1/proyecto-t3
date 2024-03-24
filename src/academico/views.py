@@ -346,16 +346,15 @@ def visualizacion_clase(request, nrc, id):
 
 @login_required(login_url="/login")
 def visualizacion_curso(request, curso_id):
-    curso = Curso.objects.get(nrc=curso_id)
+    curso = get_object_or_404(Curso, nrc=curso_id)
     clases = Clase.objects.filter(curso=curso).select_related('docente')
+    docentes_con_clases = Docente.objects.filter(clase__curso=curso).distinct()
 
     total_horas_programadas = timedelta()
     for clase in clases:
         horas_programadas = clase.fecha_fin - clase.fecha_inicio
         clase.horas_programadas = horas_programadas
         total_horas_programadas += horas_programadas
-
-    docentes_con_clases = Docente.objects.annotate(num_clases=Count('clase')).filter(num_clases__gt=0)
 
     return render(
         request,
