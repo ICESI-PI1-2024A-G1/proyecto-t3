@@ -4,34 +4,44 @@
   {% load static %}
   <script src="{% static 'js/materia.js' %}"></script>
 </head>
-<div class="container">
-  <h2 class="mt-2"><strong>{{ materia.codigo }}:</strong> {{ materia.nombre }}</h2>
-  <label class="col"><strong>Departamento:</strong> {{ materia.departamento.nombre }}</label>
+<div class="container" style="text-align: start;">
+  <h2 class="mt-2"><strong>{{ materia.nombre }}:</strong> {{ materia.codigo }}</h2>
+
   <div class="row">
-      <label class="col" style="text-align: start;"><strong>Creditos:</strong> {{ materia.creditos }}</label>
-      <label class="col" style="text-align: start;"><strong>Tipo:</strong> {{ materia.nombre }}</label>
+      <label class="col ml-3" style="text-align: start;"><strong>Departamento:</strong> {{ materia.departamento.nombre }}</label>
+      <label class="col ml-3" style="text-align: start;"><strong>Creditos:</strong> {{ materia.creditos }}</label>
+      <label class="col ml-3" style="text-align: start;"><strong>Tipo:</strong> {{ materia.nombre }}</label>
   </div>
 
   <!-- Tabla de cursos -->
-  <div class="block card card-body mt-3">
+  <div class="block card card-body mt-3 inner-shadow">
     <div class="form-inline">
-      <strong class="mr-2"> <span class="text-wrapper">Periodo: </span> <span class="span">{{periodo_seleccionado}}</span></strong>
+      <div class="col">
+        <strong>Cursos</strong>
+      </div>
     </div>
-    <div class="mt-2 block card">
+
+    <div class="block card card-body mt-3 inner-shadow">
+      <div class="mt-2">
     
-    <div class="pd-1 row align-items-center">
-        {% for curso in cursos %}
-          <div class="frame m-2" style="background-color: rgba(89, 96, 196, 0.773);">
-          <div class="div">
-            <div class="derecho"> NRC: {{curso.nrc}}</div>
-            <p class="p"><span class="text-wrapper">Grupo: </span> <span class="span">{{curso.grupo}}</span></p>
-            <p class="p"><span class="text-wrapper">Cupos: </span> <span class="span">{{curso.cupo}}</span></p>
+      <div class="pd-1 row align-items-center">
+        <div class="frame m-2 justify-content-center" style="background-color: rgba(120, 120, 120, 0.773);"><strong style="width: 25px;"> </strong></div>
+          {% for curso in cursos %} 
+          <div id="{{curso.nrc}}" class="color-{{cursos.color}} frame m-2 btn outer-shadow" onclick="window.location.href='/academico/cursos/{{curso.nrc}}/visualizar-curso'" style="width: 100px;">
+            <div class="div">
+              <span class="text-wrapper span"> NRC: {{curso.nrc}}</span>
+              <span class="text-wrapper span"> Grupo:{{curso.grupo}}</span>
+              <span class="text-wrapper span"> Cupos:{{curso.cupo}}</span>
+            </div>
           </div>
+          {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+      </div>
     </div>
   </div>
 </div>
+</div class="row">
 
-{% endblock %}
+  {% endblock %}
+
+</div>
