@@ -378,3 +378,22 @@ def obtener_modalidad(malla):
             continue
 
     return max(set(modalidades), key=modalidades.count)
+
+def cambio_docente(request, clase_id):
+    if request.method == "POST":
+        clase = Clase.objects.get(id=clase_id)
+        docente_cedula = request.POST.get("docente_clase")
+        docente = Docente.objects.get(cedula = docente_cedula)
+        
+        if not Docente.objects.filter(cedula=docente_cedula).exists():
+            return render(request, "error.html", {"mensaje": "El docente no existe."})
+        
+        clase.docente = docente
+        clase.save()
+        return redirect(reverse('visualizacion_clases', args=[clase.curso_id, clase.id]))
+    else:
+        clase = Clase.objects.get(id=clase_id)
+        espacios = Espacio.objects.all()
+        modalidades = Modalidad.objects.all()
+        docentes = Docente.objects.all()
+        return render(request, 'visualizacion_clases', {'clase': clase, 'espacios': espacios, 'modalidades': modalidades, 'docentes': docentes})
