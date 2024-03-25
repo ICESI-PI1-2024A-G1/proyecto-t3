@@ -10,6 +10,7 @@ from django.http import Http404, HttpResponse
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from datetime import datetime, timedelta
+from django.urls import reverse
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
@@ -55,7 +56,7 @@ def crear_clase(request, curso_id):
             start_day += timedelta(days=7)
             end_day += timedelta(days=7)   
 
-        return redirect("visualizar clases")
+        return redirect (reverse('visualizacion_clases', args=[curso_id, clase.id]))
     else:
         espacios = Espacio.objects.all()
         modalidades = Modalidad.objects.all()
