@@ -73,11 +73,27 @@ def test_programa_view_not_authenticated(nuevo_programa):
 
 @pytest.mark.django_db
 def test_programa_view_invalid_programa(nuevo_programa):
-    request = RequestFactory().get(reverse("programa", args=["P2", "2021-01"]))
+    request = RequestFactory().get(reverse("programa", args=["P2", "202101"]))
     request.user = User.objects.create_user(username="admin", password="admin")
 
     try:
-        programa(request, "P2", )
+        programa(request, "P2", "202101")
         assert False
     except Http404:
         assert True
+
+
+@pytest.mark.django_db
+def test_malla_curricular_empty_page(nuevo_programa):
+    request = RequestFactory().get(
+        reverse("programa", args=[nuevo_programa.codigo, "2021-01"])
+    )
+    request.user = User.objects.create_user(username="admin", password="admin")
+
+    response = programa(request, nuevo_programa.codigo, "2021-01")
+
+    assert response.status_code == 200
+    assert nuevo_programa.codigo.encode() in response.content
+    assert nuevo_programa.nombre.encode() in response.content
+    assert b"2021-01" in response.content
+    assert b"No hay materias en esta malla curricular" in response.content

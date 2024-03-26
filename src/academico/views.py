@@ -1,19 +1,18 @@
 import json
 import random
+from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.db.models import Q
 from django.http import Http404, HttpResponse
-from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
-from datetime import datetime, timedelta
 
 from .forms import MateriaForm
-from .models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Periodo, Programa, Modalidad, Docente)
- 
+from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
+                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
+
 
 @login_required(login_url="/login")
 def crear_clase(request, curso_id):
@@ -296,6 +295,7 @@ def malla_curricular(request, codigo, periodo):
             "programa": programa,
             "semestres": semestres,
             "malla": malla,
+            "num_materias": len(malla),
             "periodos": Periodo.objects.all(),
             "periodo_seleccionado": periodo,
             "side": "sidebar_programa.html",
