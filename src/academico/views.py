@@ -16,6 +16,7 @@ from .forms import MateriaForm
 from .models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
                      MallaCurricular, Materia, Periodo, Programa, Modalidad, Docente)
  
+# Create your views here.
 
 @login_required(login_url="/login")
 def crear_clase(request, curso_id):
@@ -62,9 +63,32 @@ def crear_clase(request, curso_id):
         modalidades = Modalidad.objects.all()
         docentes = Docente.objects.all()
         return render(request, "planeacion_materias.html", {'espacios': espacios,'modalidades': modalidades,'docentes': docentes, "curso_id":curso_id})
+    
 
-# Create your views here.
+@login_required(login_url="/login")
+def cambio_docente(request, clase_id):
+    docentes = Docente.objects.all()
+    print("Docentes impresos:",docentes)
 
+    if request.method == "POST":
+        clase = Clase.objects.get(id=clase_id)
+        docente_cedula = request.POST.get("docente_clase")
+
+        if not docente_cedula:
+            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+
+        try:
+            docente = Docente.objects.get(cedula=docente_cedula)
+        except Docente.DoesNotExist:
+            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+
+        clase.docente = docente
+        clase.save()
+        return redirect(reverse('visualizacion_clases', args=[clase.curso_id, clase.id]))
+    else:
+        clase = Clase.objects.get(id=clase_id)
+        print("Renderizando Plantilla con docentes:",docentes)
+        return render(request, 'visualizacion_clases.html', {'clase': clase,'docentes': docentes})
 
 @login_required(login_url="/login")
 def crear_curso(request, codigo, periodo):
@@ -379,21 +403,4 @@ def obtener_modalidad(malla):
 
     return max(set(modalidades), key=modalidades.count)
 
-def cambio_docente(request, clase_id):
-    if request.method == "POST":
-        clase = Clase.objects.get(id=clase_id)
-        docente_cedula = request.POST.get("docente_clase")
-        docente = Docente.objects.get(cedula = docente_cedula)
-        
-        if not Docente.objects.filter(cedula=docente_cedula).exists():
-            return render(request, "error.html", {"mensaje": "El docente no existe."})
-        
-        clase.docente = docente
-        clase.save()
-        return redirect(reverse('visualizacion_clases', args=[clase.curso_id, clase.id]))
-    else:
-        clase = Clase.objects.get(id=clase_id)
-        espacios = Espacio.objects.all()
-        modalidades = Modalidad.objects.all()
-        docentes = Docente.objects.all()
-        return render(request, 'visualizacion_clases', {'clase': clase, 'espacios': espacios, 'modalidades': modalidades, 'docentes': docentes})
+
