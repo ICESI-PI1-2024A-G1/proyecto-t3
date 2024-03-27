@@ -57,7 +57,7 @@ def crear_clase(request, curso_id):
             start_day += timedelta(days=7)
             end_day += timedelta(days=7)   
 
-        return redirect (reverse('visualizacion_clases', args=[curso_id, clase.id]))
+        return redirect('cambio_docente', clase_id=clase.id)
     else:
         espacios = Espacio.objects.all()
         modalidades = Modalidad.objects.all()
@@ -84,11 +84,14 @@ def cambio_docente(request, clase_id):
 
         clase.docente = docente
         clase.save()
-        return redirect(reverse('visualizacion_clases', args=[clase.curso_id, clase.id]))
+        return redirect('cambio_docente',clase_id=clase.id)
     else:
         clase = Clase.objects.get(id=clase_id)
+        docentes = Docente.objects.all()
         print("Renderizando Plantilla con docentes:",docentes)
         return render(request, 'visualizacion_clases.html', {'clase': clase,'docentes': docentes})
+    
+
 
 @login_required(login_url="/login")
 def crear_curso(request, codigo, periodo):
