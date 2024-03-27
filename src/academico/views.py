@@ -54,12 +54,40 @@ def crear_clase(request, curso_id):
             start_day += timedelta(days=7)
             end_day += timedelta(days=7)   
 
-        return redirect (reverse('visualizacion_clases', args=[curso_id, clase.id]))
+        return redirect('cambio_docente', clase_id=clase.id)
     else:
         espacios = Espacio.objects.all()
         modalidades = Modalidad.objects.all()
         docentes = Docente.objects.all()
         return render(request, "planeacion_materias.html", {'espacios': espacios,'modalidades': modalidades,'docentes': docentes, "curso_id":curso_id})
+    
+
+@login_required(login_url="/login")
+def cambio_docente(request, clase_id):
+    docentes = Docente.objects.all()
+    print("Docentes impresos:",docentes)
+
+    if request.method == "POST":
+        clase = Clase.objects.get(id=clase_id)
+        docente_cedula = request.POST.get("docente_clase")
+
+        if not docente_cedula:
+            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+
+        try:
+            docente = Docente.objects.get(cedula=docente_cedula)
+        except Docente.DoesNotExist:
+            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+
+        clase.docente = docente
+        clase.save()
+        return redirect('cambio_docente',clase_id=clase.id)
+    else:
+        clase = Clase.objects.get(id=clase_id)
+        docentes = Docente.objects.all()
+        print("Renderizando Plantilla con docentes:",docentes)
+        return render(request, 'visualizacion_clases.html', {'clase': clase,'docentes': docentes})
+
 
 # Create your views here.
 
