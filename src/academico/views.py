@@ -1,20 +1,19 @@
 import json
 import random
+from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
-from django.db.models import Q
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import Http404, HttpResponse
-from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
-from datetime import datetime, timedelta
+from django.urls import reverse
 
 from .forms import MateriaForm
-from .models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Periodo, Programa, Modalidad, Docente)
- 
+from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
+                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
+
 
 @login_required(login_url="/login")
 def crear_clase(request, curso_id):
@@ -55,12 +54,40 @@ def crear_clase(request, curso_id):
             start_day += timedelta(days=7)
             end_day += timedelta(days=7)   
 
-        return redirect("visualizar clases")
+        return redirect('cambio_docente', clase_id=clase.id)
     else:
         espacios = Espacio.objects.all()
         modalidades = Modalidad.objects.all()
         docentes = Docente.objects.all()
         return render(request, "planeacion_materias.html", {'espacios': espacios,'modalidades': modalidades,'docentes': docentes, "curso_id":curso_id})
+    
+
+@login_required(login_url="/login")
+def cambio_docente(request, clase_id):
+    docentes = Docente.objects.all()
+    print("Docentes impresos:",docentes)
+
+    if request.method == "POST":
+        clase = Clase.objects.get(id=clase_id)
+        docente_cedula = request.POST.get("docente_clase")
+
+        if not docente_cedula:
+            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+
+        try:
+            docente = Docente.objects.get(cedula=docente_cedula)
+        except Docente.DoesNotExist:
+            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+
+        clase.docente = docente
+        clase.save()
+        return redirect('cambio_docente',clase_id=clase.id)
+    else:
+        clase = Clase.objects.get(id=clase_id)
+        docentes = Docente.objects.all()
+        print("Renderizando Plantilla con docentes:",docentes)
+        return render(request, 'visualizacion_clases.html', {'clase': clase,'docentes': docentes})
+
 
 # Create your views here.
 
@@ -101,16 +128,8 @@ def crear_curso(request, codigo, periodo):
         except IntegrityError as e:
             print("Error al crear el curso. Por favor, inténtelo de nuevo.")
             print(e)
-    else:
-        form = MateriaForm()
 
-    materia = get_object_or_404(Materia, codigo=codigo)
-
-    return render(
-        request,
-        "crear-curso.html",
-        {"form": form, "materia": materia, "periodo": periodo},
-    )
+    return redirect("visualizacion_materias", codigo=codigo, periodo=periodo)
 
 @login_required(login_url="/login")
 def programas(request):
@@ -297,6 +316,7 @@ def malla_curricular(request, codigo, periodo):
             "programa": programa,
             "semestres": semestres,
             "malla": malla,
+            "num_materias": len(malla),
             "periodos": Periodo.objects.all(),
             "periodo_seleccionado": periodo,
             "side": "sidebar_programa.html",
