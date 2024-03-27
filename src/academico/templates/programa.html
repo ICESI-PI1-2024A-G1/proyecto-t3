@@ -78,6 +78,10 @@
 
     </div>
     <div class="mt-2">
+    {% if tamaño == 0 %}
+      <div class="alert alert-warning w-100" role="alert">No hay materias en esta malla curricular</div>
+    {% endif %}
+
     {% for semestre, materias in malla.items %}
       <div id="{{semestre}}" class="rounded m-2 row semestre_malla" style="background-color: #ebeaea;">
         <div class="frame m-2 justify-content-center" style="background-color: rgba(120, 120, 120, 0.773);"><strong style="width: 25px;">{{ semestre }}°</strong></div>

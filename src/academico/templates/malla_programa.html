@@ -40,6 +40,11 @@
             </tr>
         </thead>
         <tbody>
+            {% if num_materias == 0 %}
+            <tr>
+                <td colspan="5 alert alert-warning" class="text-center">No hay materias en esta malla curricular</td>
+            </tr>
+            {% endif %}
             {% for materia in malla %}
             <tr>
                 <td>{{ materia.materia.codigo }}</td>
