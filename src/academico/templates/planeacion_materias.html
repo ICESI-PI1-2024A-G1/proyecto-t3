@@ -1,115 +1,66 @@
-{% extends "base.html" %}
+{% extends "popup.html" %} {% block content %}
+<h3 class="h2">Seleccionar día y horario</h3>
+<form id="classForm" method="POST" action="/academico/cursos/{{curso.nrc}}/crear-clase">
+  {% csrf_token %}
 
-{% block content %}
-
-<div class="container">
-  <h1>Planeación de Curso</h1>
-  <button id="nuevaClaseBtn" class="btn btn-primary">Nueva Clase</button>
-</div>
-
-<div id="popup" style="display: none">
-  <div class="modal moodle-has-zindex show background-shadow">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="popup-content form-group">
-
-          <span class="close" onclick="closePopup()"></span>
-          <h3 class="h2">Seleccionar día y horario</h3>
-          <form id="classForm"  method="POST">
-            {% csrf_token %}
-            
-            <h4 class="h4">Inicio</h4>
-            <div class="form-group row">
-              <label for="start_day">Día de inicio:</label>
-              <div class="col">
-                <input type="datetime-local" id="start_day" name="start_day" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="end_day">Día de fin:</label>
-              <div class="col">
-                <input type="datetime-local" id="end_day" name="end_day" />
-              </div>
-            </div>
-            
-            <div class="form-group row">
-            <label for="tipo_espacio">Tipo de espacio:</label>
-              <div class="col">
-                <select id="tipo_espacio" name="tipo_espacio">
-                  {% for espacio in espacios %}
-                    <option value="{{ espacio.id }}">{{ espacio.tipo }}</option>
-                  {% endfor %}
-                </select>
-              </div>   
-            </div>
-            <!-- Modalidad y tipo de espacio -->
-            <div class="form-group row">
-              <label for="modalidad">Modalidad:</label>
-              <div class="col">
-                <select id="modalidad_clase" name="modalidad_clase">
-                  {% for modalidad in modalidades  %}
-                  <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label for="modalidad">Docente Encargado:</label>
-              <div class="col">
-                <select id="docente_clase" name="docente_clase">
-                  {% for docente in docentes %}
-                  <option value="{{docente.cedula}}">{{docente.nombre}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-            </div>
-
-
-
-            <div class="form-group row">
-              <label for="num_semanas" class="col">Numero de semanas que se dara esta clase:</label>
-              <div class="col">
-                <input type="number" id="num_semanas" name="num_semanas"/> 
-              </div>
-            </div>
-          
-           
-            <!-- Modalidad y tipo de espacio -->                
-
-            <button class="btn btn-primary" type="submit">Crear Clases</button>
-          </form>
-        </div>
-      </div>
+  <h4 class="h4">Inicio</h4>
+  <div class="form-group row">
+    <label for="start_day">Día de inicio:</label>
+    <div class="col">
+      <input type="datetime-local" id="start_day" name="start_day" />
     </div>
   </div>
-  <div
-    tabindex="-1"
-    style="position: fixed; top: 0px; left: 0px"
-    aria-hidden="true"
-    data-aria-hidden-tab-index="0"
-  ></div>
-</div>
+  <div class="form-group row">
+    <label for="end_day">Día de fin:</label>
+    <div class="col">
+      <input type="datetime-local" id="end_day" name="end_day" />
+    </div>
+  </div>
 
-<!-- Popup para seleccionar día y horario -->
-<script>
-  var popup = document.getElementById("popup");
+  <div class="form-group row">
+    <label for="tipo_espacio">Tipo de espacio:</label>
+    <div class="col">
+      <select id="tipo_espacio" name="tipo_espacio">
+        {% for espacio in espacios %}
+        <option value="{{ espacio.id }}">{{ espacio.tipo }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <!-- Modalidad y tipo de espacio -->
+  <div class="form-group row">
+    <label for="modalidad">Modalidad:</label>
+    <div class="col">
+      <select id="modalidad_clase" name="modalidad_clase">
+        {% for modalidad in modalidades %}
+        <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
 
-  // Mostrar popup al hacer clic en "Nueva Clase"
-  document.getElementById("nuevaClaseBtn").onclick = function () {
-    popup.style.display = "block";
-  };
+  <div class="form-group row">
+    <label for="modalidad">Docente Encargado:</label>
+    <div class="col">
+      <select id="docente_clase" name="docente_clase">
+        {% for docente in docentes %}
+        <option value="{{docente.cedula}}">{{docente.nombre}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
 
-  // Cerrar popup al hacer clic en el botón de cerrar
-  function closePopup() {
-    popup.style.display = "none";
-  }
+  <div class="form-group row">
+    <label for="num_semanas" class="col"
+      >Numero de semanas que se dara esta clase:</label
+    >
+    <div class="col">
+      <input type="number" id="num_semanas" name="num_semanas" />
+    </div>
+  </div>
 
-  // Cerrar popup al dar clic afuera
-  window.onclick = function (event) {
-    if (event.target == popup) {
-      popup.style.display = "none";
-    }
-  };
-</script>
+  <!-- Modalidad y tipo de espacio -->
+
+  <button class="btn btn-primary" type="submit">Crear Clases</button>
+</form>
 {% endblock %}

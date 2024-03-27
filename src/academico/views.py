@@ -25,10 +25,9 @@ def crear_clase(request, curso_id):
         num_semanas = int (request.POST.get("num_semanas"))
         docente_cedula = (request.POST.get("docente_clase"))
 
-
         if not Docente.objects.filter(cedula=docente_cedula).exists():
             return render(request, "error.html", {"mensaje": "El docente no existe."})
-        
+
         if not Curso.objects.filter(nrc=curso_id).exists():
             return render(request, "error.html", {"mensaje": "El curso no existe."})
 
@@ -37,7 +36,7 @@ def crear_clase(request, curso_id):
 
         if not Modalidad.objects.filter(id=modalidad_clase).exists():
             return render(request, "error.html", {"mensaje": "La modalidad no existe."})
-        
+
         docente = Docente.objects.get(cedula=docente_cedula)
 
         for _ in range(num_semanas):
@@ -54,13 +53,18 @@ def crear_clase(request, curso_id):
             start_day += timedelta(days=7)
             end_day += timedelta(days=7)   
 
-        return redirect('cambio_docente', clase_id=clase.id)
+        return redirect("visualizar-curso", curso_id=curso_id)
     else:
         espacios = Espacio.objects.all()
         modalidades = Modalidad.objects.all()
         docentes = Docente.objects.all()
-        return render(request, "planeacion_materias.html", {'espacios': espacios,'modalidades': modalidades,'docentes': docentes, "curso_id":curso_id})
-    
+        return {
+            "espacios": espacios,
+            "modalidades": modalidades,
+            "docentes": docentes,
+            "curso_id": curso_id,
+        }
+
 
 @login_required(login_url="/login")
 def cambio_docente(request, clase_id):
@@ -347,14 +351,14 @@ def visualizacion_materia(request, codigo, periodo):
             "side": "sidebar_materias.html",
         },
     )
-    
+
 def args_principal(seleccionado):
     return {
         "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
         "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"},
         "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
         }
-    
+
 def visualizacion_clase(request, nrc, id):
     clase = Clase.objects.get(id=id, curso__nrc=nrc)
 
@@ -381,7 +385,13 @@ def visualizacion_curso(request, curso_id):
     return render(
         request,
         "visualizar-curso.html",
-        {"curso": curso, "clases": clases, "docentes_con_clases": docentes_con_clases, "total_horas_programadas": total_horas_programadas}
+        {
+            "curso": curso,
+            "clases": clases,
+            "docentes_con_clases": docentes_con_clases,
+            "total_horas_programadas": total_horas_programadas,
+            "side": "sidebar_curso.html",
+        } | crear_clase(request, curso_id),
     )
 
 
