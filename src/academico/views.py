@@ -98,6 +98,20 @@ def cambio_docente(request, clase_id):
 
 @login_required(login_url="/login")
 def crear_curso(request, codigo, periodo):
+    """
+    Creates a new course with the specified code and period.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        codigo (str): The code of the course.
+        periodo (str): The period of the course.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the "visualizacion_materias" view.
+
+    Raises:
+        Http404: If the specified period does not exist.
+    """
     if request.method == "POST":
         form = request.POST
         cupo = form["cantidad_de_cupos"]
@@ -372,6 +386,16 @@ def visualizacion_clase(request, nrc, id):
 
 @login_required(login_url="/login")
 def visualizacion_curso(request, curso_id):
+    """
+    View function for displaying course information.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        curso_id (int): The ID of the course to be displayed.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered template.
+    """
     curso = get_object_or_404(Curso, nrc=curso_id)
     clases = Clase.objects.filter(curso=curso).select_related('docente')
     docentes_con_clases = Docente.objects.filter(clase__curso=curso).distinct()
