@@ -3,6 +3,7 @@
 <head>
   {% load static %}
   <script src="{% static 'js/materia.js' %}"></script>
+  <script src="{% static 'js/popup.js' %}"></script>
 </head>
 <div class="container" style="text-align: start;">
   <h2 class="mt-2"><strong>{{ materia.nombre }}:</strong> {{ materia.codigo }}</h2>
@@ -18,6 +19,18 @@
     <div class="form-inline">
       <div class="col">
         <strong>Cursos</strong>
+      </div>
+      <div class="justify-content-end">
+        Periodo selecionado:
+        <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
+              {% for periodo in periodos %} 
+              {% if periodo_seleccionado == periodo.semestre %}
+          <option value="{{materia.codigo}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
+          {% else %}
+          <option value="{{materia.codigo}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>
+          {% endif %} 
+          {% endfor %}
+        </select>
       </div>
     </div>
 
@@ -38,6 +51,8 @@
         </div>
       </div>
     </div>
+    <a class="btn btn-primary mt-2"  onclick="show()">Nuevo curso<img class="icon" src="{% static 'img/add.webp' %}"></a>
+    {% include 'crear-curso.html' %}
   </div>
 </div>
 </div class="row">

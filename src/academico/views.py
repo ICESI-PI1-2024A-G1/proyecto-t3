@@ -100,16 +100,8 @@ def crear_curso(request, codigo, periodo):
         except IntegrityError as e:
             print("Error al crear el curso. Por favor, inténtelo de nuevo.")
             print(e)
-    else:
-        form = MateriaForm()
 
-    materia = get_object_or_404(Materia, codigo=codigo)
-
-    return render(
-        request,
-        "crear-curso.html",
-        {"form": form, "materia": materia, "periodo": periodo},
-    )
+    return redirect("visualizacion_materias", codigo=codigo, periodo=periodo)
 
 @login_required(login_url="/login")
 def programas(request):
