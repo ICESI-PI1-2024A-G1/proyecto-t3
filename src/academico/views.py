@@ -208,8 +208,20 @@ def programas(request):
         },
     )
 
-
 def materias(request):
+    """
+    View function for displaying a list of materias.
+
+    This function retrieves all the materias and programas from the database.
+    It also handles search, filtering, and pagination of the materias.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered HTML response containing the list of materias.
+
+    """
     materias = Materia.objects.all()
     programas = Programa.objects.all()
 
@@ -251,7 +263,6 @@ def materias(request):
             "side_args": args_principal("materias"),
         },
     )
-
 
 @login_required(login_url="/login")
 def programa(request, codigo, periodo):
