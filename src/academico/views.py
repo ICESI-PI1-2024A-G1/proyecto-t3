@@ -151,6 +151,19 @@ def crear_curso(request, codigo, periodo):
 
 @login_required(login_url="/login")
 def programas(request):
+    """
+    View function for displaying a list of programs.
+
+    This view function handles the logic for displaying a list of programs based on various filters and search queries.
+    It also handles pagination of the program list.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered template with the program list.
+
+    """
     programas = Programa.objects.all()
 
     # Búsqueda y filtrado
@@ -385,6 +398,20 @@ def args_principal(seleccionado):
         }
 
 def visualizacion_clase(request, nrc, id):
+    """
+    Render the visualizacion_clases.html template with the specified class.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        nrc (str): The NRC (Número de Registro de Curso) of the class.
+        id (int): The ID of the class.
+
+    Returns:
+        HttpResponse: The rendered HTML response.
+
+    Raises:
+        Clase.DoesNotExist: If the class with the specified NRC and ID does not exist.
+    """
     clase = Clase.objects.get(id=id, curso__nrc=nrc)
 
     return render(
