@@ -1,38 +1,36 @@
-{% extends 'base.html' %}
-{% block content %}
-{% load static %}
-<div class="container mt-6">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">Crear curso</h1>
-                    <p class="card-text">Por favor complete todos los campos del siguiente formulario para crear un nuevo curso.</p>
+{% extends 'popup.html' %} {% block content %} {% load static %}
 
-                    <form method="POST">
-                        {% csrf_token %}
+<h1 class="card-title">Crear curso</h1>
+<p class="card-text mt-4">
+  Por favor complete todos los campos del siguiente formulario para crear un
+  nuevo curso.
+</p>
 
-                        <div class="form-group">
-                            <label for="cantidad_de_cupos">Cantidad de cupos</label>
-                            <input type="text" id="cantidad_de_cupos" name="cantidad_de_cupos" class="form-control">
-                        </div>
+<form action="/academico/materias/{{materia.codigo}}/{{periodo_seleccionado}}/crear-curso" method="POST">
+  {% csrf_token %}
 
-                        <div class="form-group">
-                            <label for="materia">Materia: {{materia.nombre}}</label>
-                        </div>
+  <div class="form-group">
+    <label for="cantidad_de_cupos">Cantidad de cupos</label>
+    <input
+      type="text"
+      id="cantidad_de_cupos"
+      name="cantidad_de_cupos"
+      class="form-control"
+    />
+  </div>
 
-                        <div class="form-group mb-3">
-                            <label for="periodo">Periodo Académico: {{periodo}}</label>
-                        </div>
+  <div class="form-group">
+    <label for="materia">Materia: {{materia.nombre}}</label>
+  </div>
 
-                        <div class="form-group">
-                            <input type="submit" value="Crear curso" class="btn btn-primary">
-                            <a href="{% url 'programas' %}" class="btn btn-danger">Cancelar</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+  <div class="form-group mb-3">
+    <label for="periodo">Periodo Académico: {{periodo_seleccionado}}</label>
+  </div>
+
+  <div class="form-group align-center">
+    <input type="submit" value="Crear curso" class="btn btn-primary" />
+    <a onclick="hide()" class="btn btn-danger">Cancelar</a>
+  </div>
+</form>
+
 {% endblock %}

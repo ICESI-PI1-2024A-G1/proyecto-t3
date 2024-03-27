@@ -1,0 +1,19 @@
+<div id="popup" style="display: none">
+  <div class="modal moodle-has-zindex show background-shadow">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="popup-content form-group">
+
+          <span class="close" onclick="hide()"></span>
+          {% block content %} {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    tabindex="-1"
+    style="position: fixed; top: 0px; left: 0px"
+    aria-hidden="true"
+    data-aria-hidden-tab-index="0"
+  ></div>
+</div>
