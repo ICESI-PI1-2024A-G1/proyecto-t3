@@ -334,7 +334,8 @@ def args_principal(seleccionado):
         "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"},
         "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
         }
-    
+
+@login_required(login_url="/login")   
 def visualizacion_clase(request, nrc, id):
     clase = Clase.objects.get(id=id, curso__nrc=nrc)
 
