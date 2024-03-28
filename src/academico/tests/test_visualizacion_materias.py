@@ -15,7 +15,7 @@ def rf():
 @pytest.fixture
 def autenticacion(db, rf):
     user = User.objects.create_user(username='admin', password='admin')
-    request = rf.get(reverse('visualizacion_materias', kwargs={'codigo': 1, 'periodo': 202401} ))
+    request = rf.get(reverse('visualizacion_materias', kwargs={'codigo': 101, 'periodo': 202401} ))
     request.user = user
     return request
 
