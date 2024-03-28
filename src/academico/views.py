@@ -331,38 +331,55 @@ def color_suave():
 
 @login_required(login_url="/login")
 def visualizacion_materia(request, codigo, periodo):
+    # Obtiene la materia correspondiente al código proporcionado
     materia = get_object_or_404(Materia, codigo=codigo)
+    
+    # Obtiene los cursos relacionados con la materia y el periodo especificado
     cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
-    c_num = Curso.objects.filter(periodo=periodo, materia = codigo).count()
-    c_numT = Curso.objects.filter(materia = codigo).count()
+    
+    # Cuenta el número de cursos para el periodo y la materia especificados
+    c_num = Curso.objects.filter(periodo=periodo, materia=codigo).count()
+    
+    # Cuenta el número total de cursos para la materia especificada
+    c_numT = Curso.objects.filter(materia=codigo).count()
+    
+    # Obtiene todas las clases disponibles
     clases = Clase.objects.all()
+    
+    # Inicializa las variables para contar el total de docentes asignados y el total de clases
     total_docentes_asignados = 0
     total_clases = 0
+    
+    # Itera sobre cada curso para contar el número total de docentes asignados y clases
     for curso in cursos:
-        for clase in clases:  # Now clases should be iterable
+        for clase in clases:  
             if clase.curso == curso.nrc:
                 total_docentes_asignados += 1
                 total_clases += 1
             else:
                 total_clases += 1
     
+    # Asigna un color suave a los cursos (asumiendo que `color_suave()` devuelve un color)
     cursos.color = color_suave()
 
+    # Renderiza la plantilla HTML con los datos obtenidos y los contextos proporcionados
     return render(
         request,
         "visualizacion_materias.html",
         {
             "materia": materia,
             "cursos": cursos,
-            "periodo_seleccionado": periodo,  # Agregado
-            "periodos": Periodo.objects.all(),  # Agregado
+            "periodo_seleccionado": periodo,
+            "periodos": Periodo.objects.all(),
             "side": "sidebar_materias.html",
             "c_num": c_num,
             "c_numT": c_numT,
-            "total_asigandos":total_docentes_asignados,
-            "total_clases":total_clases,
+            "total_asigandos": total_docentes_asignados,
+            "total_clases": total_clases,
         },
     )
+
+
     
 def args_principal(seleccionado):
     return {
