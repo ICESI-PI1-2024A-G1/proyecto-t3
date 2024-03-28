@@ -336,15 +336,15 @@ def visualizacion_materia(request, codigo, periodo):
     c_num = Curso.objects.filter(periodo=periodo, materia = codigo).count()
     c_numT = Curso.objects.filter(materia = codigo).count()
     clases = Clase.objects.all()
-    Total_Docentes_Asignados = 0
-    Total_Clases = 0
+    total_docentes_asignados = 0
+    total_clases = 0
     for curso in cursos:
         for clase in clases:  # Now clases should be iterable
             if clase.curso == curso.nrc:
-                Total_Docentes_Asignados += 1
-                Total_Clases += 1
+                total_docentes_asignados += 1
+                total_clases += 1
             else:
-                Total_Clases += 1
+                total_clases += 1
     
     cursos.color = color_suave()
 
@@ -359,8 +359,8 @@ def visualizacion_materia(request, codigo, periodo):
             "side": "sidebar_materias.html",
             "c_num": c_num,
             "c_numT": c_numT,
-            "Total_Asigandos":Total_Docentes_Asignados,
-            "Total_Clases":Total_Clases,
+            "total_asigandos":total_docentes_asignados,
+            "total_clases":total_clases,
         },
     )
     

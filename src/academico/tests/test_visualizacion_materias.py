@@ -33,7 +33,7 @@ def periodo(db):
 
 @pytest.mark.django_db
 def test_visualizacion_materia(autenticacion, materia, periodo):
-    response = visualizacion_materia(autenticacion, materia.codigo, periodo)
+    response = visualizacion_materia(autenticacion, materia.codigo, periodo.semestre)
     assert response.status_code == 200
     assert str(materia.codigo).encode() in response.content
     assert str(materia.credito).encode() in response.content
