@@ -13,6 +13,6 @@ urlpatterns = [
     path("visualizacion_clases/<str:nrc>/<str:id>", views.visualizacion_clase, name="visualizacion_clases"),
     path("materias/<str:codigo>/<str:periodo>", views.visualizacion_materia, name="visualizacion_materias"),
     path("materias", views.materias, name="materias"),
-    path('cambio_docente/<int:clase_id>/', views.cambio_docente, name='cambio_docente'),
+    path('editar_clase/<int:clase_id>/', views.editar_clase, name='editar_clase'),
 
 ]

@@ -67,29 +67,36 @@ def crear_clase(request, curso_id):
 
 
 @login_required(login_url="/login")
-def cambio_docente(request, clase_id):
-    docentes = Docente.objects.all()
-    print("Docentes impresos:",docentes)
-
+def editar_clase(request, clase_id):
     if request.method == "POST":
+        # Obtén la clase a editar
         clase = Clase.objects.get(id=clase_id)
-        docente_cedula = request.POST.get("docente_clase")
 
-        if not docente_cedula:
-            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+        # Obtén los nuevos valores de los atributos desde el formulario
+        start_day = request.POST.get("start_day")
+        end_day = request.POST.get("end_day")
+        tipo_espacio = request.POST.get("tipo_espacio")
+        modalidad_clase = request.POST.get("modalidad_clase")
+        docente_clase = request.POST.get("docente_clase")
+        num_semanas = request.POST.get("num_semanas")
 
-        try:
-            docente = Docente.objects.get(cedula=docente_cedula)
-        except Docente.DoesNotExist:
-            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+        # Asigna los nuevos valores a los atributos de la clase
+        clase.start_day = start_day
+        clase.end_day = end_day
+        clase.tipo_espacio = tipo_espacio
+        clase.modalidad_clase = modalidad_clase
+        clase.docente_clase = docente_clase
+        clase.num_semanas = num_semanas
 
-        clase.docente = docente
+        # Guarda la clase
         clase.save()
-        return redirect('cambio_docente',clase_id=clase.id)
+
+        # Redirige al usuario a la página de visualización de clases
+        return redirect('visualizacion_clases', curso_nrc=clase.curso.nrc)
     else:
+        # Si la solicitud no es POST, muestra el formulario de edición
         clase = Clase.objects.get(id=clase_id)
         docentes = Docente.objects.all()
-        print("Renderizando Plantilla con docentes:",docentes)
         return render(request, 'visualizacion_clases.html', {'clase': clase,'docentes': docentes})
 
 

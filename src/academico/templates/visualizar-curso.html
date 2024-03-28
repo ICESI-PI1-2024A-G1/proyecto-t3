@@ -80,7 +80,12 @@
                             style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Clase {{ forloop.counter }}</h5>
+
+                                    <div class="row row justify-content-center align-items-center">
+                                        <h5 class="card-title flex-grow-1 text-center">Clase {{ forloop.counter }}</h5>
+                                        <img src="{% static 'img/pencil.png' %}" class="icon btn" onclick="showEditModal()">
+                                    </div>
+
                                     <p class="card-text">
                                         <img src="{% static 'img/calendar.png' %}" class="icon" alt="Fecha de Inicio">
                                         <strong>Fecha de Inicio:</strong> {{ clase.fecha_inicio }}
@@ -111,4 +116,33 @@
         </div>
     </div>
 </div>
+
+<div id="editModal" style="display: none">
+    <div class="modal moodle-has-zindex show background-shadow">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="popup-content form-group">
+            <span class="close" onclick="hideEditModal()"></span>
+            <h3 class="h2">Editar Clase</h3>
+            <form id="editClassForm" method="POST" action="/academico/cursos/{{curso.nrc}}/editar-clase">
+              {% csrf_token %}
+              <input type="hidden" id="clase_id" name="clase_id">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      tabindex="-1"
+      style="position: fixed; top: 0px; left: 0px"
+      aria-hidden="true"
+      data-aria-hidden-tab-index="0"
+    ></div>
+  </div>
+
 {% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'academico/js/popup.js' %}"></script>
+{% endblock %}
+
