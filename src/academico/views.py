@@ -329,11 +329,23 @@ def color_suave():
     color = random.choice([1, 2, 3])
     return color
 
+@login_required(login_url="/login")
 def visualizacion_materia(request, codigo, periodo):
-    materia = Materia.objects.get(codigo=codigo)
+    materia = get_object_or_404(Materia, codigo=codigo)
     cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
-
-    periodos = Periodo.objects.all()
+    c_num = Curso.objects.filter(periodo=periodo, materia = codigo).count()
+    c_numT = Curso.objects.filter(materia = codigo).count()
+    clases = Clase.objects.all()
+    Total_Docentes_Asignados = 0
+    Total_Clases = 0
+    for curso in cursos:
+        for clase in clases:  # Now clases should be iterable
+            if clase.curso == curso.nrc:
+                Total_Docentes_Asignados += 1
+                Total_Clases += 1
+            else:
+                Total_Clases += 1
+    
     cursos.color = color_suave()
 
     return render(
@@ -345,6 +357,10 @@ def visualizacion_materia(request, codigo, periodo):
             "periodo_seleccionado": periodo,  # Agregado
             "periodos": Periodo.objects.all(),  # Agregado
             "side": "sidebar_materias.html",
+            "c_num": c_num,
+            "c_numT": c_numT,
+            "Total_Asigandos":Total_Docentes_Asignados,
+            "Total_Clases":Total_Clases,
         },
     )
     
