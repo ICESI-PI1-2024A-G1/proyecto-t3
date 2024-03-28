@@ -21,16 +21,19 @@ def autenticacion(db, rf):
 
 @pytest.fixture
 def materias(db):
-    periodo = Periodo.objects.create(semestre='202402', fecha_inicio=datetime.now(), fecha_fin=datetime.now())
     departamento = Departamento.objects.create(codigo=1, nombre="Departamento 1")
     tipo_materia = TipoDeMateria.objects.create(tipo="1")
     materia = Materia.objects.create(codigo=1, nombre="Materia", creditos=3, departamento=departamento, tipo_de_materia=tipo_materia)
-    curso = Curso.objects.create(grupo = '4', cupo = 30, materia_id = 1, periodo = periodo)
     return materia
 
+@pytest.fixture
+def periodo(db):
+    periodo = Periodo.objects.create(semestre='202402', fecha_inicio=datetime.now(), fecha_fin=datetime.now())
+    return periodo
+
 @pytest.mark.django_db
-def test_visualizacion_materia(autenticacion, materia, curso):
-    response = visualizacion_materia(autenticacion, materia.codigo, materia.periodo, curso.periodo)
+def test_visualizacion_materia(autenticacion, materia, periodo):
+    response = visualizacion_materia(autenticacion, materia.codigo, periodo)
     assert response.status_code == 200
     assert str(materia.codigo).encode() in response.content
     assert str(materia.credito).encode() in response.content
