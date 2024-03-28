@@ -83,7 +83,7 @@
 
                                     <div class="row row justify-content-center align-items-center">
                                         <h5 class="card-title flex-grow-1 text-center">Clase {{ forloop.counter }}</h5>
-                                        <img src="{% static 'img/pencil.png' %}" class="icon btn" onclick="showEditModal()">
+                                        <img id="claseEdit" src="{% static 'img/pencil.png' %}" class="icon btn">
                                     </div>
 
                                     <p class="card-text">
@@ -139,6 +139,27 @@
       data-aria-hidden-tab-index="0"
     ></div>
   </div>
+
+<script>
+    var editModal = document.getElementById("editModal");
+  
+    // Mostrar popup al hacer clic en "Nueva Clase"
+    document.getElementById("claseEdit").onclick = function () {
+        editModal.style.display = "block";
+    };
+  
+    // Cerrar popup al hacer clic en el botón de cerrar
+    function closePopup() {
+        editModal.style.display = "none";
+    }
+  
+    // Cerrar popup al dar clic afuera
+    window.onclick = function (event) {
+      if (event.target == editModal) {
+        editModal.style.display = "none";
+      }
+    };
+</script>
 
 {% endblock %}
 
