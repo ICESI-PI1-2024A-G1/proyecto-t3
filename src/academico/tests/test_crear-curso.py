@@ -1,11 +1,12 @@
 import pytest
-from django.test import RequestFactory
 from django.contrib.auth.models import User
+from django.http import Http404
+from django.test import RequestFactory
 from django.urls import reverse
 from mixer.backend.django import mixer
-from academico.models import Curso, Periodo, Materia
+
+from academico.models import Curso, Materia, Periodo
 from academico.views import crear_curso
-from django.http import Http404
 
 
 @pytest.fixture
@@ -19,20 +20,14 @@ def rf():
 @pytest.fixture
 def autenticacion(db, rf):
     """
-    Fixture for authentication.
-
-    This fixture creates a user with the username 'admin' and password 'admin'.
-    It also creates a request object with the URL for creating a course, passing
-    the course code and period as kwargs. The user is then assigned to the request
-    object. This fixture is used for testing the creation of a course.
+    Fixture que simula la autenticación de un usuario para realizar pruebas en la vista 'crear-curso'.
 
     Args:
-        db: Django test database fixture.
-        rf: RequestFactory fixture.
+        db: Objeto de la base de datos.
+        rf: Objeto de la clase RequestFactory.
 
     Returns:
-        request: Request object with authenticated user.
-
+        request: Objeto de la clase HttpRequest con la autenticación del usuario.
     """
     user = User.objects.create_user(username='admin', password='admin')
     request = rf.get(reverse('crear-curso', kwargs={'codigo': '1', 'periodo': '202402'}))
@@ -42,41 +37,40 @@ def autenticacion(db, rf):
 @pytest.fixture
 def materia(db):
     """
-    Fixture function that creates and returns a blended Materia object.
+    Fixture que crea y retorna una instancia de la clase Materia.
 
-    Parameters:
-    - db: The database fixture.
+    Args:
+        db: Objeto de la base de datos.
 
     Returns:
-    - A blended Materia object.
+        Una instancia de la clase Materia.
     """
     return mixer.blend(Materia)
 
 @pytest.fixture
 def periodo_202402(db):
     """
-    Fixture function that creates a Periodo object with the specified attributes.
+    Crea y devuelve un objeto Periodo con los siguientes atributos:
 
     Args:
-        db: Django database fixture.
+        db: Objeto de la base de datos.
 
     Returns:
-        Periodo: The created Periodo object.
-
+        Un objeto Periodo con los siguientes atributos:
+        - semestre: El semestre del periodo ('202402').
+        - fecha_inicio: La fecha de inicio del periodo ('2024-01-01').
+        - fecha_fin: La fecha de fin del periodo ('2024-12-31').
     """
-    return Periodo.objects.create(semestre='202402',fecha_inicio='2024-01-01',fecha_fin='2024-12-31')
+    return Periodo.objects.create(semestre='202402', fecha_inicio='2024-01-01', fecha_fin='2024-12-31')
 
 @pytest.mark.django_db
 def test_crear_curso_post_negativo(autenticacion, materia):
     """
-    Test case for creating a course with a negative scenario.
+    Prueba la función crear_curso cuando se realiza una solicitud POST con una cantidad de cupos inválida.
 
     Args:
-        autenticacion: The authentication object.
-        materia: The materia object.
-
-    Raises:
-        Http404: If the course creation raises a Http404 exception.
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        materia: Objeto de materia para simular la materia del curso.
 
     Returns:
         None
@@ -92,12 +86,12 @@ def test_crear_curso_post_negativo(autenticacion, materia):
 @pytest.mark.django_db
 def test_crear_curso_post_positivo(autenticacion, materia, periodo_202402):
     """
-    Test case for creating a course with a positive POST request.
+    Prueba unitaria para verificar el comportamiento del método crear_curso al recibir una solicitud POST válida.
 
     Args:
-        autenticacion: The authentication object.
-        materia: The materia object.
-        periodo_202402: The periodo object.
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        materia: Objeto de materia para utilizar en la prueba.
+        periodo_202402: Objeto de periodo para utilizar en la prueba.
 
     Returns:
         None

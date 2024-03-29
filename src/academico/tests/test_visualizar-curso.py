@@ -1,40 +1,38 @@
-from django.http import Http404
+from datetime import datetime
+
 import pytest
-from django.test import RequestFactory
 from django.contrib.auth.models import User
+from django.http import Http404
+from django.test import RequestFactory
 from django.urls import reverse
 from mixer.backend.django import mixer
-from academico.models import Curso, Clase, Departamento, Materia, Modalidad, Periodo, TipoDeMateria, Espacio
+
+from academico.models import (Clase, Curso, Departamento, Espacio, Materia,
+                              Modalidad, Periodo, TipoDeMateria)
 from academico.views import visualizacion_curso
-from datetime import datetime
+
 
 @pytest.fixture
 def rf():
     """
-    Returns an instance of the RequestFactory class.
-
-    This fixture is used to create fake HTTP requests for testing purposes.
+    Crea y devuelve una instancia de RequestFactory.
 
     Returns:
-        RequestFactory: An instance of the RequestFactory class.
+        RequestFactory: Una instancia de RequestFactory.
     """
     return RequestFactory()
 
 @pytest.fixture
 def autenticacion(db, rf):
     """
-    Fixture for authentication.
-
-    This fixture creates a user with the username 'admin' and password 'admin'.
-    It also creates a request object with the URL for visualizing a course with ID 1.
-    The created user is set as the authenticated user for the request.
+    Fixture que simula la autenticación de un usuario para visualizar un curso.
 
     Args:
-        db: Django database fixture.
-        rf: RequestFactory fixture.
+        db: Objeto de la base de datos.
+        rf: Objeto de la solicitud HTTP.
 
     Returns:
-        HttpRequest: The authenticated request object.
+        request: Objeto de la solicitud HTTP con el usuario autenticado.
     """
     user = User.objects.create_user(username='admin', password='admin')
     request = rf.get(reverse('visualizar-curso', kwargs={'curso_id': 1}))
@@ -44,13 +42,13 @@ def autenticacion(db, rf):
 @pytest.fixture
 def curso(db):
     """
-    Fixture function that creates a Curso object for testing purposes.
+    Fixture que crea y retorna un objeto de tipo Curso para ser utilizado en pruebas.
 
     Args:
-        db: Database fixture.
+        db: Objeto de la base de datos.
 
     Returns:
-        Curso: The created Curso object.
+        Curso: Objeto de tipo Curso creado para pruebas.
     """
     periodo = Periodo.objects.create(semestre='202402', fecha_inicio=datetime.now(), fecha_fin=datetime.now())
     departamento = Departamento.objects.create(codigo=1, nombre="Departamento 1")
@@ -62,14 +60,14 @@ def curso(db):
 @pytest.fixture
 def clase(db, curso):
     """
-    Fixture function that creates a test class instance.
+    Esta función es un fixture que crea una instancia de la clase Clase para ser utilizada en pruebas.
 
     Args:
-        db: Database fixture.
-        curso: Course fixture.
+        db: Objeto de la base de datos.
+        curso: Objeto del curso al que pertenece la clase.
 
     Returns:
-        The created class instance.
+        Una instancia de la clase Clase creada con los parámetros proporcionados.
     """
     docente = mixer.blend('usuarios.Docente')
     modalidad = Modalidad.objects.create(metodologia="Presencial")
@@ -80,12 +78,12 @@ def clase(db, curso):
 @pytest.mark.django_db
 def test_visualizacion_curso(autenticacion, curso, clase):
     """
-    Test the visualization of a course.
+    Prueba la visualización de un curso en el sistema.
 
     Args:
-        autenticacion: The authentication object.
-        curso: The course object.
-        clase: The class object.
+        autenticacion (objeto): Objeto de autenticación del usuario.
+        curso (objeto): Objeto del curso a visualizar.
+        clase (objeto): Objeto de la clase asociada al curso.
 
     Returns:
         None
@@ -102,12 +100,10 @@ def test_visualizacion_curso(autenticacion, curso, clase):
 @pytest.mark.django_db
 def test_visualizacion_curso_inexistente(autenticacion):
     """
-    Test case for visualizing a non-existent course.
-
-    This test verifies that the appropriate exception (Http404) is raised when attempting to visualize a course that does not exist.
+    Prueba la visualización de un curso inexistente.
 
     Args:
-        autenticacion: The authentication object.
+        autenticacion: Objeto de autenticación.
 
     Returns:
         None
@@ -120,11 +116,11 @@ def test_visualizacion_curso_inexistente(autenticacion):
 @pytest.mark.django_db
 def test_visualizacion_curso_sin_clases(autenticacion, curso):
     """
-    Test case for visualizing a course without any classes.
+    Prueba la visualización de un curso sin clases.
 
     Args:
-        autenticacion: The authentication object.
-        curso: The course object.
+        autenticacion: Objeto de autenticación.
+        curso: Objeto de curso.
 
     Returns:
         None

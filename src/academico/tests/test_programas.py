@@ -1,16 +1,19 @@
 import pytest
-from django.test import RequestFactory
-from django.http import HttpRequest
 from django.contrib.auth.models import User
-from academico.models import EstadoSolicitud, Facultad, Programa, TipoDePrograma
-from usuarios.models import Ciudad, Director
+from django.http import HttpRequest
+from django.test import RequestFactory
+
+from academico.models import (EstadoSolicitud, Facultad, Programa,
+                              TipoDePrograma)
 from academico.views import programas
+from usuarios.models import Ciudad, Director
+
 
 def crear_instancias():
     """
-    Creates instances of various models for testing purposes.
+    Crea instancias de objetos en la base de datos para realizar pruebas.
 
-    This function creates instances of the following models:
+    Esta función crea instancias de los siguientes objetos:
     - Ciudad
     - Facultad
     - Director
@@ -19,7 +22,7 @@ def crear_instancias():
     - Programa
 
     Returns:
-    None
+        None
     """
     cali = Ciudad.objects.create(ciudad="Cali")
     facultadA = Facultad.objects.create(nombre="Facultad A")
@@ -36,14 +39,13 @@ def crear_instancias():
 
 def autenticar_usuario(request):
     """
-    Authenticates a user by creating a new user with the username 'admin' and password 'admin',
-    and assigns it to the request object.
+    Autentica al usuario en la aplicación.
 
-    Args:
-        request (HttpRequest): The request object.
+    Parámetros:
+    - request: La solicitud HTTP recibida.
 
-    Returns:
-        None
+    Retorna:
+    None
     """
     user = User.objects.create_user(username='admin', password='admin')
     request.user = user
@@ -51,24 +53,21 @@ def autenticar_usuario(request):
 @pytest.mark.django_db
 def test_busqueda_programa():
     """
-    Test case for searching a program.
+    Prueba la búsqueda de un programa.
 
-    This test case verifies that the 'programas' view returns a response with status code 200
-    and the content contains the program name 'Programa 1'.
+    Esta prueba verifica que la función `programas` responda correctamente a una solicitud GET con un parámetro
+    de búsqueda y que devuelva un código de estado 200 junto con el contenido del programa buscado.
 
-    Steps:
-    1. Create necessary instances.
-    2. Create a GET request with a search query for 'Programa 1'.
-    3. Authenticate the user.
-    4. Call the 'programas' view with the request.
-    5. Assert that the response status code is 200.
-    6. Assert that the response content contains the program name 'Programa 1'.
+    Args:
+        None
+
+    Returns:
+        None
     """
     crear_instancias()
     request = HttpRequest()
     request.method = 'GET'
-    request.GET['q'] = 'Programa 1' 
-
+    request.GET['q'] = 'Programa 1'
     autenticar_usuario(request)
 
     response = programas(request)
@@ -79,20 +78,25 @@ def test_busqueda_programa():
 @pytest.mark.django_db
 def test_filtrar_programa_por_estado():
     """
-    Test case to verify the filtering of programs by state.
+    Prueba unitaria para verificar el filtrado de programas por estado.
 
-    This test case checks if the 'programas' view correctly filters programs based on the provided state.
-    It creates instances of programs with different states, sets the state filter to 'Aprobado' (assuming the ID of 'Aprobado' state is 1),
-    authenticates the user, and sends a GET request to the 'programas' view. It then asserts that the response status code is 200,
-    and checks if the expected programs are present or not in the response content.
+    Se crean instancias de programas y se realiza una solicitud GET con el parámetro 'estado' establecido en '1',
+    que supone que el ID del estado "Aprobado" es 1. Luego se autentica al usuario y se realiza la solicitud al
+    controlador 'programas'. Se verifica que la respuesta tenga un código de estado 200 y que el contenido de la
+    respuesta contenga el programa 1, pero no el programa 2 ni el programa 3, ya que su estado no es "Aprobado".
 
+    Args:
+        None
+
+    Returns:
+        None
     """
     crear_instancias()
     request = HttpRequest()
     request.method = 'GET'
     request.GET['estado'] = '1'  # Suponiendo que el ID del estado "Aprobado" es 1
 
-    autenticar_usuario(request) 
+    autenticar_usuario(request)
 
     response = programas(request)
 
@@ -104,22 +108,13 @@ def test_filtrar_programa_por_estado():
 @pytest.mark.django_db
 def test_filtrar_programa_por_facultad():
     """
-    Test case to verify the filtering of programs by faculty.
+    Prueba la funcionalidad de filtrar programas por facultad.
 
-    This test case creates instances of programs and sets up a request with a faculty ID.
-    It then authenticates the user, makes a request to the 'programas' view, and checks the response.
+    Args:
+        Ninguno
 
-    The expected behavior is that the response status code should be 200, and the content of the response
-    should contain 'Programa 1' and 'Programa 3', but not 'Programa 2'.
-
-    Preconditions:
-    - The 'crear_instancias' function must be defined and set up the necessary program instances.
-    - The 'autenticar_usuario' function must be defined and authenticate the user.
-    - The 'programas' view must be defined and handle the request to filter programs by faculty.
-
-    Postconditions:
-    - The response status code should be 200.
-    - The content of the response should contain 'Programa 1' and 'Programa 3', but not 'Programa 2'.
+    Returns:
+        Ninguno
     """
     crear_instancias()
     request = HttpRequest()

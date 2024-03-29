@@ -13,6 +13,12 @@ from usuarios.models import Ciudad
 
 @pytest.fixture
 def nuevo_programa():
+    """
+    Crea y devuelve un nuevo programa de prueba.
+
+    Returns:
+        Programa: El programa de prueba creado.
+    """
     cali = Ciudad.objects.create(ciudad="Cali")
     facultadA = Facultad.objects.create(nombre="Facultad A")
     director = Director.objects.create(
@@ -39,6 +45,18 @@ def nuevo_programa():
 
 @pytest.mark.django_db
 def test_programa_view(nuevo_programa):
+    """
+    Prueba la vista del programa.
+
+    Esta función realiza pruebas para verificar el comportamiento de la vista del programa.
+    Se asegura de que la vista responda correctamente y muestre la información correcta del programa.
+
+    Args:
+        nuevo_programa (Programa): El programa de prueba.
+
+    Returns:
+        None
+    """
     request = RequestFactory().get(
         reverse("programa", args=[nuevo_programa.codigo, "2021-01"])
     )
@@ -59,6 +77,15 @@ def test_programa_view(nuevo_programa):
 
 @pytest.mark.django_db
 def test_programa_view_not_authenticated(nuevo_programa):
+    """
+    Prueba la vista del programa cuando el usuario no está autenticado.
+
+    Args:
+        nuevo_programa: Un objeto que representa un programa académico.
+
+    Returns:
+        None
+    """
     factory = RequestFactory()
     request = factory.get(reverse("programa", args=[nuevo_programa.codigo, "202101"]))
     request.user = AnonymousUser()
@@ -73,6 +100,20 @@ def test_programa_view_not_authenticated(nuevo_programa):
 
 @pytest.mark.django_db
 def test_programa_view_invalid_programa(nuevo_programa):
+    """
+    Prueba unitaria para verificar el comportamiento de la vista 'programa' cuando se proporciona un programa inválido.
+
+    Se crea una solicitud HTTP utilizando la clase RequestFactory y se establece el usuario como un usuario creado previamente.
+    Luego se llama a la vista 'programa' con un programa y un periodo académico inválidos.
+    Se espera que se genere una excepción Http404, lo cual indica que no se encontró el recurso solicitado.
+
+    Args:
+        nuevo_programa: Un objeto que representa un programa académico creado previamente.
+
+    Raises:
+        AssertionError: Si la vista 'programa' no genera una excepción Http404.
+
+    """
     request = RequestFactory().get(reverse("programa", args=["P2", "202101"]))
     request.user = User.objects.create_user(username="admin", password="admin")
 
@@ -85,6 +126,15 @@ def test_programa_view_invalid_programa(nuevo_programa):
 
 @pytest.mark.django_db
 def test_malla_curricular_empty_page(nuevo_programa):
+    """
+    Prueba unitaria para verificar que se muestra correctamente una página vacía de la malla curricular.
+
+    Args:
+        nuevo_programa (Programa): El programa académico para el cual se desea verificar la página vacía.
+
+    Returns:
+        None
+    """
     request = RequestFactory().get(
         reverse("programa", args=[nuevo_programa.codigo, "2021-01"])
     )

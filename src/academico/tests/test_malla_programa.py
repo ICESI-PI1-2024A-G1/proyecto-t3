@@ -13,6 +13,25 @@ from usuarios.models import Ciudad, Director
 
 
 def crear_instancias():
+    """
+    Crea instancias de objetos relacionados para realizar pruebas.
+
+    Esta función crea instancias de los siguientes objetos:
+    - Ciudad
+    - Facultad
+    - Director
+    - EstadoSolicitud
+    - TipoDePrograma
+    - Programa
+    - Periodo
+    - Departamento
+    - TipoDeMateria
+    - Materia
+    - MallaCurricular
+
+    Returns:
+        None
+    """
     cali = Ciudad.objects.create(ciudad="Cali")
     facultadA = Facultad.objects.create(nombre="Facultad A")
     director = Director.objects.create(
@@ -50,11 +69,34 @@ def crear_instancias():
         MallaCurricular.objects.create(programa=programa, periodo=periodo, semestre=1,  materia=materia)
 
 def autenticar_usuario(request):
+    """
+    Autentica al usuario en la solicitud.
+
+    Args:
+    - request: La solicitud HTTP recibida.
+
+    Returns:
+    None
+    """
     user = User.objects.create_user(username='admin', password='admin')
     request.user = user
 
 @pytest.mark.django_db
 def test_malla_curricular():
+    """
+    Prueba unitaria para verificar el funcionamiento de la vista 'malla_curricular'.
+
+    Esta prueba verifica que la vista 'malla_curricular' responda correctamente
+    a una solicitud GET con los parámetros 'codigo' y 'periodo' especificados.
+    Se asegura que la respuesta tenga un código de estado 200, y que contenga
+    la cadena 'Malla curricular', el periodo y las materias especificadas.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     crear_instancias()
     request = HttpRequest()
     request.method = 'GET'
@@ -76,6 +118,21 @@ def test_malla_curricular():
 
 @pytest.mark.django_db
 def test_malla_curricular_pagination():
+    """
+    Prueba la paginación de la malla curricular.
+
+    Esta función crea instancias necesarias para la prueba, configura una petición 
+    HTTP GET con parámetros específicos y autentica al usuario. Luego realiza una
+    llamada a la vista 'malla_curricular' con los parámetros de código y periodo
+    proporcionados en la petición. Finalmente, realiza una serie de aserciones para
+    verificar que la respuesta de la vista es correcta.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     crear_instancias()
     request = HttpRequest()
     request.method = 'GET'
@@ -94,6 +151,19 @@ def test_malla_curricular_pagination():
 
 @pytest.mark.django_db
 def test_malla_curricular_empty_page():
+    """
+    Prueba unitaria para verificar el comportamiento de la vista 'malla_curricular' cuando no hay materias en la malla curricular.
+
+    Se crean instancias necesarias para la prueba y se realiza una solicitud GET a la vista 'malla_curricular' con un código de programa y periodo específicos.
+    Se autentica al usuario en la solicitud y se verifica que la respuesta tenga un código de estado 200.
+    Además, se verifica que la respuesta contenga el texto 'Malla curricular', el periodo y el mensaje 'No hay materias en esta malla curricular'.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     crear_instancias()
     request = HttpRequest()
     request.method = 'GET'

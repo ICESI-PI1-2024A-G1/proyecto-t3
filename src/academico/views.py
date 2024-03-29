@@ -102,18 +102,18 @@ def editar_clase(request, clase_id):
 @login_required(login_url="/login")
 def crear_curso(request, codigo, periodo):
     """
-    Creates a new course with the specified code and period.
+    Crea un nuevo curso en el sistema.
 
     Args:
-        request (HttpRequest): The HTTP request object.
-        codigo (str): The code of the course.
-        periodo (str): The period of the course.
+        request (HttpRequest): La solicitud HTTP recibida.
+        codigo (str): El código de la materia del curso.
+        periodo (str): El período académico del curso.
 
     Returns:
-        HttpResponseRedirect: Redirects to the "visualizacion_materias" view.
+        HttpResponseRedirect: Una redirección a la página de visualización de materias.
 
     Raises:
-        Http404: If the specified period does not exist.
+        Http404: Si el período especificado no existe.
     """
     if request.method == "POST":
         form = request.POST
@@ -155,17 +155,20 @@ def crear_curso(request, codigo, periodo):
 @login_required(login_url="/login")
 def programas(request):
     """
-    View function for displaying a list of programs.
+    Vista para mostrar la lista de programas académicos.
 
-    This view function handles the logic for displaying a list of programs based on various filters and search queries.
-    It also handles pagination of the program list.
+    Esta vista permite realizar búsquedas y filtrados en la lista de programas académicos.
+    Los programas se pueden filtrar por periodo, facultad, estado y se pueden ordenar por diferentes criterios.
+    Además, se implementa la paginación para mostrar los programas de forma organizada.
 
     Args:
-        request (HttpRequest): The HTTP request object.
+        request (HttpRequest): La solicitud HTTP recibida.
 
     Returns:
-        HttpResponse: The HTTP response object containing the rendered template with the program list.
+        HttpResponse: La respuesta HTTP que contiene la página de programas académicos.
 
+    Raises:
+        None
     """
     programas = Programa.objects.all()
 
@@ -226,16 +229,16 @@ def programas(request):
 
 def materias(request):
     """
-    View function for displaying a list of materias.
+    Vista que muestra la lista de materias.
 
-    This function retrieves all the materias and programas from the database.
-    It also handles search, filtering, and pagination of the materias.
+    Esta vista recibe una solicitud HTTP y devuelve una respuesta HTTP que muestra una lista de materias.
+    La lista de materias se puede filtrar y ordenar según los parámetros proporcionados en la solicitud GET.
 
-    Args:
-        request (HttpRequest): The HTTP request object.
+    Parámetros:
+    - request: La solicitud HTTP recibida.
 
-    Returns:
-        HttpResponse: The rendered HTML response containing the list of materias.
+    Retorna:
+    - Una respuesta HTTP que muestra una lista de materias.
 
     """
     materias = Materia.objects.all()
@@ -282,6 +285,28 @@ def materias(request):
 
 @login_required(login_url="/login")
 def programa(request, codigo, periodo):
+    """
+    Renderiza la plantilla 'programa.html' con información del programa y datos del currículo.
+
+    Args:
+        request (HttpRequest): El objeto de solicitud HTTP.
+        codigo (str): El código del programa.
+        periodo (str): El período del semestre.
+
+    Returns:
+        HttpResponse: La plantilla 'programa.html' renderizada con las siguientes variables de contexto:
+            - 'programa': El objeto Programa.
+            - 'periodos': Todos los objetos Periodo.
+            - 'periodo_seleccionado': El período seleccionado.
+            - 'malla': Un diccionario que representa el currículo, donde las claves son los semestres y los valores son listas de Materias.
+            - 'tamaño': El tamaño del currículo.
+            - 'creditos_totales': El número total de créditos en el currículo.
+            - 'cursos_totales': El número total de cursos en el currículo.
+            - 'semestres': El número de semestres en el currículo.
+            - 'side': La plantilla de la barra lateral a incluir.
+            - 'modalidad': La modalidad del currículo.
+
+    """
     programa = get_object_or_404(Programa,codigo=codigo)
     materias = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
@@ -321,6 +346,17 @@ def programa(request, codigo, periodo):
     )
 
 def actualizar_malla(request, codigo, periodo):
+    """
+    Actualiza la malla curricular de un programa académico para un periodo específico.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        codigo (str): El código del programa académico.
+        periodo (str): El periodo para el cual se actualizará la malla curricular.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la vista del programa académico actualizado.
+    """
     body = json.loads(request.body.decode('utf-8'))
     for key in body:
         if len(MallaCurricular.objects.filter(programa__codigo=codigo, periodo__semestre=periodo))<1:
@@ -334,6 +370,17 @@ def actualizar_malla(request, codigo, periodo):
 
 @login_required(login_url="/login")
 def malla_curricular(request, codigo, periodo):
+    """
+    Función de vista para mostrar la malla curricular de un programa.
+
+    Args:
+        request (HttpRequest): El objeto de solicitud HTTP.
+        codigo (str): El código del programa.
+        periodo (str): El semestre de la malla curricular.
+
+    Returns:
+        HttpResponse: El objeto de respuesta HTTP que contiene la plantilla renderizada.
+    """
     programa= get_object_or_404(Programa,codigo=codigo)
     malla = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
@@ -370,7 +417,13 @@ def malla_curricular(request, codigo, periodo):
 
 
 def color_suave():
-    # Seleccionar un color de la lista de forma aleatoria
+    """
+    Retorna un color suave seleccionado aleatoriamente de una lista.
+    La lista de colores está definida en el CSS.
+
+    Returns:
+        int: Un número entero que representa el color seleccionado.
+    """
     color = random.choice([1, 2, 3])
     return color
 
@@ -394,26 +447,33 @@ def visualizacion_materia(request, codigo, periodo):
     )
 
 def args_principal(seleccionado):
+    """
+    Genera un diccionario con la información de los menús de la barra lateral del menú principal.
+
+    Args:
+        seleccionado (str): El menú seleccionado actualmente.
+
+    Returns:
+        dict: Un diccionario con la información de los menús, donde la clave es el nombre del menú y el valor es otro diccionario con la URL y si está seleccionado o no.
+    """
     return {
         "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
         "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"},
         "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
-        }
+    }
+
 
 def visualizacion_clase(request, nrc, id):
     """
-    Render the visualizacion_clases.html template with the specified class.
+    Renderiza la plantilla visualizacion_clases.html con la clase especificada.
 
     Args:
-        request (HttpRequest): The HTTP request object.
-        nrc (str): The NRC (Número de Registro de Curso) of the class.
-        id (int): The ID of the class.
+        request (HttpRequest): El objeto de solicitud HTTP.
+        nrc (str): El NRC (Número de Registro de Curso) de la clase.
+        id (int): El ID de la clase.
 
     Returns:
-        HttpResponse: The rendered HTML response.
-
-    Raises:
-        Clase.DoesNotExist: If the class with the specified NRC and ID does not exist.
+        HttpResponse: La respuesta HTTP que contiene la plantilla renderizada.
     """
     clase = Clase.objects.get(id=id, curso__nrc=nrc)
 
@@ -428,14 +488,14 @@ def visualizacion_clase(request, nrc, id):
 @login_required(login_url="/login")
 def visualizacion_curso(request, curso_id):
     """
-    View function for displaying course information.
+    Vista que muestra la visualización de un curso.
 
     Args:
-        request (HttpRequest): The HTTP request object.
-        curso_id (int): The ID of the course to be displayed.
+        request (HttpRequest): La solicitud HTTP recibida.
+        curso_id (int): El ID del curso a visualizar.
 
     Returns:
-        HttpResponse: The HTTP response object containing the rendered template.
+        HttpResponse: La respuesta HTTP que muestra la visualización del curso.
     """
     curso = get_object_or_404(Curso, nrc=curso_id)
     clases = Clase.objects.filter(curso=curso).select_related('docente')
@@ -461,6 +521,15 @@ def visualizacion_curso(request, curso_id):
 
 
 def obtener_modalidad(malla):
+    """
+    Obtiene la modalidad de un programa con base en sus clases.
+
+    Parámetros:
+    - malla (list): Lista de materias de la malla curricular del programa.
+
+    Retorna:
+    - str: La modalidad más frecuente encontrada en las clases del programa.
+    """
     modalidades = ["NO ESPECIFICADO"]
 
     for materia in malla:

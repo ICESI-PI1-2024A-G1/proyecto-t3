@@ -18,6 +18,15 @@ from .models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
 # Create your views here.
 
 def login_page(request):
+    """
+    Vista que maneja la página de inicio de sesión.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+
+    Returns:
+        HttpResponse: La respuesta HTTP que se enviará al cliente.
+    """
     if request.method == 'POST':
         form = request.POST
         login(request, authenticate(request, username=form['username'], password=form['password']))
@@ -32,6 +41,15 @@ def login_page(request):
     })
 
 def log_out(request):
+    """
+    Cierra la sesión del usuario actual.
+
+    Args:
+        request: La solicitud HTTP recibida.
+
+    Returns:
+        Una redirección a la página de inicio de sesión.
+    """
     logout(request)
     return redirect("login")
 
