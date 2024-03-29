@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block content %}
+
+<head>
+  {% load static %}
+  <script src="{% static 'js/clases.js' %}"></script>
+</head>
 <div class="container mt-6">
     <div class="row">
         <div class="col-md-12">
@@ -80,7 +85,12 @@
                             style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Clase {{ forloop.counter }}</h5>
+
+                                    <div class="row row justify-content-center align-items-center">
+                                        <h5 class="card-title flex-grow-1 text-center">Clase {{ forloop.counter }}</h5>
+                                        <img id="{{clase.id}}" src="{% static 'img/pencil.png' %}" class="icon btn" onclick="show_pop(event)">
+                                    </div>
+
                                     <p class="card-text">
                                         <img src="{% static 'img/calendar.png' %}" class="icon" alt="Fecha de Inicio">
                                         <strong>Fecha de Inicio:</strong> {{ clase.fecha_inicio }}
@@ -111,4 +121,94 @@
         </div>
     </div>
 </div>
+
+<div id="editModal" style="display: none">
+    <div class="modal moodle-has-zindex show background-shadow">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="popup-content form-group">
+            <span class="close" onclick="hideEditModal()"></span>
+            <h3 class="h2">Editar Clase</h3>
+            <form id="editClassForm" method="POST" action="">
+              {% csrf_token %}
+              <input type="hidden" id="clase_id" name="clase_id">
+              
+            <label for="fecha_inicio">Fecha de Inicio:</label><br>
+            <input type="datetime-local" id="fecha_inicio" name="fecha_inicio"><br>
+
+            <label for="fecha_fin">Fecha de Fin:</label><br>
+            <input type="datetime-local" id="fecha_fin" name="fecha_fin"><br>
+
+            <label for="espacio_asignado">Espacio Asignado:</label><br>
+            <input type="text" id="espacio_asignado" name="espacio_asignado" value=""><br>
+
+            <div class="form-group row">
+                <label for="tipo_espacio">Tipo de espacio:</label>
+                <div class="col">
+                  <select id="tipo_espacio" name="tipo_espacio">
+                    {% for espacio in espacios %}
+                    <option value="{{ espacio.id }}">{{ espacio.tipo }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+            </div>
+
+            
+            <div class="form-group row">
+                <label for="modalidad_clase">Modalidad:</label>
+                <div class="col">
+                  <select id="modalidad_clase" name="modalidad_clase">
+                    {% for modalidad in modalidades %}
+                    <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              
+            <div class="form-group row">
+                <label for="docente_clase">Docente Encargado:</label>
+                <div class="col">
+                  <select id="docente_clase" name="docente_clase">
+                    {% for docente in docentes %}
+                    <option value="{{docente.cedula}}">{{docente.nombre}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Actualizar Clase</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      tabindex="-1"
+      style="position: fixed; top: 0px; left: 0px"
+      aria-hidden="true"
+      data-aria-hidden-tab-index="0"
+    ></div>
+  </div>
+
+<script>
+    var editModal = document.getElementById("editModal");
+  
+    // Cerrar popup al hacer clic en el botón de cerrar
+    function closePopup() {
+        editModal.style.display = "none";
+    }
+  
+    // Cerrar popup al dar clic afuera
+    window.onclick = function (event) {
+      if (event.target == editModal) {
+        editModal.style.display = "none";
+      }
+    };
+</script>
+
 {% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'academico/js/popup.js' %}"></script>
+{% endblock %}
+
