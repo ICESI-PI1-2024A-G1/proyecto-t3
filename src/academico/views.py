@@ -25,10 +25,9 @@ def crear_clase(request, curso_id):
         num_semanas = int (request.POST.get("num_semanas"))
         docente_cedula = (request.POST.get("docente_clase"))
 
-
         if not Docente.objects.filter(cedula=docente_cedula).exists():
             return render(request, "error.html", {"mensaje": "El docente no existe."})
-        
+
         if not Curso.objects.filter(nrc=curso_id).exists():
             return render(request, "error.html", {"mensaje": "El curso no existe."})
 
@@ -37,7 +36,7 @@ def crear_clase(request, curso_id):
 
         if not Modalidad.objects.filter(id=modalidad_clase).exists():
             return render(request, "error.html", {"mensaje": "La modalidad no existe."})
-        
+
         docente = Docente.objects.get(cedula=docente_cedula)
 
         for _ in range(num_semanas):
@@ -54,46 +53,68 @@ def crear_clase(request, curso_id):
             start_day += timedelta(days=7)
             end_day += timedelta(days=7)   
 
-        return redirect('cambio_docente', clase_id=clase.id)
+        return redirect("visualizar-curso", curso_id=curso_id)
     else:
         espacios = Espacio.objects.all()
         modalidades = Modalidad.objects.all()
         docentes = Docente.objects.all()
-        return render(request, "planeacion_materias.html", {'espacios': espacios,'modalidades': modalidades,'docentes': docentes, "curso_id":curso_id})
-    
+        return {
+            "espacios": espacios,
+            "modalidades": modalidades,
+            "docentes": docentes,
+            "curso_id": curso_id,
+        }
+
 
 @login_required(login_url="/login")
-def cambio_docente(request, clase_id):
-    docentes = Docente.objects.all()
-    print("Docentes impresos:",docentes)
-
+def editar_clase(request, clase_id):
+    clase = get_object_or_404(Clase,id=clase_id)
     if request.method == "POST":
-        clase = Clase.objects.get(id=clase_id)
+        fecha_inicio = request.POST.get("fecha_inicio")
+        fecha_fin = request.POST.get("fecha_fin")
+        espacio_asignado = request.POST.get("espacio_asignado")
+        tipo_espacio_id = request.POST.get("tipo_espacio")
+        modalidad_id = request.POST.get("modalidad_clase")
         docente_cedula = request.POST.get("docente_clase")
 
-        if not docente_cedula:
-            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+        if not all([fecha_inicio, fecha_fin, tipo_espacio_id, modalidad_id, docente_cedula]):
+            return render(request, "error.html", {"mensaje": "Todos los campos son requeridos."})
 
         try:
+            tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)
+            modalidad = Modalidad.objects.get(id=modalidad_id)
             docente = Docente.objects.get(cedula=docente_cedula)
-        except Docente.DoesNotExist:
-            return render(request, "error.html", {"mensaje": "El docente no existe.", 'docentes': docentes})
+        except (Espacio.DoesNotExist, Modalidad.DoesNotExist, Docente.DoesNotExist):
+            return render(request, "error.html", {"mensaje": "Uno o más de los IDs proporcionados no existen."})
 
+        clase.fecha_inicio = fecha_inicio
+        clase.fecha_fin = fecha_fin
+        clase.espacio_asignado = espacio_asignado
+        clase.espacio = tipo_espacio
+        clase.modalidad = modalidad
         clase.docente = docente
         clase.save()
-        return redirect('cambio_docente',clase_id=clase.id)
-    else:
-        clase = Clase.objects.get(id=clase_id)
-        docentes = Docente.objects.all()
-        print("Renderizando Plantilla con docentes:",docentes)
-        return render(request, 'visualizacion_clases.html', {'clase': clase,'docentes': docentes})
-
-
+        
+    return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 # Create your views here.
 
 
 @login_required(login_url="/login")
 def crear_curso(request, codigo, periodo):
+    """
+    Creates a new course with the specified code and period.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        codigo (str): The code of the course.
+        periodo (str): The period of the course.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the "visualizacion_materias" view.
+
+    Raises:
+        Http404: If the specified period does not exist.
+    """
     if request.method == "POST":
         form = request.POST
         cupo = form["cantidad_de_cupos"]
@@ -133,6 +154,19 @@ def crear_curso(request, codigo, periodo):
 
 @login_required(login_url="/login")
 def programas(request):
+    """
+    View function for displaying a list of programs.
+
+    This view function handles the logic for displaying a list of programs based on various filters and search queries.
+    It also handles pagination of the program list.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered template with the program list.
+
+    """
     programas = Programa.objects.all()
 
     # Búsqueda y filtrado
@@ -190,8 +224,20 @@ def programas(request):
         },
     )
 
-
 def materias(request):
+    """
+    View function for displaying a list of materias.
+
+    This function retrieves all the materias and programas from the database.
+    It also handles search, filtering, and pagination of the materias.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered HTML response containing the list of materias.
+
+    """
     materias = Materia.objects.all()
     programas = Programa.objects.all()
 
@@ -233,7 +279,6 @@ def materias(request):
             "side_args": args_principal("materias"),
         },
     )
-
 
 @login_required(login_url="/login")
 def programa(request, codigo, periodo):
@@ -329,61 +374,25 @@ def color_suave():
     color = random.choice([1, 2, 3])
     return color
 
-@login_required(login_url="/login")
 def visualizacion_materia(request, codigo, periodo):
-    # Obtiene la materia correspondiente al código proporcionado
-    materia = get_object_or_404(Materia, codigo=codigo)
-    
-    # Obtiene los cursos relacionados con la materia y el periodo especificado
+    materia = Materia.objects.get(codigo=codigo)
     cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
-    
-    # Obtiene los cursos relacionados con la materia y el periodo especificado
-    cursos_totales = Curso.objects.filter(materia__codigo=codigo)
-    
-    # Cuenta el número de cursos para el periodo y la materia especificados
-    c_num = Curso.objects.filter(periodo=periodo, materia=codigo).count()
-    
-    # Cuenta el número total de cursos para la materia especificada
-    c_numT = Curso.objects.filter(materia=codigo).count()
-    
-    # Obtiene todas las clases disponibles
-    clases = Clase.objects.all()
-    
-    # Inicializa las variables para contar el total de docentes asignados y el total de clases
-    total_docentes_asignados = 0
-    total_clases = 0
-    
-    # Itera sobre cada curso para contar el número total de docentes asignados y clases
-    for curso in cursos_totales:
-        for clase in clases:  
-            if clase.curso == curso.nrc:
-                total_docentes_asignados += 1
-                total_clases += 1
-            else:
-                total_clases += 1
-    
-    # Asigna un color suave a los cursos (asumiendo que `color_suave()` devuelve un color)
+
+    periodos = Periodo.objects.all()
     cursos.color = color_suave()
 
-    # Renderiza la plantilla HTML con los datos obtenidos y los contextos proporcionados
     return render(
         request,
         "visualizacion_materias.html",
         {
             "materia": materia,
             "cursos": cursos,
-            "periodo_seleccionado": periodo,
-            "periodos": Periodo.objects.all(),
+            "periodo_seleccionado": periodo,  # Agregado
+            "periodos": Periodo.objects.all(),  # Agregado
             "side": "sidebar_materias.html",
-            "c_num": c_num,
-            "c_numT": c_numT,
-            "total_asigandos": total_docentes_asignados,
-            "total_clases": total_clases,
         },
     )
 
-
-    
 def args_principal(seleccionado):
     return {
         "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
@@ -391,8 +400,21 @@ def args_principal(seleccionado):
         "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
         }
 
-@login_required(login_url="/login")   
 def visualizacion_clase(request, nrc, id):
+    """
+    Render the visualizacion_clases.html template with the specified class.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        nrc (str): The NRC (Número de Registro de Curso) of the class.
+        id (int): The ID of the class.
+
+    Returns:
+        HttpResponse: The rendered HTML response.
+
+    Raises:
+        Clase.DoesNotExist: If the class with the specified NRC and ID does not exist.
+    """
     clase = Clase.objects.get(id=id, curso__nrc=nrc)
 
     return render(
@@ -405,6 +427,16 @@ def visualizacion_clase(request, nrc, id):
 
 @login_required(login_url="/login")
 def visualizacion_curso(request, curso_id):
+    """
+    View function for displaying course information.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        curso_id (int): The ID of the course to be displayed.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered template.
+    """
     curso = get_object_or_404(Curso, nrc=curso_id)
     clases = Clase.objects.filter(curso=curso).select_related('docente')
     docentes_con_clases = Docente.objects.filter(clase__curso=curso).distinct()
@@ -418,7 +450,13 @@ def visualizacion_curso(request, curso_id):
     return render(
         request,
         "visualizar-curso.html",
-        {"curso": curso, "clases": clases, "docentes_con_clases": docentes_con_clases, "total_horas_programadas": total_horas_programadas}
+        {
+            "curso": curso,
+            "clases": clases,
+            "docentes_con_clases": docentes_con_clases,
+            "total_horas_programadas": total_horas_programadas,
+            "side": "sidebar_curso.html",
+        } | crear_clase(request, curso_id),
     )
 
 
