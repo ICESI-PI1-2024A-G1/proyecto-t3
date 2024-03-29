@@ -9,7 +9,7 @@
   <h2 class="mt-2"><strong>{{ materia.nombre }}:</strong> {{ materia.codigo }}</h2>
 
   <div class="row">
-      <label class="col ml-3" style="text-align: start;"><strong>Departamento:</strong> {{ materia.departamento.nombre }}</label>
+      <label class="col ml-3" style="text-align: start;"><strong>Departamento:</strong> {{ materia.departamento.nombre }} </label>
       <label class="col ml-3" style="text-align: start;"><strong>Creditos:</strong> {{ materia.creditos }}</label>
       
   </div>
@@ -28,6 +28,42 @@
     </label>
 </div>
 
+<div class="row mt-4">
+  <div class="col-md-12">
+      <div class="card">
+          <div class="card-body">
+              <h1 class="card-title bg-primary p-2 mb-4 text-white">Docentes</h1>
+              <div class="docentes-container" style="display: flex; flex-wrap: wrap;">
+                  {% if total_docentes == 0 %}
+                  <div class="alert alert-warning w-100" role="alert">
+                      No hay docentes asignados a esta materia.
+                  </div>
+                  {% endif %}
+                  {% for docente in docentes_con_clases %}
+                  <div class="col-md-6 docente-item"
+                      style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
+                      <div class="card">
+                          <div class="card-body">
+                              <div class="docente-info row">
+                                  <img src="{{ docente.foto }}" alt="{{ docente.nombre }}"
+                                      class="img-fluid docente-img rounded" style="max-width: 100px; height: auto;">
+                                      <div class="col">
+                                        <h5 style="margin-left: 10px;">{{ docente.nombre }}</h5>
+                                        <h5 style="margin-left: 10px; margin-top: 10px;"> Cursos: </h5>
+                                        {% for curso in docente.cursos %}
+                                        <label style="margin-left: 20px;">- Grupo {{ curso.grupo }}</label>
+                                        {% endfor %}
+                                      </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
 
   <!-- Tabla de cursos -->
   <div class="block card card-body mt-3 inner-shadow">
@@ -53,12 +89,16 @@
       <div class="mt-2">
     
       <div class="pd-1 row align-items-center">
+        {% if cursos.count == 0 %}
+        <div class="alert alert-warning w-100" role="alert">No hay cursos programados para este periodo</div>
+        {% else %}
         <div class="frame m-2 justify-content-center" style="background-color: rgba(120, 120, 120, 0.773);"><strong style="width: 25px;"> {{c_num}}</strong></div>
+        {% endif %}
           {% for curso in cursos %} 
           <div id="{{curso.nrc}}" class="color-{{cursos.color}} frame m-2 btn outer-shadow" onclick="window.location.href='/academico/cursos/{{curso.nrc}}'" style="width: 100px;">
             <div class="div">
+              <strong class="title mb-2">Grupo {{curso.grupo}}</strong>
               <span class="text-wrapper span"> NRC: {{curso.nrc}}</span>
-              <span class="text-wrapper span"> Grupo:{{curso.grupo}}</span>
               <span class="text-wrapper span"> Cupos:{{curso.cupo}}</span>
             </div>
           </div>
