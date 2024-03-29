@@ -11,14 +11,16 @@
 
 <div class="container">
   <h1 class="display-3 align-center">Lista de Docentes</h1>
-  <div class="d-flex justify-content-between mb-3">
+  <div class="mb-3">
     <!-- Formulario para búsqueda -->
     <form method="GET" action="{% url 'docentes' %}" class="form-inline">
-      <div class="form-group">
+      <div class="form-group flex-grow-1 position-relative">
         <label for="q" class="sr-only">Buscar por nombre de docente o numero id</label>
-        <input type="text" name="q" id="q" class="form-control" placeholder="Buscar por docente o cedula" />
+        <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por docente o cedula" />
+        <img src="{% static 'academico/img/search.png' %}" alt="Buscar"
+          style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
+          onclick="document.getElementById('search-form').submit();">
       </div>
-      <button type="submit" class="btn btn-primary ml-2" style="margin-top: 10px;">Buscar</button>
     </form>
 
     <!-- Formulario para filtrado y ordenamiento -->
