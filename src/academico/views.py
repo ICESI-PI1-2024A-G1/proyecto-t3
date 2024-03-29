@@ -592,10 +592,9 @@ def obtener_modalidad(malla):
 
     for materia in malla:
         try:
-            for curso in Curso.objects.get(materia__codigo=materia.codigo):
-                for clase in Clase.objects.get(curso_id=curso.id):
-                    modalidades.append(clase.modalidad)
+            for clase in Clase.objects.filter(curso__materia=materia.materia):
+                modalidades.append(clase.modalidad.metodologia)
         except:
             continue
-
+    print(modalidades)
     return max(set(modalidades), key=modalidades.count)
