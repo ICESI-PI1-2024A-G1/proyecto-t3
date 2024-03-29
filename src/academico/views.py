@@ -337,6 +337,9 @@ def visualizacion_materia(request, codigo, periodo):
     # Obtiene los cursos relacionados con la materia y el periodo especificado
     cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)
     
+    # Obtiene los cursos relacionados con la materia y el periodo especificado
+    cursos_totales = Curso.objects.filter(materia__codigo=codigo)
+    
     # Cuenta el número de cursos para el periodo y la materia especificados
     c_num = Curso.objects.filter(periodo=periodo, materia=codigo).count()
     
@@ -351,7 +354,7 @@ def visualizacion_materia(request, codigo, periodo):
     total_clases = 0
     
     # Itera sobre cada curso para contar el número total de docentes asignados y clases
-    for curso in cursos:
+    for curso in cursos_totales:
         for clase in clases:  
             if clase.curso == curso.nrc:
                 total_docentes_asignados += 1

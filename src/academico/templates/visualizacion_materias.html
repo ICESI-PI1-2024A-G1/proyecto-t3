@@ -4,10 +4,6 @@
   {% load static %}
   <script src="{% static 'js/materia.js' %}"></script>
   <script src="{% static 'js/popup.js' %}"></script>
-  <script src="{% static 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' %}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="{% static 'vendor/chart.js/Chart.js' %}"></script>
-  <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
 </head>
 <div class="container" style="text-align: start;">
   <h2 class="mt-2"><strong>{{ materia.nombre }}:</strong> {{ materia.codigo }}</h2>
@@ -21,6 +17,17 @@
     <label class="col ml-3" style="text-align: start;"><strong>Tipo:</strong> {{ materia.nombre }}</label>
     <label class="col ml-3" style="text-align: start;"><strong># de Cursos Totales:</strong> {{ c_numT }}</label>
   </div>
+
+  <div class="row">
+    <label class="col ml-3" style="text-align: start;"><strong>Numero de Clases Asignadas:</strong> 
+        {% if total_asignados > 0 %}
+            {{ total_asignados }}/{{ total_clases }}
+        {% else %}
+            0/{{ total_clases }}
+        {% endif %}
+    </label>
+</div>
+
 
   <!-- Tabla de cursos -->
   <div class="block card card-body mt-3 inner-shadow">
@@ -53,34 +60,6 @@
               <span class="text-wrapper span"> NRC: {{curso.nrc}}</span>
               <span class="text-wrapper span"> Grupo:{{curso.grupo}}</span>
               <span class="text-wrapper span"> Cupos:{{curso.cupo}}</span>
-              <div class="col-sm-6">
-                <canvas id="myChart" width="50" height="50"></canvas>
-                <script>
-                  var ctx = document.getElementById('myChart');
-                  var myChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                      labels: ["Sin docente", "Con docente"],
-                      datasets: [{
-                        label: 'Clases Asignadas',
-                        data: ['{{total_asignados}}', '{{total_clases}}'],
-                        backgroundColor: ['rgba(255,99,132,1)', 'rgba(54,162,135,1)'],
-                        borderColor: ['rgba(54,162,135,1)', 'rgba(25,206,86,1)'],
-                        borderWidth: 1
-                      }]
-                    },
-                    options: {
-                      scales: {
-                        yAxes: [{
-                          ticks: {
-                            beginAtZero: true
-                          }
-                        }]
-                      }
-                    }
-                  });
-                </script>
-              </div>
             </div>
           </div>
           {% endfor %}
