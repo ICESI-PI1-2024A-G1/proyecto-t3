@@ -1,5 +1,5 @@
 import random
-
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
@@ -29,9 +29,12 @@ def login_page(request):
     """
     if request.method == 'POST':
         form = request.POST
-        login(request, authenticate(request, username=form['username'], password=form['password']))
-        if request.user.is_authenticated:
+        user = authenticate(request, username=form['username'], password=form['password'])
+        if user is not None:
+            login(request, user)
             return redirect("programas")
+        else:
+            messages.error(request, "Usuario y/o contraseña incorrectos. Por favor, inténtelo nuevamente.")
 
     elif request.user.is_authenticated:
         return redirect('programas')
