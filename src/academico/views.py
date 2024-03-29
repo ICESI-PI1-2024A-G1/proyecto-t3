@@ -43,9 +43,6 @@ def crear_clase(request, curso_id):
         num_semanas = int (request.POST.get("num_semanas"))
         docente_cedula = (request.POST.get("docente_clase"))
 
-        if not Docente.objects.filter(cedula=docente_cedula).exists():
-            raise Http404("El docente no existe.")
-
         if not Curso.objects.filter(nrc=curso_id).exists():
             raise Http404("El curso no existe.")
 
