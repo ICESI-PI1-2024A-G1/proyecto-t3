@@ -68,38 +68,34 @@ def crear_clase(request, curso_id):
 
 @login_required(login_url="/login")
 def editar_clase(request, clase_id):
+    clase = get_object_or_404(Clase,id=clase_id)
     if request.method == "POST":
-        # Obtén la clase a editar
-        clase = Clase.objects.get(id=clase_id)
+        fecha_inicio = request.POST.get("fecha_inicio")
+        fecha_fin = request.POST.get("fecha_fin")
+        espacio_asignado = request.POST.get("espacio_asignado")
+        tipo_espacio_id = request.POST.get("tipo_espacio")
+        modalidad_id = request.POST.get("modalidad_clase")
+        docente_cedula = request.POST.get("docente_clase")
 
-        # Obtén los nuevos valores de los atributos desde el formulario
-        start_day = request.POST.get("start_day")
-        end_day = request.POST.get("end_day")
-        tipo_espacio = request.POST.get("tipo_espacio")
-        modalidad_clase = request.POST.get("modalidad_clase")
-        docente_clase = request.POST.get("docente_clase")
-        num_semanas = request.POST.get("num_semanas")
+        if not all([fecha_inicio, fecha_fin, tipo_espacio_id, modalidad_id, docente_cedula]):
+            return render(request, "error.html", {"mensaje": "Todos los campos son requeridos."})
 
-        # Asigna los nuevos valores a los atributos de la clase
-        clase.start_day = start_day
-        clase.end_day = end_day
-        clase.tipo_espacio = tipo_espacio
-        clase.modalidad_clase = modalidad_clase
-        clase.docente_clase = docente_clase
-        clase.num_semanas = num_semanas
+        try:
+            tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)
+            modalidad = Modalidad.objects.get(id=modalidad_id)
+            docente = Docente.objects.get(cedula=docente_cedula)
+        except (Espacio.DoesNotExist, Modalidad.DoesNotExist, Docente.DoesNotExist):
+            return render(request, "error.html", {"mensaje": "Uno o más de los IDs proporcionados no existen."})
 
-        # Guarda la clase
+        clase.fecha_inicio = fecha_inicio
+        clase.fecha_fin = fecha_fin
+        clase.espacio_asignado = espacio_asignado
+        clase.espacio = tipo_espacio
+        clase.modalidad = modalidad
+        clase.docente = docente
         clase.save()
-
-        # Redirige al usuario a la página de visualización de clases
-        return redirect('visualizacion_clases', curso_nrc=clase.curso.nrc)
-    else:
-        # Si la solicitud no es POST, muestra el formulario de edición
-        clase = Clase.objects.get(id=clase_id)
-        docentes = Docente.objects.all()
-        return render(request, 'visualizacion_clases.html', {'clase': clase,'docentes': docentes})
-
-
+        
+    return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 # Create your views here.
 
 
