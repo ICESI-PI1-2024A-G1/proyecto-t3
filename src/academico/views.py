@@ -316,17 +316,25 @@ def programa(request, codigo, periodo):
     tamaño = 0
     creditos_totales = 0
     cursos_totales = 0
+    docentes_con_clase = []
 
     for materia in materias:
         materia.materia.color = color_suave()
         creditos_totales += materia.materia.creditos
         cursos_totales += 1
+        docentes_con_clase+=Docente.objects.filter(clase__curso__materia=materia.materia, clase__curso__periodo__semestre=periodo).distinct()
         if materia.semestre not in malla_curricular.keys():
             tamaño = 1
             malla_curricular[materia.semestre] = []
         malla_curricular[materia.semestre].append(materia.materia)
 
     semestres = len(malla_curricular.keys())
+    
+    docentes = set()
+    for docente in docentes_con_clase:
+        docente.lista_materias = Materia.objects.filter(curso__clase__docente=docente).distinct()
+        docentes.add(docente)
+    
 
     return render(
         request,
@@ -340,6 +348,8 @@ def programa(request, codigo, periodo):
             "creditos_totales": creditos_totales,
             "cursos_totales": cursos_totales,
             "semestres": semestres,
+            "docentes_con_clases": docentes,
+            "total_docentes": len(docentes),
             "side": "sidebar_programa.html",
             "modalidad": obtener_modalidad(materias),
         },
@@ -446,6 +456,16 @@ def visualizacion_materia(request, codigo, periodo):
     
     # Obtiene todas las clases disponibles
     clases = Clase.objects.all()
+
+    docentes_con_clase = []
+    for curso in cursos:
+        docentes = Docente.objects.filter(clase__curso=curso).distinct()
+        for docente in docentes:
+            if docente not in docentes_con_clase:
+                docente.cursos = []
+                docentes_con_clase.append(docente)
+            docentes_con_clase[docentes_con_clase.index(docente)].cursos.append(curso)
+    
     
     # Inicializa las variables para contar el total de docentes asignados y el total de clases
     total_docentes_asignados = 0
@@ -475,7 +495,9 @@ def visualizacion_materia(request, codigo, periodo):
             "side": "sidebar_materias.html",
             "c_num": c_num,
             "c_numT": c_numT,
-            "total_asigandos": total_docentes_asignados,
+            "total_asignados": total_docentes_asignados,
+            "docentes_con_clases": docentes_con_clase,
+            "total_docentes": len(docentes_con_clase),
             "total_clases": total_clases,
         },
     )
@@ -534,6 +556,8 @@ def visualizacion_curso(request, curso_id):
     curso = get_object_or_404(Curso, nrc=curso_id)
     clases = Clase.objects.filter(curso=curso).select_related('docente')
     docentes_con_clases = Docente.objects.filter(clase__curso=curso).distinct()
+    for docente in docentes_con_clases:
+        docente.num_clases = len(Clase.objects.filter(docente=docente, curso=curso))
 
     total_horas_programadas = timedelta()
     for clase in clases:
@@ -568,10 +592,9 @@ def obtener_modalidad(malla):
 
     for materia in malla:
         try:
-            for curso in Curso.objects.get(materia__codigo=materia.codigo):
-                for clase in Clase.objects.get(curso_id=curso.id):
-                    modalidades.append(clase.modalidad)
+            for clase in Clase.objects.filter(curso__materia=materia.materia):
+                modalidades.append(clase.modalidad.metodologia)
         except:
             continue
-
+    print(modalidades)
     return max(set(modalidades), key=modalidades.count)

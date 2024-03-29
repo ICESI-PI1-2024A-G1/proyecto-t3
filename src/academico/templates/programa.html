@@ -55,6 +55,42 @@
     </div>
   </div>
 
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card">
+          <div class="card-body">
+              <h1 class="card-title bg-primary p-2 mb-4 text-white">Docentes</h1>
+              <div class="docentes-container" style="display: flex; flex-wrap: wrap;">
+                  {% if total_docentes == 0 %}
+                  <div class="alert alert-warning w-100" role="alert">
+                      No hay docentes asignados a este programa.
+                  </div>
+                  {% endif %}
+                  {% for docente in docentes_con_clases %}
+                  <div class="col-md-6 docente-item"
+                      style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
+                      <div class="card">
+                          <div class="card-body">
+                              <div class="docente-info row">
+                                  <img src="{{ docente.foto }}" alt="{{ docente.nombre }}"
+                                      class="img-fluid docente-img rounded" style="max-width: 100px; height: auto;">
+                                      <div class="col">
+                                        <h5 style="margin-left: 10px;">{{ docente.nombre }}</h5>
+                                        <h5 style="margin-left: 10px; margin-top: 10px;"> Materias: </h5>
+                                        {% for materia in docente.lista_materias %}
+                                        <label style="margin-left: 20px;">- {{ materia.nombre }}</label>
+                                        {% endfor %}
+                                      </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  {% endfor %}
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
   <!-- Tabla de materias -->
   <div class="block card card-body mt-3 inner-shadow">
     <div class="form-inline">
