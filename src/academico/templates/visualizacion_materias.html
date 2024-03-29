@@ -11,8 +11,23 @@
   <div class="row">
       <label class="col ml-3" style="text-align: start;"><strong>Departamento:</strong> {{ materia.departamento.nombre }}</label>
       <label class="col ml-3" style="text-align: start;"><strong>Creditos:</strong> {{ materia.creditos }}</label>
-      <label class="col ml-3" style="text-align: start;"><strong>Tipo:</strong> {{ materia.nombre }}</label>
+      
   </div>
+  <div class="row">
+    <label class="col ml-3" style="text-align: start;"><strong>Tipo:</strong> {{ materia.nombre }}</label>
+    <label class="col ml-3" style="text-align: start;"><strong># de Cursos Totales:</strong> {{ c_numT }}</label>
+  </div>
+
+  <div class="row">
+    <label class="col ml-3" style="text-align: start;"><strong>Numero de Clases Asignadas:</strong> 
+        {% if total_asignados > 0 %}
+            {{ total_asignados }}/{{ total_clases }}
+        {% else %}
+            0/{{ total_clases }}
+        {% endif %}
+    </label>
+</div>
+
 
   <!-- Tabla de cursos -->
   <div class="block card card-body mt-3 inner-shadow">
@@ -38,7 +53,7 @@
       <div class="mt-2">
     
       <div class="pd-1 row align-items-center">
-        <div class="frame m-2 justify-content-center" style="background-color: rgba(120, 120, 120, 0.773);"><strong style="width: 25px;"> </strong></div>
+        <div class="frame m-2 justify-content-center" style="background-color: rgba(120, 120, 120, 0.773);"><strong style="width: 25px;"> {{c_num}}</strong></div>
           {% for curso in cursos %} 
           <div id="{{curso.nrc}}" class="color-{{cursos.color}} frame m-2 btn outer-shadow" onclick="window.location.href='/academico/cursos/{{curso.nrc}}'" style="width: 100px;">
             <div class="div">
