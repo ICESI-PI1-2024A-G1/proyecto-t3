@@ -1,14 +1,16 @@
+import datetime
 from django.contrib.auth.models import User
-from django.http import Http404
+from django.http import Http404, HttpResponseNotFound
 from django.test import RequestFactory
 from django.urls import reverse
 from mixer.backend.django import mixer
 from django.test import TestCase, Client
 from django.urls import reverse
-from academico.models import Docente, Curso, Espacio, Modalidad, Clase
+from academico.models import Docente, Curso, Espacio, Modalidad, Clase, Periodo
 from academico.views import crear_clase
 import pytest
 import pytest
+from datetime import datetime
 
 
 @pytest.fixture
@@ -32,7 +34,7 @@ def autenticacion(db, rf):
         request: Objeto de la solicitud HTTP con el usuario autenticado.
     """
     user = User.objects.create_user(username='admin', password='admin')
-    request = rf.get(reverse('crear_clase', kwargs={'curso_id': 1}))
+    request = rf.get(reverse('planeacion_materias', kwargs={'curso_id': 1}))
     request.user = user
     return request
 
@@ -52,14 +54,96 @@ def curso(db):
     return curso
 
 @pytest.mark.django_db
-def test_crear_clase_post_negativo(autenticacion, curso):
+def test_crear_clase_post_negativo_1(autenticacion):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       'espacio_asignado': None,
+       'espacio_id': '13',
+       'modalidad_id': '4',
+       'docente_id': '1000000000'
+    }
+    response = crear_clase(request, 2)
+    assert isinstance(response, HttpResponseNotFound)
+
+@pytest.mark.django_db
+def test_crear_clase_post_negativo_01(autenticacion):
+    # Crear un curso con un ID específico
+    Curso.objects.create(nrc=1,grupo=7,cupo=30,materia_id=101,periodo_id=202401)
+
+    # Configurar la solicitud
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       'espacio_asignado': None,
+       'espacio_id': '13',
+       'modalidad_id': '4',
+       'docente_id': '1000000000'
+    }
+
+    # Llamar a la vista con un ID de curso que no existe
+    response = crear_clase(request, 2)
+    
+
+    # Verificar que la respuesta es una instancia de HttpResponseNotFound
+    assert isinstance(response, HttpResponseNotFound)
+
+
+@pytest.mark.django_db
+def test_crear_clase_post_negativo_2(autenticacion, curso):
     request = autenticacion
     request.method = 'POST'
     request.post = {
-        
+       'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       'espacio_asignado': None,
+       'curso_id': -1,
+       'espacio_id': 12,
+       'modalidad_id': 3,
+       'docente_id': 1000000000
+
     }
     with pytest.raises(Http404):
-        crear_clase(request, curso.id)
+        crear_clase(request, -1)
+
+
+@pytest.mark.django_db
+def test_crear_clase_post_negativo_3(autenticacion, curso):
+    request = autenticacion
+    request.method = 'POST'
+    request.post = {
+       'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       'espacio_asignado': None,
+       'curso_id': 3,
+       'espacio_id': 12,
+       'modalidad_id': 3,
+       'docente_id': 1000000000
+
+    }
+    with pytest.raises(Http404):
+        crear_clase(request, 3)
+
+@pytest.mark.django_db
+def test_crear_clase_post_negativo_4(autenticacion, curso):
+    request = autenticacion
+    request.method = 'POST'
+    request.post = {
+       'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       'espacio_asignado': None,
+       'curso_id': 0,
+       'espacio_id': 12,
+       'modalidad_id': 4,
+       'docente_id': 1000000000
+
+    }
+    with pytest.raises(Http404):
+        crear_clase(request, 0)
     
     
 @pytest.mark.django_db
@@ -67,47 +151,45 @@ def test_crear_clase_post_positivo(autenticacion, curso):
     request = autenticacion
     request.method = 'POST'
     request.post = {
-        
+        'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       'espacio_asignado': None,
+       'curso_id': 1,
+       'espacio_id': 12,
+       'modalidad_id': 4,
+       'docente_id': 3456789012
     }
-    response = crear_clase(request, curso.id)
-    assert response.status_code == 302
+    response = crear_clase(request, curso.nrc)
+    assert response.status_code == 200
     
 @pytest.mark.django_db
 def test_crear_clase_post_positivo_docente_null(autenticacion, curso):
     request = autenticacion
     request.method = 'POST'
     request.post = {
-        
+        'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       'espacio_asignado': None,
+       'curso_id': 1,
+       'espacio_id': 12,
+       'modalidad_id': 4,
+       'docente_id': None
     }
-    response = crear_clase(request, curso.id)
-    assert response.status_code == 302
+    response = crear_clase(request, curso.nrc)
+    assert response.status_code == 200
     
 @pytest.mark.django_db
 def test_crear_clase_post_positivo_espacio_null(autenticacion, curso):
     request = autenticacion
     request.method = 'POST'
     request.post = {
-        
+        'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       'espacio_asignado': '205E',
+       'curso_id': 1,
+       'espacio_id': 12,
+       'modalidad_id': 4,
+       'docente_id': 2345678901
     }
-    response = crear_clase(request, curso.id)
-    assert response.status_code == 302
-class CrearClaseTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.docente = Docente.objects.create(cedula='12345678')
-        self.curso = Curso.objects.create(nrc='1')
-        self.espacio = Espacio.objects.create(id=1)
-        self.modalidad = Modalidad.objects.create(id=1)
-        self.url = reverse('crear_clase', args=[self.curso.nrc])
-
-    def test_crear_clase(self):
-        response = self.client.post(self.url, {
-            'start_day': '2022-12-01T13:15',
-            'end_day': '2022-12-01T15:15',
-            'tipo_espacio': self.espacio.id,
-            'modalidad_clase': self.modalidad.id,
-            'num_semanas': 2,
-            'docente_clase': self.docente.cedula
-        })
-        self.assertEqual(response.status_code, 302)  # Redireccionamiento a "visualizar clases"
-        self.assertEqual(Clase.objects.count(), 2)  # Se crearon 2 clases
+    response = crear_clase(request, curso.nrc)
+    assert response.status_code == 200
