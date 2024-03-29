@@ -15,27 +15,45 @@ from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
                      MallaCurricular, Materia, Modalidad, Periodo, Programa)
 
 
+
+
 @login_required(login_url="/login")
 def crear_clase(request, curso_id):
+    """
+    Crea una nueva clase para un curso en el sistema.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        curso_id (str): Recibe el codigo del curso.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualizacion clases dentro del curso.
+
+    Raises:
+        Http404: Si el curso no existe.
+    
+    """
     if request.method == "POST":
+        
         start_day = datetime.strptime(request.POST.get("start_day"), "%Y-%m-%dT%H:%M")
         end_day = datetime.strptime(request.POST.get("end_day"), "%Y-%m-%dT%H:%M")
+
         tipo_espacio = int(request.POST.get("tipo_espacio"))
         modalidad_clase = int(request.POST.get("modalidad_clase"))
         num_semanas = int (request.POST.get("num_semanas"))
         docente_cedula = (request.POST.get("docente_clase"))
 
         if not Docente.objects.filter(cedula=docente_cedula).exists():
-            return render(request, "error.html", {"mensaje": "El docente no existe."})
+            raise Http404("El docente no existe.")
 
         if not Curso.objects.filter(nrc=curso_id).exists():
-            return render(request, "error.html", {"mensaje": "El curso no existe."})
+            raise Http404("El curso no existe.")
 
         if not Espacio.objects.filter(id=tipo_espacio).exists():
-            return render(request, "error.html", {"mensaje": "El espacio no existe."})
+            raise Http404("El espacio no existe.")
 
         if not Modalidad.objects.filter(id=modalidad_clase).exists():
-            return render(request, "error.html", {"mensaje": "La modalidad no existe."})
+            raise Http404("La modalidad no existe.")
 
         docente = Docente.objects.get(cedula=docente_cedula)
 
@@ -64,10 +82,26 @@ def crear_clase(request, curso_id):
             "docentes": docentes,
             "curso_id": curso_id,
         }
-
+    
 
 @login_required(login_url="/login")
 def editar_clase(request, clase_id):
+
+    """
+    Permite editar los atributos de una clase
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): El código de la clase a editar.
+        
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualizacion clases dentro del curso.
+
+    Raises:
+        Http404: Si la clase no existe.
+
+    """
     clase = get_object_or_404(Clase,id=clase_id)
     if request.method == "POST":
         fecha_inicio = request.POST.get("fecha_inicio")

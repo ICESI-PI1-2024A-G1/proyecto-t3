@@ -17,6 +17,25 @@
     </div>
   </div>
 
+  <span id="error-message" style="color: red;"></span>
+
+  <script>
+    document.getElementById('classForm').addEventListener('submit', function(event) {
+      var start_day = new Date(document.getElementById('start_day').value);
+      var end_day = new Date(document.getElementById('end_day').value);
+      var diffMs = (end_day - start_day);
+      var diffHrs = Math.floor(diffMs / 3600000); // hours
+      if (diffHrs > 24) {
+        event.preventDefault();
+        // En lugar de mostrar una alerta, cambia el contenido del elemento de mensaje de error
+        document.getElementById('error-message').textContent = 'La duración de la clase no puede ser mayor a 24 horas.';
+      } else {
+        // Si la duración es válida, asegúrate de que el mensaje de error esté vacío
+        document.getElementById('error-message').textContent = '';
+      }
+    });
+    </script>
+
   <div class="form-group row">
     <label for="tipo_espacio">Tipo de espacio:</label>
     <div class="col">
@@ -63,4 +82,5 @@
 
   <button class="btn btn-primary" type="submit">Crear Clases</button>
 </form>
+
 {% endblock %}
