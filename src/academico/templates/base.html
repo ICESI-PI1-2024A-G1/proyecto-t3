@@ -6,19 +6,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Proyecto CCSA</title>
+    <script src="{% static 'js/sidebar.js' %}"></script>
   </head>
   <body>
     <div class="rui-topbar-wrapper">
       <div class="rui-topbar wrapper-page">
         <div class="d-inline-flex align-items-center">
-          <div>
-            <a href="/" class="rui-navbar-brand rui-navbar-brand--img">
+          <div class="rui-sidebar-menu">
+            <a class="popover-region-toggle rui-topbar-special-btn mr-1" onclick="changeSidebarState()">
+              <img class="icon" src="{% static 'img/hamburger.png' %}" />
+            </a>
+            <div class="rui-navbar-nav--sep d-inline-flex mx-1"></div>
+            <a href="/" class="rui-navbar-brand rui-navbar-brand--img ml-2">
               <span class="rui-logo">
                 <img src="{% static 'img/logo-app.jpg' %}" alt="CCSA" />
               </span>
             </a>
           </div>
-          <div class="rui-navbar-nav--sep d-inline-flex mx-1"></div>
         </div>
         <ul class="rui-icon-menu ml-auto">
           <li>
@@ -49,12 +53,12 @@
       </div>
     </div>
     <div class="row mb-0">
-      <div class="col-2">
+      <div id="page_sidebar_content" class="page-sidebar">
         {% if side != null %}
         {% include side %}
         {% endif %}
       </div>
-      <div class="container col pb-3"style="background-color: #f0f2f5;">
+      <div id="page_main_content" class="col pb-3 w-100"style="background-color: #f0f2f5;">
         {% block content %} {% endblock %}
       </div>
     </div>
