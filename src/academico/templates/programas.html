@@ -25,19 +25,20 @@
     </form>
 
     <!-- Formulario para filtrado y ordenamiento -->
-    <form method="GET" action="{% url 'programas' %}" class="form-inline">
-      <div class="form-group mr-2 d-flex align-items-center">
-
-        <label for="ordenar_por" class="mr-2">Ordenar por:</label>
-        <select name="ordenar_por" id="ordenar_por" class="form-control mr-2" onchange="toggleFiltrado()">
-          <option value="">Sin orden</option>
-          <option value="facultad">Facultad</option>
-          <option value="estado_solicitud">Estado de Solicitud</option>
-        </select>
+    <div class="d-flex flex-wrap justify-content-between">
+      <form method="GET" action="{% url 'programas' %}" class="form-inline mb-2 mb-md-0 mr-2">
+        <div class="form-group">
+          <label for="ordenar_por" class="mr-2">Ordenar por:</label>
+          <select name="ordenar_por" id="ordenar_por" class="form-control mr-2" onchange="toggleFiltrado()">
+            <option value="">Sin orden</option>
+            <option value="facultad">Facultad</option>
+            <option value="estado_solicitud">Estado de Solicitud</option>
+          </select>
+        </div>
 
         <!-- Contenedor para Filtrado por Facultad y Estado de Solicitud -->
-        <div id="filtradoDiv" class="d-flex align-items-center">
-          <div id="facultadDiv" style="display: none;" class="mr-2">
+        <div id="filtradoDiv" class="d-flex align-items-center flex-column flex-md-row">
+          <div id="facultadDiv" style="display: none;" class="mr-2 mb-2 mb-md-0">
             <select name="facultad" class="form-control">
               <option value="">Todas las facultades</option>
               {% for facultad in facultades %}
@@ -47,7 +48,7 @@
           </div>
 
           <!-- Filtrado por Estado de Solicitud -->
-          <div id="estadoDiv" style="display: none;" class="mr-2">
+          <div id="estadoDiv" style="display: none;" class="mr-2 mb-2 mb-md-0">
             <select name="estado" class="form-control">
               <option value="">Todos los estados</option>
               {% for estado in estados %}
@@ -55,38 +56,69 @@
               {% endfor %}
             </select>
           </div>
-
-          <button type="submit" class="btn btn-primary">Filtrar</button>
         </div>
-      </div>
-    </form>
+
+        <!-- Botón de Filtrar -->
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+      </form>
+    </div>
   </div>
 
-  <!-- Tabla de programas -->
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Código</th>
-        <th>Nombre del Programa</th>
-        <th>Facultad</th>
-        <th>Tipo de Programa</th>
-        <th>Director</th>
-        <th>Estado de Solicitud</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for programa in programas %}
-      <tr onclick="window.location.href='programas/{{programa.codigo}}/202401'">
-        <td>{{ programa.codigo }}</td>
-        <td>{{ programa.nombre }}</td>
-        <td>{{ programa.facultad.nombre }}</td>
-        <td>{{ programa.tipo_de_programa.nombre }}</td>
-        <td>{{ programa.director.nombre }}</td>
-        <td>{{ programa.estado_solicitud.nombre }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <!-- Tabla de programas para pantallas grandes -->
+  <div class="d-none d-md-block">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre del Programa</th>
+          <th>Facultad</th>
+          <th>Tipo de Programa</th>
+          <th>Director</th>
+          <th>Estado de Solicitud</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for programa in programas %}
+        <tr onclick="window.location.href='programas/{{programa.codigo}}/202401'">
+          <td>{{ programa.codigo }}</td>
+          <td>{{ programa.nombre }}</td>
+          <td>{{ programa.facultad.nombre }}</td>
+          <td>{{ programa.tipo_de_programa.nombre }}</td>
+          <td>{{ programa.director.nombre }}</td>
+          <td>{{ programa.estado_solicitud.nombre }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Tabla de programas para pantallas pequeñas -->
+  <div class="table-responsive d-md-none">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre del Programa</th>
+          <th>Facultad</th>
+          <th>Tipo de Programa</th>
+          <th>Director</th>
+          <th>Estado de Solicitud</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for programa in programas %}
+        <tr onclick="window.location.href='programas/{{programa.codigo}}/202401'">
+          <td>{{ programa.codigo }}</td>
+          <td>{{ programa.nombre }}</td>
+          <td>{{ programa.facultad.nombre }}</td>
+          <td>{{ programa.tipo_de_programa.nombre }}</td>
+          <td>{{ programa.director.nombre }}</td>
+          <td>{{ programa.estado_solicitud.nombre }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
   <!-- Paginación -->
   <div class="pagination">
