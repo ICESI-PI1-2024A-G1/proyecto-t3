@@ -43,7 +43,7 @@ def crear_clase(request, curso_id):
         modalidad_clase = int(request.POST.get("modalidad_clase"))
         num_semanas_str = (request.POST.get("num_semanas", "1"))
         num_semanas = 1 if  num_semanas_str == "" else int(num_semanas_str)
-        docente_cedula = (request.POST.get("docente_clase"))
+        docente_cedula = request.POST.get("docente_clase")
 
         if not Curso.objects.filter(nrc=curso_id).exists():
             raise Http404("El curso no existe.")
@@ -53,8 +53,11 @@ def crear_clase(request, curso_id):
 
         if not Modalidad.objects.filter(id=modalidad_clase).exists():
             raise Http404("La modalidad no existe.")
-
-        docente = Docente.objects.get(cedula=docente_cedula)
+        
+        if docente_cedula is not None:            
+            docente = Docente.objects.get(cedula=docente_cedula)
+        else:
+            docente = None  
 
         for _ in range(num_semanas):
             clase = Clase.objects.create(
@@ -110,17 +113,29 @@ def editar_clase(request, clase_id):
         modalidad_id = request.POST.get("modalidad_clase")
         docente_cedula = request.POST.get("docente_clase")
 
-        if not all([fecha_inicio, fecha_fin, tipo_espacio_id, modalidad_id, docente_cedula]):
-            messages.error(request, "Por favor, complete todos los campos.")
-            return redirect("editar_clase", clase_id=clase_id)
+        if not all([fecha_inicio, fecha_fin, tipo_espacio_id, modalidad_id]):
+             raise Http404("Todos los campos son requeridos.")
 
         try:
-            tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)
-            modalidad = Modalidad.objects.get(id=modalidad_id)
-            docente = Docente.objects.get(cedula=docente_cedula)
-        except (Espacio.DoesNotExist, Modalidad.DoesNotExist, Docente.DoesNotExist):
-            return render(request, "error.html", {"mensaje": "Uno o más de los IDs proporcionados no existen."})
+            tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)       
+        except (Espacio.DoesNotExist):
+            raise Http404("Tipo de espacio no existe.")
 
+        try:
+            modalidad = Modalidad.objects.get(id=modalidad_id)    
+        except (Modalidad.DoesNotExist):
+            raise Http404("Modalidad no existe.")
+        
+        if docente_cedula is not None:
+            try:
+                docente = Docente.objects.get(cedula=docente_cedula)
+                
+            except (Docente.DoesNotExist):
+                raise Http404("Docente no existe.")
+        else:
+            docente = None
+            
+        
         clase.fecha_inicio = fecha_inicio
         clase.fecha_fin = fecha_fin
         clase.espacio_asignado = espacio_asignado

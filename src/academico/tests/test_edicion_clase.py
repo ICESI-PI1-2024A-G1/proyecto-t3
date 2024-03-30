@@ -115,7 +115,25 @@ def modalidad(db):
     return mixer.blend(Modalidad)
 
 @pytest.mark.django_db
-def test_editar_clase_post_negativo_(autenticacion, clase):
+def test_editar_clase_post_negativo_clase_inexistente(autenticacion, clase):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': clase.fecha_inicio,
+       'end_day': clase.fecha_fin,
+       "espacio_asignado": None,
+       "tipo_espacio": clase.espacio.id,
+        "modalidad_clase": clase.modalidad.id,
+        "docente_clase": clase.docente.cedula
+    }
+    try:
+        response = editar_clase(request, 999)
+        assert False
+    except Http404 as e:
+        assert True
+        
+@pytest.mark.django_db
+def test_editar_clase_post_negativo_fecha_inicio_None(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -130,4 +148,127 @@ def test_editar_clase_post_negativo_(autenticacion, clase):
         response = editar_clase(request, clase.id)
         assert False
     except Http404 as e:
-        assert e == "Todos los campos son requeridos."
+        assert str(e) == "Todos los campos son requeridos."
+        
+@pytest.mark.django_db
+def test_editar_clase_post_negativo_fecha_fin_None(autenticacion, clase):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': clase.fecha_inicio,
+       'end_day': None,
+       "espacio_asignado": None,
+       "tipo_espacio": clase.espacio.id,
+        "modalidad_clase": clase.modalidad.id,
+        "docente_clase": clase.docente.cedula
+    }
+    try:
+        response = editar_clase(request, clase.id)
+        assert False
+    except Http404 as e:
+        assert str(e) == "Todos los campos son requeridos."
+        
+@pytest.mark.django_db
+def test_editar_clase_post_negativo_tipo_espacio_None(autenticacion, clase):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': clase.fecha_inicio,
+       'end_day': clase.fecha_fin,
+       "espacio_asignado": None,
+       "tipo_espacio": None,
+        "modalidad_clase": clase.modalidad.id,
+        "docente_clase": clase.docente.cedula
+    }
+    try:
+        response = editar_clase(request, clase.id)
+        assert False
+    except Http404 as e:
+        assert str(e) == "Todos los campos son requeridos."
+
+@pytest.mark.django_db
+def test_editar_clase_post_negativo_tipo_espacio_invalido(autenticacion, clase):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': clase.fecha_inicio,
+       'end_day': clase.fecha_fin,
+       "espacio_asignado": None,
+       "tipo_espacio": 100,
+        "modalidad_clase": clase.modalidad.id,
+        "docente_clase": clase.docente.cedula
+    }
+    try:
+        response = editar_clase(request, clase.id)
+        assert False
+    except Http404 as e:
+        assert str(e) == "Tipo de espacio no existe."
+
+@pytest.mark.django_db
+def test_editar_clase_post_negativo_modalidad_None(autenticacion, clase):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': clase.fecha_inicio,
+       'end_day': clase.fecha_fin,
+       "espacio_asignado": None,
+       "tipo_espacio": clase.espacio.id,
+        "modalidad_clase": None,
+        "docente_clase": clase.docente.cedula
+    }
+    try:
+        response = editar_clase(request, clase.id)
+        assert False
+    except Http404 as e:
+        assert str(e) == "Todos los campos son requeridos."
+        
+@pytest.mark.django_db
+def test_editar_clase_post_negativo_modalidad_invalido(autenticacion, clase):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': clase.fecha_inicio,
+       'end_day': clase.fecha_fin,
+       "espacio_asignado": None,
+       "tipo_espacio": clase.espacio.id,
+        "modalidad_clase": 100,
+        "docente_clase": clase.docente.cedula
+    }
+    try:
+        response = editar_clase(request, clase.id)
+        assert False
+    except Http404 as e:
+        assert str(e) == "Modalidad no existe."
+        
+@pytest.mark.django_db
+def test_editar_clase_post_negativo_docente_invalido(autenticacion, clase):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': clase.fecha_inicio,
+       'end_day': clase.fecha_fin,
+       "espacio_asignado": None,
+       "tipo_espacio": clase.espacio.id,
+        "modalidad_clase": clase.modalidad.id,
+        "docente_clase": 999
+    }
+    try:
+        response = editar_clase(request, clase.id)
+        assert False
+    except Http404 as e:
+        assert str(e) == "Docente no existe."
+        
+@pytest.mark.django_db
+def test_editar_clase_post_positivo(autenticacion, clase):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': clase.fecha_inicio,
+       'end_day': clase.fecha_fin,
+       "espacio_asignado": None,
+       "tipo_espacio": clase.espacio.id,
+        "modalidad_clase": clase.modalidad.id,
+        "docente_clase": clase.docente.cedula
+    }
+    response = editar_clase(request, clase.id)
+    assert response.status_code == 302
