@@ -1,6 +1,7 @@
 import json
 import random
 from datetime import datetime, timedelta
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -110,7 +111,8 @@ def editar_clase(request, clase_id):
         docente_cedula = request.POST.get("docente_clase")
 
         if not all([fecha_inicio, fecha_fin, tipo_espacio_id, modalidad_id, docente_cedula]):
-            return render(request, "error.html", {"mensaje": "Todos los campos son requeridos."})
+            messages.error(request, "Por favor, complete todos los campos.")
+            return redirect("editar_clase", clase_id=clase_id)
 
         try:
             tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)

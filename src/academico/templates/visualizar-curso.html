@@ -138,22 +138,22 @@
               <input type="hidden" id="clase_id" name="clase_id">
               
             <label for="fecha_inicio">Fecha de Inicio:</label><br>
-            <input type="datetime-local" id="fecha_inicio" name="fecha_inicio"><br>
+            <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" required/><br>
 
             <label for="fecha_fin">Fecha de Fin:</label><br>
-            <input type="datetime-local" id="fecha_fin" name="fecha_fin"><br>
+            <input type="datetime-local" id="fecha_fin" name="fecha_fin" required/><br>
 
             <span id="error-message" style="color: red; display: block; height: auto; visibility: visible;"></span>
 
             <label for="espacio_asignado">Espacio Asignado:</label><br>
-            <input type="text" id="espacio_asignado" name="espacio_asignado" value=""><br>
+            <input type="text" id="espacio_asignado" name="espacio_asignado" value="" required/><br>
 
             <div class="form-group row">
                 <label for="tipo_espacio">Tipo de espacio:</label>
                 <div class="col">
-                  <select id="tipo_espacio" name="tipo_espacio">
+                  <select id="tipo_espacio" name="tipo_espacio" required/>
                     {% for espacio in espacios %}
-                    <option value="{{ espacio.id }}">{{ espacio.tipo }}</option>
+                    <option value="{{ espacio.id }}">{{ espacio.tipo }} </option>
                     {% endfor %}
                   </select>
                 </div>
@@ -163,7 +163,7 @@
             <div class="form-group row">
                 <label for="modalidad_clase">Modalidad:</label>
                 <div class="col">
-                  <select id="modalidad_clase" name="modalidad_clase">
+                  <select id="modalidad_clase" name="modalidad_clase" required/>
                     {% for modalidad in modalidades %}
                     <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
                     {% endfor %}
@@ -174,7 +174,7 @@
             <div class="form-group row">
                 <label for="docente_clase">Docente Encargado:</label>
                 <div class="col">
-                  <select id="docente_clase" name="docente_clase">
+                  <select id="docente_clase" name="docente_clase" required/>
                     {% for docente in docentes %}
                     <option value="{{docente.cedula}}">{{docente.nombre}}</option>
                     {% endfor %}
