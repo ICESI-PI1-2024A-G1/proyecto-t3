@@ -120,7 +120,7 @@ def test_busqueda_docente_nombre_Noexiste():
     request.method = 'GET'
     request.GET['q'] = 'Camilo'
 
-    #autenticar_usuario(request)
+    autenticar_usuario(request)
     response = docentes(request)
 
     assert response.status_code == 200
@@ -144,6 +144,7 @@ def test_filtrar_docente_por_estado():
     """
     crear_instancias()
     request = RequestFactory().get('/?estado=1') #Se supone que la id=1 es la correspondiente a Activo
+    autenticar_usuario(request)
 
     response = docentes(request)
     assert response.status_code == 200
@@ -169,7 +170,8 @@ def test_filtrar_docente_por_contrato():
     """
     crear_instancias()
     request = RequestFactory().get('/?contrato=2') #Se supone que la id=2 es la correspondiente al tipo de contrato contrato de Prestación de servicios.
-
+    autenticar_usuario(request)
+    
     response = docentes(request)
     assert response.status_code == 200
     assert b'Daniel' not in response.content
