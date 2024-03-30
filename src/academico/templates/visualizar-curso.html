@@ -143,6 +143,8 @@
             <label for="fecha_fin">Fecha de Fin:</label><br>
             <input type="datetime-local" id="fecha_fin" name="fecha_fin"><br>
 
+            <span id="error-message" style="color: red; display: block; height: auto; visibility: visible;"></span>
+
             <label for="espacio_asignado">Espacio Asignado:</label><br>
             <input type="text" id="espacio_asignado" name="espacio_asignado" value=""><br>
 
@@ -179,8 +181,7 @@
                   </select>
                 </div>
             </div>
-
-            <button class="btn btn-primary" type="submit">Actualizar Clase</button>
+                <button class="btn btn-primary" type="submit">Actualizar Clase</button>
             </form>
           </div>
         </div>
@@ -209,6 +210,36 @@
       }
     };
 </script>
+
+<script>
+    document.getElementById('editClassForm').addEventListener('submit', function(event) {
+        var start_day = new Date(document.getElementById('fecha_inicio').value.replace('T', ' ') + ' UTC');
+        var end_day = new Date(document.getElementById('fecha_fin').value.replace('T', ' ') + ' UTC');
+        var diffMs = (end_day - start_day);
+        var diffHrs = Math.floor(diffMs / 3600000); // hours
+        if (diffHrs > 24) {
+            event.preventDefault();
+            document.getElementById('error-message').textContent = 'La duración de la clase no puede ser mayor a 24 horas.';
+            document.getElementById('error-message').style.display = 'block';
+            setTimeout(function() {
+                document.getElementById('error-message').style.display = 'none';
+                document.getElementById('editClassForm').submit();
+            }, 2000);
+        } else if (diffMs < 0) {
+            event.preventDefault();
+            document.getElementById('error-message').textContent = 'La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.';
+            document.getElementById('error-message').style.display = 'block';
+            setTimeout(function() {
+                document.getElementById('error-message').style.display = 'none';
+                document.getElementById('editClassForm').submit();
+            }, 2000);
+        } else {
+            document.getElementById('error-message').textContent = '';
+        }
+    });
+</script>
+
+
 
 {% endblock %}
 

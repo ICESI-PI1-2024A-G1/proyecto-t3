@@ -40,7 +40,8 @@ def crear_clase(request, curso_id):
 
         tipo_espacio = int(request.POST.get("tipo_espacio"))
         modalidad_clase = int(request.POST.get("modalidad_clase"))
-        num_semanas = int (request.POST.get("num_semanas"))
+        num_semanas_str = (request.POST.get("num_semanas", "1"))
+        num_semanas = 1 if  num_semanas_str == "" else int(num_semanas_str)
         docente_cedula = (request.POST.get("docente_clase"))
 
         if not Curso.objects.filter(nrc=curso_id).exists():

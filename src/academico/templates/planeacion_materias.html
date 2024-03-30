@@ -29,6 +29,10 @@
         event.preventDefault();
         // En lugar de mostrar una alerta, cambia el contenido del elemento de mensaje de error
         document.getElementById('error-message').textContent = 'La duración de la clase no puede ser mayor a 24 horas.';
+      } else if (diffMs < 0) {
+        event.preventDefault();
+        // Si la fecha/hora de inicio es posterior a la fecha/hora de finalización, muestra un mensaje de error
+        document.getElementById('error-message').textContent = 'La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.';
       } else {
         // Si la duración es válida, asegúrate de que el mensaje de error esté vacío
         document.getElementById('error-message').textContent = '';
