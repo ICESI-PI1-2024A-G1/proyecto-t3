@@ -88,36 +88,96 @@ def docente(db):
     """
     return mixer.blend(Docente)
 
+@pytest.fixture
+def espacio(db):
+    """
+    Fixture que crea y retorna una instancia de la clase Espacio.
+
+    Args:
+        db: Objeto de la base de datos.
+
+    Returns:
+        Una instancia de la clase Espacio.
+    """
+    return mixer.blend(Espacio)
+
+@pytest.fixture
+def modalidad(db):
+    """
+    Fixture que crea y retorna una instancia de la clase Modalidad.
+
+    Args:
+        db: Objeto de la base de datos.
+
+    Returns:
+        Una instancia de la clase Modalidad.
+    """
+    return mixer.blend(Modalidad)
+
 @pytest.mark.django_db
-def test_crear_clase_post_negativo_1(autenticacion, curso):
+def test_crear_clase_post_negativo_modalidad(autenticacion, curso, espacio, docente):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
        'start_day': '2022-12-01T13:15',
        'end_day': '2022-12-01T15:15',
-       "tipo_espacio": 1,
+       "tipo_espacio": espacio.id,
         "modalidad_clase": 100,
-        "docente_clase": None,
+        "docente_clase": docente.cedula,
         "num_semanas": 1,
     }
     try:
         response = crear_clase(request, curso.nrc)
         assert False
     except Http404 as e:
-        assert e == Http404("La modalidad no existe.")
-        
+        assert str(e) == "La modalidad no existe."
+
 @pytest.mark.django_db
-def test_crear_clase_post_positivo_1(autenticacion, curso):
+def test_crear_clase_post_negativo_espacio(autenticacion, curso, modalidad, docente):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
        'start_day': '2022-12-01T13:15',
        'end_day': '2022-12-01T15:15',
-       "tipo_espacio": 1,
-        "modalidad_clase": 1,
+       "tipo_espacio": 2,
+        "modalidad_clase": modalidad.id,
+        "docente_clase": docente.cedula,
+        "num_semanas": 1,
+    }
+    try:
+        response = crear_clase(request, curso.nrc)
+        assert False
+    except Http404 as e:
+        assert str(e) == "El espacio no existe."
+        
+@pytest.mark.django_db
+def test_crear_clase_post_positivo_con_docente(autenticacion, curso, espacio, modalidad, docente):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       "tipo_espacio": espacio.id,
+        "modalidad_clase": modalidad.id,
+        "docente_clase": docente.cedula,
+        "num_semanas": 1,
+    }
+   
+    response = crear_clase(request, curso.nrc)
+    assert response.status_code == 302
+        
+@pytest.mark.django_db
+def test_crear_clase_post_positivo_sin_docente(autenticacion, curso, espacio, modalidad, docente):
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = {
+       'start_day': '2022-12-01T13:15',
+       'end_day': '2022-12-01T15:15',
+       "tipo_espacio": espacio.id,
+        "modalidad_clase": modalidad.id,
         "docente_clase": None,
         "num_semanas": 1,
     }
+   
     response = crear_clase(request, curso.nrc)
     assert response.status_code == 302
-
