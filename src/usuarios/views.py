@@ -97,10 +97,13 @@ def docente_Detail(request, cedula, periodo):
         docente.estado = nuevo_estado
         docente.save()
     
-    
     clasesDocente = Clase.objects.filter(docente=docente , curso__periodo=periodo)
+    clasesDocenteOrdenada = Clase.objects.filter(docente=docente , curso__periodo=periodo).order_by("fecha_inicio")
+
     dias = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    
+    days = traducir(dias)
+    #en cada iteración del bucle, dia será un día en inglés y day será su traducción al español.
+    dias_days = zip(dias, days)
     return render(
         request,
         "docenteProfile.html", 
@@ -108,13 +111,53 @@ def docente_Detail(request, cedula, periodo):
             'docente': docente,
             'periodo_seleccionado': periodo,
             'clasesDocente': clasesDocente,
+            'clasesDocenteOrdenada': clasesDocenteOrdenada,
             'dias': dias,
+            'dias_days':dias_days ,
             'periodos': Periodo.objects.all(),
             'estados': estados,
             "side": "sidebar_docente.html"
         },
     )
-    
+
+def traducir(dias):
+    """
+    Función que va a agregando cada día de la lista de dias (en inglés), traducido al español, en una lista de dias traducidos.
+
+    Args:
+        dias: Lista con los días en inglés.
+
+    Returns: Una lista de días traducidos
+        
+    """
+    dias_traducidos = []
+    for dia in dias:
+        day = traducir_a_español(dia)
+        dias_traducidos.append(day)
+    return dias_traducidos
+
+
+def traducir_a_español(dia):
+    """
+    Función que va traduce el día especificado según su valor.
+
+    Args:
+        dia: dia en ingles
+
+    Returns: un día con su traducción equivalente
+        
+    """
+    dias_semana = {
+        'Monday':'Lunes',
+        'Tuesday':'Martes',
+        'Wednesday':'Miércoles',
+        'Thursday':'Jueves',
+        'Friday':'Viernes',
+        'Saturday':'Sábado',
+        'Sunday':'Domingo'
+    }
+
+    return dias_semana.get(dia, dia)
 @login_required(login_url="/login")
 def docentes(request):
     """

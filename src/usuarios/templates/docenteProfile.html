@@ -85,22 +85,24 @@
           </select>
         </div>
       </div>
-      <div class= "block card card-body mt-3 inner-shadow">
+      <div class= "block card card-body mt-3 inner-shadow ">
         {% if clasesDocente.count == 0 %}
         <div class="alert alert-warning w-100" role="alert">No hay clases programados para este periodo</div>
         {% else %}
         <div class="row" style="display:flex;text-align:center;">
-            {% for dia in dias %}
+            {% for dia, day in dias_days  %}
             <div class="col" style="flex-grow: 1;">
                 <h4 id="diaSemana" class="m-2 p-2" style="border-radius: 8px; background-color: rgba(32, 69, 137, 0.773); color:white;">
-                  <span id="diaSemanaTexto">{{ dia }}</span>
+                  <span id="diaSemanaTexto">{{ day }}</span>
                 </h4>
-                {% for clase in clasesDocente %}
+                {% for clase in clasesDocenteOrdenada %}
                 {% if clase.fecha_inicio|date:"l" == dia %}
                 <div class="row">
-                  <div id="{{ clase.curso.nrc }}" class="color-{{ clase.curso.color }} frame m-2 btn outer-shadow" style="width: 100px;">
+                  <div id="{{ clase.curso.nrc }}" class="color-{{ clase.curso.color }} frame m-2 p-2 btn outer-shadow" style="display:flex; height:auto;">
                       <div class="div">
                           <strong class="title mb-2">Grupo {{ clase.curso.grupo }}</strong>
+                          <label class="col">{{ clase.curso.materia.nombre }} </label>
+                          <span class="text-wrapper span">{{ clase.fecha_inicio|date:"F j" }}</span>
                           <span class="text-wrapper span"> Hora inicio: {{ clase.fecha_inicio|date:"g:i A"}}</span>
                           <span class="text-wrapper span"> Hora fin: {{ clase.fecha_fin|date:"g:i A" }}</span>
                       </div>
