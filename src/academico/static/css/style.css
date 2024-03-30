@@ -76476,4 +76476,66 @@ http://yuilibrary.com/license/
       height: 86px;
     }
   }
-  
+
+  /*Pantalla programa*/
+    /* Estilos para pantallas más pequeñas */
+    @media (max-width: 768px) {
+      .img-reloj,
+      .img-dinero,
+      .img-pc {
+        width: 20%; /* Ajusta el ancho de las imágenes */
+        height: auto; /* Mantiene la relación de aspecto */
+      }
+      .row.align-items-center {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .col.card.block.inner-shadow {
+        margin-top: 20px;
+      }
+      .row.m-3 {
+        margin: 10px 0;
+      }
+      .col-md-6.docente-item {
+        flex-basis: 100%;
+        margin-right: 0;
+      }
+      .form-inline .col {
+        margin-bottom: 10px;
+      }
+      .frame.m-2.justify-content-center {
+        margin-bottom: 10px;
+      }
+      .semestre_materia {
+        flex-direction: column;
+      }
+      .semestre_materia .div {
+        text-align: left;
+      }
+      .btn-primary.rounded.p-2.ml-2,
+      .btn-secondary.rounded.p-2.ml-2 {
+        margin-top: 10px;
+      }
+      .btn-primary.rounded.p-2.ml-2 img,
+      .btn-secondary.rounded.p-2.ml-2 img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .btn-primary.h-100 {
+        width: auto; 
+        padding: 8px 12px; 
+        font-size: 14px; 
+        text-align: center; 
+        white-space: nowrap;
+    }
+
+    /* Estilos para pantallas más grandes */
+    @media (min-width: 769px) {
+    .img-reloj,
+    .img-dinero,
+    .img-pc {
+      width: 10%; 
+      height: 10%;
+    }
+  }
