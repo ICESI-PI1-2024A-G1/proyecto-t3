@@ -272,6 +272,20 @@ progress[value]::-moz-progress-bar {
   border-radius: var(--collection-1-border-radius);
 }
 
+
+@media (min-width: 768px) {
+    .page-sidebar{
+        flex: 0 0 16.66666667%;
+        max-width: 16.66666667%
+    }
+}
+
+@media (max-width: 767.9px) {
+    .page-sidebar{
+        width: 100%
+    }
+}
+
 .availability-item .availability_stash label {
     display: inline-block
 }
@@ -68665,6 +68679,14 @@ span[data-flexitour="container"] .modal-dialog .modal-content .modal-header.mini
 }
 
 .rui-icon-menu {
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    position: relative;
+    list-style: none
+}
+
+.rui-sidebar-menu {
     padding: 0;
     margin: 0;
     display: inline-flex;
