@@ -14,6 +14,8 @@ from academico.views import args_principal
 from .forms import DocenteForm
 from .models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
                      EstadoDocente, Persona, TipoContrato)
+from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
+                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
 
 # Create your views here.
 
@@ -56,14 +58,81 @@ def log_out(request):
     logout(request)
     return redirect("login")
 
+@login_required(login_url="/login")
+def docente_Detail(request, cedula, periodo):
+    """
+    Vista que permite renderizar la pantalla 'docenteProfile.html' con información del docente.
+    Además de poder editar el estado del docente.
 
-def docente_Detail(request, cedula):
-    if request.method=='GET':
-        docente = get_object_or_404(Docente, cedula=cedula)
-        return render(request, "docenteProfile.html", {'docente': docente})
+    Args:
+        request (HttpRequest): El objeto de solicitud HTTP.
+        cedula (str): La cédula del docente.
+        periodo (str): Un periodo academico.
+
+    Returns:
+        HttpResponse: La plantilla 'docenteProfile.html' renderizada con las siguientes variables de contexto:
+            - 'docente': El objeto Docente.
+            - 'periodo_seleccionado': El período seleccionado.
+            - 'clasesDocente': Las clases relacionados con el docete y el periodo especificado
+            - 'dias': Lista de días necesaria para crear los días de la semana en el horario de clases del docente.
+            - 'periodos': Todos los objetos Periodo.
+            - 'estados': Todos los objetos EstadoDocente.
+            - 'side': La plantilla de la barra lateral a incluir.
+
+    Raises:
+        Http404: Si no se encuentra el docente con el código especificado.
+    """
+    docentes = Docente.objects.all()
+    docente = get_object_or_404(Docente, cedula=cedula)
+    estados = EstadoDocente.objects.all()
+    if request.method == "POST":
+        id_nuevo_estado = request.POST.get('nuevoEstado',None)
+
+        # Busca el nuevo estado en la base de datos
+        nuevo_estado = EstadoDocente.objects.get(id=id_nuevo_estado)
+
+        if(nuevo_estado == docente.estado):
+            return redirect("ver_docente", cedula=cedula, periodo = periodo)
+
+        docente.estado = nuevo_estado
+        docente.save()
     
-#@login_required(login_url="/login")
+    
+    clasesDocente = Clase.objects.filter(docente=docente , curso__periodo=periodo)
+    dias = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    
+    return render(
+        request,
+        "docenteProfile.html", 
+        {
+            'docente': docente,
+            'periodo_seleccionado': periodo,
+            'clasesDocente': clasesDocente,
+            'dias': dias,
+            'periodos': Periodo.objects.all(),
+            'estados': estados,
+            "side": "sidebar_docente.html"
+        },
+    )
+    
+@login_required(login_url="/login")
 def docentes(request):
+    """
+    Vista para mostrar la lista de docentes de posgrado.
+
+    Esta vista permite realizar búsquedas y filtrados en la lista de docentes de posgrado.
+    Los docentes se pueden filtrar por estado, tipo de contrato y se pueden ordenar por diferentes criterios.
+    Además, se implementa la paginación para mostrar los docentes de forma organizada.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+
+    Returns:
+        HttpResponse: La respuesta HTTP que contiene la página de docentes de posgrado.
+
+    Raises:
+        None
+    """
     docentes = Docente.objects.all()
 
     # Búsqueda y filtrado

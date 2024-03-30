@@ -17,7 +17,7 @@
       <div class="form-group flex-grow-1 position-relative">
         <label for="q" class="sr-only">Buscar por nombre de docente o numero id</label>
         <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por docente o cedula" />
-        <img src="{% static 'academico/img/search.png' %}" alt="Buscar"
+        <img src="{% static 'img/search.png' %}" alt="Buscar"
           style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
           onclick="document.getElementById('search-form').submit();">
       </div>
@@ -72,7 +72,7 @@
     </thead>
     <tbody>
       {% for docente in docentes %}
-      <tr onclick="window.location.href='docentes/{{docente.cedula}}'">
+      <tr onclick="window.location.href='docentes/{{docente.cedula}}/202401'">
         <td>{{ docente.cedula }}</td>
         <td>{{ docente.nombre }}</td>
         <td>{{ docente.email }}</td>

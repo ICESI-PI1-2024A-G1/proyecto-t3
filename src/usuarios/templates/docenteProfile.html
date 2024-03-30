@@ -41,6 +41,10 @@
                 <button id="btnEstado" class="btn btn-secondary e p-2" style="border-radius: 8px; text-align: start; background-color: rgba(186, 250, 114, 0.773); width: 100%;">
                 {% elif docente.estado.estado == "Inactivo" %}
                 <button id="btnEstado" class="btn btn-secondary e p-2" style="border-radius: 8px; text-align: start; background-color: rgba(243, 119, 136 , 0.773);">
+                {% elif docente.estado.estado == "Suspendido" %}
+                <button id="btnEstado" class="btn btn-secondary e p-2" style="border-radius: 8px; text-align: start; background-color: rgba(253, 239, 139, 0.773);">
+                {% elif docente.estado.estado == "Cancelado" %}
+                <button id="btnEstado" class="btn btn-secondary e p-2" style="border-radius: 8px; text-align: start; background-color: rgba(156, 168, 236, 0.773);">
                 {% endif %}
                   <div class="col">
                     <label class="col">{{docente.estado.estado}}</label>
@@ -63,87 +67,95 @@
         </div>
       </div>  
     </div>
-    <div class="card card-body"> 
-      <div class="x row" style="display:flex;text-align:center;">
-        <div class="col" style="flex-grow: 1;">
-          <h4 class="m-2 p-2"style="border-radius: 8px; background-color: rgba(32, 69, 137, 0.773); color:white;">Lunes</h4>
-          <div style= "list-style-type: none;text-align:center;">
-            <li>7:00</li>
-            <li>7:30</li>
-            <li>8:00</li>
-          </div>
+    <div class="card card-body">
+      <div class="form-inline">
+        <div class="col" style="text-align:start;">
+          <h2>Clases</h2>
         </div>
-        <div class="col" style="flex-grow: 1;">
-          <h4 class="m-2 p-2"style="border-radius: 8px; background-color: rgba(32, 69, 137, 0.773); color:white;">Martes</h4>
-          <div style= "list-style-type: none;text-align:center;">
-            <li>7:00</li>
-            <li>7:30</li>
-            <li>8:00</li>
-          </div>
+        <div class="justify-content-end">
+          Periodo selecionado:
+          <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
+                {% for periodo in periodos %} 
+                {% if periodo_seleccionado == periodo.semestre %}
+            <option value="{{docente.cedula}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
+            {% else %}
+            <option value="{{docente.cedula}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>
+            {% endif %} 
+            {% endfor %}
+          </select>
         </div>
-        <div class="col" style="flex-grow: 1;">
-          <h4 class="m-2 p-2"style="border-radius: 8px; background-color: rgba(32, 69, 137, 0.773); color:white;">Miercoles</h4>
-          <div style= "list-style-type: none;text-align:center;">
-            <li>7:00</li>
-            <li>7:30</li>
-            <li>8:00</li>
-          </div>
+      </div>
+      <div class= "block card card-body mt-3 inner-shadow">
+        {% if clasesDocente.count == 0 %}
+        <div class="alert alert-warning w-100" role="alert">No hay clases programados para este periodo</div>
+        {% else %}
+        <div class="row" style="display:flex;text-align:center;">
+            {% for dia in dias %}
+            <div class="col" style="flex-grow: 1;">
+                <h4 id="diaSemana" class="m-2 p-2" style="border-radius: 8px; background-color: rgba(32, 69, 137, 0.773); color:white;">
+                  <span id="diaSemanaTexto">{{ dia }}</span>
+                </h4>
+                {% for clase in clasesDocente %}
+                {% if clase.fecha_inicio|date:"l" == dia %}
+                <div class="row">
+                  <div id="{{ clase.curso.nrc }}" class="color-{{ clase.curso.color }} frame m-2 btn outer-shadow" style="width: 100px;">
+                      <div class="div">
+                          <strong class="title mb-2">Grupo {{ clase.curso.grupo }}</strong>
+                          <span class="text-wrapper span"> Hora inicio: {{ clase.fecha_inicio|date:"g:i A"}}</span>
+                          <span class="text-wrapper span"> Hora fin: {{ clase.fecha_fin|date:"g:i A" }}</span>
+                      </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
         </div>
-        <div class="col" style="flex-grow: 1;">
-          <h4 class="m-2 p-2"style="border-radius: 8px; background-color: rgba(32, 69, 137, 0.773); color:white;">Jueves</h4>
-          <div style= "list-style-type: none;text-align:center;">
-            <li>7:00</li>
-            <li>7:30</li>
-            <li>8:00</li>
-          </div>
-        </div>
-        <div class="col" style="flex-grow: 1;">
-          <h4 class="m-2 p-2"style="border-radius: 8px; background-color: rgba(32, 69, 137, 0.773); color:white;">Viernes</h4>
-          <div style= "list-style-type: none;text-align:center;">
-            <li>7:00</li>
-            <li>7:30</li>
-            <li>8:00</li>
-          </div>
-        </div>
+        {% endif %}
+        
       </div>
     </div>
   </div>
-  <div class="mt-2 pt-2 buttons" style="display: flex; justify-content: flex-end;">
-      <button type="submit" class="mr-2 btn btn-primary" onclick="window.history.back();">Anterior</button>
-      <button type="submit" class="btn btn-primary">Página principal</button>
-  </div>  
   
 </div>
 <!--popup para cambiar estado-->
-<div id="popup" style="display: none">
-  <div class="modal moodle-has-zindex show background-shadow">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="popup-content form-group">
+<form method="POST" action="/usuarios/docentes/{{docente.cedula}}/{{ periodo_seleccionado}}">
+{% csrf_token %}
+  <div id="popup" style="display: none">
+    <div class="modal moodle-has-zindex show background-shadow">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="popup-content form-group">
 
-          <span class="close" onclick="closePopup()"></span>
-          <h3 class="h2">Cambiar estado</h3>
-          <select class="custom-select mr-2 mb-5" id="nuevoEstado" onchange="cambiar_periodo()">
-            <option >{{docente.estado.estado}}</option>
-            {% for estadodocente in estados %} 
-              <option >{{estados.estado}}</option>
-            {% endfor %} 
-          </select>
-            <button class="btn btn-primary mb-5" type="submit">Actualizar</button>
-          
+            <span class="close" onclick="closePopup()"></span>
+            <h3 class="h2">Cambiar estado</h3>
+            <select class="custom-select mr-2 mb-5" name="nuevoEstado">
+              {% for estadodocente in estados %} 
+                <option value="{{ estadodocente.id }}">{{ estadodocente.estado }}</option>
+              {% endfor %}
+            </select>
+              <button class="btn btn-primary mb-5" type="submit">Actualizar</button>
+            
+          </div>
         </div>
       </div>
     </div>
+    <div
+      tabindex="-1"
+      style="position: fixed; top: 0px; left: 0px"
+      aria-hidden="true"
+      data-aria-hidden-tab-index="0"
+    ></div>
   </div>
-  <div
-    tabindex="-1"
-    style="position: fixed; top: 0px; left: 0px"
-    aria-hidden="true"
-    data-aria-hidden-tab-index="0"
-  ></div>
-</div>  
+</form>
 
 <script>
+  
+  function cambiar_periodo() {
+      var periodo = document.getElementById('periodo').value;
+      var url = '/usuarios/docentes/' + periodo;
+      window.location.href = url;
+  }
   var popup = document.getElementById("popup");
 
   // Mostrar popup al hacer clic en "Nueva Clase"
