@@ -4,19 +4,19 @@
 
 <div class="container">
     <h1 class="display-3 align-center">Lista de Materias</h1>
-
+    <div class="mb-3">
+  
     <!-- Formulario para búsqueda -->
-    <form id="search-form" method="GET" action="{% url 'materias' %}" class="form-inline mb-3">
+    <form id="search-form" method="GET" action="{% url 'programas' %}" class="form-inline">
         <div class="form-group flex-grow-1 position-relative">
-            <label for="q" class="sr-only">Buscar por nombre de materia o departamento</label>
-            <input type="text" name="q" id="q" class="form-control w-100 pl-4"
-                placeholder="Buscar por nombre o departamento" />
+            <label for="q" class="sr-only">Buscar por nombre de programa o director</label>
+            <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por nombre de programa o director" />
             <img src="{% static 'img/search.png' %}" alt="Buscar"
                 style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
                 onclick="document.getElementById('search-form').submit();">
         </div>
     </form>
-
+  
     <!-- Formulario para filtrado por programa -->
     <form method="GET" action="{% url 'materias' %}" class="form-inline mb-3">
         <div class="form-group flex-grow-1 mr-2">
@@ -30,29 +30,59 @@
         <button type="submit" class="btn btn-primary">Filtrar</button>
     </form>
 
-    <!-- Tabla de materias -->
+</div>
+
+<!-- Tabla de materias para pantallas grandes -->
+<div class="d-none d-md-block">
     <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nombre de la Materia</th>
-                <th>Créditos</th>
-                <th>Departamento</th>
-                <th>Tipo de Materia</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for materia in materias %}
-            <tr onclick="window.location.href='materias/{{materia.codigo}}/202401'">
-                <td>{{ materia.codigo }}</td>
-                <td>{{ materia.nombre }}</td>
-                <td>{{ materia.creditos }}</td>
-                <td>{{ materia.departamento.nombre }}</td>
-                <td>{{ materia.tipo_de_materia.nombre }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre de la Materia</th>
+          <th>Créditos</th>
+          <th>Departamento</th>
+          <th>Tipo de Materia</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for materia in materias %}
+        <tr onclick="window.location.href='materias/{{materia.codigo}}/202401'">
+          <td>{{ materia.codigo }}</td>
+          <td>{{ materia.nombre }}</td>
+          <td>{{ materia.creditos }}</td>
+          <td>{{ materia.departamento.nombre }}</td>
+          <td>{{ materia.tipo_de_materia.nombre }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
+  
+  <!-- Tabla de materias para pantallas pequeñas -->
+  <div class="table-responsive d-md-none">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre de la Materia</th>
+          <th>Créditos</th>
+          <th>Departamento</th>
+          <th>Tipo de Materia</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for materia in materias %}
+        <tr onclick="window.location.href='materias/{{materia.codigo}}/202401'">
+          <td>{{ materia.codigo }}</td>
+          <td>{{ materia.nombre }}</td>
+          <td>{{ materia.creditos }}</td>
+          <td>{{ materia.departamento.nombre }}</td>
+          <td>{{ materia.tipo_de_materia.nombre }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>  
 
     <!-- Paginación -->
     <div class="pagination">
