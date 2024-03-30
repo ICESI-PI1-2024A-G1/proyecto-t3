@@ -9,7 +9,7 @@
 
   <h2 class="mt-2"><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
   <label class="col ml-3"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
-  <label class="col ml-3"><strong>Crétidos totales:</strong> {{ creditos_totales }}</label>
+  <label class="col ml-3"><strong>Créditos totales:</strong> {{ creditos_totales }}</label>
   <label class="col ml-3"><strong>Cursos totales:</strong> {{ cursos_totales }}</label>
   <div class="row">
     <div class="row align-items-center">
@@ -17,9 +17,9 @@
         <div class="row align-items-center">
           <img class="rounded" src="{% static 'img/d_AndresFelipeGalloSarria.jpg' %}" style="width: 20%; height: 20%;">
           <div class="col">
-            <label class="row m-3" style="text-align: start;"><strong>Director:</strong> {{ programa.director.nombre }}</label>
-            <label class="row m-3" style="text-align: start;"><strong>Email:</strong> {{ programa.director.email }}</label>
-            <label class="row m-3" style="text-align: start;"><strong>Teléfono:</strong> {{ programa.director.telefono }}</label>
+            <label class="row m-3" style="text-align: start;"><strong>Director: </strong> &nbsp; {{ programa.director.nombre }}</label>
+            <label class="row m-3" style="text-align: start;"><strong>Email: </strong> &nbsp; {{ programa.director.email }}</label>
+            <label class="row m-3" style="text-align: start;"><strong>Teléfono: </strong> &nbsp; {{ programa.director.telefono }}</label>
           </div>
           <div class="col-2 h-100">
             <a class="btn btn-primary h-100" title="Enviar para aprobación">
@@ -34,21 +34,21 @@
       </div>
       <div class="col card block inner-shadow  p-3 pt-4 pb-3 ml-2">
         <div class="row align-items-center">
-          <img class="rounded btn-warning p-2" src="{% static 'img/reloj.png' %}" style="width: 10%; height: 10%;">
+          <img class="rounded btn-warning p-2 img-reloj" src="{% static 'img/reloj.png' %}">
           <div class="col">
-            <label class="row m-3" style="text-align: start;"><strong>Duración: </strong> {{ semestres }} semestres </label>
+            <label class="row m-3" style="text-align: start;"><strong>Duración: </strong> &nbsp; {{ semestres }} semestres </label>
           </div>        
         </div>
         <div class="row align-items-center">
-          <img class="rounded btn-warning p-2" src="{% static 'img/dinero.png' %}" style="width: 10%; height: 10%;">
+          <img class="rounded btn-warning p-2 img-dinero" src="{% static 'img/dinero.png' %}">
           <div class="col">
-            <label class="row m-3" style="text-align: start;"><strong>Costo del semestre: </strong> 11.500.000 $ </label>
+            <label class="row m-3" style="text-align: start;"><strong>Costo del semestre: </strong> &nbsp; 11.500.000 $ </label>
           </div>        
         </div>
         <div class="row align-items-center">
-          <img class="rounded btn-warning p-2" src="{% static 'img/pc.png' %}" style="width: 10%; height: 10%;">
+          <img class="rounded btn-warning p-2 img-pc" src="{% static 'img/pc.png' %}">
           <div class="col">
-            <label class="row m-3" style="text-align: start;"><strong>Modalidad: </strong> {{modalidad}} </label>
+            <label class="row m-3" style="text-align: start;"><strong>Modalidad: </strong> &nbsp; {{modalidad}} </label>
           </div>        
         </div>
       </div>
