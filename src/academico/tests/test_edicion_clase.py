@@ -10,7 +10,7 @@ from mixer.backend.django import mixer
 
 from academico.models import (Clase, Curso, Departamento, Docente, Espacio,
                               Materia, Modalidad, Periodo, TipoDeMateria)
-from academico.views import crear_clase
+from academico.views import editar_clase
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def autenticacion(db, rf):
         request: Objeto de la solicitud HTTP con el usuario autenticado.
     """
     user = User.objects.create_user(username='admin', password='admin')
-    request = rf.get(reverse('planeacion_materias', kwargs={'curso_id': 1}))
+    request = rf.get(reverse('visualizar-curso', kwargs={'curso_id': 1}))
     request.user = user
     return request
 
@@ -54,7 +54,7 @@ def curso(db):
     departamento = Departamento.objects.create(codigo=1, nombre="Departamento 1")
     tipo_materia = TipoDeMateria.objects.create(tipo="1")
     materia = Materia.objects.create(codigo=1, nombre="Materia", creditos=3, departamento=departamento, tipo_de_materia=tipo_materia)
-    curso = Curso.objects.create(grupo = '4', cupo = 30, materia_id = 1, periodo = periodo)
+    curso = Curso.objects.create(grupo='4', cupo=30, materia_id=1, periodo=periodo)
     return curso
 
 @pytest.fixture
@@ -115,19 +115,19 @@ def modalidad(db):
     return mixer.blend(Modalidad)
 
 @pytest.mark.django_db
-def test_editar_clase_post_negativo_modalidad(autenticacion, curso, espacio, docente):
+def test_editar_clase_post_negativo_(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': '2022-12-01T13:15',
-       'end_day': '2022-12-01T15:15',
-       "tipo_espacio": espacio.id,
-        "modalidad_clase": 100,
-        "docente_clase": docente.cedula,
-        "num_semanas": 1,
+       'start_day': None,
+       'end_day': clase.fecha_fin,
+       "espacio_asignado": None,
+       "tipo_espacio": clase.espacio.id,
+        "modalidad_clase": clase.modalidad.id,
+        "docente_clase": clase.docente.cedula
     }
     try:
-        response = crear_clase(request, curso.nrc)
+        response = editar_clase(request, clase.id)
         assert False
     except Http404 as e:
-        assert str(e) == "La modalidad no existe."
+        assert e == "Todos los campos son requeridos."
