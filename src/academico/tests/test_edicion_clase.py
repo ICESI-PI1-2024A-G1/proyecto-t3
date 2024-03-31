@@ -116,6 +116,16 @@ def modalidad(db):
 
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_clase_inexistente(autenticacion, clase):
+    """
+    Prueba unitaria para verificar el comportamiento del método editar_clase al recibir una solicitud POST con una clase que no existe.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        clase: Objeto de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -134,6 +144,16 @@ def test_editar_clase_post_negativo_clase_inexistente(autenticacion, clase):
         
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_fecha_inicio_None(autenticacion, clase):
+    """
+    Prueba unitaria para verificar el comportamiento del método editar_clase al recibir una solicitud POST con fecha de inicio None.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        clase: Objeto de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -152,6 +172,16 @@ def test_editar_clase_post_negativo_fecha_inicio_None(autenticacion, clase):
         
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_fecha_fin_None(autenticacion, clase):
+    """
+    Prueba unitaria para verificar el comportamiento del método editar_clase al recibir una solicitud POST con fecha de fin None.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        clase: Objeto de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -170,6 +200,16 @@ def test_editar_clase_post_negativo_fecha_fin_None(autenticacion, clase):
         
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_tipo_espacio_None(autenticacion, clase):
+    """
+    Prueba unitaria para verificar el comportamiento del método editar_clase al recibir una solicitud POST con tipo de espacio None.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        clase: Objeto de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -188,6 +228,16 @@ def test_editar_clase_post_negativo_tipo_espacio_None(autenticacion, clase):
 
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_tipo_espacio_invalido(autenticacion, clase):
+    """
+    Prueba unitaria para verificar el comportamiento del método editar_clase al recibir una solicitud POST con un tipo de espacio inválido.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        clase: Objeto de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -206,6 +256,16 @@ def test_editar_clase_post_negativo_tipo_espacio_invalido(autenticacion, clase):
 
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_modalidad_None(autenticacion, clase):
+    """
+    Prueba unitaria para verificar el comportamiento del método editar_clase al recibir una solicitud POST con modalidad None.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        clase: Objeto de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -224,6 +284,16 @@ def test_editar_clase_post_negativo_modalidad_None(autenticacion, clase):
         
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_modalidad_invalido(autenticacion, clase):
+    """
+    Prueba unitaria para verificar el comportamiento del método editar_clase al recibir una solicitud POST con una modalidad inválida.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        clase: Objeto de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -242,6 +312,16 @@ def test_editar_clase_post_negativo_modalidad_invalido(autenticacion, clase):
         
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_docente_invalido(autenticacion, clase):
+    """
+    Prueba unitaria para verificar el comportamiento del método editar_clase al recibir una solicitud POST con un docente inválido.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        clase: Objeto de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -260,6 +340,16 @@ def test_editar_clase_post_negativo_docente_invalido(autenticacion, clase):
         
 @pytest.mark.django_db
 def test_editar_clase_post_positivo(autenticacion, clase):
+    """
+    Prueba unitaria para verificar el comportamiento del método editar_clase al recibir una solicitud POST válida.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        clase: Objeto de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {

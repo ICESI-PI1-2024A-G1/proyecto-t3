@@ -219,27 +219,18 @@
         var diffHrs = Math.floor(diffMs / 3600000); // hours
         if (diffHrs > 24) {
             event.preventDefault();
+            // En lugar de mostrar una alerta, cambia el contenido del elemento de mensaje de error
             document.getElementById('error-message').textContent = 'La duración de la clase no puede ser mayor a 24 horas.';
-            document.getElementById('error-message').style.display = 'block';
-            setTimeout(function() {
-                document.getElementById('error-message').style.display = 'none';
-                document.getElementById('editClassForm').submit();
-            }, 2000);
-        } else if (diffMs < 0) {
+          } else if (diffMs < 0) {
             event.preventDefault();
+            // Si la fecha/hora de inicio es posterior a la fecha/hora de finalización, muestra un mensaje de error
             document.getElementById('error-message').textContent = 'La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.';
-            document.getElementById('error-message').style.display = 'block';
-            setTimeout(function() {
-                document.getElementById('error-message').style.display = 'none';
-                document.getElementById('editClassForm').submit();
-            }, 2000);
-        } else {
+          } else {
+            // Si la duración es válida, asegúrate de que el mensaje de error esté vacío
             document.getElementById('error-message').textContent = '';
-        }
-    });
+          }
+        });
 </script>
-
-
 
 {% endblock %}
 

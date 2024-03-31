@@ -116,6 +116,18 @@ def modalidad(db):
 
 @pytest.mark.django_db
 def test_crear_clase_post_negativo_modalidad(autenticacion, curso, espacio, docente):
+    """
+    Prueba unitaria para verificar el comportamiento del método crear_clase al recibir una solicitud POST con una modalidad que no existe.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        curso: Objeto de curso para utilizar en la prueba.
+        espacio: Objeto de espacio para utilizar en la prueba.
+        docente: Objeto de docente para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -134,6 +146,18 @@ def test_crear_clase_post_negativo_modalidad(autenticacion, curso, espacio, doce
 
 @pytest.mark.django_db
 def test_crear_clase_post_negativo_espacio(autenticacion, curso, modalidad, docente):
+    """
+    Prueba unitaria para verificar el comportamiento del método crear_clase al recibir una solicitud POST con un espacio que no existe.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        curso: Objeto de curso para utilizar en la prueba.
+        modalidad: Objeto de modalidad para utilizar en la prueba.
+        docente: Objeto de docente para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -152,6 +176,18 @@ def test_crear_clase_post_negativo_espacio(autenticacion, curso, modalidad, doce
 
 @pytest.mark.django_db
 def test_crear_clase_post_negativo_espacio(autenticacion, curso, modalidad, docente):
+    """
+    Prueba unitaria para verificar el comportamiento del método crear_clase al recibir una solicitud POST para un curso que no existe.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        curso: Objeto de curso para utilizar en la prueba.
+        modalidad: Objeto de modalidad para utilizar en la prueba.
+        docente: Objeto de docente para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
@@ -170,6 +206,19 @@ def test_crear_clase_post_negativo_espacio(autenticacion, curso, modalidad, doce
 
 @pytest.mark.django_db
 def test_crear_clase_post_positivo_con_docente(autenticacion, curso, espacio, modalidad, docente):
+    """
+    Prueba unitaria para verificar el comportamiento del método crear_clase al recibir una solicitud POST válida.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        curso: Objeto de curso para utilizar en la prueba.
+        espacio: Objeto de espacio para utilizar en la prueba.
+        modalidad: Objeto de modalidad para utilizar en la prueba.
+        docente: Objeto de docente para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
     request.POST = {
