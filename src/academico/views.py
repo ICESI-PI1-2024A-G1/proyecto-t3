@@ -561,29 +561,6 @@ def args_principal(seleccionado):
         "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
     }
 
-
-def visualizacion_clase(request, nrc, id):
-    """
-    Renderiza la plantilla visualizacion_clases.html con la clase especificada.
-
-    Args:
-        request (HttpRequest): El objeto de solicitud HTTP.
-        nrc (str): El NRC (Número de Registro de Curso) de la clase.
-        id (int): El ID de la clase.
-
-    Returns:
-        HttpResponse: La respuesta HTTP que contiene la plantilla renderizada.
-    """
-    clase = Clase.objects.get(id=id, curso__nrc=nrc)
-
-    return render(
-        request,
-        "visualizacion_clases.html",
-        {
-            "clase": clase,
-        },
-    )
-
 @login_required(login_url="/login")
 def visualizacion_curso(request, curso_id):
     """
