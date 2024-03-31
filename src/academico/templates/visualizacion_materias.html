@@ -42,7 +42,7 @@
                   {% for docente in docentes_con_clases %}
                   <div class="col-md-6 docente-item"
                       style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
-                      <div class="card">
+                      <div class="card btn-secondary linkeable" onclick="window.location.href ='/docentes/{{docente.cedula}}/{{periodo_seleccionado}}'">
                           <div class="card-body">
                               <div class="docente-info row">
                                   <img src="{{ docente.foto }}" alt="{{ docente.nombre }}"
@@ -51,7 +51,7 @@
                                         <h5 style="margin-left: 10px;">{{ docente.nombre }}</h5>
                                         <h5 style="margin-left: 10px; margin-top: 10px;"> Cursos: </h5>
                                         {% for curso in docente.cursos %}
-                                        <label style="margin-left: 20px;">- Grupo {{ curso.grupo }}</label>
+                                        <label class="linkeable" style="margin-left: 20px;">- Grupo {{ curso.grupo }}</label>
                                         {% endfor %}
                                       </div>
                               </div>

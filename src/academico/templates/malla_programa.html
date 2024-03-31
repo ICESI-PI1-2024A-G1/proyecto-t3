@@ -46,11 +46,11 @@
             </tr>
             {% endif %}
             {% for materia in malla %}
-            <tr>
-                <td>{{ materia.materia.codigo }}</td>
-                <td>{{ materia.materia.nombre }}</td>
-                <td>{{ materia.materia.creditos }}</td>
-                <td>{{ materia.materia.departamento.nombre }}</td>
+            <tr class="linkeable">
+                <td onclick="window.location.href ='/academico/materias/{{materia.materia.codigo}}/{{periodo_seleccionado}}'">{{ materia.materia.codigo }}</td>
+                <td onclick="window.location.href ='/academico/materias/{{materia.materia.codigo}}/{{periodo_seleccionado}}'">{{ materia.materia.nombre }}</td>
+                <td onclick="window.location.href ='/academico/materias/{{materia.materia.codigo}}/{{periodo_seleccionado}}'">{{ materia.materia.creditos }}</td>
+                <td onclick="window.location.href ='/academico/materias/{{materia.materia.codigo}}/{{periodo_seleccionado}}'">{{ materia.materia.departamento.nombre }}</td>
                 <td>
                     <select class="custom-select mr-2" id="{{materia.materia.codigo}}"onchange="activar_guardar(event)">
                         {% for semestre in semestres %}

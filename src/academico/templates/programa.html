@@ -69,7 +69,7 @@
                   {% for docente in docentes_con_clases %}
                   <div class="col-md-6 docente-item"
                       style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
-                      <div class="card">
+                      <div class="card btn-secondary linkeable" onclick="window.location.href ='/docentes/{{docente.cedula}}/{{periodo_seleccionado}}'">
                           <div class="card-body">
                               <div class="docente-info row">
                                   <img src="{{ docente.foto }}" alt="{{ docente.nombre }}"
@@ -78,7 +78,7 @@
                                         <h5 style="margin-left: 10px;">{{ docente.nombre }}</h5>
                                         <h5 style="margin-left: 10px; margin-top: 10px;"> Materias: </h5>
                                         {% for materia in docente.lista_materias %}
-                                        <label style="margin-left: 20px;">- {{ materia.nombre }}</label>
+                                        <label class="linkeable" style="margin-left: 20px;">- {{ materia.nombre }}</label>
                                         {% endfor %}
                                       </div>
                               </div>
@@ -95,8 +95,8 @@
   <div class="block card card-body mt-3 inner-shadow">
     <div class="form-inline">
       <div class="col">
-        <a id="btn-editar" class="btn-secondary rounded p-2 ml-2"onclick="modo_edicion()"><img class="icon" src="{% static 'img/pencil.png' %}"></a>
-        <a id="btn-guardar" class="btn-primary rounded p-2 ml-2"onclick="guardar_malla()"style="display:none;"><img class="icon" src="{% static 'img/guardar.png' %}"></a>
+        <a id="btn-editar" class="btn-secondary rounded p-2 ml-2 linkeable"onclick="modo_edicion()"><img class="icon" src="{% static 'img/pencil.png' %}"></a>
+        <a id="btn-guardar" class="btn-primary rounded p-2 ml-2 linkeable"onclick="guardar_malla()"style="display:none;"><img class="icon" src="{% static 'img/guardar.png' %}"></a>
         <strong>Malla curricular</strong>
       </div>
       <div class="justify-content-end">

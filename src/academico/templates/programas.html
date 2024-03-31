@@ -79,7 +79,7 @@
       </thead>
       <tbody>
         {% for programa in programas %}
-        <tr onclick="window.location.href='programas/{{programa.codigo}}/202401'">
+        <tr class="linkeable" onclick="window.location.href='programas/{{programa.codigo}}/202401'">
           <td>{{ programa.codigo }}</td>
           <td>{{ programa.nombre }}</td>
           <td>{{ programa.facultad.nombre }}</td>
@@ -107,7 +107,7 @@
       </thead>
       <tbody>
         {% for programa in programas %}
-        <tr onclick="window.location.href='programas/{{programa.codigo}}/202401'">
+        <tr class="linkeable" onclick="window.location.href='programas/{{programa.codigo}}/202401'">
           <td>{{ programa.codigo }}</td>
           <td>{{ programa.nombre }}</td>
           <td>{{ programa.facultad.nombre }}</td>

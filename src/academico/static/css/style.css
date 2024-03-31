@@ -272,6 +272,9 @@ progress[value]::-moz-progress-bar {
   border-radius: var(--collection-1-border-radius);
 }
 
+.linkeable:hover{
+    cursor: pointer;
+}
 
 @media (min-width: 768px) {
     .page-sidebar{

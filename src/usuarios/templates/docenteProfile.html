@@ -94,7 +94,7 @@
                 {% for clase in clasesDocenteOrdenada %}
                 {% if clase.fecha_inicio|date:"l" == dia %}
                 <div class="row">
-                  <div id="{{ clase.curso.nrc }}" class="color-1 frame m-2 p-2 btn outer-shadow" style="display:flex; height:auto;">
+                  <div id="{{ clase.curso.nrc }}" class="color-1 frame m-2 p-2 btn outer-shadow" style="display:flex; height:auto;" onclick="window.location.href='/academico/cursos/{{clase.curso.nrc}}'">
                       <div class="div">
                         <strong class="col title">{{ clase.curso.materia.nombre }} </strong>
                         <label class="col mb-2">Grupo {{ clase.curso.grupo }}</label>
