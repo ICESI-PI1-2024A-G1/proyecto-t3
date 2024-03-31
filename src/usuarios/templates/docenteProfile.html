@@ -14,7 +14,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <img src="{{docente.foto}}" class="img-fluid rounded" style="width: 200px; height: 150px;" alt="Profesor docente" >
+              <img src="{{docente.foto}}" class="img-fluid rounded w-100"  alt="Profesor docente" >
             </div>
             <div class="col mr-2 ml-5" style="text-align: start;">
               <h5 strong>Correo electronico</strong>
@@ -29,10 +29,6 @@
             <div class="col mr-2 ml-2" style="text-align: start;">
               <h5 strong>Fecha de nacimiento</strong>
               <label class="col">{{docente.fechaNacimiento}}</label>
-              <!--<div class="info-text">
-                <div class="info-text-title"><h5>Codigo</h5></div>
-                <div class="info-text-answer"><h6>{{docente.codigo}}</h6></div>
-              </div>-->
               <h5 strong>Contrato</strong>
               <label class="col">{{docente.contrato_codigo.tipo_contrato.tipo}}</label>
               <h5 strong>Estado</strong>
@@ -98,13 +94,12 @@
                 {% for clase in clasesDocenteOrdenada %}
                 {% if clase.fecha_inicio|date:"l" == dia %}
                 <div class="row">
-                  <div id="{{ clase.curso.nrc }}" class="color-{{ clase.curso.color }} frame m-2 p-2 btn outer-shadow" style="display:flex; height:auto;">
+                  <div id="{{ clase.curso.nrc }}" class="color-1 frame m-2 p-2 btn outer-shadow" style="display:flex; height:auto;">
                       <div class="div">
-                          <strong class="title mb-2">Grupo {{ clase.curso.grupo }}</strong>
-                          <label class="col">{{ clase.curso.materia.nombre }} </label>
-                          <span class="text-wrapper span">{{ clase.fecha_inicio|date:"F j" }}</span>
-                          <span class="text-wrapper span"> Hora inicio: {{ clase.fecha_inicio|date:"g:i A"}}</span>
-                          <span class="text-wrapper span"> Hora fin: {{ clase.fecha_fin|date:"g:i A" }}</span>
+                        <strong class="col title">{{ clase.curso.materia.nombre }} </strong>
+                        <label class="col mb-2">Grupo {{ clase.curso.grupo }}</label>
+                          <span class="text-wrapper col">{{ clase.fecha_inicio|date:"F j" }}</span>
+                          <span class="span"> {{ clase.fecha_inicio|date:"g:i A"}} - {{ clase.fecha_fin|date:"g:i A" }}</span>
                       </div>
                   </div>
                 </div>
