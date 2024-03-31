@@ -119,8 +119,8 @@ def test_editar_clase_post_negativo_clase_inexistente(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': clase.fecha_inicio,
-       'end_day': clase.fecha_fin,
+       'fecha_inicio': clase.fecha_inicio,
+       'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
        "tipo_espacio": clase.espacio.id,
         "modalidad_clase": clase.modalidad.id,
@@ -137,8 +137,8 @@ def test_editar_clase_post_negativo_fecha_inicio_None(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': None,
-       'end_day': clase.fecha_fin,
+       'fecha_inicio': None,
+       'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
        "tipo_espacio": clase.espacio.id,
         "modalidad_clase": clase.modalidad.id,
@@ -155,8 +155,8 @@ def test_editar_clase_post_negativo_fecha_fin_None(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': clase.fecha_inicio,
-       'end_day': None,
+       'fecha_inicio': clase.fecha_inicio,
+       'fecha_fin': None,
        "espacio_asignado": None,
        "tipo_espacio": clase.espacio.id,
         "modalidad_clase": clase.modalidad.id,
@@ -173,8 +173,8 @@ def test_editar_clase_post_negativo_tipo_espacio_None(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': clase.fecha_inicio,
-       'end_day': clase.fecha_fin,
+       'fecha_inicio': clase.fecha_inicio,
+       'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
        "tipo_espacio": None,
         "modalidad_clase": clase.modalidad.id,
@@ -191,8 +191,8 @@ def test_editar_clase_post_negativo_tipo_espacio_invalido(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': clase.fecha_inicio,
-       'end_day': clase.fecha_fin,
+       'fecha_inicio': clase.fecha_inicio,
+       'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
        "tipo_espacio": 100,
         "modalidad_clase": clase.modalidad.id,
@@ -209,8 +209,8 @@ def test_editar_clase_post_negativo_modalidad_None(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': clase.fecha_inicio,
-       'end_day': clase.fecha_fin,
+       'fecha_inicio': clase.fecha_inicio,
+       'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
        "tipo_espacio": clase.espacio.id,
         "modalidad_clase": None,
@@ -227,8 +227,8 @@ def test_editar_clase_post_negativo_modalidad_invalido(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': clase.fecha_inicio,
-       'end_day': clase.fecha_fin,
+       'fecha_inicio': clase.fecha_inicio,
+       'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
        "tipo_espacio": clase.espacio.id,
         "modalidad_clase": 100,
@@ -245,12 +245,12 @@ def test_editar_clase_post_negativo_docente_invalido(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': clase.fecha_inicio,
-       'end_day': clase.fecha_fin,
-       "espacio_asignado": None,
-       "tipo_espacio": clase.espacio.id,
-        "modalidad_clase": clase.modalidad.id,
-        "docente_clase": 999
+       'fecha_inicio': clase.fecha_inicio,
+       'fecha_fin': clase.fecha_fin,
+       'espacio_asignado': None,
+       'tipo_espacio': clase.espacio.id,
+        'modalidad_clase': clase.modalidad.id,
+        'docente_clase': 999
     }
     try:
         response = editar_clase(request, clase.id)
@@ -263,8 +263,8 @@ def test_editar_clase_post_positivo(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'start_day': clase.fecha_inicio,
-       'end_day': clase.fecha_fin,
+       'fecha_inicio': clase.fecha_inicio,
+       'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
        "tipo_espacio": clase.espacio.id,
         "modalidad_clase": clase.modalidad.id,

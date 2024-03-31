@@ -113,7 +113,7 @@ def editar_clase(request, clase_id):
         modalidad_id = request.POST.get("modalidad_clase")
         docente_cedula = request.POST.get("docente_clase")
 
-        if not all([fecha_inicio, fecha_fin, tipo_espacio_id, modalidad_id]):
+        if (fecha_inicio==None or fecha_fin==None or tipo_espacio_id==None or modalidad_id==None):
              raise Http404("Todos los campos son requeridos.")
 
         try:

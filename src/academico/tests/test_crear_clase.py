@@ -184,20 +184,3 @@ def test_crear_clase_post_positivo_con_docente(autenticacion, curso, espacio, mo
     response = crear_clase(request, curso.nrc)
     assert response.status_code == 302
         
-"""
-@pytest.mark.django_db
-def test_crear_clase_post_positivo_sin_docente(autenticacion, curso, espacio, modalidad, docente):
-    request = autenticacion
-    request.method = 'POST'
-    request.POST = {
-       'start_day': '2022-12-01T13:15',
-       'end_day': '2022-12-01T15:15',
-       "tipo_espacio": espacio.id,
-        "modalidad_clase": modalidad.id,
-        "docente_clase": None,
-        "num_semanas": 1,
-    }
-   
-    response = crear_clase(request, curso.nrc)
-    assert response.status_code == 302
-"""
