@@ -87,7 +87,11 @@
                         {% for clase in clases %}
                         <div class="col-md-6 clase-item"
                             style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
+                            {%if clase.docente == None %}
+                            <div class="card" style="background-color: #ffe6e6c5;">
+                            {% else %}
                             <div class="card">
+                            {%endif%}
                                 <div class="card-body">
 
                                     <div class="row row justify-content-center align-items-center">
@@ -109,11 +113,21 @@
                                     </p>
                                     <p class="card-text">
                                         <img src="{% static 'img/location.png' %}" class="icon" alt="Espacio Asignado">
-                                        <strong>Espacio Asignado:</strong> {{ clase.espacio_asignado }}
+                                        <strong>Espacio Asignado:</strong> 
+                                        {% if clase.espacio_asignado != None %}
+                                        {{ clase.espacio_asignado }}
+                                        {% else %}
+                                        Sin asignar
+                                        {% endif %}
                                     </p>
                                     <p class="card-text">
                                         <img src="{% static 'img/user.png' %}" class="icon" alt="Docente">
-                                        <strong>Docente:</strong> {{ clase.docente.nombre }}
+                                        <strong>Docente:</strong> 
+                                        {%if clase.docente != None %}
+                                        {{ clase.docente.nombre }}
+                                        {% else %}
+                                        Sin asignar
+                                        {% endif %}
                                     </p>
                                 </div>
                             </div>
@@ -175,6 +189,7 @@
                 <label for="docente_clase">Docente Encargado:</label>
                 <div class="col">
                   <select id="docente_clase_e" name="docente_clase_e" required/>
+                  <option value="None">Sin asignar</option>
                     {% for docente in docentes %}
                     <option value="{{docente.cedula}}">{{docente.nombre}}</option>
                     {% endfor %}

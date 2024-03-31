@@ -13,9 +13,15 @@ function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente) {
 
     fecha_inicio.value = format_date(inicio);
     fecha_fin.value = format_date(fin);
+    if(espacio == "None"){
+        espacio = "Sin asignar";
+    }
     espacio_asignado.value = espacio;
     tipo_espacio.value = tipo;
     modalidad_clase.value = modalidad;
+    if(docente == ""){
+        docente = "None";
+    }
     docente_clase.value = docente;
 }
 

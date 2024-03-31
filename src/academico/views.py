@@ -52,7 +52,7 @@ def crear_clase(request, curso_id):
         if not Modalidad.objects.filter(id=modalidad_clase).exists():
             raise Http404("La modalidad no existe.")
         
-        if docente_cedula is not None:            
+        if docente_cedula is not None and docente_cedula != "None":            
             docente = Docente.objects.get(cedula=docente_cedula)
         else:
             docente = None  
@@ -66,7 +66,6 @@ def crear_clase(request, curso_id):
                 espacio_id=tipo_espacio,
                 modalidad_id=modalidad_clase,
                 docente = docente
-
             )
             start_day += timedelta(days=7)
             end_day += timedelta(days=7)   
@@ -106,7 +105,6 @@ def editar_clase(request, clase_id):
     if request.method == "POST":
         fecha_inicio = request.POST.get("fecha_inicio")
         fecha_fin = request.POST.get("fecha_fin")
-        espacio_asignado = request.POST.get("espacio_asignado")
         tipo_espacio_id = request.POST.get("tipo_espacio_e")
         modalidad_id = request.POST.get("modalidad_clase_e")
         docente_cedula = request.POST.get("docente_clase_e")
@@ -124,7 +122,7 @@ def editar_clase(request, clase_id):
         except (Modalidad.DoesNotExist):
             raise Http404("Modalidad no existe.")
         
-        if docente_cedula is not None:
+        if docente_cedula is not None and docente_cedula != "None":
             try:
                 docente = Docente.objects.get(cedula=docente_cedula)
                 
@@ -136,7 +134,6 @@ def editar_clase(request, clase_id):
         
         clase.fecha_inicio = fecha_inicio
         clase.fecha_fin = fecha_fin
-        clase.espacio_asignado = espacio_asignado
         clase.espacio = tipo_espacio
         clase.modalidad = modalidad
         clase.docente = docente
