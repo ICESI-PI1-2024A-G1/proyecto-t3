@@ -17,7 +17,6 @@ function dragstart(evt){
 function drop(evt){
     changes[evt.dataTransfer.getData('text')]=evt.target.id;
     document.getElementById(evt.target.id).appendChild(document.getElementById(evt.dataTransfer.getData('text')));
-    console.log(changes);
 }
 
 function modo_edicion() {

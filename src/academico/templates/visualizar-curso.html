@@ -92,7 +92,7 @@
 
                                     <div class="row row justify-content-center align-items-center">
                                         <h5 class="card-title flex-grow-1 text-center">Clase {{ forloop.counter }}</h5>
-                                        <img id="{{clase.id}}" src="{% static 'img/pencil.png' %}" class="icon btn" onclick="show_pop(event)">
+                                        <img id="{{clase.id}}" src="{% static 'img/pencil.png' %}" class="icon btn" onclick="show_pop(event,'{{clase.fecha_inicio}}', '{{clase.fecha_fin}}','{{clase.espacio_asignado}}','{{clase.espacio.id}}','{{clase.modalidad.id}}' ,'{{clase.docente.cedula}}')">
                                     </div>
 
                                     <p class="card-text">
@@ -143,15 +143,15 @@
             <label for="fecha_fin">Fecha de Fin:</label><br>
             <input type="datetime-local" id="fecha_fin" name="fecha_fin" required/><br>
 
-            <span id="error-message" style="color: red; display: block; height: auto; visibility: visible;"></span>
+            <span id="error-message_e" style="color: red; display: block; height: auto; visibility: visible;"></span>
 
             <label for="espacio_asignado">Espacio Asignado:</label><br>
-            <input type="text" id="espacio_asignado" name="espacio_asignado" value="" required/><br>
+            <input type="text" id="espacio_asignado" name="espacio_asignado" value="" disabled="true"/><br>
 
             <div class="form-group row">
                 <label for="tipo_espacio">Tipo de espacio:</label>
                 <div class="col">
-                  <select id="tipo_espacio" name="tipo_espacio" required/>
+                  <select id="tipo_espacio_e" name="tipo_espacio_e" required/>
                     {% for espacio in espacios %}
                     <option value="{{ espacio.id }}">{{ espacio.tipo }} </option>
                     {% endfor %}
@@ -163,7 +163,7 @@
             <div class="form-group row">
                 <label for="modalidad_clase">Modalidad:</label>
                 <div class="col">
-                  <select id="modalidad_clase" name="modalidad_clase" required/>
+                  <select id="modalidad_clase_e" name="modalidad_clase_e" required/>
                     {% for modalidad in modalidades %}
                     <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
                     {% endfor %}
@@ -174,7 +174,7 @@
             <div class="form-group row">
                 <label for="docente_clase">Docente Encargado:</label>
                 <div class="col">
-                  <select id="docente_clase" name="docente_clase" required/>
+                  <select id="docente_clase_e" name="docente_clase_e" required/>
                     {% for docente in docentes %}
                     <option value="{{docente.cedula}}">{{docente.nombre}}</option>
                     {% endfor %}
@@ -220,14 +220,14 @@
         if (diffHrs > 24) {
             event.preventDefault();
             // En lugar de mostrar una alerta, cambia el contenido del elemento de mensaje de error
-            document.getElementById('error-message').textContent = 'La duración de la clase no puede ser mayor a 24 horas.';
+            document.getElementById('error-message_e').textContent = 'La duración de la clase no puede ser mayor a 24 horas.';
           } else if (diffMs < 0) {
             event.preventDefault();
             // Si la fecha/hora de inicio es posterior a la fecha/hora de finalización, muestra un mensaje de error
-            document.getElementById('error-message').textContent = 'La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.';
+            document.getElementById('error-message_e').textContent = 'La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.';
           } else {
             // Si la duración es válida, asegúrate de que el mensaje de error esté vacío
-            document.getElementById('error-message').textContent = '';
+            document.getElementById('error-message_e').textContent = '';
           }
         });
 </script>

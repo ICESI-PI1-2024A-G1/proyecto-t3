@@ -1,8 +1,8 @@
 import json
 import random
 from datetime import datetime, timedelta
-from django.contrib import messages
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
@@ -14,8 +14,6 @@ from django.urls import reverse
 from .forms import MateriaForm
 from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
                      MallaCurricular, Materia, Modalidad, Periodo, Programa)
-
-
 
 
 @login_required(login_url="/login")
@@ -109,9 +107,9 @@ def editar_clase(request, clase_id):
         fecha_inicio = request.POST.get("fecha_inicio")
         fecha_fin = request.POST.get("fecha_fin")
         espacio_asignado = request.POST.get("espacio_asignado")
-        tipo_espacio_id = request.POST.get("tipo_espacio")
-        modalidad_id = request.POST.get("modalidad_clase")
-        docente_cedula = request.POST.get("docente_clase")
+        tipo_espacio_id = request.POST.get("tipo_espacio_e")
+        modalidad_id = request.POST.get("modalidad_clase_e")
+        docente_cedula = request.POST.get("docente_clase_e")
 
         if (fecha_inicio==None or fecha_fin==None or tipo_espacio_id==None or modalidad_id==None):
              raise Http404("Todos los campos son requeridos.")
@@ -644,5 +642,4 @@ def obtener_modalidad(malla):
                 modalidades.append(clase.modalidad.metodologia)
         except:
             continue
-    print(modalidades)
     return max(set(modalidades), key=modalidades.count)
