@@ -132,9 +132,9 @@ def test_editar_clase_post_negativo_clase_inexistente(autenticacion, clase):
        'fecha_inicio': clase.fecha_inicio,
        'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
-       "tipo_espacio": clase.espacio.id,
-        "modalidad_clase": clase.modalidad.id,
-        "docente_clase": clase.docente.cedula
+       "tipo_espacio_e": clase.espacio.id,
+        "modalidad_clase_e": clase.modalidad.id,
+        "docente_clase_e": clase.docente.cedula
     }
     try:
         response = editar_clase(request, 999)
@@ -160,9 +160,9 @@ def test_editar_clase_post_negativo_fecha_inicio_None(autenticacion, clase):
        'fecha_inicio': None,
        'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
-       "tipo_espacio": clase.espacio.id,
-        "modalidad_clase": clase.modalidad.id,
-        "docente_clase": clase.docente.cedula
+       "tipo_espacio_e": clase.espacio.id,
+        "modalidad_clase_e": clase.modalidad.id,
+        "docente_clase_e": clase.docente.cedula
     }
     try:
         response = editar_clase(request, clase.id)
@@ -188,9 +188,9 @@ def test_editar_clase_post_negativo_fecha_fin_None(autenticacion, clase):
        'fecha_inicio': clase.fecha_inicio,
        'fecha_fin': None,
        "espacio_asignado": None,
-       "tipo_espacio": clase.espacio.id,
-        "modalidad_clase": clase.modalidad.id,
-        "docente_clase": clase.docente.cedula
+       "tipo_espacio_e": clase.espacio.id,
+        "modalidad_clase_e": clase.modalidad.id,
+        "docente_clase_e": clase.docente.cedula
     }
     try:
         response = editar_clase(request, clase.id)
@@ -216,9 +216,9 @@ def test_editar_clase_post_negativo_tipo_espacio_None(autenticacion, clase):
        'fecha_inicio': clase.fecha_inicio,
        'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
-       "tipo_espacio": None,
-        "modalidad_clase": clase.modalidad.id,
-        "docente_clase": clase.docente.cedula
+       "tipo_espacio_e": None,
+        "modalidad_clase_e": clase.modalidad.id,
+        "docente_clase_e": clase.docente.cedula
     }
     try:
         response = editar_clase(request, clase.id)
@@ -244,9 +244,9 @@ def test_editar_clase_post_negativo_tipo_espacio_invalido(autenticacion, clase):
        'fecha_inicio': clase.fecha_inicio,
        'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
-       "tipo_espacio": 100,
-        "modalidad_clase": clase.modalidad.id,
-        "docente_clase": clase.docente.cedula
+       "tipo_espacio_e": 100,
+        "modalidad_clase_e": clase.modalidad.id,
+        "docente_clase_e": clase.docente.cedula
     }
     try:
         response = editar_clase(request, clase.id)
@@ -272,9 +272,9 @@ def test_editar_clase_post_negativo_modalidad_None(autenticacion, clase):
        'fecha_inicio': clase.fecha_inicio,
        'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
-       "tipo_espacio": clase.espacio.id,
-        "modalidad_clase": None,
-        "docente_clase": clase.docente.cedula
+       "tipo_espacio_e": clase.espacio.id,
+        "modalidad_clase_e": None,
+        "docente_clase_e": clase.docente.cedula
     }
     try:
         response = editar_clase(request, clase.id)
@@ -300,9 +300,9 @@ def test_editar_clase_post_negativo_modalidad_invalido(autenticacion, clase):
        'fecha_inicio': clase.fecha_inicio,
        'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
-       "tipo_espacio": clase.espacio.id,
-        "modalidad_clase": 100,
-        "docente_clase": clase.docente.cedula
+       "tipo_espacio_e": clase.espacio.id,
+        "modalidad_clase_e": 100,
+        "docente_clase_e": clase.docente.cedula
     }
     try:
         response = editar_clase(request, clase.id)
@@ -328,9 +328,9 @@ def test_editar_clase_post_negativo_docente_invalido(autenticacion, clase):
        'fecha_inicio': clase.fecha_inicio,
        'fecha_fin': clase.fecha_fin,
        'espacio_asignado': None,
-       'tipo_espacio': clase.espacio.id,
-        'modalidad_clase': clase.modalidad.id,
-        'docente_clase': 999
+       'tipo_espacio_e': clase.espacio.id,
+        'modalidad_clase_e': clase.modalidad.id,
+        'docente_clase_e': 999
     }
     try:
         response = editar_clase(request, clase.id)
@@ -356,9 +356,9 @@ def test_editar_clase_post_positivo(autenticacion, clase):
        'fecha_inicio': clase.fecha_inicio,
        'fecha_fin': clase.fecha_fin,
        "espacio_asignado": None,
-       "tipo_espacio": clase.espacio.id,
-        "modalidad_clase": clase.modalidad.id,
-        "docente_clase": clase.docente.cedula
+       "tipo_espacio_e": clase.espacio.id,
+        "modalidad_clase_e": clase.modalidad.id,
+        "docente_clase_e": clase.docente.cedula
     }
     response = editar_clase(request, clase.id)
     assert response.status_code == 302
