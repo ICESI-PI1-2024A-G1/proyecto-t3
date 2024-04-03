@@ -10,6 +10,13 @@ from django.db.models import Count, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
+from reportlab.lib import utils
+from openpyxl import Workbook
+import pandas as pd
+from .models import Programa
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
@@ -617,3 +624,148 @@ def obtener_modalidad(malla):
         except:
             continue
     return max(set(modalidades), key=modalidades.count)
+
+def export_to_pdf(request, codigo_programa):
+    programa = Programa.objects.get(codigo=codigo_programa)
+    materias = Materia.objects.filter(programas__codigo=codigo_programa)
+    clases = Clase.objects.filter(curso__materia__programas__codigo=codigo_programa)
+    docentes = Docente.objects.filter(clase__curso__materia__programas__codigo=codigo_programa)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="programa.pdf"'
+
+    p = canvas.Canvas(response, pagesize=letter)
+
+    '''
+    # Logo 
+    logo_path = 'src/academico/static/img/logo-app.jpg' 
+    p.drawInlineImage(logo_path, 50, 750 - logo_height, width=logo_width, height=logo_height)
+
+    '''
+    logo_width = 1.5 * inch
+    logo_height = 0.75 * inch
+
+    # Texto encabezado
+    p.setFont("Helvetica", 12)
+    p.drawString(150 + logo_width, 750 - logo_height - 15, "Universidad Icesi")
+    p.drawString(130 + logo_width, 730, "Programación académica")
+
+    p.setFont("Helvetica", 12)
+
+    # Posición inicial 
+    y = 640
+
+    # Información general del programa
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Información general:")
+    p.setFont("Helvetica", 12)
+    y -= 15
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Nombre del programa: ")
+    p.setFont("Helvetica", 12)
+    p.drawString(70 + p.stringWidth("Nombre del programa: ", "Helvetica-Bold", 12), y, programa.nombre)
+    y -= 15
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Facultad: ")
+    p.setFont("Helvetica", 12)
+    p.drawString(70 + p.stringWidth("Facultad: ", "Helvetica-Bold", 12), y, programa.facultad.nombre)
+    y -= 15
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Director de programa: ")
+    p.setFont("Helvetica", 12)
+    p.drawString(70 + p.stringWidth("Director de programa: ", "Helvetica-Bold", 12), y, programa.director.nombre)
+    y -= 15
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Email del director: ")
+    p.setFont("Helvetica", 12)
+    p.drawString(70 + p.stringWidth("Email del director: ", "Helvetica-Bold", 12), y, programa.director.email)
+    y -= 15
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Teléfono del director: ")
+    p.setFont("Helvetica", 12)
+    p.drawString(70 + p.stringWidth("Teléfono del director: ", "Helvetica-Bold", 12), y, programa.director.telefono)
+    y -= 15
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Modalidad: ")
+    p.setFont("Helvetica", 12)
+    p.drawString(70 + p.stringWidth("Modalidad: ", "Helvetica-Bold", 12), y, obtener_modalidad(materias))
+    y -= 30
+
+    # Lista de materias asociadas al programa
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Materias:")
+    p.setFont("Helvetica", 12)
+    y -= 15
+    for materia in set(materias):
+        p.drawString(100, y, "- " + materia.nombre)
+        y -= 15
+    y -= 15
+
+    # Lista de clases y docentes asociados
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Clases y docentes:")
+    p.setFont("Helvetica", 12)
+    y -= 20
+
+    # Dibujo tabla para clases y docentes
+    x_offset = 70
+    cell_height = 15
+    row_height = 2 * cell_height  # Alto de una fila
+    table_width = 250  # Ancho total de la tabla
+
+    # Encabezados de la tabla de clases y docentes
+    p.drawString(x_offset, y, "Curso")
+    p.drawString(x_offset + 100, y, "Docente")
+    y -= cell_height
+
+    # Bordes de la tabla de clases y docentes
+    p.rect(x_offset, y, table_width, row_height)  # Borde exterior
+
+    # Línea vertical entre las columnas Curso y Docente
+    p.line(x_offset + 100, y, x_offset + 100, y + row_height)
+
+    # Líneas horizontales de la tabla
+    p.line(x_offset, y + cell_height, x_offset + table_width, y + cell_height)
+
+    for clase in set(clases):
+        # Dibujo celdas
+        p.rect(x_offset, y, 100, cell_height)  # Celda de Curso
+        p.rect(x_offset + 100, y, table_width - 100, cell_height)  # Celda de Docente
+
+        # Texto de la celda de Curso
+        p.drawString(x_offset + 5, y + 3, str(clase.curso.nrc))
+
+        # Texto de la celda de Docente
+        docentes_clase = Docente.objects.filter(clase__curso=clase.curso).distinct()
+        docentes = ", ".join([docente.nombre for docente in docentes_clase])
+        p.drawString(x_offset + 105, y + 3, docentes)
+
+        # Posición vertical actualizada
+        y -= cell_height
+
+    p.showPage()
+    p.save()
+
+    return response
+
+
+def export_to_excel(request, codigo_programa):
+    programa = Programa.objects.get(codigo=codigo_programa)
+
+    df = pd.DataFrame({
+        'Nombre': [programa.nombre],
+        # Resto de campos del programa
+    })
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="programa.xlsx"'
+
+    df.to_excel(response, index=False)
+
+    return response

@@ -135,8 +135,16 @@
     {% endfor %}
     </div>
     {% if tamaño == 1 %}
-    <a class="btn btn-primary">Exportar<img class="icon" src="{% static 'img/download.webp' %}"></a>
-    {% endif %}
+    <div class="dropdown btn btn-primary">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Exportar <img class="icon" src="{% static 'img/download.webp' %}">
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="{% url 'export_to_pdf' programa.codigo %}">PDF</a>
+        <a class="dropdown-item" href="{% url 'export_to_excel' programa.codigo %}">Excel</a>
+    </div>
+    </div>
+  {% endif %}  
   </div>
 </div>
 
