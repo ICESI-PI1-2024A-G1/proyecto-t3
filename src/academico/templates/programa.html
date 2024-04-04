@@ -140,7 +140,7 @@
         Exportar <img class="icon" src="{% static 'img/download.webp' %}">
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="{% url 'export_to_pdf' programa.codigo %}">PDF</a>
+        <a class="dropdown-item" href="{% url 'export_to_pdf' codigo_programa=programa.codigo periodo=periodo_seleccionado %}">PDF</a>
         <a class="dropdown-item" href="{% url 'export_to_excel' programa.codigo %}">Excel</a>
     </div>
     </div>

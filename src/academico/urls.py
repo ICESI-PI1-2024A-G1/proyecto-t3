@@ -15,7 +15,7 @@ urlpatterns = [
     #path("cursos/<int:curso_id>/editar_clase", views.editar_clase, name="editar_clase"),
     path("clases/<int:clase_id>", views.editar_clase, name="editar_clase"),
     #path("cursos/<int:curso_id>/clases/<int:clase_id>/editar_clase", views.editar_clase, name="editar_clase"),
-    path('programa/<str:codigo_programa>/export/pdf/', views.export_to_pdf, name='export_to_pdf'),
-    path('programa/<str:codigo_programa>/export/excel/', views.export_to_excel, name='export_to_excel'),
+    path('programas/<str:codigo_programa>/<str:periodo>/export/pdf/', views.export_to_pdf, name='export_to_pdf'),
+    path('programas/<str:codigo_programa>/export/excel/', views.export_to_excel, name='export_to_excel'),
 
 ]

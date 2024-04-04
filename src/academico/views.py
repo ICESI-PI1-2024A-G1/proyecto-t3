@@ -1,7 +1,8 @@
 import json
+import os
 import random
 from datetime import datetime, timedelta
-
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -12,11 +13,16 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+from reportlab.platypus import Table, TableStyle
+from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.lib import utils
 from openpyxl import Workbook
 import pandas as pd
+
+from ccsa_project import settings
 from .models import Programa
+from django.templatetags.static import static
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
@@ -625,25 +631,25 @@ def obtener_modalidad(malla):
             continue
     return max(set(modalidades), key=modalidades.count)
 
-def export_to_pdf(request, codigo_programa):
-    programa = Programa.objects.get(codigo=codigo_programa)
-    materias = Materia.objects.filter(programas__codigo=codigo_programa)
-    clases = Clase.objects.filter(curso__materia__programas__codigo=codigo_programa)
-    docentes = Docente.objects.filter(clase__curso__materia__programas__codigo=codigo_programa)
+def export_to_pdf(request, codigo_programa, periodo):
+    programa = Programa.objects.select_related('facultad', 'director').get(codigo=codigo_programa)
+    malla_curricular = MallaCurricular.objects.filter(programa__codigo=codigo_programa, periodo__semestre=periodo)
+    materias = [materia.materia for materia in malla_curricular]
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="programa.pdf"'
 
     p = canvas.Canvas(response, pagesize=letter)
 
-    '''
     # Logo 
-    logo_path = 'src/academico/static/img/logo-app.jpg' 
-    p.drawInlineImage(logo_path, 50, 750 - logo_height, width=logo_width, height=logo_height)
-
-    '''
     logo_width = 1.5 * inch
     logo_height = 0.75 * inch
+
+    '''
+    Ejecutar collectatic al final de la implementación
+    logo_path = os.path.join(settings.STATIC_ROOT, 'img/logo-app.jpg')
+    p.drawInlineImage(logo_path, 50, 750 - logo_height, width=logo_width, height=logo_height)
+    '''
 
     # Texto encabezado
     p.setFont("Helvetica", 12)
@@ -655,105 +661,98 @@ def export_to_pdf(request, codigo_programa):
     # Posición inicial 
     y = 640
 
+    y_threshold = 50
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Información general del programa")
+    y -= 20  
+
     # Información general del programa
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Información general:")
-    p.setFont("Helvetica", 12)
-    y -= 15
+    informacion_general = [
+        ("Nombre del programa:", programa.nombre),
+        ("Facultad:", programa.facultad.nombre),
+        ("Director de programa:", programa.director.nombre),
+        ("Email del director:", programa.director.email),
+        ("Teléfono del director:", programa.director.telefono),
+        ("Modalidad:", obtener_modalidad(materias))
+    ]
 
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Nombre del programa: ")
-    p.setFont("Helvetica", 12)
-    p.drawString(70 + p.stringWidth("Nombre del programa: ", "Helvetica-Bold", 12), y, programa.nombre)
-    y -= 15
-
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Facultad: ")
-    p.setFont("Helvetica", 12)
-    p.drawString(70 + p.stringWidth("Facultad: ", "Helvetica-Bold", 12), y, programa.facultad.nombre)
-    y -= 15
-
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Director de programa: ")
-    p.setFont("Helvetica", 12)
-    p.drawString(70 + p.stringWidth("Director de programa: ", "Helvetica-Bold", 12), y, programa.director.nombre)
-    y -= 15
-
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Email del director: ")
-    p.setFont("Helvetica", 12)
-    p.drawString(70 + p.stringWidth("Email del director: ", "Helvetica-Bold", 12), y, programa.director.email)
-    y -= 15
-
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Teléfono del director: ")
-    p.setFont("Helvetica", 12)
-    p.drawString(70 + p.stringWidth("Teléfono del director: ", "Helvetica-Bold", 12), y, programa.director.telefono)
-    y -= 15
-
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Modalidad: ")
-    p.setFont("Helvetica", 12)
-    p.drawString(70 + p.stringWidth("Modalidad: ", "Helvetica-Bold", 12), y, obtener_modalidad(materias))
-    y -= 30
-
-    # Lista de materias asociadas al programa
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Materias:")
-    p.setFont("Helvetica", 12)
-    y -= 15
-    for materia in set(materias):
-        p.drawString(100, y, "- " + materia.nombre)
+    for label, value in informacion_general:
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(70, y, label)
+        p.setFont("Helvetica", 12)
+        p.drawString(70 + p.stringWidth(label, "Helvetica-Bold", 12), y, value)
         y -= 15
-    y -= 15
 
-    # Lista de clases y docentes asociados
+    y -= 20  
+
     p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Clases y docentes:")
-    p.setFont("Helvetica", 12)
-    y -= 20
+    p.drawString(70, y, "Malla Curricular")
+    y -= 20  
 
-    # Dibujo tabla para clases y docentes
-    x_offset = 70
-    cell_height = 15
-    row_height = 2 * cell_height  # Alto de una fila
-    table_width = 250  # Ancho total de la tabla
+    # Contenido de la tabla de cursos y docentes
+    for malla_curricular in malla_curricular:
+        if y < y_threshold:
+            p.showPage()
+            y = 750
 
-    # Encabezados de la tabla de clases y docentes
-    p.drawString(x_offset, y, "Curso")
-    p.drawString(x_offset + 100, y, "Docente")
-    y -= cell_height
+        materia = malla_curricular.materia
+        
+        p.setFont("Helvetica-Bold", 12)
+        p.drawString(70, y, f"Materia: {materia.nombre}")
+        y -= 10
+        
+        # Guardar la posición inicial de la tabla
+        y_table_start = y
+        
+        cursos = Curso.objects.filter(materia=materia, periodo__semestre=periodo)
+        if cursos.exists(): 
+            for curso in cursos:
+                clases = Clase.objects.filter(curso=curso)
+                docentes = [clase.docente for clase in clases] if clases.exists() else ""
+                
+                # Datos para la tabla
+                data = [["NRC Curso", "Clase", "Docente"]]
+                for clase in clases:
+                    docente_nombre = clase.docente.nombre if clase.docente else 'No asignado'
+                    fecha_inicio = clase.fecha_inicio.strftime('%Y-%m-%d de %I %p')
+                    fecha_fin = clase.fecha_fin.strftime('%I %p')
+                    data.append([curso.nrc, f"{fecha_inicio} a {fecha_fin}", docente_nombre])
 
-    # Bordes de la tabla de clases y docentes
-    p.rect(x_offset, y, table_width, row_height)  # Borde exterior
+                # Estilo de la tabla
+                style = TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.lightsteelblue),
+                                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+                                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                                    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                    ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                                    ('BACKGROUND', (0, 1), (-1, -1), colors.aliceblue),
+                                    ('GRID', (0, 0), (-1, -1), 1, colors.black)])
 
-    # Línea vertical entre las columnas Curso y Docente
-    p.line(x_offset + 100, y, x_offset + 100, y + row_height)
+                # Crear tabla y aplicar estilo
+                tabla = Table(data)
+                tabla.setStyle(style)
 
-    # Líneas horizontales de la tabla
-    p.line(x_offset, y + cell_height, x_offset + table_width, y + cell_height)
+                # Dibujar tabla
+                tabla.wrapOn(p, 0, 0)
+                
+                # Calcular la altura de la tabla
+                tabla_height = tabla._height
+                
+                # Dibujar tabla en la posición calculada
+                tabla.drawOn(p, 70, y - tabla_height)
+                
+                # Actualizar la posición y para la próxima tabla
+                y -= tabla_height  # Espacio entre materias
 
-    for clase in set(clases):
-        # Dibujo celdas
-        p.rect(x_offset, y, 100, cell_height)  # Celda de Curso
-        p.rect(x_offset + 100, y, table_width - 100, cell_height)  # Celda de Docente
-
-        # Texto de la celda de Curso
-        p.drawString(x_offset + 5, y + 3, str(clase.curso.nrc))
-
-        # Texto de la celda de Docente
-        docentes_clase = Docente.objects.filter(clase__curso=clase.curso).distinct()
-        docentes = ", ".join([docente.nombre for docente in docentes_clase])
-        p.drawString(x_offset + 105, y + 3, docentes)
-
-        # Posición vertical actualizada
-        y -= cell_height
+            y -=40
+        else: 
+            p.drawString(70, y-5, "No hay cursos registrados para esta materia")
+            y -= 20
 
     p.showPage()
     p.save()
 
     return response
-
 
 def export_to_excel(request, codigo_programa):
     programa = Programa.objects.get(codigo=codigo_programa)
