@@ -2,7 +2,6 @@ import json
 import os
 import random
 from datetime import datetime, timedelta
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -13,10 +12,16 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.lib import utils
+from collections import Counter
+from reportlab.graphics.charts.piecharts import Pie
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics import renderPDF
+from reportlab.graphics.charts.barcharts import VerticalBarChart, HorizontalBarChart
+from reportlab.platypus import Paragraph
 from openpyxl import Workbook
 import pandas as pd
 
@@ -669,12 +674,13 @@ def export_to_pdf(request, codigo_programa, periodo):
 
     # Información general del programa
     informacion_general = [
-        ("Nombre del programa:", programa.nombre),
-        ("Facultad:", programa.facultad.nombre),
-        ("Director de programa:", programa.director.nombre),
-        ("Email del director:", programa.director.email),
-        ("Teléfono del director:", programa.director.telefono),
-        ("Modalidad:", obtener_modalidad(materias))
+        ("Nombre del programa: ", programa.nombre),
+        ("Periodo: ", periodo),
+        ("Facultad: ", programa.facultad.nombre),
+        ("Director de programa: ", programa.director.nombre),
+        ("Email del director: ", programa.director.email),
+        ("Teléfono del director: ", programa.director.telefono),
+        ("Modalidad: ", obtener_modalidad(materias))
     ]
 
     for label, value in informacion_general:
@@ -701,9 +707,6 @@ def export_to_pdf(request, codigo_programa, periodo):
         p.setFont("Helvetica-Bold", 12)
         p.drawString(70, y, f"Materia: {materia.nombre}")
         y -= 10
-        
-        # Guardar la posición inicial de la tabla
-        y_table_start = y
         
         cursos = Curso.objects.filter(materia=materia, periodo__semestre=periodo)
         if cursos.exists(): 
@@ -735,19 +738,147 @@ def export_to_pdf(request, codigo_programa, periodo):
                 # Dibujar tabla
                 tabla.wrapOn(p, 0, 0)
                 
-                # Calcular la altura de la tabla
                 tabla_height = tabla._height
-                
-                # Dibujar tabla en la posición calculada
+
+                if y - tabla_height < y_threshold:
+                    p.showPage()
+                    y = 750
+
                 tabla.drawOn(p, 70, y - tabla_height)
-                
-                # Actualizar la posición y para la próxima tabla
-                y -= tabla_height  # Espacio entre materias
+
+                y -= tabla_height + 20
 
             y -=40
         else: 
             p.drawString(70, y-5, "No hay cursos registrados para esta materia")
-            y -= 20
+            y -= 40
+
+    # Sección de "Estadísticas"
+    if y < y_threshold:
+        p.showPage()
+        y = 750
+
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y, "Estadísticas")
+    y -= 60  
+
+    # Gráfico circular de tipos de espacios de las clases, cursos del programa y periodo seleccionado
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y - 130, "Tipos de espacios de las clases")  # Título para el gráfico circular
+    clases = Clase.objects.filter(curso__materia__programas__codigo=codigo_programa, curso__periodo__semestre=periodo)
+    tipos_espacios = [clase.espacio.tipo for clase in clases]
+    tipos_espacios_counter = Counter(tipos_espacios)
+    tipos_espacios_data = list(tipos_espacios_counter.values())
+    tipos_espacios_labels = list(tipos_espacios_counter.keys())
+
+    drawing = Drawing(200, 150)
+    pie = Pie()
+    pie.x = 60
+    pie.y = 60
+    pie.width = 120
+    pie.height = 120
+    pie.data = tipos_espacios_data
+    pie.labels = tipos_espacios_labels
+    pie.sideLabels = True
+    pie.slices.strokeWidth = 0.5
+    pie.slices.strokeColor = colors.white
+    light_colors = [colors.lightcoral, colors.lightgreen, colors.lightblue, colors.lightgoldenrodyellow, colors.lightcyan, colors.lightpink, colors.lightsalmon, colors.lightseagreen, colors.lightskyblue, colors.lightsteelblue, colors.lightyellow, colors.lightgrey]
+    for i in range(len(tipos_espacios_labels)):
+        pie.slices[i].fillColor = light_colors[i % len(light_colors)]
+
+    drawing.add(pie)
+    renderPDF.draw(drawing, p, 70, y - 150)
+
+    # Gráfico de barras de la cantidad de clases por docente en el programa del periodo seleccionado
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(350, y - 130, "Cantidad de clases por docente")  
+    docentes = Docente.objects.filter(clase__curso__materia__programas__codigo=codigo_programa, clase__curso__periodo__semestre=periodo).distinct()
+    docentes_clases = {}
+    for docente in docentes:
+        docentes_clases[docente.nombre] = docente.clase_set.count()
+    no_asignado = Clase.objects.filter(curso__materia__programas__codigo=codigo_programa, curso__periodo__semestre=periodo, docente__isnull=True).count()
+    if no_asignado > 0:
+        docentes_clases['No asignado'] = no_asignado
+    docentes_nombres = list(docentes_clases.keys())
+    docentes_clases = list(docentes_clases.values())
+    drawing = Drawing(200, 150)
+    bar = VerticalBarChart()
+    bar.x = 60
+    bar.y = 60
+    bar.width = 120
+    bar.height = 120
+    bar.data = [docentes_clases]
+    bar.categoryAxis.categoryNames = docentes_nombres
+    bar.valueAxis.valueMin = 0
+    bar.valueAxis.valueMax = max(docentes_clases) + 1
+
+    for i in range(len(docentes_nombres)):
+        bar.bars[i].fillColor = random.choice(light_colors)
+
+    drawing.add(bar)
+    renderPDF.draw(drawing, p, 350, y - 150)
+
+    # Gráfico circular de cantidad de clases por materia (con porcentajes dentro de los slices)
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(70, y - 300, "Cantidad de clases por materia")
+
+    # Obtener todas las clases y contarlas por materia
+    clases = Clase.objects.filter(curso__materia__programas__codigo=codigo_programa, curso__periodo__semestre=periodo)
+    materias_counter = Counter([clase.curso.materia.nombre for clase in clases])
+    total_clases = len(clases)  # Calcular el total de clases para calcular los porcentajes
+
+    # Extraer los datos necesarios para el gráfico circular
+    materias_data = list(materias_counter.values())
+    materias_labels = list(materias_counter.keys())
+    porcentajes = [round((cantidad / total_clases) * 100, 2) for cantidad in materias_data]
+
+    # Crear y dibujar el gráfico circular
+    drawing = Drawing(200, 150)
+    pie = Pie()
+    pie.x = 60
+    pie.y = 60
+    pie.width = 120
+    pie.height = 120
+    pie.data = materias_data
+    pie.labels = [f"{label} ({porcentaje} %)" for label, porcentaje in zip(materias_labels, porcentajes)]
+    pie.sideLabels = True
+    pie.slices.strokeWidth = 0.5
+    pie.slices.strokeColor = colors.white
+    for i in range(len(materias_labels)):
+        pie.slices[i].fillColor = light_colors[i % len(light_colors)]
+
+    drawing.add(pie)
+    renderPDF.draw(drawing, p, 70, y - 320)
+
+    # Gráfica de barras (cantidad de clases por día de la semana)
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(350, y - 300, "Cantidad de clases por día de la semana")
+
+    # Obtener todas las clases y contarlas por día de la semana
+    dias_semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+    clases_por_dia = [0] * 7
+    for clase in clases:
+        dia_semana = clase.fecha_inicio.weekday()
+        clases_por_dia[dia_semana] += 1
+    
+    # Crear y dibujar la gráfica de barras
+    drawing = Drawing(200, 150)
+    bar = HorizontalBarChart()
+    bar.x = 60
+    bar.y = 60
+    bar.width = 120
+    bar.height = 120
+    bar.data = [clases_por_dia]
+    bar.categoryAxis.categoryNames = dias_semana
+    bar.valueAxis.valueMin = 0
+    bar.valueAxis.valueMax = max(clases_por_dia) + 1
+
+    for i in range(len(dias_semana)):
+        bar.bars[i].fillColor = random.choice(light_colors)
+    
+    drawing.add(bar)
+    renderPDF.draw(drawing, p, 350, y - 320)
+
 
     p.showPage()
     p.save()
