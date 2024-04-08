@@ -23,6 +23,9 @@ from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.barcharts import VerticalBarChart, HorizontalBarChart
 from reportlab.platypus import Paragraph
 from openpyxl import Workbook
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
 import pandas as pd
 
 from ccsa_project import settings
@@ -636,261 +639,70 @@ def obtener_modalidad(malla):
             continue
     return max(set(modalidades), key=modalidades.count)
 
-def export_to_pdf(request, codigo_programa, periodo):
-    programa = Programa.objects.select_related('facultad', 'director').get(codigo=codigo_programa)
-    malla_curricular = MallaCurricular.objects.filter(programa__codigo=codigo_programa, periodo__semestre=periodo)
-    materias = [materia.materia for materia in malla_curricular]
-
+def render_pdf_from_html(html_content):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="programa.pdf"'
 
-    p = canvas.Canvas(response, pagesize=letter)
+    # Renderizar el HTML como PDF
+    pisa_status = pisa.CreatePDF(html_content, dest=response)
 
-    # Logo 
-    logo_width = 1.5 * inch
-    logo_height = 0.75 * inch
-
-    '''
-    Ejecutar collectatic al final de la implementación
-    logo_path = os.path.join(settings.STATIC_ROOT, 'img/logo-app.jpg')
-    p.drawInlineImage(logo_path, 50, 750 - logo_height, width=logo_width, height=logo_height)
-    '''
-
-    # Texto encabezado
-    p.setFont("Helvetica", 12)
-    p.drawString(150 + logo_width, 750 - logo_height - 15, "Universidad Icesi")
-    p.drawString(130 + logo_width, 730, "Programación académica")
-
-    p.setFont("Helvetica", 12)
-
-    # Posición inicial 
-    y = 640
-
-    y_threshold = 50
-
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Información general del programa")
-    y -= 20  
-
-    # Información general del programa
-    informacion_general = [
-        ("Nombre del programa: ", programa.nombre),
-        ("Periodo: ", periodo),
-        ("Facultad: ", programa.facultad.nombre),
-        ("Director de programa: ", programa.director.nombre),
-        ("Email del director: ", programa.director.email),
-        ("Teléfono del director: ", programa.director.telefono),
-        ("Modalidad: ", obtener_modalidad(materias))
-    ]
-
-    for label, value in informacion_general:
-        p.setFont("Helvetica-Bold", 12)
-        p.drawString(70, y, label)
-        p.setFont("Helvetica", 12)
-        p.drawString(70 + p.stringWidth(label, "Helvetica-Bold", 12), y, value)
-        y -= 15
-
-    y -= 20  
-
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Malla Curricular")
-    y -= 20  
-
-    # Contenido de la tabla de cursos y docentes
-    for malla_curricular in malla_curricular:
-        if y < y_threshold:
-            p.showPage()
-            y = 750
-
-        materia = malla_curricular.materia
-        
-        p.setFont("Helvetica-Bold", 12)
-        p.drawString(70, y, f"Materia: {materia.nombre}")
-        y -= 10
-        
-        cursos = Curso.objects.filter(materia=materia, periodo__semestre=periodo)
-        if cursos.exists(): 
-            for curso in cursos:
-                clases = Clase.objects.filter(curso=curso)
-                docentes = [clase.docente for clase in clases] if clases.exists() else ""
-                
-                # Datos para la tabla
-                data = [["NRC Curso", "Clase", "Docente"]]
-                for clase in clases:
-                    docente_nombre = clase.docente.nombre if clase.docente else 'No asignado'
-                    fecha_inicio = clase.fecha_inicio.strftime('%Y-%m-%d de %I %p')
-                    fecha_fin = clase.fecha_fin.strftime('%I %p')
-                    data.append([curso.nrc, f"{fecha_inicio} a {fecha_fin}", docente_nombre])
-
-                # Estilo de la tabla
-                style = TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.lightsteelblue),
-                                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
-                                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                                    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                                    ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                                    ('BACKGROUND', (0, 1), (-1, -1), colors.aliceblue),
-                                    ('GRID', (0, 0), (-1, -1), 1, colors.black)])
-
-                # Crear tabla y aplicar estilo
-                tabla = Table(data)
-                tabla.setStyle(style)
-
-                # Dibujar tabla
-                tabla.wrapOn(p, 0, 0)
-                
-                tabla_height = tabla._height
-
-                if y - tabla_height < y_threshold:
-                    p.showPage()
-                    y = 750
-
-                tabla.drawOn(p, 70, y - tabla_height)
-
-                y -= tabla_height + 20
-
-            y -=40
-        else: 
-            p.drawString(70, y-5, "No hay cursos registrados para esta materia")
-            y -= 40
-
-    # Sección de "Estadísticas"
-    if y < y_threshold:
-        p.showPage()
-        y = 750
-
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y, "Estadísticas")
-    y -= 60  
-
-    # Gráfico circular de tipos de espacios de las clases, cursos del programa y periodo seleccionado
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y - 130, "Tipos de espacios de las clases")  # Título para el gráfico circular
-    clases = Clase.objects.filter(curso__materia__programas__codigo=codigo_programa, curso__periodo__semestre=periodo)
-    tipos_espacios = [clase.espacio.tipo for clase in clases]
-    tipos_espacios_counter = Counter(tipos_espacios)
-    tipos_espacios_data = list(tipos_espacios_counter.values())
-    tipos_espacios_labels = list(tipos_espacios_counter.keys())
-
-    drawing = Drawing(200, 150)
-    pie = Pie()
-    pie.x = 60
-    pie.y = 60
-    pie.width = 120
-    pie.height = 120
-    pie.data = tipos_espacios_data
-    pie.labels = tipos_espacios_labels
-    pie.sideLabels = True
-    pie.slices.strokeWidth = 0.5
-    pie.slices.strokeColor = colors.white
-    light_colors = [colors.lightcoral, colors.lightgreen, colors.lightblue, colors.lightgoldenrodyellow, colors.lightcyan, colors.lightpink, colors.lightsalmon, colors.lightseagreen, colors.lightskyblue, colors.lightsteelblue, colors.lightyellow, colors.lightgrey]
-    for i in range(len(tipos_espacios_labels)):
-        pie.slices[i].fillColor = light_colors[i % len(light_colors)]
-
-    drawing.add(pie)
-    renderPDF.draw(drawing, p, 70, y - 150)
-
-    # Gráfico de barras de la cantidad de clases por docente en el programa del periodo seleccionado
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(350, y - 130, "Cantidad de clases por docente")  
-    docentes = Docente.objects.filter(clase__curso__materia__programas__codigo=codigo_programa, clase__curso__periodo__semestre=periodo).distinct()
-    docentes_clases = {}
-    for docente in docentes:
-        docentes_clases[docente.nombre] = docente.clase_set.count()
-    no_asignado = Clase.objects.filter(curso__materia__programas__codigo=codigo_programa, curso__periodo__semestre=periodo, docente__isnull=True).count()
-    if no_asignado > 0:
-        docentes_clases['No asignado'] = no_asignado
-    docentes_nombres = list(docentes_clases.keys())
-    docentes_clases = list(docentes_clases.values())
-    drawing = Drawing(200, 150)
-    bar = VerticalBarChart()
-    bar.x = 60
-    bar.y = 60
-    bar.width = 120
-    bar.height = 120
-    bar.data = [docentes_clases]
-    bar.categoryAxis.categoryNames = docentes_nombres
-    bar.valueAxis.valueMin = 0
-    bar.valueAxis.valueMax = max(docentes_clases) + 1
-
-    for i in range(len(docentes_nombres)):
-        bar.bars[i].fillColor = random.choice(light_colors)
-
-    drawing.add(bar)
-    renderPDF.draw(drawing, p, 350, y - 150)
-
-    # Gráfico circular de cantidad de clases por materia (con porcentajes dentro de los slices)
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(70, y - 300, "Cantidad de clases por materia")
-
-    # Obtener todas las clases y contarlas por materia
-    clases = Clase.objects.filter(curso__materia__programas__codigo=codigo_programa, curso__periodo__semestre=periodo)
-    materias_counter = Counter([clase.curso.materia.nombre for clase in clases])
-    total_clases = len(clases)  # Calcular el total de clases para calcular los porcentajes
-
-    # Extraer los datos necesarios para el gráfico circular
-    materias_data = list(materias_counter.values())
-    materias_labels = list(materias_counter.keys())
-    porcentajes = [round((cantidad / total_clases) * 100, 2) for cantidad in materias_data]
-
-    # Crear y dibujar el gráfico circular
-    drawing = Drawing(200, 150)
-    pie = Pie()
-    pie.x = 60
-    pie.y = 60
-    pie.width = 120
-    pie.height = 120
-    pie.data = materias_data
-    pie.labels = [f"{label} ({porcentaje} %)" for label, porcentaje in zip(materias_labels, porcentajes)]
-    pie.sideLabels = True
-    pie.slices.strokeWidth = 0.5
-    pie.slices.strokeColor = colors.white
-    for i in range(len(materias_labels)):
-        pie.slices[i].fillColor = light_colors[i % len(light_colors)]
-
-    drawing.add(pie)
-    renderPDF.draw(drawing, p, 70, y - 320)
-
-    # Gráfica de barras (cantidad de clases por día de la semana)
-    p.setFont("Helvetica-Bold", 12)
-    p.drawString(350, y - 300, "Cantidad de clases por día de la semana")
-
-    # Obtener todas las clases y contarlas por día de la semana
-    dias_semana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
-    clases_por_dia = [0] * 7
-    for clase in clases:
-        dia_semana = clase.fecha_inicio.weekday()
-        clases_por_dia[dia_semana] += 1
-    
-    # Crear y dibujar la gráfica de barras
-    drawing = Drawing(200, 150)
-    bar = HorizontalBarChart()
-    bar.x = 60
-    bar.y = 60
-    bar.width = 120
-    bar.height = 120
-    bar.data = [clases_por_dia]
-    bar.categoryAxis.categoryNames = dias_semana
-    bar.valueAxis.valueMin = 0
-    bar.valueAxis.valueMax = max(clases_por_dia) + 1
-
-    for i in range(len(dias_semana)):
-        bar.bars[i].fillColor = random.choice(light_colors)
-    
-    drawing.add(bar)
-    renderPDF.draw(drawing, p, 350, y - 320)
-
-
-    p.showPage()
-    p.save()
-
+    # Si ocurrió un error, mostrarlo
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF: %s' % pisa_status.err, status=500)
     return response
+
+def export_to_pdf(request, codigo_programa, periodo):
+    pensum = {}
+    docentes_con_clase = []
+    materias = []
+    cursos_totales = 0
+    creditos_totales = 0
+    programa = get_object_or_404(Programa, codigo=codigo_programa)
+    programa.modalidad = obtener_modalidad(MallaCurricular.objects.filter(programa__codigo=codigo_programa, periodo__semestre=periodo))
+    malla_curricular = MallaCurricular.objects.filter(programa__codigo=codigo_programa, periodo__semestre=periodo)
+
+    for malla in malla_curricular: 
+        materia = malla.materia
+        materia.num_clases = 0 
+        materia.num_clases_asignadas = 0
+        materia.num_cursos = 0
+        materias.append(materia)
+        cursos_totales += 1
+        creditos_totales += materia.creditos
+        materia.cursos = Curso.objects.filter(materia=materia, periodo__semestre=periodo)
+        docentes_con_clase+=Docente.objects.filter(clase__curso__materia=malla.materia, clase__curso__periodo__semestre=periodo).distinct()
+        if malla.semestre not in pensum.keys():
+            pensum[malla.semestre] = []
+        pensum[malla.semestre].append(materia)
+        for curso in materia.cursos:
+            materia.num_cursos += 1
+            curso.clases = Clase.objects.filter(curso=curso)
+            curso.num_clases = len(curso.clases)
+            materia.num_clases += curso.num_clases
+            materia.num_clases_asignadas += len(Clase.objects.filter(curso=curso, docente__isnull=False))
+        
+
+    programa.creditos = sum([materia.creditos for materia in materias])
+    programa.cursos_totales = cursos_totales
+    programa.docentes = docentes_con_clase
+    programa.creditos_totales = creditos_totales
+    programa.pensum = pensum
+
+    docentes = set()
+    for docente in docentes_con_clase:
+        docente.lista_materias = Materia.objects.filter(curso__clase__docente=docente).distinct()
+        docentes.add(docente)
+    
+    template = get_template('programa_pdf.html')
+    html_content = template.render({'programa': programa, 'periodo': periodo, 'materias': materias, 'docentes': docentes})
+
+    return render_pdf_from_html(html_content)
 
 def export_to_excel(request, codigo_programa):
     programa = Programa.objects.get(codigo=codigo_programa)
 
     df = pd.DataFrame({
         'Nombre': [programa.nombre],
-        # Resto de campos del programa
     })
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
