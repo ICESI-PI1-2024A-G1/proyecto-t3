@@ -10,19 +10,7 @@ from django.db.models import Count, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-from reportlab.lib import colors
-from reportlab.lib.units import inch
-from reportlab.lib import utils
 from collections import Counter
-from reportlab.graphics.charts.piecharts import Pie
-from reportlab.graphics.shapes import Drawing
-from reportlab.graphics import renderPDF
-from reportlab.graphics.charts.barcharts import VerticalBarChart, HorizontalBarChart
-from reportlab.platypus import Paragraph
-from openpyxl import Workbook
 from django.template.loader import get_template
 from django.http import HttpResponse
 from xhtml2pdf import pisa
