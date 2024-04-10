@@ -168,7 +168,6 @@ def eliminar_clase(request, clase_id):
     """
     if request.method == 'POST':
         clase = get_object_or_404(Clase, id=clase_id)
-        curso_id = clase.curso.nrc
         clase.delete()
 
         return redirect('visualizar-curso', curso_id=clase.curso.nrc)
