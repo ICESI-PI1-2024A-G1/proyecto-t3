@@ -99,6 +99,11 @@
                                         <img id="{{clase.id}}" src="{% static 'img/pencil.png' %}" class="icon btn" onclick="show_pop(event,'{{clase.fecha_inicio}}', '{{clase.fecha_fin}}','{{clase.espacio_asignado}}','{{clase.espacio.id}}','{{clase.modalidad.id}}' ,'{{clase.docente.cedula}}')">
                                     </div>
 
+                                    <div class="row row justify-content-center align-items-center">
+                                      <h5 class="card-title flex-grow-1 text-center"></h5>
+                                      <img id="{{clase.id}}" src="{% static 'img/Eliminar.png' %}" class="icon btn" onclick="confirmarEliminarClase(event, '{{clase.id}}')">
+                                    </div>
+
                                     <p class="card-text">
                                         <img src="{% static 'img/calendar.png' %}" class="icon" alt="Fecha de Inicio">
                                         <strong>Fecha de Inicio:</strong> {{ clase.fecha_inicio }}
@@ -183,7 +188,7 @@
                     {% endfor %}
                   </select>
                 </div>
-              </div>
+            </div>
               
             <div class="form-group row">
                 <label for="docente_clase">Docente Encargado:</label>
@@ -246,6 +251,8 @@
           }
         });
 </script>
+
+
 
 {% endblock %}
 

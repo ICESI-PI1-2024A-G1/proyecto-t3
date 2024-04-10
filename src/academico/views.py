@@ -15,6 +15,8 @@ from django.template.loader import get_template
 from django.http import HttpResponse
 from xhtml2pdf import pisa
 import pandas as pd
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 from ccsa_project import settings
 from .models import Programa
@@ -151,6 +153,25 @@ def editar_clase(request, clase_id):
     return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 # Create your views here.
 
+@login_required(login_url="/login")
+@require_POST
+def eliminar_clase(request, clase_id):
+    """
+    Elimina una clase del sistema.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): El ID de la clase a eliminar.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualización del curso al que pertenecía la clase.
+    """
+    if request.method == 'POST':
+        clase = get_object_or_404(Clase, id=clase_id)
+        curso_id = clase.curso.nrc
+        clase.delete()
+
+        return redirect('visualizar-curso', curso_id=clase.curso.nrc)
 
 @login_required(login_url="/login")
 def crear_curso(request, codigo, periodo):

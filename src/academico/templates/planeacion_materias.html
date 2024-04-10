@@ -3,18 +3,18 @@
 <form id="classForm" method="POST" action="/academico/cursos/{{curso.nrc}}/crear-clase">
   {% csrf_token %}
 
-  <h4 class="h4">Inicio</h4>
   <div class="form-group row">
     <label for="start_day">Día de inicio:</label>
-    <div class="col">
-      <input type="datetime-local" id="start_day" name="start_day" required/>
-    </div>
+      <div class="col">
+        <input type="datetime-local" id="start_day" name="start_day" required/>
+      </div>
   </div>
+
   <div class="form-group row">
     <label for="end_day">Día de fin:</label>
-    <div class="col">
-      <input type="datetime-local" id="end_day" name="end_day" required/>
-    </div>
+      <div class="col">
+        <input type="datetime-local" id="end_day" name="end_day" required/>
+      </div>
   </div>
 
   <span id="error-message" style="color: red;"></span>
@@ -50,6 +50,7 @@
       </select>
     </div>
   </div>
+  
   <!-- Modalidad y tipo de espacio -->
   <div class="form-group row">
     <label for="modalidad">Modalidad:</label>

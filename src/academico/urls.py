@@ -17,5 +17,6 @@ urlpatterns = [
     #path("cursos/<int:curso_id>/clases/<int:clase_id>/editar_clase", views.editar_clase, name="editar_clase"),
     path('programas/<str:codigo_programa>/<str:periodo>/export/pdf/', views.export_to_pdf, name='export_to_pdf'),
     path('programas/<str:codigo_programa>/export/excel/', views.export_to_excel, name='export_to_excel'),
+    path("clases/<int:clase_id>/eliminar", views.eliminar_clase, name='eliminar_clase'),
 
 ]
