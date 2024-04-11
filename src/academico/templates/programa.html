@@ -4,6 +4,7 @@
   {% load static %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="{% static 'js/programa.js' %}"></script>
+  <script src="{% static 'js/popup.js' %}"></script>
 </head>
 <div class="container" style="text-align: start;">
 
@@ -92,6 +93,7 @@
     </div>
   </div>
   <!-- Tabla de materias -->
+  {%include 'importar_malla.html'%}  
   <div class="block card card-body mt-3 inner-shadow">
     <div class="form-inline">
       <div class="col">
@@ -100,6 +102,7 @@
         <strong>Malla curricular</strong>
       </div>
       <div class="justify-content-end">
+        <button class="btn btn-primary mr-2" onclick="show()">Importar malla</button>
         Periodo selecionado:
         <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
               {% for periodo in periodos %} 
