@@ -1,36 +1,24 @@
 import json
 import os
 import random
+from collections import Counter
 from datetime import datetime, timedelta
+
+import pandas as pd
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.db.models import Count, Q
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-from reportlab.lib import colors
-from reportlab.lib.units import inch
-from reportlab.lib import utils
-from collections import Counter
-from reportlab.graphics.charts.piecharts import Pie
-from reportlab.graphics.shapes import Drawing
-from reportlab.graphics import renderPDF
-from reportlab.graphics.charts.barcharts import VerticalBarChart, HorizontalBarChart
-from reportlab.platypus import Paragraph
-from openpyxl import Workbook
 from django.template.loader import get_template
-from django.http import HttpResponse
+from django.templatetags.static import static
+from django.urls import reverse
+from django.views.decorators.http import require_POST
 from xhtml2pdf import pisa
-import pandas as pd
 
 from ccsa_project import settings
-from .models import Programa
-from django.templatetags.static import static
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
@@ -102,7 +90,7 @@ def crear_clase(request, curso_id):
             "docentes": docentes,
             "curso_id": curso_id,
         }
-    
+
 
 @login_required(login_url="/login")
 def editar_clase(request, clase_id):
@@ -163,6 +151,24 @@ def editar_clase(request, clase_id):
     return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 # Create your views here.
 
+@login_required(login_url="/login")
+@require_POST
+def eliminar_clase(request, clase_id):
+    """
+    Elimina una clase del sistema.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): El ID de la clase a eliminar.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualización del curso al que pertenecía la clase.
+    """
+    if request.method == 'POST':
+        clase = get_object_or_404(Clase, id=clase_id)
+        clase.delete()
+
+        return redirect('visualizar-curso', curso_id=clase.curso.nrc)
 
 @login_required(login_url="/login")
 def crear_curso(request, codigo, periodo):
@@ -419,6 +425,101 @@ def programa(request, codigo, periodo):
             "modalidad": obtener_modalidad(materias),
         },
     )
+
+@login_required(login_url="/login")
+def primera_clase_programa(request, codigo, periodo):
+    """
+    Obtiene la primera clase de un programa académico para un periodo específico.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        codigo (str): El código del programa académico.
+        periodo (str): El periodo para el cual se obtendrá la primera clase.
+
+    Returns:
+        JsonResponse: Un JSON con la información de la primera clase del programa académico.
+    """
+
+    clases = Clase.objects.filter(curso__periodo__semestre=periodo, curso__materia__programas__codigo=codigo).distinct()
+    primera_clase = None
+
+    for clase in clases:
+        if not primera_clase or clase.fecha_inicio < primera_clase.fecha_inicio:
+            primera_clase = clase
+
+    if primera_clase:
+        return JsonResponse(
+            {
+                "curso": primera_clase.curso.materia.nombre,
+                "fecha_inicio": primera_clase.fecha_inicio,
+                "fecha_fin": primera_clase.fecha_fin,
+                "espacio": primera_clase.espacio.tipo,
+                "modalidad": primera_clase.modalidad.metodologia,
+                "total_clases": len(clases),
+            }
+        )
+    return JsonResponse(
+        {
+            "total_clases": len(clases)}
+    )
+
+@login_required(login_url="/login")
+def importar_malla(request, codigo, periodo):
+    """
+    Importa una malla curricular desde un periodo anterior al periodo actual.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        codigo (str): El código del programa académico.
+        periodo (str): El periodo actual.
+
+    Returns:
+        JsonResponse: Un objeto JSON con un mensaje de éxito si la malla curricular se importó correctamente,
+        o un objeto JSON con un mensaje de error si ocurrió un error al importar la malla curricular.
+    """
+    body = json.loads(request.body.decode('utf-8'))
+
+    primera_clase_actual = datetime.strptime(body.get("primera_clase_actual"), "%Y-%m-%d")
+    primera_clase_importar = datetime.strptime(body.get("primera_clase_importar"), "%Y-%m-%dT%H:%M:%SZ")
+    delta = (primera_clase_actual- primera_clase_importar).days
+    if delta % 7 != 0:
+        delta+=1
+    incluir_docentes = body.get("incluir_docentes")
+    periodo_importar = body.get("periodo_importar").split("/")[1]
+
+    MallaCurricular.objects.filter(
+        programa__codigo=codigo, periodo__semestre=periodo
+    ).delete()
+
+    try:
+        for malla_anterior in MallaCurricular.objects.filter(programa__codigo=codigo, periodo__semestre=periodo_importar).distinct():
+            MallaCurricular.objects.create(
+                materia=malla_anterior.materia,
+                programa=malla_anterior.programa,
+                periodo=Periodo.objects.get(semestre=periodo),
+                semestre=malla_anterior.semestre,
+            )
+            Curso.objects.filter(materia=malla_anterior.materia, periodo__semestre=periodo).distinct().delete()
+            for curso_anterior in Curso.objects.filter(materia=malla_anterior.materia,periodo=malla_anterior.periodo).distinct():
+                curso = Curso.objects.create(
+                    cupo=curso_anterior.cupo,
+                    grupo=curso_anterior.grupo,
+                    materia=curso_anterior.materia,
+                    periodo=Periodo.objects.get(semestre=periodo)
+                )
+                for clase_anterior in Clase.objects.filter(curso=curso_anterior).distinct().order_by('fecha_inicio'):
+                    Clase.objects.create(
+                        fecha_inicio=clase_anterior.fecha_inicio + timedelta(days=delta),
+                        fecha_fin=clase_anterior.fecha_fin + timedelta(days=delta),
+                        espacio=clase_anterior.espacio,
+                        curso=curso,
+                        modalidad=clase_anterior.modalidad,
+                        docente=clase_anterior.docente if incluir_docentes else None
+                    )
+    except:
+        return JsonResponse({"error": "Error al importar la malla curricular."})
+    return JsonResponse({"success": "Malla curricular importada exitosamente."})
+
 
 def actualizar_malla(request, codigo, periodo):
     """

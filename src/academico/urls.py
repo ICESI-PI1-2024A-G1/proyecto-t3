@@ -7,6 +7,8 @@ urlpatterns = [
     path("cursos/<int:curso_id>", views.visualizacion_curso, name="visualizar-curso"),
     path("programas", views.programas, name="programas"),
     path("programas/<str:codigo>/<str:periodo>", views.programa, name="programa"),
+    path("programas/<str:codigo>/<str:periodo>/obtener-primera-clase", views.primera_clase_programa, name="primera-clase"),
+    path("programas/<str:codigo>/<str:periodo>/importar", views.importar_malla, name="importar_malla"),
     path("programas/<str:codigo>/<str:periodo>/editar-malla", views.malla_curricular, name="malla_curricular"),
     path("programas/<str:codigo>/<str:periodo>/guardar-malla", views.actualizar_malla, name="actualizar_malla_curricular"),
     path("cursos/<int:curso_id>/crear-clase", views.crear_clase, name="planeacion_materias"),
@@ -17,5 +19,6 @@ urlpatterns = [
     #path("cursos/<int:curso_id>/clases/<int:clase_id>/editar_clase", views.editar_clase, name="editar_clase"),
     path('programas/<str:codigo_programa>/<str:periodo>/export/pdf/', views.export_to_pdf, name='export_to_pdf'),
     path('programas/<str:codigo_programa>/export/excel/', views.export_to_excel, name='export_to_excel'),
+    path("clases/<int:clase_id>/eliminar", views.eliminar_clase, name='eliminar_clase'),
 
 ]
