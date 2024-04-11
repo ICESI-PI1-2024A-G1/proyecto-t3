@@ -447,7 +447,6 @@ def primera_clase_programa(request, codigo, periodo):
         if not primera_clase or clase.fecha_inicio < primera_clase.fecha_inicio:
             primera_clase = clase
 
-    print(len(clases))
     if primera_clase:
         return JsonResponse(
             {
@@ -467,21 +466,16 @@ def primera_clase_programa(request, codigo, periodo):
 @login_required(login_url="/login")
 def importar_malla(request, codigo, periodo):
     """
-    Importa una malla curricular de un programa académico para un periodo específico.
+    Importa una malla curricular desde un periodo anterior al periodo actual.
 
     Args:
         request (HttpRequest): La solicitud HTTP recibida.
         codigo (str): El código del programa académico.
-        periodo (str): El periodo para el cual se importará la malla curricular.
+        periodo (str): El periodo actual.
 
     Returns:
-        HttpResponseRedirect: Una redirección a la vista del programa académico importado.
-    """
-
-    """recieves something like: 
-        primera_clase_actual 2024-04-15
-        incluir_docentes True
-        periodo_importar ADM/202401
+        JsonResponse: Un objeto JSON con un mensaje de éxito si la malla curricular se importó correctamente,
+        o un objeto JSON con un mensaje de error si ocurrió un error al importar la malla curricular.
     """
     body = json.loads(request.body.decode('utf-8'))
 
