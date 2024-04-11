@@ -579,7 +579,8 @@ def args_principal(seleccionado):
     return {
         "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
         "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"},
-        "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
+        "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"},
+        "Solicitud": {"url": "/solicitud/crear_viatico", "seleccionado": seleccionado=="solicitud"}
     }
 
 @login_required(login_url="/login")

@@ -22,6 +22,7 @@ urlpatterns = [
     path('', include('usuarios.urls')),
     path('academico/', include('academico.urls')),
     path('usuarios/', include('usuarios.urls')),
+    path('solicitud/', include('solicitud.urls')),
 ]
 
 handler404 = 'usuarios.views.error_404'
