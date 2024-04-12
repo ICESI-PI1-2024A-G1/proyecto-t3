@@ -146,74 +146,89 @@
 </div>
 
 <div id="editModal" style="display: none">
-    <div class="modal moodle-has-zindex show background-shadow">
-      <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="popup-content form-group">
-            <span class="close" onclick="hideEditModal()"></span>
-            <h3 class="h2">Editar Clase</h3>
-            <form id="editClassForm" method="POST" action="">
-              {% csrf_token %}
-              <input type="hidden" id="clase_id" name="clase_id">
-              
-            <label for="fecha_inicio">Fecha de Inicio:</label><br>
-            <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" required/><br>
+  <div class="modal moodle-has-zindex show background-shadow">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="popup-content form-group">
+          <span class="close" onclick="hideEditModal()"></span>
+          <h3 class="h2">Editar Clase</h3>
+          <form id="editClassForm" method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" id="clase_id" name="clase_id">
 
-            <label for="fecha_fin">Fecha de Fin:</label><br>
-            <input type="datetime-local" id="fecha_fin" name="fecha_fin" required/><br>
-
-            <span id="error-message_e" style="color: red; display: block; height: auto; visibility: visible;"></span>
-
-            <label for="espacio_asignado">Espacio Asignado:</label><br>
-            <input type="text" id="espacio_asignado" name="espacio_asignado" value="" disabled="true"/><br>
-
-            <div class="form-group row">
-                <label for="tipo_espacio">Tipo de espacio:</label>
-                <div class="col">
-                  <select id="tipo_espacio_e" name="tipo_espacio_e" required/>
-                    {% for espacio in espacios %}
-                    <option value="{{ espacio.id }}">{{ espacio.tipo }} </option>
-                    {% endfor %}
-                  </select>
-                </div>
-            </div>
-
-            
-            <div class="form-group row">
-                <label for="modalidad_clase">Modalidad:</label>
-                <div class="col">
-                  <select id="modalidad_clase_e" name="modalidad_clase_e" required/>
-                    {% for modalidad in modalidades %}
-                    <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-            </div>
-              
-            <div class="form-group row">
-                <label for="docente_clase">Docente Encargado:</label>
-                <div class="col">
-                  <select id="docente_clase_e" name="docente_clase_e" required/>
-                  <option value="None">Sin asignar</option>
-                    {% for docente in docentes %}
-                    <option value="{{docente.cedula}}">{{docente.nombre}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-            </div>
-                <button class="btn btn-primary" type="submit">Actualizar Clase</button>
-            </form>
+          <div class="form-group row justify-content-center">  
+            <label for="fecha_inicio" class="col-sm-2 col-form-label text-left">Fecha de Inicio:</label>
+            <div class="col-sm-8 text-right">
+              <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" class="form-control" required/>
+            </div>  
           </div>
+
+          <div class="form-group row justify-content-center">
+            <label for="fecha_fin" class="col-sm-2 col-form-label text-left">Fecha de Fin:</label>
+            <div class="col-sm-8 text-right">
+              <input type="datetime-local" id="fecha_fin" name="fecha_fin" class="form-control" required/>
+            </div>
+          </div>
+
+          <span id="error-message_e" style="color: red; display: block; height: auto; visibility: visible;"></span>
+          
+          <div class="form-group row justify-content-center">
+            <label for="espacio_asignado" class="col-sm-2 col-form-label text-left">Espacio Asignado:</label>
+            <div class="col-sm-8 text-right">
+              <input type="text" id="espacio_asignado" name="espacio_asignado" value="" disabled="true" class="form-control" >
+            </div>
+          </div>
+
+          <div class="form-group row justify-content-center">
+              <label for="tipo_espacio" class="col-sm-2 col-form-label text-left">Tipo de espacio:</label>
+              <div class="col-sm-8 text-right">
+                <select id="tipo_espacio_e" name="tipo_espacio_e" class="form-control" required/>
+                  {% for espacio in espacios %}
+                  <option value="{{ espacio.id }}">{{ espacio.tipo }} </option>
+                  {% endfor %}
+                </select>
+              </div>
+          </div>
+
+          <div class="form-group row justify-content-center">
+              <label for="modalidad_clase" class="col-sm-2 col-form-label text-left">Modalidad:</label>
+              <div class="col-sm-8 text-right">
+                <select id="modalidad_clase_e" name="modalidad_clase_e" class="form-control" required/>
+                  {% for modalidad in modalidades %}
+                  <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+          </div>
+
+          <div class="form-group row justify-content-center">
+              <label for="docente_clase" class="col-sm-2 col-form-label text-left">Docente Encargado:</label>
+              <div class="col-sm-8 text-right">
+                <select id="docente_clase_e" name="docente_clase_e" class="form-control" required/>
+                <option value="None">Sin asignar</option>
+                  {% for docente in docentes %} 
+                  <option value="{{docente.cedula}}">{{docente.nombre}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+          </div>
+
+          <div class="d-flex justify-content-center">
+              <button class="btn btn-primary mt-3 mb-3" type="submit" style="width: 250px; height: 50px;">Actualizar Clase</button>
+          </div>
+
+          </form>
         </div>
       </div>
     </div>
-    <div
-      tabindex="-1"
-      style="position: fixed; top: 0px; left: 0px"
-      aria-hidden="true"
-      data-aria-hidden-tab-index="0"
-    ></div>
   </div>
+  <div
+    tabindex="-1"
+    style="position: fixed; top: 0px; left: 0px"
+    aria-hidden="true"
+    data-aria-hidden-tab-index="0"
+  ></div>
+</div>
 
 <script>
     var editModal = document.getElementById("editModal");
