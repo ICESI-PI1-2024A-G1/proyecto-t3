@@ -45,7 +45,7 @@
         <div class="col-sm-8 text-right">
           <select id="tipo_espacio" name="tipo_espacio" class="form-control" required>
             {% for espacio in espacios %}
-            <option value="{{ espacio.id }}">{{ espacio.tipo }}</option>
+            <option value="{{ espacio.id }}">{{ espacio.tipo }} : [ {{espacio.capacidad}} Max]</option>
             {% endfor %}
           </select>
         </div>
