@@ -73,6 +73,7 @@
           </div>
       </div>
     </div>
+
     <div class="row mt-4">
         <div class="col-md-12">
             <div class="card">
@@ -139,11 +140,15 @@
                         </div>
                         {% endfor %}
                     </div>
+                      <div class="d-flex justify-content-center">
+                          <a class="btn btn-primary mt-2 w-100"  onclick="Solicitud_Salones(event, '{{curso.nrc}}')">Solicitar Salones<img class="icon" src="{% static 'img/Solicitud.png' %}"></a>
+                      </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <div id="editModal" style="display: none">
   <div class="modal moodle-has-zindex show background-shadow">
@@ -184,7 +189,7 @@
               <div class="col-sm-8 text-right">
                 <select id="tipo_espacio_e" name="tipo_espacio_e" class="form-control" required/>
                   {% for espacio in espacios %}
-                  <option value="{{ espacio.id }}">{{ espacio.tipo }} </option>
+                  <option value="{{ espacio.id }}">{{ espacio.tipo }} : [{{espacio.capacidad}} MAX] </option>
                   {% endfor %}
                 </select>
               </div>
