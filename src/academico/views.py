@@ -143,6 +143,10 @@ def editar_clase(request, clase_id):
         clase.docente = docente
         clase.save()
         
+        
+        if(clase.docente is not None){
+            
+        }
         # Extracting just the date part from the datetime objects
         fecha_inicio_str = clase.fecha_inicio[:10]
 
@@ -169,7 +173,9 @@ def editar_clase(request, clase_id):
         to_email = [clase.docente.email]  # List of recipients
 
         # Sending the email with both plain text and HTML content
-        send_mail(subject, html_message, from_email, to_email, html_message=html_message)
+        if(to_email is not None){
+            send_mail(subject, html_message, from_email, to_email, html_message=html_message)
+        }
         
     return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 # Create your views here.
