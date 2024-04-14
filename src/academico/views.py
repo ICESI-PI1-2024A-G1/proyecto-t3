@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import random
@@ -7,6 +8,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.db.models import Count, Q
@@ -473,6 +475,68 @@ def primera_clase_programa(request, codigo, periodo):
             "total_clases": len(clases)}
     )
 
+def render_pdf(html_content):
+    """
+    Renderiza HTML como PDF y devuelve un objeto HttpResponse con el PDF.
+    """
+    result = io.BytesIO()
+    pdf = pisa.pisaDocument(io.BytesIO(html_content.encode("UTF-8")), result)
+    if not pdf.err:
+        return result.getvalue()
+    print(pdf.err)
+    return None
+
+@login_required(login_url="/login")
+def enviar_para_aprobacion(request, codigo, periodo):
+    """
+    Envía una solicitud de aprobación de un programa académico.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        codigo (str): El código del programa académico.
+        periodo (str): El periodo para el cual se enviará la solicitud de aprobación.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualización del programa académico.
+    """
+    try:
+        if request.method == "POST":
+            body = json.loads(request.body.decode('utf-8'))
+            programa = get_object_or_404(Programa, codigo=codigo)
+
+            # Generar el PDF
+            template = get_template('programa_pdf.html')
+            pdf_content = render_pdf(template.render(export_program_data(codigo, periodo)))
+
+            html_content = get_template('aprobacion_email.html').render({
+                'programa': programa,
+                'comentarios': body["comentarios"].split("<br>") if "<br>" in body["comentarios"] else [body["comentarios"]],
+                'url': request.build_absolute_uri(reverse('programa', kwargs={'codigo': codigo, 'periodo': periodo})),
+            })
+            print("hola")
+            if pdf_content:
+                # Crear el correo electrónico
+                subject = f"REVISIÓN DEL PROGRAMA - {programa.nombre}"
+                message = body["comentarios"]
+                from_email = None
+                to_email = [programa.director.email]
+
+                # Adjuntar el PDF al correo electrónico
+                email = EmailMultiAlternatives(subject, message, from_email, to_email)
+                email.attach_alternative(html_content, "text/html")
+                email.attach("programa.pdf", pdf_content, "application/pdf")
+
+                # Enviar el correo electrónico
+                email.send()
+
+                # Actualizar el estado del programa
+                programa.estado_solicitud = EstadoSolicitud.objects.get(nombre="Por aprobar")
+                programa.save()
+
+        return redirect("programa", codigo=codigo, periodo=periodo)
+    except Exception as e:
+        raise Http404("Error al enviar la solicitud de aprobación.")
+
 @login_required(login_url="/login")
 def importar_malla(request, codigo, periodo):
     """
@@ -763,7 +827,7 @@ def render_pdf_from_html(html_content):
         return HttpResponse('Error al generar el PDF: %s' % pisa_status.err, status=500)
     return response
 
-def export_to_pdf(request, codigo_programa, periodo):
+def export_program_data(codigo_programa, periodo):
     pensum = {}
     docentes_con_clase = []
     materias = []
@@ -792,7 +856,6 @@ def export_to_pdf(request, codigo_programa, periodo):
             curso.num_clases = len(curso.clases)
             materia.num_clases += curso.num_clases
             materia.num_clases_asignadas += len(Clase.objects.filter(curso=curso, docente__isnull=False))
-        
 
     programa.creditos = sum([materia.creditos for materia in materias])
     programa.cursos_totales = cursos_totales
@@ -804,9 +867,18 @@ def export_to_pdf(request, codigo_programa, periodo):
     for docente in docentes_con_clase:
         docente.lista_materias = Materia.objects.filter(curso__clase__docente=docente).distinct()
         docentes.add(docente)
-    
+
+    return {
+        "programa": programa,
+        "periodo": periodo,
+        "materias": materias,
+        "docentes": docentes,
+    }
+
+
+def export_to_pdf(request, codigo_programa, periodo):
     template = get_template('programa_pdf.html')
-    html_content = template.render({'programa': programa, 'periodo': periodo, 'materias': materias, 'docentes': docentes})
+    html_content = template.render(export_program_data(codigo_programa, periodo))
 
     return render_pdf_from_html(html_content)
 

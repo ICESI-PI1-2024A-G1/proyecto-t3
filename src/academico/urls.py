@@ -11,6 +11,7 @@ urlpatterns = [
     path("programas/<str:codigo>/<str:periodo>/importar", views.importar_malla, name="importar_malla"),
     path("programas/<str:codigo>/<str:periodo>/editar-malla", views.malla_curricular, name="malla_curricular"),
     path("programas/<str:codigo>/<str:periodo>/guardar-malla", views.actualizar_malla, name="actualizar_malla_curricular"),
+    path("programas/<str:codigo>/<str:periodo>/enviar-aprobacion", views.enviar_para_aprobacion, name="enviar_aprobacion"),
     path("cursos/<int:curso_id>/crear-clase", views.crear_clase, name="planeacion_materias"),
     path("materias/<str:codigo>/<str:periodo>", views.visualizacion_materia, name="visualizacion_materias"),
     path("materias", views.materias, name="materias"),
