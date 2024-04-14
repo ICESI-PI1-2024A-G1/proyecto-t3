@@ -11,6 +11,10 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+
 from .forms import MateriaForm
 from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
                      MallaCurricular, Materia, Modalidad, Periodo, Programa)
@@ -138,6 +142,34 @@ def editar_clase(request, clase_id):
         clase.modalidad = modalidad
         clase.docente = docente
         clase.save()
+        
+        # Extracting just the date part from the datetime objects
+        fecha_inicio_str = clase.fecha_inicio[:10]
+
+
+        # Extracting just the time part from the datetime objects
+        hora_inicio_str = clase.fecha_inicio[11:]
+        hora_fin_str = clase.fecha_fin[11:]
+
+
+        subject = f"{clase.id} class change"
+
+        # Rendering the message using an HTML template
+        html_message = render_to_string('email_template.html', {
+            'fecha_inicio': fecha_inicio_str,
+            'tipo_espacio': clase.espacio.tipo,
+            'espacio_asignado': clase.espacio_asignado,
+            'metodologia': clase.modalidad.metodologia,
+            'nombre_docente': clase.docente.nombre,
+            'hora_inicio': hora_inicio_str,
+            'hora_fin': hora_fin_str,
+        })
+
+        from_email = 'juanseg201@gmail.com'
+        to_email = [clase.docente.email]  # List of recipients
+
+        # Sending the email with both plain text and HTML content
+        send_mail(subject, html_message, from_email, to_email, html_message=html_message)
         
     return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 # Create your views here.
