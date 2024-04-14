@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from academico.models import (Director, EstadoSolicitud, Facultad, Programa,
                               TipoDePrograma)
-from academico.views import programa
+from academico.views import export_to_excel, export_to_pdf, programa
 from usuarios.models import Ciudad
 
 
@@ -147,3 +147,29 @@ def test_malla_curricular_empty_page(nuevo_programa):
     assert nuevo_programa.nombre.encode() in response.content
     assert b"2021-01" in response.content
     assert b"No hay materias en esta malla curricular" in response.content
+
+@pytest.mark.django_db
+def test_export_to_pdf(nuevo_programa):
+    request = RequestFactory().get(
+        reverse("export_to_pdf", args=[nuevo_programa.codigo, "2021-01"])
+    )
+    request.user = User.objects.create_user(username="admin", password="admin")
+
+    response = export_to_pdf(request, nuevo_programa.codigo, "2021-01")
+
+    assert response.status_code == 200
+    assert response['Content-Type'] == 'application/pdf'
+    assert 'attachment; filename="programa.pdf"' in response['Content-Disposition']
+
+@pytest.mark.django_db
+def test_export_to_excel(nuevo_programa):
+    request = RequestFactory().get(
+        reverse("export_to_excel", args=[nuevo_programa.codigo, "2021-01"])
+    )
+    request.user = User.objects.create_user(username="admin", password="admin")
+
+    response = export_to_excel(request, nuevo_programa.codigo, "2021-01")
+
+    assert response.status_code == 200
+    assert response['Content-Type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    assert 'attachment; filename="programa.xlsx"' in response['Content-Disposition']
