@@ -93,3 +93,8 @@ function eliminarClase(claseId) {
     document.body.appendChild(form);
     form.submit();
 }
+
+function cambiar_checkbox_edicion(){
+    var checkbox = document.getElementById("editar_relacionadas_e");
+    checkbox.checked = !checkbox.checked;
+}
