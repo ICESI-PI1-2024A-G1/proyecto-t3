@@ -24,8 +24,9 @@ from xhtml2pdf import pisa
 from ccsa_project import settings
 
 from .forms import MateriaForm
-from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa, Estudiante)
+from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud,
+                     Estudiante, Facultad, GrupoDeClase, MallaCurricular,
+                     Materia, Modalidad, Periodo, Programa)
 
 
 @login_required(login_url="/login")
@@ -67,7 +68,9 @@ def crear_clase(request, curso_id):
         if docente_cedula is not None and docente_cedula != "None":            
             docente = Docente.objects.get(cedula=docente_cedula)
         else:
-            docente = None  
+            docente = None
+            
+        grupo_clases = GrupoDeClase.objects.create()
 
         for _ in range(num_semanas):
             clase = Clase.objects.create(
@@ -77,10 +80,11 @@ def crear_clase(request, curso_id):
                 curso_id=curso_id,
                 espacio_id=tipo_espacio,
                 modalidad_id=modalidad_clase,
-                docente = docente
+                docente = docente,
+                grupo_clases = grupo_clases
             )
             start_day += timedelta(days=7)
-            end_day += timedelta(days=7)   
+            end_day += timedelta(days=7)
 
         return redirect("visualizar-curso", curso_id=curso_id)
     else:
@@ -115,14 +119,15 @@ def editar_clase(request, clase_id):
     """
     clase = get_object_or_404(Clase,id=clase_id)
     if request.method == "POST":
-        fecha_inicio = request.POST.get("fecha_inicio")
-        fecha_fin = request.POST.get("fecha_fin")
+        fecha_inicio = datetime.strptime(request.POST.get("fecha_inicio"), "%Y-%m-%dT%H:%M")
+        fecha_fin = datetime.strptime(request.POST.get("fecha_fin"), "%Y-%m-%dT%H:%M")
         tipo_espacio_id = request.POST.get("tipo_espacio_e")
         modalidad_id = request.POST.get("modalidad_clase_e")
         docente_cedula = request.POST.get("docente_clase_e")
+        editar_relacionadas = request.POST.get("editar_relacionadas_e")
 
         if (fecha_inicio==None or fecha_fin==None or tipo_espacio_id==None or modalidad_id==None):
-             raise Http404("Todos los campos son requeridos.")
+            raise Http404("Todos los campos son requeridos.")
 
         try:
             tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)       
@@ -133,23 +138,38 @@ def editar_clase(request, clase_id):
             modalidad = Modalidad.objects.get(id=modalidad_id)    
         except (Modalidad.DoesNotExist):
             raise Http404("Modalidad no existe.")
-        
+
         if docente_cedula is not None and docente_cedula != "None":
             try:
                 docente = Docente.objects.get(cedula=docente_cedula)
-                
+
             except (Docente.DoesNotExist):
                 raise Http404("Docente no existe.")
         else:
             docente = None
-            
-        
+
+        old_date = clase.fecha_inicio
+
         clase.fecha_inicio = fecha_inicio
         clase.fecha_fin = fecha_fin
         clase.espacio = tipo_espacio
         clase.modalidad = modalidad
         clase.docente = docente
         clase.save()
+
+        if editar_relacionadas:
+            for clase_i in Clase.objects.filter(grupo_clases=clase.grupo_clases):
+                clase.fecha_inicio
+                if clase_i.fecha_inicio > old_date:
+                    fecha_inicio+=timedelta(days=7)
+                    fecha_fin+=timedelta(days=7)
+                    clase_i.fecha_inicio = fecha_inicio
+                    clase_i.fecha_fin = fecha_fin
+                    clase_i.espacio = tipo_espacio
+                    clase_i.modalidad = modalidad
+                    clase_i.docente = docente
+                    clase_i.save()
+
         
         #Estudiantes
         estudiantes = Estudiante.objects.filter(cursos = clase.curso)
@@ -157,13 +177,11 @@ def editar_clase(request, clase_id):
         for es in estudiantes:
             to_email.append(es.email)
         # Extracting just the date part from the datetime objects
-        fecha_inicio_str = clase.fecha_inicio[:10]
-
+        fecha_inicio_str = clase.fecha_inicio.date()
 
         # Extracting just the time part from the datetime objects
-        hora_inicio_str = clase.fecha_inicio[11:]
-        hora_fin_str = clase.fecha_fin[11:]
-
+        hora_inicio_str = clase.fecha_inicio.time()
+        hora_fin_str = clase.fecha_fin.time()
 
         subject = f"{clase.id} class change"
         
@@ -189,7 +207,7 @@ def editar_clase(request, clase_id):
         # Sending the email with both plain text and HTML content
         if(to_email is not None):
             send_mail(subject, html_message, from_email, to_email, html_message=html_message)
-        
+
     return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 # Create your views here.
 
@@ -550,10 +568,9 @@ def enviar_para_aprobacion(request, codigo, periodo):
 
             html_content = get_template('aprobacion_email.html').render({
                 'programa': programa,
-                'comentarios': body["comentarios"].split("<br>") if "<br>" in body["comentarios"] else [body["comentarios"]],
+                'comentarios': body["comentarios"].replace("&nbsp;", " ").split("<br>") if "<br>" in body["comentarios"] else [body["comentarios"]],
                 'url': request.build_absolute_uri(reverse('programa', kwargs={'codigo': codigo, 'periodo': periodo})),
             })
-            print("hola")
             if pdf_content:
                 # Crear el correo electrónico
                 subject = f"REVISIÓN DEL PROGRAMA - {programa.nombre}"
@@ -811,7 +828,7 @@ def visualizacion_curso(request, curso_id):
         HttpResponse: La respuesta HTTP que muestra la visualización del curso.
     """
     curso = get_object_or_404(Curso, nrc=curso_id)
-    clases = Clase.objects.filter(curso=curso).select_related('docente')
+    clases = Clase.objects.filter(curso=curso).select_related('docente').order_by('fecha_inicio')
     docentes_con_clases = Docente.objects.filter(clase__curso=curso).distinct()
     for docente in docentes_con_clases:
         docente.num_clases = len(Clase.objects.filter(docente=docente, curso=curso))
