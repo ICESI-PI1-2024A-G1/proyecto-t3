@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proyecto CCSA</title>
+    <script src="{% static 'js/sidebar.js' %}"></script>
+  </head>
+  <body>
+    <h2 class="mt-2"><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
+    <label class="col ml-3"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
+
+    {%if comentarios %}
+    <h2 class="h4">Comentarios agregados:</h2>
+    <div>
+        {% for comentario in comentarios %}
+        <label>{{ comentario }}</label><br>
+        {% endfor %}
+    </div>
+    {%endif%}
+    <p>
+        <strong>Puedes ver el programa completo, en:</strong> {{ url }}
+    </p>
+  </body>
+</html>

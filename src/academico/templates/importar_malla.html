@@ -2,7 +2,6 @@
 
 
 {% csrf_token %}
-<h3 class="h2 mt-2">Panel de importación</h3>
 <!--- Seleccionar periodo a importar --->
 <div class="form-inline row" style="justify-content: center;">
     <label for="periodo_importar" class="col-3 mr-2">Periodo a importar:</label>
@@ -24,12 +23,12 @@
 
 <div id="form-options" style=" display: none;">
     <div class="form-inline row mt-3"style="justify-content: center;">
-        <label class="col-3 mr-2" style="text-align: start;">Primera clase del periodo anterior:</label>
+        <label class="col-4 mr-2" style="text-align: start;">Primera clase del periodo anterior:</label>
         <input type="text" disabled id="primera-clase" class="w-50"/>
     </div>
 
     <div  class="form-inline row mt-3"style="justify-content: center;">
-        <label class="col-3 mr-2" style="text-align: start;">Primera clase del periodo actual:</label>
+        <label class="col-4 mr-2" style="text-align: start;">Primera clase del periodo actual:</label>
         <input type="date" id="primera-clase-actual" class="w-50 custom-select" onchange="validate_selected_date()"></input>
     </div>
     
