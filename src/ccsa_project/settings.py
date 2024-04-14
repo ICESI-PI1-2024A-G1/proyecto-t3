@@ -128,3 +128,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+#Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'juanseg201@gmail.com' #Email que va a mandar las notificaciones
+EMAIL_HOST_PASSWORD = '----' #Password de Google Authenticator
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True  # Or False if you're using SSL
