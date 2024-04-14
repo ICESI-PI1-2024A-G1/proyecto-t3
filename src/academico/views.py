@@ -25,7 +25,7 @@ from ccsa_project import settings
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
+                     MallaCurricular, Materia, Modalidad, Periodo, Programa, Estudiante)
 
 
 @login_required(login_url="/login")
@@ -151,7 +151,11 @@ def editar_clase(request, clase_id):
         clase.docente = docente
         clase.save()
         
-        
+        #Estudiantes
+        estudiantes = Estudiante.objects.filter(cursos = clase.curso)
+        to_email = [] # List of recipients
+        for es in estudiantes:
+            to_email.append(es.email)
         # Extracting just the date part from the datetime objects
         fecha_inicio_str = clase.fecha_inicio[:10]
 
@@ -162,6 +166,12 @@ def editar_clase(request, clase_id):
 
 
         subject = f"{clase.id} class change"
+        
+        if(clase.docente is not None):
+            nombre_docente = clase.docente.nombre
+            to_email.append(clase.docente.email)  # List of recipients
+        else:
+            nombre_docente = "N/A"
 
         # Rendering the message using an HTML template
         html_message = render_to_string('email_template.html', {
@@ -169,13 +179,12 @@ def editar_clase(request, clase_id):
             'tipo_espacio': clase.espacio.tipo,
             'espacio_asignado': clase.espacio_asignado,
             'metodologia': clase.modalidad.metodologia,
-            'nombre_docente': clase.docente.nombre,
+            'nombre_docente': nombre_docente,
             'hora_inicio': hora_inicio_str,
             'hora_fin': hora_fin_str,
         })
 
         from_email = settings.EMAIL_HOST_USER
-        to_email = [clase.docente.email]  # List of recipients
 
         # Sending the email with both plain text and HTML content
         if(to_email is not None):
