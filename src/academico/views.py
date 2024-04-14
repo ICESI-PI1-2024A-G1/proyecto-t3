@@ -800,12 +800,78 @@ def export_to_pdf(request, codigo_programa, periodo):
 
     return render_pdf_from_html(html_content)
 
-def export_to_excel(request, codigo_programa):
-    programa = Programa.objects.get(codigo=codigo_programa)
+def export_to_excel(request, codigo_programa, periodo):
+    programa = get_object_or_404(Programa, codigo=codigo_programa)
+    clases = []
+    total_horas_programadas = timedelta()
 
-    df = pd.DataFrame({
-        'Nombre': [programa.nombre],
-    })
+    for malla in MallaCurricular.objects.filter(programa__codigo=codigo_programa, periodo__semestre=periodo): 
+        for curso in Curso.objects.filter(materia=malla.materia, periodo__semestre=periodo):
+            for clase in  Clase.objects.filter(curso=curso):
+                clase.programa = programa
+                clase.materia = malla.materia
+                clase.periodo = malla.periodo
+                clase.facultad = programa.facultad
+                clase.horas_programadas = clase.fecha_fin - clase.fecha_inicio
+                total_horas_programadas += clase.horas_programadas
+                clase.total_horas_programadas = total_horas_programadas
+                clases.append(clase)
+    data = {
+        'Código_Facultad': [],
+        'Nombre_Facultad': [],
+        'Código_Programa': [],
+        'Nombre_Programa': [],
+        'Código_Materia': [],
+        'Nombre_Materia': [],
+        'NRC': [],
+        'Grupo': [],
+        'Método_Educativo': [],
+        'Cupo_Materia': [],
+        'Número_Horas': [],
+        'Horas_Programadas': [],
+        "Número_Créditos": [],
+        "Cédula": [],
+        "Nombre_Profesor": [],
+        "Código_Contrato": [],
+        "Tipo_Contrato": [], 
+        "Fecha_Contrato": [],
+        "Estado_Contrato": [],
+        "Fecha_Inicio": [],
+        "Fecha_Fin": [], 
+        "HR_Inicio": [],
+        "HR_Fin": [],
+        "Espacio": [],
+
+    }
+    
+    for clase in clases:
+        data["Código_Facultad"].append(clase.facultad.id)
+        data["Nombre_Facultad"].append(clase.facultad.nombre)
+        data["Código_Programa"].append(clase.programa.codigo)
+        data["Nombre_Programa"].append(clase.programa.nombre)
+        data["Código_Materia"].append(clase.materia.codigo)
+        data["Nombre_Materia"].append(clase.materia.nombre)
+        data["NRC"].append(clase.curso.nrc)
+        data["Grupo"].append(clase.curso.grupo)
+        data["Método_Educativo"].append(clase.modalidad.metodologia)
+        data["Cupo_Materia"].append(clase.curso.cupo)
+        data["Número_Horas"].append(clase.horas_programadas)
+        data["Horas_Programadas"].append(clase.total_horas_programadas)
+        data["Número_Créditos"].append(clase.materia.creditos),
+        data["Cédula"].append(clase.docente.cedula if clase.docente else "No asignado")
+        data["Nombre_Profesor"].append(clase.docente.nombre if clase.docente else "No asignado")
+        data["Código_Contrato"].append(clase.docente.contrato_codigo.codigo if clase.docente else "")
+        data["Tipo_Contrato"].append(clase.docente.contrato_codigo.tipo_contrato.tipo if clase.docente else "-")
+        data["Fecha_Contrato"].append(clase.docente.contrato_codigo.fecha_elaboracion if clase.docente else "-")
+        data["Estado_Contrato"].append(clase.docente.contrato_codigo.estado.estado if clase.docente else "-")
+        data["Fecha_Inicio"].append(clase.fecha_inicio.replace(tzinfo=None).strftime("%Y-%m-%d") if clase.fecha_inicio else "-")
+        data["Fecha_Fin"].append(clase.fecha_fin.replace(tzinfo=None).strftime("%Y-%m-%d") if clase.fecha_fin else "-") 
+        data["HR_Inicio"].append(clase.fecha_inicio.replace(tzinfo=None).strftime("%H:%M") if clase.fecha_inicio else "-")
+        data["HR_Fin"].append(clase.fecha_fin.replace(tzinfo=None).strftime("%H:%M") if clase.fecha_fin else "-") 
+        data["Espacio"].append(clase.espacio_asignado.id if clase.espacio_asignado else "No asignado")
+
+
+    df = pd.DataFrame(data)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="programa.xlsx"'
