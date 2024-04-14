@@ -25,7 +25,7 @@ from ccsa_project import settings
 
 from .forms import MateriaForm
 from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
+                     MallaCurricular, Materia, Modalidad, Periodo, Programa, Estudiante)
 
 
 @login_required(login_url="/login")
@@ -185,7 +185,6 @@ def editar_clase(request, clase_id):
         })
 
         from_email = settings.EMAIL_HOST_USER
-        to_email = [clase.docente.email]  # List of recipients
 
         # Sending the email with both plain text and HTML content
         if(to_email is not None):
