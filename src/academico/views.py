@@ -388,8 +388,19 @@ def programa(request, codigo, periodo):
     creditos_totales = 0
     cursos_totales = 0
     docentes_con_clase = []
+    programa.total_grupos = len(Curso.objects.filter(periodo__semestre=periodo, materia__programas__codigo=codigo).distinct())
+    programa.total_clases_docente = len(Clase.objects.filter(curso__materia__programas__codigo=codigo, curso__periodo__semestre=periodo, docente__isnull=False).distinct())
+    programa.total_clases = len(Clase.objects.filter(curso__materia__programas__codigo=codigo, curso__periodo__semestre=periodo).distinct())
+    programa.porcentaje_clases_docente = int((programa.total_clases_docente/programa.total_clases)*100 if programa.total_clases > 0 else 0)
+    programa.lista_materias = "Materias del pensum:\n\n"
+
+    programa.lista_cursos_incompletos = Curso.objects.filter(periodo__semestre=periodo, materia__programas__codigo=codigo, clase__docente__isnull=True).distinct()
+    programa.cursos_incompletos = "Cursos incompletos:\n\n"
+    for curso in programa.lista_cursos_incompletos:
+        programa.cursos_incompletos += f"{curso.materia.nombre} - Grupo {curso.grupo}\n"
 
     for materia in materias:
+        programa.lista_materias += f"{materia.materia.nombre} - Semestre {materia.semestre}\n"
         materia.materia.color = color_suave()
         creditos_totales += materia.materia.creditos
         cursos_totales += 1
@@ -400,12 +411,11 @@ def programa(request, codigo, periodo):
         malla_curricular[materia.semestre].append(materia.materia)
 
     semestres = len(malla_curricular.keys())
-    
+
     docentes = set()
     for docente in docentes_con_clase:
         docente.lista_materias = Materia.objects.filter(curso__clase__docente=docente).distinct()
         docentes.add(docente)
-    
 
     return render(
         request,

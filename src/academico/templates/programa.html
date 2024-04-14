@@ -13,6 +13,7 @@
   <label class="col ml-3"><strong>Créditos totales:</strong> {{ creditos_totales }}</label>
   <label class="col ml-3"><strong>Cursos totales:</strong> {{ cursos_totales }}</label>
   <div class="row">
+    {% include 'envio_aprobacion.html' with popup_id=2 popup_title="Enviar para revisión"%}
     <div class="row align-items-center">
       <div class="col card block inner-shadow p-3 mr-2">
         <div class="row align-items-center">
@@ -23,7 +24,7 @@
             <label class="row m-3" style="text-align: start;"><strong>Teléfono: </strong> &nbsp; {{ programa.director.telefono }}</label>
           </div>
           <div class="col-2 h-100">
-            <a class="btn btn-primary h-100" title="Enviar para aprobación">
+            <a class="btn btn-primary h-100" title="Enviar para aprobación" onclick="show(2)">
               <img class="icon" src="{% static 'img/email.png' %}">
             </a>
           </div>
@@ -93,7 +94,7 @@
     </div>
   </div>
   <!-- Tabla de materias -->
-  {%include 'importar_malla.html'%}  
+  {%include 'importar_malla.html' with popup_id=1 popup_title="Importar malla"%}
   <div class="block card card-body mt-3 inner-shadow">
     <div class="form-inline">
       <div class="col">
@@ -102,7 +103,7 @@
         <strong>Malla curricular</strong>
       </div>
       <div class="justify-content-end">
-        <button class="btn btn-primary mr-2" onclick="show()">Importar malla</button>
+        <button class="btn btn-primary mr-2" onclick="show(1)">Importar malla</button>
         Periodo selecionado:
         <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
               {% for periodo in periodos %} 
@@ -147,7 +148,7 @@
         <a class="dropdown-item" href="{% url 'export_to_excel' programa.codigo %}">Excel</a>
     </div>
     </div>
-  {% endif %}  
+  {% endif %} 
   </div>
 </div>
 
