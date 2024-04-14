@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Programa PDF</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .programa-info {
+      margin-bottom: 20px;
+    }
+
+    .malla-curricular {
+      margin-bottom: 20px;
+    }
+
+    .semestre-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .semestre {
+      width: 48%;
+      background-color: #ebeaea;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    .semestre-header {
+      background-color: rgba(120, 120, 120, 0.773);
+      padding: 5px;
+      text-align: center;
+    }
+
+    .materia {
+      width: 48%;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 5px;
+    }
+
+    .docentes {
+      display: flex;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px; 
+      border: 1px solid #ccc
+    }
+
+
+    .card {
+      width: 100%; 
+      align-items: center;
+      background-color: #f0f0f0;
+      text-align: center;
+    }
+
+    .docente-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 8cm;
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+
+  </style>
+</head>
+
+<div class="header">
+  <h1>Informe Programa Académico</h1>
+  <h2>{{ programa.nombre }}</h2>
+  <h3>{{ programa.facultad.nombre }}</h3>
+  <h4>Periodo {{ periodo }}</h4>
+</div>
+<div class="programa-info">
+  <h2>Información General del Programa</h2>
+  <table>
+    <tr>
+      <td><strong>Director de Programa:</strong> {{ programa.director.nombre }}</td>
+      <td style = "margin-left: 50px;"><strong>Teléfono del director: </strong> {{ programa.director.telefono }}</td>
+      <td style = "margin-left: 50px;"><strong>Créditos totales: </strong> {{ programa.creditos }}</td>
+    </tr>
+    <tr>
+      <td><strong>Email del director: </strong> {{ programa.director.email }}</td>
+      <td style = "margin-left: 50px;"><strong>Modalidad: </strong> {{ programa.modalidad }}</td>
+      <td style = "margin-left: 50px;"><strong>Cursos totales: </strong> {{ programa.cursos_totales }}</td>
+    </tr>
+  </table>
+</div>
+  
+  <h2>Docentes</h2>
+  <div class="docentes" style="flex-wrap: wrap;">
+    <table border="0.5">
+      {% for docente in docentes %}
+        <tr">
+          <td style="justify-content: center; align-items: center; text-align: center; padding: 10px;">
+            <p style="padding: 0px; margin-bottom: 0%;"><strong>{{ docente.nombre }}</strong></p>
+            <img src="{{ docente.foto }}" alt="Foto de {{ docente.nombre }}" class="docente-img">
+          </td>
+          <td style="text-align: center; padding: 5px;">
+            <p style="padding: 0px;"><strong> Contacto</strong></p>
+            <p style="padding: 0px;"><strong>Email: </strong> {{ docente.email }} </br> <strong> Teléfono:</strong> {{ docente.telefono }} </p>
+          </td>
+          <td style="padding: 5px; text-align: center;">
+            <p style="padding: 0px; text-align: center;"><strong>Materias:</strong></p>
+            <ul style="padding: 0px; list-style-type: none;">
+              {% for materia in docente.lista_materias %}
+              <li style="padding: 0px;">{{ materia.nombre }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="pensum">
+    <h2>Pensum</h2>
+    {% for semestre, materias in programa.pensum.items %}
+    <div class="semestre">
+      <div class="semestre-header">
+        <strong>{{ semestre }}° Semestre</strong>
+      </div>
+      <div class="semestre-container">
+        {% for materia in materias %}
+        <div
+          class="materia"
+          id="{{materia.codigo}}"
+          onclick="window.location.href='/academico/materias/{{materia.codigo}}/{{periodo_seleccionado}}'"
+        >
+          <strong>{{materia.nombre}}</strong><br />
+          <strong>Créditos:</strong> {{materia.creditos}}<br />
+          <strong>Código:</strong> {{materia.codigo}}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="malla-curricular">
+    <h2>Malla Curricular</h2>
+    {% for materia in materias %}
+    <h3>{{ materia.nombre }}</h3>
+    <table style = "background-color: #ebeaea; border-style: solid; padding-top: 5px; padding-left: 5px; padding-right: 5px;">
+      <tr>
+        <td><strong>Departamento: </strong> {{ materia.departamento.nombre }}</td>
+        <td style="padding: 5px; text-align: center;"><strong>Tipo: </strong> {{ materia.tipo_de_materia.nombre }}</td>
+        <td style="padding: 5px; text-align: center;"><strong>Créditos:</strong> {{ materia.creditos }}</td>
+      </tr>
+      <tr>
+        <td><strong>Cantidad de clases asignadas:</strong> {{ materia.num_clases_asignadas }} / {{ materia.num_clases }}</td>
+        <td style="padding: 5px; text-align: center;"><strong>Cantidad de cursos totales:</strong> {{ materia.num_cursos }}</td>
+      </tr>
+    </table>
+
+    {% if materia.cursos %}
+    {% for curso in materia.cursos %}
+    <h4><strong>Grupo:</strong> {{ curso.grupo }} <strong>- NRC</strong> {{ curso.nrc }}</h4>
+    <table border="1" cellspacing="0" cellpadding="5">
+      <tr>
+        <th>Clase</th>
+        <th>Docente</th>
+        <th>Modalidad</th>
+        <th>Espacio</th>
+        <th>Espacio asignado</th>
+      </tr>
+      {% for clase in curso.clases %}
+      <tr>
+        <td>{{ clase.fecha_inicio }} to {{ clase.fecha_fin|date:"P" }}</td>
+        {% if clase.docente %}
+        <td>{{ clase.docente.nombre }}</td>
+        {% else %}
+        <td style="background-color: rgb(255, 203, 203)">
+          No asignado
+        </td>
+        {% endif %}
+        <td>{{ clase.modalidad.metodologia }}</td>
+        <td>{{ clase.espacio.tipo }}</td>
+        {% if clase.espacio_asignado %}
+        <td>{{ clase.espacio_asignado }}</td>
+        {% else %}
+        <td style="background-color: rgb(255, 203, 203)">
+          No asignado
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+    {% endfor %}
+    {% else %}
+    <p>No hay cursos registrados para esta materia.</p>
+    {% endif %}
+    {% endfor %}
+  </div>
+</body>
+</html>

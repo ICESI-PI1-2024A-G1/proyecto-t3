@@ -1,4 +1,5 @@
 changes = {}
+primera_clase = ""
 
 function cambiar_periodo() {
     var periodo = document.getElementById('periodo').value;
@@ -93,4 +94,97 @@ function activar_guardar(evt) {
     changes[evt.target.id] = evt.target.value
     document.getElementById('btn-guardar').disabled = false;
     document.getElementById('btn-guardar').classList.remove('btn--disabled');
+}
+
+function obtener_primera_clase_periodo(){
+    var periodo = document.getElementById('periodo_importar').value;
+    fetch('/academico/programas/'+periodo+'/obtener-primera-clase')
+    .then(response => response.json())
+    .then(data => {
+        if(data['total_clases'] != 0){
+            primera_clase = data['fecha_inicio'];
+            document.getElementById('primera-clase').value = formatDate(data['fecha_inicio']);
+            document.getElementById('form-options').style.display = 'block';
+            document.getElementById('form-state').textContent = 'Se importarán un total de ' + data['total_clases'] + ' clases a partir de la fecha seleccionada';
+        }else{
+            primera_clase = "";
+            document.getElementById('form-state').textContent = 'No hay clases registradas en el periodo seleccionado';
+            document.getElementById('form-options').style.display = 'none';
+        }
+        document.getElementById('form-state').style.display = 'block';
+    });
+
+}
+
+function validate_selected_date(){
+    var selected_date = document.getElementById('primera-clase-actual').value;
+    var oldDate = new Date(primera_clase);
+    var date = new Date(selected_date);
+
+    document.getElementById('error-label').style.display = 'block';
+    if(date.getUTCDate() < oldDate.getUTCDate()){
+        document.getElementById('error-label').textContent = 'La fecha seleccionada no puede ser anterior a la fecha antigua';
+        document.getElementById('submit-import').disabled = true;
+    }else if((date.getUTCDay()) != oldDate.getUTCDay()){
+        document.getElementById('error-label').textContent = 'Debe coincidir el día de la semana';
+        document.getElementById('submit-import').disabled = true;
+    }
+    else{
+        document.getElementById('error-label').textContent = 'Esta acción sobreescribirá toda la malla actual';
+        document.getElementById('submit-import').disabled = false;
+    }
+}
+
+function formatDate(dateString) {
+    const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];    
+    
+    const fecha = new Date(dateString);
+    const dayOfWeek = diasSemana[fecha.getUTCDay()];
+    const day = fecha.getUTCDate();
+    const month = meses[fecha.getUTCMonth()];
+    const year = fecha.getUTCFullYear();    
+
+    return `${dayOfWeek}, ${day} de ${month} del ${year}`;
+}
+
+function cambiar_checkbox_docente(){
+    var checkbox = document.getElementById('incluir-docentes');
+    checkbox.checked = !checkbox.checked;
+}
+
+function send_import_request(){
+    document.getElementById('submit-import').disabled = true;
+    periodo = document.getElementById('periodo_actual').value;
+    codigo = document.getElementById('codigo_programa').value;
+
+    fetch('/academico/programas/'+codigo+"/"+periodo+"/importar", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            primera_clase_actual: document.getElementById('primera-clase-actual').value,
+            primera_clase_importar: primera_clase,
+            incluir_docentes: document.getElementById('incluir-docentes').checked,
+            periodo_importar: document.getElementById('periodo_importar').value
+        })
+    }).then(response => response.json())
+    .then(data => {
+        if(data['error']){
+            document.getElementById('form-state').textContent = data['error'];
+            document.getElementById('form-state').style.color = 'red';
+        }else{
+            document.getElementById('form-state').textContent = data['success'];
+            document.getElementById('form-state').style.color = 'green';
+        }
+        document.getElementById('form-state').style.display = 'block';
+        
+        // Esperar 2 segundos y recargar la página
+        setTimeout(function(){
+            location.reload();
+        }, 2000);
+    });
+
 }

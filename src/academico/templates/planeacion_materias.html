@@ -3,17 +3,18 @@
 <form id="classForm" method="POST" action="/academico/cursos/{{curso.nrc}}/crear-clase">
   {% csrf_token %}
 
-  <h4 class="h4">Inicio</h4>
-  <div class="form-group row">
-    <label for="start_day">Día de inicio:</label>
-    <div class="col">
-      <input type="datetime-local" id="start_day" name="start_day" required/>
+
+  <div class="form-group row justify-content-center">
+    <label for="start_day" class="col-sm-2 col-form-label text-left">Día de inicio:</label>
+    <div class="col-sm-8 text-right">
+      <input type="datetime-local" id="start_day" name="start_day" class="form-control" required/>
     </div>
   </div>
-  <div class="form-group row">
-    <label for="end_day">Día de fin:</label>
-    <div class="col">
-      <input type="datetime-local" id="end_day" name="end_day" required/>
+
+  <div class="form-group row justify-content-center">
+    <label for="end_day" class="col-sm-2 col-form-label text-left">Día de fin:</label>
+    <div class="col-sm-8 text-right">
+      <input type="datetime-local" id="end_day" name="end_day" class="form-control" required/>
     </div>
   </div>
 
@@ -40,21 +41,22 @@
     });
     </script>
 
-  <div class="form-group row">
-    <label for="tipo_espacio">Tipo de espacio:</label>
-    <div class="col">
-      <select id="tipo_espacio" name="tipo_espacio" required>
+  <div class="form-group row justify-content-center">
+    <label for="tipo_espacio" class="col-sm-2 col-form-label text-left">Tipo de espacio:</label>
+    <div class="col-sm-8 text-right">
+      <select id="tipo_espacio" name="tipo_espacio" class="form-control" required>
         {% for espacio in espacios %}
-        <option value="{{ espacio.id }}">{{ espacio.tipo }}</option>
+        <option value="{{ espacio.id }}">{{ espacio.tipo }} : [{{espacio.capacidad}} MAX]</option>
         {% endfor %}
       </select>
     </div>
   </div>
+
   <!-- Modalidad y tipo de espacio -->
-  <div class="form-group row">
-    <label for="modalidad">Modalidad:</label>
-    <div class="col">
-      <select id="modalidad_clase" name="modalidad_clase" required>
+  <div class="form-group row justify-content-center">
+    <label for="modalidad" class="col-sm-2 col-form-label text-left">Modalidad:</label>
+    <div class="col-sm-8 text right">
+      <select id="modalidad_clase" name="modalidad_clase" class="form-control" required>
         {% for modalidad in modalidades %}
         <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
         {% endfor %}
@@ -62,10 +64,10 @@
     </div>
   </div>
 
-  <div class="form-group row">
-    <label for="modalidad">Docente Encargado:</label>
-    <div class="col">
-      <select id="docente_clase" name="docente_clase", required>
+  <div class="form-group row justify-content-center">
+    <label for="modalidad" class="col-sm-2 col-form-label text-left">Docente Encargado:</label>
+    <div class="col-sm-8 text-right">
+      <select id="docente_clase" name="docente_clase" class="form-control", required>
         <option value="None">Sin asignar</option>
         {% for docente in docentes %}
         <option value="{{docente.cedula}}">{{docente.nombre}}</option>
@@ -74,18 +76,18 @@
     </div>
   </div>
 
-  <div class="form-group row">
-    <label for="num_semanas" class="col"
-      >Numero de semanas que se dara esta clase:</label
-    >
-    <div class="col">
-      <input type="number" id="num_semanas" name="num_semanas" />
+  <div class="form-group row justify-content-center">
+    <label for="num_semanas" class="col-sm-2 col-form-label text-left" style="white-space: nowrap;"
+      >N° de semanadas:</label>
+    <div class="col-sm-8 text right">
+      <input type="number" id="num_semanas" name="num_semanas" class="form-control" />
     </div>
   </div>
 
   <!-- Modalidad y tipo de espacio -->
-
-  <button class="btn btn-primary" type="submit">Crear Clases</button>
+  <div class="d-flex justify-content-center">
+  <button class="btn btn-primary" type="submit" style="width: 250px; height: 50px;">Crear Clases</button>
+  </div>
 </form>
 
 {% endblock %}

@@ -1,15 +1,24 @@
 import json
+import os
 import random
+from collections import Counter
 from datetime import datetime, timedelta
 
+import pandas as pd
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.db.models import Count, Q
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import get_template
+from django.templatetags.static import static
 from django.urls import reverse
+from django.views.decorators.http import require_POST
+from xhtml2pdf import pisa
+
+from ccsa_project import settings
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -85,7 +94,7 @@ def crear_clase(request, curso_id):
             "docentes": docentes,
             "curso_id": curso_id,
         }
-    
+
 
 @login_required(login_url="/login")
 def editar_clase(request, clase_id):
@@ -176,6 +185,24 @@ def editar_clase(request, clase_id):
     return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 # Create your views here.
 
+@login_required(login_url="/login")
+@require_POST
+def eliminar_clase(request, clase_id):
+    """
+    Elimina una clase del sistema.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): El ID de la clase a eliminar.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualización del curso al que pertenecía la clase.
+    """
+    if request.method == 'POST':
+        clase = get_object_or_404(Clase, id=clase_id)
+        clase.delete()
+
+        return redirect('visualizar-curso', curso_id=clase.curso.nrc)
 
 @login_required(login_url="/login")
 def crear_curso(request, codigo, periodo):
@@ -433,6 +460,101 @@ def programa(request, codigo, periodo):
         },
     )
 
+@login_required(login_url="/login")
+def primera_clase_programa(request, codigo, periodo):
+    """
+    Obtiene la primera clase de un programa académico para un periodo específico.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        codigo (str): El código del programa académico.
+        periodo (str): El periodo para el cual se obtendrá la primera clase.
+
+    Returns:
+        JsonResponse: Un JSON con la información de la primera clase del programa académico.
+    """
+
+    clases = Clase.objects.filter(curso__periodo__semestre=periodo, curso__materia__programas__codigo=codigo).distinct()
+    primera_clase = None
+
+    for clase in clases:
+        if not primera_clase or clase.fecha_inicio < primera_clase.fecha_inicio:
+            primera_clase = clase
+
+    if primera_clase:
+        return JsonResponse(
+            {
+                "curso": primera_clase.curso.materia.nombre,
+                "fecha_inicio": primera_clase.fecha_inicio,
+                "fecha_fin": primera_clase.fecha_fin,
+                "espacio": primera_clase.espacio.tipo,
+                "modalidad": primera_clase.modalidad.metodologia,
+                "total_clases": len(clases),
+            }
+        )
+    return JsonResponse(
+        {
+            "total_clases": len(clases)}
+    )
+
+@login_required(login_url="/login")
+def importar_malla(request, codigo, periodo):
+    """
+    Importa una malla curricular desde un periodo anterior al periodo actual.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        codigo (str): El código del programa académico.
+        periodo (str): El periodo actual.
+
+    Returns:
+        JsonResponse: Un objeto JSON con un mensaje de éxito si la malla curricular se importó correctamente,
+        o un objeto JSON con un mensaje de error si ocurrió un error al importar la malla curricular.
+    """
+    body = json.loads(request.body.decode('utf-8'))
+
+    primera_clase_actual = datetime.strptime(body.get("primera_clase_actual"), "%Y-%m-%d")
+    primera_clase_importar = datetime.strptime(body.get("primera_clase_importar"), "%Y-%m-%dT%H:%M:%SZ")
+    delta = (primera_clase_actual- primera_clase_importar).days
+    if delta % 7 != 0:
+        delta+=1
+    incluir_docentes = body.get("incluir_docentes")
+    periodo_importar = body.get("periodo_importar").split("/")[1]
+
+    MallaCurricular.objects.filter(
+        programa__codigo=codigo, periodo__semestre=periodo
+    ).delete()
+
+    try:
+        for malla_anterior in MallaCurricular.objects.filter(programa__codigo=codigo, periodo__semestre=periodo_importar).distinct():
+            MallaCurricular.objects.create(
+                materia=malla_anterior.materia,
+                programa=malla_anterior.programa,
+                periodo=Periodo.objects.get(semestre=periodo),
+                semestre=malla_anterior.semestre,
+            )
+            Curso.objects.filter(materia=malla_anterior.materia, periodo__semestre=periodo).distinct().delete()
+            for curso_anterior in Curso.objects.filter(materia=malla_anterior.materia,periodo=malla_anterior.periodo).distinct():
+                curso = Curso.objects.create(
+                    cupo=curso_anterior.cupo,
+                    grupo=curso_anterior.grupo,
+                    materia=curso_anterior.materia,
+                    periodo=Periodo.objects.get(semestre=periodo)
+                )
+                for clase_anterior in Clase.objects.filter(curso=curso_anterior).distinct().order_by('fecha_inicio'):
+                    Clase.objects.create(
+                        fecha_inicio=clase_anterior.fecha_inicio + timedelta(days=delta),
+                        fecha_fin=clase_anterior.fecha_fin + timedelta(days=delta),
+                        espacio=clase_anterior.espacio,
+                        curso=curso,
+                        modalidad=clase_anterior.modalidad,
+                        docente=clase_anterior.docente if incluir_docentes else None
+                    )
+    except:
+        return JsonResponse({"error": "Error al importar la malla curricular."})
+    return JsonResponse({"success": "Malla curricular importada exitosamente."})
+
+
 def actualizar_malla(request, codigo, periodo):
     """
     Actualiza la malla curricular de un programa académico para un periodo específico.
@@ -592,7 +714,8 @@ def args_principal(seleccionado):
     return {
         "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
         "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"},
-        "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
+        "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"},
+        "Solicitud": {"url": "/solicitud/crear_viatico", "seleccionado": seleccionado=="solicitud"}
     }
 
 @login_required(login_url="/login")
@@ -651,3 +774,142 @@ def obtener_modalidad(malla):
         except:
             continue
     return max(set(modalidades), key=modalidades.count)
+
+def render_pdf_from_html(html_content):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="programa.pdf"'
+
+    # Renderizar el HTML como PDF
+    pisa_status = pisa.CreatePDF(html_content, dest=response)
+
+    # Si ocurrió un error, mostrarlo
+    if pisa_status.err:
+        return HttpResponse('Error al generar el PDF: %s' % pisa_status.err, status=500)
+    return response
+
+def export_to_pdf(request, codigo_programa, periodo):
+    pensum = {}
+    docentes_con_clase = []
+    materias = []
+    cursos_totales = 0
+    creditos_totales = 0
+    programa = get_object_or_404(Programa, codigo=codigo_programa)
+    programa.modalidad = obtener_modalidad(MallaCurricular.objects.filter(programa__codigo=codigo_programa, periodo__semestre=periodo))
+    malla_curricular = MallaCurricular.objects.filter(programa__codigo=codigo_programa, periodo__semestre=periodo)
+
+    for malla in malla_curricular: 
+        materia = malla.materia
+        materia.num_clases = 0 
+        materia.num_clases_asignadas = 0
+        materia.num_cursos = 0
+        materias.append(materia)
+        cursos_totales += 1
+        creditos_totales += materia.creditos
+        materia.cursos = Curso.objects.filter(materia=materia, periodo__semestre=periodo)
+        docentes_con_clase+=Docente.objects.filter(clase__curso__materia=malla.materia, clase__curso__periodo__semestre=periodo).distinct()
+        if malla.semestre not in pensum.keys():
+            pensum[malla.semestre] = []
+        pensum[malla.semestre].append(materia)
+        for curso in materia.cursos:
+            materia.num_cursos += 1
+            curso.clases = Clase.objects.filter(curso=curso)
+            curso.num_clases = len(curso.clases)
+            materia.num_clases += curso.num_clases
+            materia.num_clases_asignadas += len(Clase.objects.filter(curso=curso, docente__isnull=False))
+        
+
+    programa.creditos = sum([materia.creditos for materia in materias])
+    programa.cursos_totales = cursos_totales
+    programa.docentes = docentes_con_clase
+    programa.creditos_totales = creditos_totales
+    programa.pensum = pensum
+
+    docentes = set()
+    for docente in docentes_con_clase:
+        docente.lista_materias = Materia.objects.filter(curso__clase__docente=docente).distinct()
+        docentes.add(docente)
+    
+    template = get_template('programa_pdf.html')
+    html_content = template.render({'programa': programa, 'periodo': periodo, 'materias': materias, 'docentes': docentes})
+
+    return render_pdf_from_html(html_content)
+
+def export_to_excel(request, codigo_programa, periodo):
+    programa = get_object_or_404(Programa, codigo=codigo_programa)
+    clases = []
+    total_horas_programadas = timedelta()
+
+    for malla in MallaCurricular.objects.filter(programa__codigo=codigo_programa, periodo__semestre=periodo): 
+        for curso in Curso.objects.filter(materia=malla.materia, periodo__semestre=periodo):
+            for clase in  Clase.objects.filter(curso=curso):
+                clase.programa = programa
+                clase.materia = malla.materia
+                clase.periodo = malla.periodo
+                clase.facultad = programa.facultad
+                clase.horas_programadas = clase.fecha_fin - clase.fecha_inicio
+                total_horas_programadas += clase.horas_programadas
+                clase.total_horas_programadas = total_horas_programadas
+                clases.append(clase)
+    data = {
+        'Código_Facultad': [],
+        'Nombre_Facultad': [],
+        'Código_Programa': [],
+        'Nombre_Programa': [],
+        'Código_Materia': [],
+        'Nombre_Materia': [],
+        'NRC': [],
+        'Grupo': [],
+        'Método_Educativo': [],
+        'Cupo_Materia': [],
+        'Número_Horas': [],
+        'Horas_Programadas': [],
+        "Número_Créditos": [],
+        "Cédula": [],
+        "Nombre_Profesor": [],
+        "Código_Contrato": [],
+        "Tipo_Contrato": [], 
+        "Fecha_Contrato": [],
+        "Estado_Contrato": [],
+        "Fecha_Inicio": [],
+        "Fecha_Fin": [], 
+        "HR_Inicio": [],
+        "HR_Fin": [],
+        "Espacio": [],
+
+    }
+    
+    for clase in clases:
+        data["Código_Facultad"].append(clase.facultad.id)
+        data["Nombre_Facultad"].append(clase.facultad.nombre)
+        data["Código_Programa"].append(clase.programa.codigo)
+        data["Nombre_Programa"].append(clase.programa.nombre)
+        data["Código_Materia"].append(clase.materia.codigo)
+        data["Nombre_Materia"].append(clase.materia.nombre)
+        data["NRC"].append(clase.curso.nrc)
+        data["Grupo"].append(clase.curso.grupo)
+        data["Método_Educativo"].append(clase.modalidad.metodologia)
+        data["Cupo_Materia"].append(clase.curso.cupo)
+        data["Número_Horas"].append(clase.horas_programadas)
+        data["Horas_Programadas"].append(clase.total_horas_programadas)
+        data["Número_Créditos"].append(clase.materia.creditos),
+        data["Cédula"].append(clase.docente.cedula if clase.docente else "No asignado")
+        data["Nombre_Profesor"].append(clase.docente.nombre if clase.docente else "No asignado")
+        data["Código_Contrato"].append(clase.docente.contrato_codigo.codigo if clase.docente else "")
+        data["Tipo_Contrato"].append(clase.docente.contrato_codigo.tipo_contrato.tipo if clase.docente else "-")
+        data["Fecha_Contrato"].append(clase.docente.contrato_codigo.fecha_elaboracion if clase.docente else "-")
+        data["Estado_Contrato"].append(clase.docente.contrato_codigo.estado.estado if clase.docente else "-")
+        data["Fecha_Inicio"].append(clase.fecha_inicio.replace(tzinfo=None).strftime("%Y-%m-%d") if clase.fecha_inicio else "-")
+        data["Fecha_Fin"].append(clase.fecha_fin.replace(tzinfo=None).strftime("%Y-%m-%d") if clase.fecha_fin else "-") 
+        data["HR_Inicio"].append(clase.fecha_inicio.replace(tzinfo=None).strftime("%H:%M") if clase.fecha_inicio else "-")
+        data["HR_Fin"].append(clase.fecha_fin.replace(tzinfo=None).strftime("%H:%M") if clase.fecha_fin else "-") 
+        data["Espacio"].append(clase.espacio_asignado.id if clase.espacio_asignado else "No asignado")
+
+
+    df = pd.DataFrame(data)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="programa.xlsx"'
+
+    df.to_excel(response, index=False)
+
+    return response

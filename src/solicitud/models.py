@@ -1,7 +1,7 @@
 from django.db import models
 
 from academico.models import Espacio
-
+from usuarios.models import Docente
 
 class TipoContable(models.Model):
     """
@@ -72,3 +72,16 @@ class SolicitudEspacio(Solicitud):
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
+
+class PropositoViaje(models.Model):
+    id = models.AutoField(primary_key=True)
+    proposito = models.CharField(max_length=128)
+
+class SolicitudViatico(Solicitud):
+    docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
+    fecha_ida = models.DateField()
+    fecha_vuelta = models.DateTimeField()
+    propositoViaje = models.ForeignKey(PropositoViaje, on_delete=models.CASCADE, to_field="id")
+    tiquete= models.BooleanField()
+    hospedaje= models.BooleanField()
+    alimentacion= models.BooleanField()

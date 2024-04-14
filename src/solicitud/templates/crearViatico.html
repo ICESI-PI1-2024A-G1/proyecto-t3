@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1 class="mt-2"> Solicitud de viaticos </h1>
+    </div>
+    <form id="classForm" method="POST" action="/solicitud/viaticos">
+        {% csrf_token %}
+        <div class="block card card-body mb-3 p-4" style="width: 100%;">
+            <div class="row">
+                <div class="col mr-2 ml-2" style="text-align: start;">
+                    <h5 strong>Invitado/Profesor*</strong>
+                    <select
+                        id="name"
+                        class="form-control mb-3"
+                        name="name"
+                    >
+                    <option value="">Docente</option>
+                    </select>
+                    <h5 strong>Nombre completo*</strong>
+                    <select
+                    id="docente_elegido"
+                    class="form-control mb-3"
+                    name="docente_elegido"
+                    >
+                    {% for docente in docentes %} 
+                    <option value="{{ docente.cedula }}" data-cedula="{{ docente.cedula }}" data-email="{{ docente.email }}">{{ docente.nombre }}</option>
+                    {% endfor %}
+                    </select>
+                    <h5 strong>Cedula*</strong>
+                        <input
+                            id="cedula"
+                            class="form-control mb-3"
+                            name="cedula"
+                            placeholder=""
+                            disabled
+                        >
+                    <h5 strong>Correo electrónico*</strong>
+                        <input
+                            id="email"
+                            class="form-control mb-3"
+                            name="email"
+                            placeholder=""
+                            disabled
+                        >
+                    <h5 strong>Propósito de viaje*</strong>
+                        <select
+                        id="propositoViaje"
+                        class="form-control mb-3"
+                        name="propositoViaje"
+                        >
+                        {% for propositoViaje in propositos %} 
+                        <option value="{{ propositoViaje.id }}">{{propositoViaje.proposito}}</option>
+                        {% endfor %}
+                        </select>
+                    <h5 strong>Descripción de la solicitud*</strong>
+                        <input
+                            type="text"
+                            id="desc"
+                            class="form-control mb-3"
+                            name="desc"
+                            placeholder=""
+                            required
+                        >
+                </div>
+                <div class="col mr-2 ml-5">
+                    <h5 strong>Fecha de viaje Ida</strong>
+                        <input
+                            type="datetime-local"
+                            id="ida"
+                            class="form-control mb-3"
+                            name="ida"
+                            placeholder=""
+                            required
+                        >
+                    <h5 strong>Fecha de viaje Vuelta</strong>
+                        <input
+                            type="datetime-local"
+                            id="vuelta"
+                            class="form-control mb-3"
+                            name="vuelta"
+                            placeholder=""
+                            required
+                        >
+                    <span id="error-message" style="color: red;"></span>
+                    <h5 strong>Tiquetes</strong>
+                        <select
+                        id="tiquetes"
+                        class="form-control mb-3"
+                        name="tiquetes"
+                        >
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
+                        </select>
+                    <h5 strong>Hospedaje</strong>
+                        <select
+                        id="hospedaje"
+                        class="form-control mb-3"
+                        name="hospedaje"
+                        >
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
+                        </select>
+                    <h5 strong>Alimentacion</strong>
+                        <select
+                        id="alimentacion"
+                        class="form-control mb-3"
+                        name="alimentacion"
+                        >
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
+                        </select>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Crear Viático</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('docente_elegido').addEventListener('change', function() {
+            var selectedIndex = this.selectedIndex;
+            var selectedOption = this.options[selectedIndex];
+            var cedula = selectedOption.getAttribute('data-cedula');
+            var email = selectedOption.getAttribute('data-email');
+            document.getElementById('cedula').value = cedula;
+            document.getElementById('email').value = email;
+
+            document.getElementById('cedula').placeholder = cedula;
+            document.getElementById('email').placeholder = email;
+        });
+    });
+</script>
+
+<script>
+    document.getElementById('classForm').addEventListener('submit', function(event) {
+      var ida_day = new Date(document.getElementById('ida').value);
+      var vuelta_day = new Date(document.getElementById('vuelta').value);
+      var difference = (vuelta_day - ida_day);
+      if (difference < 0) {
+        event.preventDefault();
+        // Si la fecha/hora de inicio es posterior a la fecha/hora de finalización, muestra un mensaje de error
+        document.getElementById('error-message').textContent = 'La fecha/hora de ida no puede ser posterior a la fecha/hora de vuelta del viaje.';
+      } else {
+        // Si la duración es válida, asegúrate de que el mensaje de error esté vacío
+        document.getElementById('error-message').textContent = '';
+      }
+    });
+    </script>
+{% endblock %}

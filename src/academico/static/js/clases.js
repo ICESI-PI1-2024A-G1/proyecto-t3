@@ -25,6 +25,8 @@ function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente) {
     docente_clase.value = docente;
 }
 
+
+
 function format_date(date){
     var dateF = new Date(convertirFormatoFecha(date));
     var formatted = dateF.getFullYear() + '-' +
@@ -66,4 +68,28 @@ function convertirFormatoFecha(fechaEnTexto) {
     var fechaFormateada = año + '-' + mes + '-' + dia + 'T' + hora + ':' + minutos + ':00';
 
     return fechaFormateada;
+}
+
+function confirmarEliminarClase(event, claseId) {
+    var confirmacion = confirm('¿Estás seguro de que quieres eliminar esta clase?');
+    if (confirmacion) {
+        eliminarClase(claseId);
+    }
+}
+
+function eliminarClase(claseId) {
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = "/academico/clases/" + claseId + "/eliminar";
+    
+    // Añade el token CSRF a la petición
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'csrfmiddlewaretoken';
+    input.value = csrfToken;
+    form.appendChild(input);
+    
+    document.body.appendChild(form);
+    form.submit();
 }

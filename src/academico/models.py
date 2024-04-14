@@ -1,6 +1,6 @@
 from django.db import models
 
-from usuarios.models import Director, Docente
+from usuarios.models import Director, Docente, Persona
 
 
 class EstadoSolicitud(models.Model):
@@ -222,7 +222,7 @@ class Clase(models.Model):
         modalidad (ForeignKey): Modalidad de enseñanza de la clase.
         espacio (ForeignKey): Espacio físico de la clase.
     """
-    
+
     id = models.AutoField(primary_key=True)
     fecha_inicio = models.DateTimeField(null=True)
     fecha_fin = models.DateTimeField(null=True)
@@ -231,3 +231,30 @@ class Clase(models.Model):
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, to_field="id")
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE, null=True, blank=True)
+
+
+class Estudiante(Persona):
+    """
+    Modelo para representar a los estudiantes.
+
+    Atributos:
+        codigo (CharField): Código del estudiante.
+    """
+    codigo = models.CharField(max_length=30, unique=True)
+    programa = models.ForeignKey(Programa, on_delete=models.CASCADE, to_field="codigo")
+    periodo_inscripcion = models.ForeignKey(Periodo, on_delete=models.CASCADE, to_field="semestre")
+    cursos = models.ManyToManyField(Curso, through="Inscripcion")
+    
+class Inscripcion(models.Model):
+    """
+    Modelo para representar las inscripciones de los estudiantes.
+
+    Atributos:
+        estudiante (CharField): Código del estudiante.
+        fecha_inscripcion (DateField): Fecha de inscripción del estudiante.
+    """
+
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, to_field="codigo")
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="nrc")
+
+
