@@ -541,10 +541,9 @@ def enviar_para_aprobacion(request, codigo, periodo):
 
             html_content = get_template('aprobacion_email.html').render({
                 'programa': programa,
-                'comentarios': body["comentarios"].split("<br>") if "<br>" in body["comentarios"] else [body["comentarios"]],
+                'comentarios': body["comentarios"].replace("&nbsp;", " ").split("<br>") if "<br>" in body["comentarios"] else [body["comentarios"]],
                 'url': request.build_absolute_uri(reverse('programa', kwargs={'codigo': codigo, 'periodo': periodo})),
             })
-            print("hola")
             if pdf_content:
                 # Crear el correo electrónico
                 subject = f"REVISIÓN DEL PROGRAMA - {programa.nombre}"
