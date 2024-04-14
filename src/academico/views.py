@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import random
@@ -5,14 +6,16 @@ from collections import Counter
 from datetime import datetime, timedelta
 
 import pandas as pd
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.db.models import Count, Q
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
 from django.templatetags.static import static
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -20,13 +23,10 @@ from xhtml2pdf import pisa
 
 from ccsa_project import settings
 
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.conf import settings
-
 from .forms import MateriaForm
-from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
+from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud,
+                     Estudiante, Facultad, GrupoDeClase, MallaCurricular,
+                     Materia, Modalidad, Periodo, Programa)
 
 
 @login_required(login_url="/login")
@@ -68,7 +68,9 @@ def crear_clase(request, curso_id):
         if docente_cedula is not None and docente_cedula != "None":            
             docente = Docente.objects.get(cedula=docente_cedula)
         else:
-            docente = None  
+            docente = None
+            
+        grupo_clases = GrupoDeClase.objects.create()
 
         for _ in range(num_semanas):
             clase = Clase.objects.create(
@@ -78,10 +80,11 @@ def crear_clase(request, curso_id):
                 curso_id=curso_id,
                 espacio_id=tipo_espacio,
                 modalidad_id=modalidad_clase,
-                docente = docente
+                docente = docente,
+                grupo_clases = grupo_clases
             )
             start_day += timedelta(days=7)
-            end_day += timedelta(days=7)   
+            end_day += timedelta(days=7)
 
         return redirect("visualizar-curso", curso_id=curso_id)
     else:
@@ -116,14 +119,15 @@ def editar_clase(request, clase_id):
     """
     clase = get_object_or_404(Clase,id=clase_id)
     if request.method == "POST":
-        fecha_inicio = request.POST.get("fecha_inicio")
-        fecha_fin = request.POST.get("fecha_fin")
+        fecha_inicio = datetime.strptime(request.POST.get("fecha_inicio"), "%Y-%m-%dT%H:%M")
+        fecha_fin = datetime.strptime(request.POST.get("fecha_fin"), "%Y-%m-%dT%H:%M")
         tipo_espacio_id = request.POST.get("tipo_espacio_e")
         modalidad_id = request.POST.get("modalidad_clase_e")
         docente_cedula = request.POST.get("docente_clase_e")
+        editar_relacionadas = request.POST.get("editar_relacionadas_e")
 
         if (fecha_inicio==None or fecha_fin==None or tipo_espacio_id==None or modalidad_id==None):
-             raise Http404("Todos los campos son requeridos.")
+            raise Http404("Todos los campos son requeridos.")
 
         try:
             tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)       
@@ -134,35 +138,58 @@ def editar_clase(request, clase_id):
             modalidad = Modalidad.objects.get(id=modalidad_id)    
         except (Modalidad.DoesNotExist):
             raise Http404("Modalidad no existe.")
-        
+
         if docente_cedula is not None and docente_cedula != "None":
             try:
                 docente = Docente.objects.get(cedula=docente_cedula)
-                
+
             except (Docente.DoesNotExist):
                 raise Http404("Docente no existe.")
         else:
             docente = None
-            
-        
+
+        old_date = clase.fecha_inicio
+
         clase.fecha_inicio = fecha_inicio
         clase.fecha_fin = fecha_fin
         clase.espacio = tipo_espacio
         clase.modalidad = modalidad
         clase.docente = docente
         clase.save()
-        
-        
-        # Extracting just the date part from the datetime objects
-        fecha_inicio_str = clase.fecha_inicio[:10]
 
+        if editar_relacionadas:
+            for clase_i in Clase.objects.filter(grupo_clases=clase.grupo_clases):
+                clase.fecha_inicio
+                if clase_i.fecha_inicio > old_date:
+                    fecha_inicio+=timedelta(days=7)
+                    fecha_fin+=timedelta(days=7)
+                    clase_i.fecha_inicio = fecha_inicio
+                    clase_i.fecha_fin = fecha_fin
+                    clase_i.espacio = tipo_espacio
+                    clase_i.modalidad = modalidad
+                    clase_i.docente = docente
+                    clase_i.save()
+
+        
+        #Estudiantes
+        estudiantes = Estudiante.objects.filter(cursos = clase.curso)
+        to_email = [] # List of recipients
+        for es in estudiantes:
+            to_email.append(es.email)
+        # Extracting just the date part from the datetime objects
+        fecha_inicio_str = clase.fecha_inicio.date()
 
         # Extracting just the time part from the datetime objects
-        hora_inicio_str = clase.fecha_inicio[11:]
-        hora_fin_str = clase.fecha_fin[11:]
-
+        hora_inicio_str = clase.fecha_inicio.time()
+        hora_fin_str = clase.fecha_fin.time()
 
         subject = f"{clase.id} class change"
+        
+        if(clase.docente is not None):
+            nombre_docente = clase.docente.nombre
+            to_email.append(clase.docente.email)  # List of recipients
+        else:
+            nombre_docente = "N/A"
 
         # Rendering the message using an HTML template
         html_message = render_to_string('email_template.html', {
@@ -170,18 +197,17 @@ def editar_clase(request, clase_id):
             'tipo_espacio': clase.espacio.tipo,
             'espacio_asignado': clase.espacio_asignado,
             'metodologia': clase.modalidad.metodologia,
-            'nombre_docente': clase.docente.nombre,
+            'nombre_docente': nombre_docente,
             'hora_inicio': hora_inicio_str,
             'hora_fin': hora_fin_str,
         })
 
-        from_email = 'juanseg201@gmail.com'
-        to_email = [clase.docente.email]  # List of recipients
+        from_email = settings.EMAIL_HOST_USER
 
         # Sending the email with both plain text and HTML content
         if(to_email is not None):
             send_mail(subject, html_message, from_email, to_email, html_message=html_message)
-        
+
     return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 # Create your views here.
 
@@ -422,8 +448,19 @@ def programa(request, codigo, periodo):
     creditos_totales = 0
     cursos_totales = 0
     docentes_con_clase = []
+    programa.total_grupos = len(Curso.objects.filter(periodo__semestre=periodo, materia__programas__codigo=codigo).distinct())
+    programa.total_clases_docente = len(Clase.objects.filter(curso__materia__programas__codigo=codigo, curso__periodo__semestre=periodo, docente__isnull=False).distinct())
+    programa.total_clases = len(Clase.objects.filter(curso__materia__programas__codigo=codigo, curso__periodo__semestre=periodo).distinct())
+    programa.porcentaje_clases_docente = int((programa.total_clases_docente/programa.total_clases)*100 if programa.total_clases > 0 else 0)
+    programa.lista_materias = "Materias del pensum:\n\n"
+
+    programa.lista_cursos_incompletos = Curso.objects.filter(periodo__semestre=periodo, materia__programas__codigo=codigo, clase__docente__isnull=True).distinct()
+    programa.cursos_incompletos = "Cursos incompletos:\n\n"
+    for curso in programa.lista_cursos_incompletos:
+        programa.cursos_incompletos += f"{curso.materia.nombre} - Grupo {curso.grupo}\n"
 
     for materia in materias:
+        programa.lista_materias += f"{materia.materia.nombre} - Semestre {materia.semestre}\n"
         materia.materia.color = color_suave()
         creditos_totales += materia.materia.creditos
         cursos_totales += 1
@@ -434,12 +471,11 @@ def programa(request, codigo, periodo):
         malla_curricular[materia.semestre].append(materia.materia)
 
     semestres = len(malla_curricular.keys())
-    
+
     docentes = set()
     for docente in docentes_con_clase:
         docente.lista_materias = Materia.objects.filter(curso__clase__docente=docente).distinct()
         docentes.add(docente)
-    
 
     return render(
         request,
@@ -496,6 +532,67 @@ def primera_clase_programa(request, codigo, periodo):
         {
             "total_clases": len(clases)}
     )
+
+def render_pdf(html_content):
+    """
+    Renderiza HTML como PDF y devuelve un objeto HttpResponse con el PDF.
+    """
+    result = io.BytesIO()
+    pdf = pisa.pisaDocument(io.BytesIO(html_content.encode("UTF-8")), result)
+    if not pdf.err:
+        return result.getvalue()
+    print(pdf.err)
+    return None
+
+@login_required(login_url="/login")
+def enviar_para_aprobacion(request, codigo, periodo):
+    """
+    Envía una solicitud de aprobación de un programa académico.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        codigo (str): El código del programa académico.
+        periodo (str): El periodo para el cual se enviará la solicitud de aprobación.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualización del programa académico.
+    """
+    try:
+        if request.method == "POST":
+            body = json.loads(request.body.decode('utf-8'))
+            programa = get_object_or_404(Programa, codigo=codigo)
+
+            # Generar el PDF
+            template = get_template('programa_pdf.html')
+            pdf_content = render_pdf(template.render(export_program_data(codigo, periodo)))
+
+            html_content = get_template('aprobacion_email.html').render({
+                'programa': programa,
+                'comentarios': body["comentarios"].replace("&nbsp;", " ").split("<br>") if "<br>" in body["comentarios"] else [body["comentarios"]],
+                'url': request.build_absolute_uri(reverse('programa', kwargs={'codigo': codigo, 'periodo': periodo})),
+            })
+            if pdf_content:
+                # Crear el correo electrónico
+                subject = f"REVISIÓN DEL PROGRAMA - {programa.nombre}"
+                message = body["comentarios"]
+                from_email = settings.EMAIL_HOST_USER
+                to_email = [programa.director.email]
+
+                # Adjuntar el PDF al correo electrónico
+                email = EmailMultiAlternatives(subject, message, from_email, to_email)
+                email.attach_alternative(html_content, "text/html")
+                email.attach("programa.pdf", pdf_content, "application/pdf")
+
+                # Enviar el correo electrónico
+                email.send()
+
+                # Actualizar el estado del programa
+                programa.estado_solicitud = EstadoSolicitud.objects.get(nombre="Por aprobar")
+                programa.save()
+
+        return redirect("programa", codigo=codigo, periodo=periodo)
+    except Exception as e:
+        raise Http404("Error al enviar la solicitud de aprobación.")
 
 @login_required(login_url="/login")
 def importar_malla(request, codigo, periodo):
@@ -731,7 +828,7 @@ def visualizacion_curso(request, curso_id):
         HttpResponse: La respuesta HTTP que muestra la visualización del curso.
     """
     curso = get_object_or_404(Curso, nrc=curso_id)
-    clases = Clase.objects.filter(curso=curso).select_related('docente')
+    clases = Clase.objects.filter(curso=curso).select_related('docente').order_by('fecha_inicio')
     docentes_con_clases = Docente.objects.filter(clase__curso=curso).distinct()
     for docente in docentes_con_clases:
         docente.num_clases = len(Clase.objects.filter(docente=docente, curso=curso))
@@ -787,7 +884,7 @@ def render_pdf_from_html(html_content):
         return HttpResponse('Error al generar el PDF: %s' % pisa_status.err, status=500)
     return response
 
-def export_to_pdf(request, codigo_programa, periodo):
+def export_program_data(codigo_programa, periodo):
     pensum = {}
     docentes_con_clase = []
     materias = []
@@ -816,7 +913,6 @@ def export_to_pdf(request, codigo_programa, periodo):
             curso.num_clases = len(curso.clases)
             materia.num_clases += curso.num_clases
             materia.num_clases_asignadas += len(Clase.objects.filter(curso=curso, docente__isnull=False))
-        
 
     programa.creditos = sum([materia.creditos for materia in materias])
     programa.cursos_totales = cursos_totales
@@ -828,9 +924,18 @@ def export_to_pdf(request, codigo_programa, periodo):
     for docente in docentes_con_clase:
         docente.lista_materias = Materia.objects.filter(curso__clase__docente=docente).distinct()
         docentes.add(docente)
-    
+
+    return {
+        "programa": programa,
+        "periodo": periodo,
+        "materias": materias,
+        "docentes": docentes,
+    }
+
+
+def export_to_pdf(request, codigo_programa, periodo):
     template = get_template('programa_pdf.html')
-    html_content = template.render({'programa': programa, 'periodo': periodo, 'materias': materias, 'docentes': docentes})
+    html_content = template.render(export_program_data(codigo_programa, periodo))
 
     return render_pdf_from_html(html_content)
 

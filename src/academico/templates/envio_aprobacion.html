@@ -1,0 +1,31 @@
+{% extends "popup.html" %} {% block content %}
+
+{% csrf_token %}
+
+<!-----Alinear todo el contenido del div a la izquierda-->
+{% if programa.estado_solicitud.nombre == "Por aprobar"%}
+<div class="alert-danger mt-1 rounded" style="text-align: center; display: block;">El director de programa ya fue notificado para realizar las revisiones</div>
+{% endif %}
+<div style="text-align: left;">
+    <h2 class="h4">Estado del programa:</h2>
+    
+
+    <p id="pp-cantidad-docente" class="ml-4"><strong class="h5">Cantidad total de docentes: </strong>{{total_docentes}}</p>
+    <p id="pp-cantidad-cursos" class="ml-4"><strong class="h5">Cantidad total de cursos: </strong>{{programa.total_grupos}}</p>
+    <p id="pp-cantidad-materias" class="ml-4" title="{{programa.lista_materias}}"><strong class="h5">Cantidad total de materias: </strong>{{cursos_totales}}</p>
+    <p id="pp-clases-docente" class="ml-4" title="{{programa.cursos_incompletos}}"><strong class="h5">Porcentaje de clases con docente: </strong>{{programa.porcentaje_clases_docente}}%</p>
+    
+    <h2 class="h4">Comentarios:</h2>
+    <div id="pp-comentarios" class="editor_atto_content form-control" contenteditable="true" role="textbox" spellcheck="true" aria-live="off" aria-labelledby="id_description_label"></div>
+
+    <div class="row" style="justify-content: center;">
+        <hr class="w-75">
+    </div>
+
+    <div id="form-state-aprobacion" class="alert-warning mt-1 rounded" style="text-align: center; display: block;">El director de programa será notificado.</div>
+
+    <div class="form-inline row mt-3" style="justify-content: center;">
+        <button id="submit-aprobacion" class="btn btn-primary mt-2" onclick="enviar_para_aprobacion()">Confirmar envío</button>
+    </div>
+</div>
+{% endblock %}

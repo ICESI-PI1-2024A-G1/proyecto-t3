@@ -1,10 +1,27 @@
-<div id="popup" style="display: none">
+<div id="popup{{popup_id}}" style="display: none">
   <div class="modal moodle-has-zindex show background-shadow">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">  <!-- Aquí está el cambio -->
+    <div class="modal-dialog modal-dialog-scrollable modal-{{size}}">
       <div class="modal-content">
-        <div class="popup-content form-group">
+        {% if popup_title %}
+        <div class="modal-header">
+          <h5 class="modal-title">{{popup_title}}</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            onclick="hide('{{popup_id}}')"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
 
-          <span class="close" onclick="hide()"></span>
+        <div class="modal-body">
+        {%else%}
+
+        <div class="popup-content form-group">
+          <span class="close" onclick="hide('{{popup_id}}')"></span>
+        {%endif%}
           {% block content %} {% endblock %}
         </div>
       </div>

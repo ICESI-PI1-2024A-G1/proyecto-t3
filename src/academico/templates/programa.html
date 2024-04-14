@@ -6,32 +6,34 @@
   <script src="{% static 'js/programa.js' %}"></script>
   <script src="{% static 'js/popup.js' %}"></script>
 </head>
-<div class="container" style="text-align: start;">
+<div class="container" style="text-align: start; font-size: small;">
 
   <h2 class="mt-2"><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
   <label class="col ml-3"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
   <label class="col ml-3"><strong>Créditos totales:</strong> {{ creditos_totales }}</label>
   <label class="col ml-3"><strong>Cursos totales:</strong> {{ cursos_totales }}</label>
   <div class="row">
+    {% include 'envio_aprobacion.html' with popup_id=2 popup_title="Enviar para revisión"%}
     <div class="row align-items-center">
       <div class="col card block inner-shadow p-3 mr-2">
         <div class="row align-items-center">
           <img class="rounded" src="{% static 'img/d_AndresFelipeGalloSarria.jpg' %}" style="width: 20%; height: 20%;">
-          <div class="col">
-            <label class="row m-3" style="text-align: start;"><strong>Director: </strong> &nbsp; {{ programa.director.nombre }}</label>
-            <label class="row m-3" style="text-align: start;"><strong>Email: </strong> &nbsp; {{ programa.director.email }}</label>
-            <label class="row m-3" style="text-align: start;"><strong>Teléfono: </strong> &nbsp; {{ programa.director.telefono }}</label>
-          </div>
-          <div class="col-2 h-100">
-            <a class="btn btn-primary h-100" title="Enviar para aprobación">
-              <img class="icon" src="{% static 'img/email.png' %}">
-            </a>
+          <div class="ml-3">
+            <label class="row" style="text-align: start;"><strong>Director: </strong> &nbsp; {{ programa.director.nombre }}</label>
+            <label class="row" style="text-align: start;"><strong>Email: </strong> &nbsp; {{ programa.director.email }}</label>
+            <label class="row" style="text-align: start;"><strong>Teléfono: </strong> &nbsp; {{ programa.director.telefono }}</label>
           </div>
         </div>
         <div class="row align-items-center">
           <strong class="mr-2">Estado:</strong>
           <progress class="rui-tooltip--bottom" data-title="{{programa.estado_solicitud.nombre}}"min="1" max="4" value={{programa.estado_solicitud.estado}}>este es un elemento de progreso no soportado por tu navegador, prueba con otro</progress>
         </div>
+        <div class="mt-2 w-100">
+            <a class="btn btn-warning h-100 w-100" title="Enviar para aprobación" onclick="show(2)">
+              Enviar para revisión
+              <img class="icon" src="{% static 'img/email.png' %}">
+            </a>
+          </div>
       </div>
       <div class="col card block inner-shadow  p-3 pt-4 pb-3 ml-2">
         <div class="row align-items-center">
@@ -93,7 +95,7 @@
     </div>
   </div>
   <!-- Tabla de materias -->
-  {%include 'importar_malla.html'%}  
+  {%include 'importar_malla.html' with popup_id=1 popup_title="Importar malla"%}
   <div class="block card card-body mt-3 inner-shadow">
     <div class="form-inline">
       <div class="col">
@@ -102,7 +104,7 @@
         <strong>Malla curricular</strong>
       </div>
       <div class="justify-content-end">
-        <button class="btn btn-primary mr-2" onclick="show()">Importar malla</button>
+        <button class="btn btn-primary mr-2" onclick="show(1)">Importar malla</button>
         Periodo selecionado:
         <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
               {% for periodo in periodos %} 

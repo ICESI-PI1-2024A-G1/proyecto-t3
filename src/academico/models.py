@@ -208,6 +208,17 @@ class Curso(models.Model):
     class Meta:
         unique_together = ('grupo', 'materia','periodo')
 
+class GrupoDeClase(models.Model):
+    """
+    Modelo para representar los grupos de clase.
+
+    Atributos:
+        id (AutoField): Identificador único del grupo de clase.
+        nombre (CharField): Nombre descriptivo del grupo de clase.
+        clases (ManyToManyField): Clases asociadas al grupo de clase.
+    """
+
+    id = models.AutoField(primary_key=True)
 
 class Clase(models.Model):
     """
@@ -231,6 +242,8 @@ class Clase(models.Model):
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, to_field="id")
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE, null=True, blank=True)
+    grupo_clases = models.ForeignKey(GrupoDeClase, on_delete=models.CASCADE, null=True, blank=True)
+
 
 
 class Estudiante(Persona):

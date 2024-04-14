@@ -94,26 +94,7 @@ function eliminarClase(claseId) {
     form.submit();
 }
 
-function Solicitud_Salones(event, cursoNrc){
-    var confirmacion = confirm('¿Estás seguro de que quieres solicitar los salones para este curso?');
-    if (confirmacion) {
-        solicitarSalon(cursoNrc);
-    }
-}
-
-function solicitarSalon(cursoNrc) {
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = "/academico/clases/solicitar_salones/" + cursoNrc;
-    
-    // Añade el token CSRF a la petición
-    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'csrfmiddlewaretoken';
-    input.value = csrfToken;
-    form.appendChild(input);
-    
-    document.body.appendChild(form);
-    form.submit();
+function cambiar_checkbox_edicion(){
+    var checkbox = document.getElementById("editar_relacionadas_e");
+    checkbox.checked = !checkbox.checked;
 }
