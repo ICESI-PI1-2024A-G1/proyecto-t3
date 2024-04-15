@@ -58,15 +58,27 @@ ROOT_URLCONF = 'ccsa_project.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
+            os.path.join(BASE_DIR, "academico/templates/"),
+            os.path.join(BASE_DIR, "academico/templates/cursos"),
+            os.path.join(BASE_DIR, "academico/templates/email"),
+            os.path.join(BASE_DIR, "academico/templates/home"),
+            os.path.join(BASE_DIR, "academico/templates/popup"),
+            os.path.join(BASE_DIR, "academico/templates/programa"),
+            os.path.join(BASE_DIR, "academico/templates/sidebar"),
+            os.path.join(BASE_DIR, "usuarios/templates"),
+            os.path.join(BASE_DIR, "permisos/templates"),
+            os.path.join(BASE_DIR, "solicitud/templates"),
+        ],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
