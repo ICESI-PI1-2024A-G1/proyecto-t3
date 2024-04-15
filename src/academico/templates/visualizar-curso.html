@@ -78,6 +78,11 @@
             <div class="card">
                 <div class="card-body">
                     <h1 class="card-title bg-primary p-2 mb-4 text-white">Clases</h1>
+
+                    <div class="d-flex justify-content-center">
+                      <button type="button" class="btn btn-primary mt-2 w-30" onclick="seleccionarTodasLasClases()">Seleccionar todas las clases</button>
+                    </div>
+
                     <div class="clases-container" style="display: flex; flex-wrap: wrap;">
                         {% if clases.count == 0 %}
                         <div class="alert alert-warning w-100" role="alert">
@@ -95,13 +100,15 @@
                                 <div class="card-body">
 
                                     <div class="row row justify-content-center align-items-center">
-                                        <h5 class="card-title flex-grow-1 text-center">Clase {{ forloop.counter }} - Grupo de clase {{clase.grupo_clases.id}} </h5>
-                                        <img id="{{clase.id}}" src="{% static 'img/pencil.png' %}" class="icon btn" onclick="show_pop(event,'{{clase.fecha_inicio}}', '{{clase.fecha_fin}}','{{clase.espacio_asignado}}','{{clase.espacio.id}}','{{clase.modalidad.id}}' ,'{{clase.docente.cedula}}')">
+                                      <h5 class="card-title flex-grow-1 text-center">Clase {{ forloop.counter }} - Grupo de clase {{clase.grupo_clases.id}} </h5>
                                     </div>
 
-                                    <div class="row row justify-content-center align-items-center">
-                                      <h5 class="card-title flex-grow-1 text-center"></h5>
+                                    <div class="d-flex flex-column align-items-end">
+                                      <img id="{{clase.id}}" src="{% static 'img/pencil.png' %}" class="icon btn" onclick="show_pop(event,'{{clase.fecha_inicio}}', '{{clase.fecha_fin}}','{{clase.espacio_asignado}}','{{clase.espacio.id}}','{{clase.modalidad.id}}' ,'{{clase.docente.cedula}}')">
                                       <img id="{{clase.id}}" src="{% static 'img/Eliminar.png' %}" class="icon btn" onclick="confirmarEliminarClase(event, '{{clase.id}}')">
+                                      <div class="form-check" style="margin-top: 1px;">
+                                        <input class="form-check-input clase-checkbox" type="checkbox" value="{{clase.id}}" id="clase{{clase.id}}" style="transform: scale(1.5);">
+                                      </div>
                                     </div>
 
                                     <p class="card-text">
@@ -140,7 +147,7 @@
                         {% endfor %}
                     </div>
                       <div class="d-flex justify-content-center">
-                          <a class="btn btn-primary mt-2 w-100"  onclick="Solicitud_Salones(event, '{{curso.nrc}}')">Solicitar Salones<img class="icon" src="{% static 'img/Solicitud.png' %}"></a>
+                          <button class="btn btn-primary mt-2 w-100"  onclick="Solicitud_Salones(event, '{{curso.nrc}}')">Solicitar Salones<img class="icon" src="{% static 'img/Solicitud.png' %}"></button
                       </div>
                 </div>
             </div>
@@ -284,11 +291,22 @@
         });
 </script>
 
+<script>
+  function seleccionarTodasLasClases() {
+    var checkboxes = document.querySelectorAll('.clase-checkbox');
+    checkboxes.forEach(function(checkbox) {
+      checkbox.checked = true;
+    });
+  }
+</script>
+
 
 
 {% endblock %}
 
 {% block extra_js %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script src="{% static 'academico/js/popup.js' %}"></script>
 {% endblock %}
-
