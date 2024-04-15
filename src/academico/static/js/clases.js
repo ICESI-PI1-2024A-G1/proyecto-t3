@@ -98,3 +98,19 @@ function cambiar_checkbox_edicion(){
     var checkbox = document.getElementById("editar_relacionadas_e");
     checkbox.checked = !checkbox.checked;
 }
+
+function Solicitud_Salones(event, cursoNrc){
+    var confirmacion = confirm('¿Estás seguro de que quieres solicitar los salones para este curso?');
+    if (confirmacion) {
+        solicitarSalon(cursoNrc);
+    }
+}
+
+function solicitarSalon(cursoNrc) {
+    var checkboxes = document.querySelectorAll('.clase-checkbox');
+    var clasesSeleccionadas = Array.from(checkboxes).map(function(checkbox) {
+        return checkbox.checked;
+    });
+    console.log(clasesSeleccionadas);
+        
+}

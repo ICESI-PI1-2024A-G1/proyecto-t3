@@ -29,6 +29,21 @@ from .models import (Clase, Curso, Docente, Espacio, EstadoSolicitud,
                      Materia, Modalidad, Periodo, Programa)
 
 
+
+@login_required(login_url="/login")
+def solicitar_salones(request, curso_id):
+    """
+    Vista que permite solicitar salones para las clases de un curso.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+
+    Returns:
+        HttpResponse: La respuesta HTTP que muestra la página de solicitud de salones.
+    """
+    curso = get_object_or_404(Curso, nrc=curso_id)
+    #Solicitud.objects.create(curso=curso, tipo="Salones")
+
 @login_required(login_url="/login")
 def crear_clase(request, curso_id):
     """
