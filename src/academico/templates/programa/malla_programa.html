@@ -22,10 +22,12 @@
                 {% endfor %}
             </select>
         </div>
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary btn--disabled" id="btn-guardar" disabled="true" onclick="enviar_malla()">
-            Guardar cambios
-        </button>
+        {% if user.is_staff %}
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn--disabled" id="btn-guardar" disabled="true" onclick="enviar_malla()">
+                Guardar cambios
+            </button>
+        {% endif %}
     </div>
 
     <!-- Tabla de malla -->
@@ -52,7 +54,11 @@
                 <td onclick="window.location.href ='/academico/materias/{{materia.materia.codigo}}/{{periodo_seleccionado}}'">{{ materia.materia.creditos }}</td>
                 <td onclick="window.location.href ='/academico/materias/{{materia.materia.codigo}}/{{periodo_seleccionado}}'">{{ materia.materia.departamento.nombre }}</td>
                 <td>
+                    {% if user.is_staff %}
                     <select class="custom-select mr-2" id="{{materia.materia.codigo}}"onchange="activar_guardar(event)">
+                    {% else %}
+                    <select class="custom-select mr-2" id="{{materia.materia.codigo}}"disabled>
+                    {% endif %}
                         {% for semestre in semestres %}
                         {% if materia.semestre == semestre %}
                         <option value="{{semestre}}" selected="true">{{ semestre }}</option>

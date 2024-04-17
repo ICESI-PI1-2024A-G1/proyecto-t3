@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
@@ -22,6 +22,7 @@ from .common import args_principal, color_suave, obtener_modalidad
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.has_perm('academico.view_programa'))
 def programas(request):
     """
     Vista para mostrar la lista de programas académicos.
@@ -40,6 +41,8 @@ def programas(request):
         None
     """
     programas = Programa.objects.all()
+    
+    request.user.is_director = request.user.groups.filter(name='directores').exists()
 
     # Búsqueda y filtrado
     if request.method == "GET":
@@ -93,11 +96,13 @@ def programas(request):
             "estados": estados,
             "side": "sidebar_principal.html",
             "side_args": args_principal("programas"),
+            "user": request.user,
         },
     )
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.has_perm('academico.view_programa'))
 def programa(request, codigo, periodo):
     """
     Renderiza la plantilla 'programa.html' con información del programa y datos del currículo.
@@ -121,6 +126,9 @@ def programa(request, codigo, periodo):
             - 'modalidad': La modalidad del currículo.
 
     """
+    
+    request.user.is_director = request.user.groups.filter(name='directores').exists()
+    
     programa = get_object_or_404(Programa, codigo=codigo)
     materias = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
@@ -205,11 +213,13 @@ def programa(request, codigo, periodo):
             "total_docentes": len(docentes),
             "side": "sidebar_programa.html",
             "modalidad": obtener_modalidad(materias),
+            "user": request.user,
         },
     )
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.has_perm("academico.add_programa"))
 def primera_clase_programa(request, codigo, periodo):
     """
     Obtiene la primera clase de un programa académico para un periodo específico.
@@ -259,6 +269,7 @@ def render_pdf(html_content):
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.has_perm("academico.add_programa"))
 def enviar_para_aprobacion(request, codigo, periodo):
     """
     Envía una solicitud de aprobación de un programa académico.
@@ -324,6 +335,7 @@ def enviar_para_aprobacion(request, codigo, periodo):
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.has_perm("academico.add_programa"))
 def importar_malla(request, codigo, periodo):
     """
     Importa una malla curricular desde un periodo anterior al periodo actual.
@@ -396,6 +408,8 @@ def importar_malla(request, codigo, periodo):
     return JsonResponse({"success": "Malla curricular importada exitosamente."})
 
 
+@login_required(login_url="/login")
+@user_passes_test(lambda u: u.has_perm("academico.add_programa"))
 def actualizar_malla(request, codigo, periodo):
     """
     Actualiza la malla curricular de un programa académico para un periodo específico.
@@ -431,6 +445,7 @@ def actualizar_malla(request, codigo, periodo):
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.has_perm("academico.view_programa"))
 def malla_curricular(request, codigo, periodo):
     """
     Función de vista para mostrar la malla curricular de un programa.
@@ -539,12 +554,17 @@ def export_program_data(codigo_programa, periodo):
     }
 
 
+@login_required(login_url="/login")
+@user_passes_test(lambda u: u.has_perm("academico.view_programa"))
 def export_to_pdf(request, codigo_programa, periodo):
     template = get_template('programa_pdf.html')
     html_content = template.render(export_program_data(codigo_programa, periodo))
 
     return render_pdf_from_html(html_content)
 
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: u.has_perm("academico.view_programa"))
 def export_to_excel(request, codigo_programa, periodo):
     programa = get_object_or_404(Programa, codigo=codigo_programa)
     clases = []
