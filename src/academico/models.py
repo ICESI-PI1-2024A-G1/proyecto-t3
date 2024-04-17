@@ -220,6 +220,25 @@ class GrupoDeClase(models.Model):
 
     id = models.AutoField(primary_key=True)
 
+class EspacioClase(models.Model):
+    """
+    Modelo para representar los espacios físicos.
+
+    Atributos:
+        id (AutoField): Identificador único del espacio.
+        tipo (CharField): Tipo de espacio (aula, laboratorio, etc.).
+        capacidad (IntegerField): Capacidad máxima del espacio.
+    """
+
+    id = models.AutoField(primary_key=True)
+    tipo = models.ForeignKey(Espacio, on_delete=models.CASCADE)
+    edificio = models.CharField(max_length=255)
+    numero = models.IntegerField()
+
+    class Meta:
+        unique_together = ("edificio", "numero")
+
+
 class Clase(models.Model):
     """
     Modelo para representar las clases.
@@ -237,13 +256,12 @@ class Clase(models.Model):
     id = models.AutoField(primary_key=True)
     fecha_inicio = models.DateTimeField(null=True)
     fecha_fin = models.DateTimeField(null=True)
-    espacio_asignado = models.CharField(max_length=255, null=True)
+    espacio_asignado = models.ForeignKey(EspacioClase, on_delete=models.CASCADE, null=True, blank=True)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="nrc")
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, to_field="id")
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE, null=True, blank=True)
     grupo_clases = models.ForeignKey(GrupoDeClase, on_delete=models.CASCADE, null=True, blank=True)
-
 
 
 class Estudiante(Persona):
@@ -257,7 +275,7 @@ class Estudiante(Persona):
     programa = models.ForeignKey(Programa, on_delete=models.CASCADE, to_field="codigo")
     periodo_inscripcion = models.ForeignKey(Periodo, on_delete=models.CASCADE, to_field="semestre")
     cursos = models.ManyToManyField(Curso, through="Inscripcion")
-    
+
 class Inscripcion(models.Model):
     """
     Modelo para representar las inscripciones de los estudiantes.
@@ -269,5 +287,3 @@ class Inscripcion(models.Model):
 
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, to_field="codigo")
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="nrc")
-
-
