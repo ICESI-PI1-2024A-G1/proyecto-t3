@@ -43,6 +43,9 @@ def programas(request):
     programas = Programa.objects.all()
     
     request.user.is_director = request.user.groups.filter(name='directores').exists()
+    
+    if request.user.is_director:
+        programas = programas.filter(director__cedula=request.user.usuario.persona.cedula)
 
     # Búsqueda y filtrado
     if request.method == "GET":
@@ -95,8 +98,7 @@ def programas(request):
             "facultades": facultades,
             "estados": estados,
             "side": "sidebar_principal.html",
-            "side_args": args_principal("programas"),
-            "user": request.user,
+            "side_args": args_principal(request.user,"programas"),
         },
     )
 
@@ -213,7 +215,6 @@ def programa(request, codigo, periodo):
             "total_docentes": len(docentes),
             "side": "sidebar_programa.html",
             "modalidad": obtener_modalidad(materias),
-            "user": request.user,
         },
     )
 

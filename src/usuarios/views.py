@@ -1,4 +1,5 @@
 import random
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,13 +10,14 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
+                              MallaCurricular, Materia, Modalidad, Periodo,
+                              Programa)
 from academico.views import args_principal
 
 from .forms import DocenteForm
 from .models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
                      EstadoDocente, Persona, TipoContrato)
-from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
 
 # Create your views here.
 
@@ -222,7 +224,7 @@ def docentes(request):
             "estados": estados,
             "contratos": contratos,
             "side": "sidebar_principal.html",
-            "side_args": args_principal("docentes"),
+            "side_args": args_principal(request.user,"docentes"),
         },
     )
 
