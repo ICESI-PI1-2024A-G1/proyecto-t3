@@ -84,6 +84,9 @@ def docente_Detail(request, cedula, periodo):
     Raises:
         Http404: Si no se encuentra el docente con el código especificado.
     """
+    
+    request.user.usuario.init_groups()
+    
     docentes = Docente.objects.all()
     docente = get_object_or_404(Docente, cedula=cedula)
     estados = EstadoDocente.objects.all()
@@ -160,6 +163,7 @@ def traducir_a_español(dia):
     }
 
     return dias_semana.get(dia, dia)
+
 @login_required(login_url="/login")
 def docentes(request):
     """
@@ -178,6 +182,9 @@ def docentes(request):
     Raises:
         None
     """
+    
+    request.user.usuario.init_groups()
+    
     docentes = Docente.objects.all()
 
     # Búsqueda y filtrado

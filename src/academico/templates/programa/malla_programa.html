@@ -22,7 +22,7 @@
                 {% endfor %}
             </select>
         </div>
-        {% if user.is_staff %}
+        {% if user.is_lider %}
             {% csrf_token %}
             <button type="submit" class="btn btn-primary btn--disabled" id="btn-guardar" disabled="true" onclick="enviar_malla()">
                 Guardar cambios
@@ -54,7 +54,7 @@
                 <td onclick="window.location.href ='/academico/materias/{{materia.materia.codigo}}/{{periodo_seleccionado}}'">{{ materia.materia.creditos }}</td>
                 <td onclick="window.location.href ='/academico/materias/{{materia.materia.codigo}}/{{periodo_seleccionado}}'">{{ materia.materia.departamento.nombre }}</td>
                 <td>
-                    {% if user.is_staff %}
+                    {% if user.is_lider %}
                     <select class="custom-select mr-2" id="{{materia.materia.codigo}}"onchange="activar_guardar(event)">
                     {% else %}
                     <select class="custom-select mr-2" id="{{materia.materia.codigo}}"disabled>

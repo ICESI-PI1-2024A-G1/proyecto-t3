@@ -22,7 +22,6 @@ from .common import args_principal, color_suave, obtener_modalidad
 
 
 @login_required(login_url="/login")
-@user_passes_test(lambda u: u.has_perm('academico.view_programa'))
 def programas(request):
     """
     Vista para mostrar la lista de programas académicos.
@@ -42,7 +41,7 @@ def programas(request):
     """
     programas = Programa.objects.all()
     
-    request.user.is_director = request.user.groups.filter(name='directores').exists()
+    request.user.usuario.init_groups()
     
     if request.user.is_director:
         programas = programas.filter(director__cedula=request.user.usuario.persona.cedula)
@@ -104,7 +103,6 @@ def programas(request):
 
 
 @login_required(login_url="/login")
-@user_passes_test(lambda u: u.has_perm('academico.view_programa'))
 def programa(request, codigo, periodo):
     """
     Renderiza la plantilla 'programa.html' con información del programa y datos del currículo.
@@ -129,7 +127,7 @@ def programa(request, codigo, periodo):
 
     """
     
-    request.user.is_director = request.user.groups.filter(name='directores').exists()
+    request.user.usuario.init_groups()
     
     programa = get_object_or_404(Programa, codigo=codigo)
     materias = MallaCurricular.objects.filter(
@@ -220,7 +218,6 @@ def programa(request, codigo, periodo):
 
 
 @login_required(login_url="/login")
-@user_passes_test(lambda u: u.has_perm("academico.add_programa"))
 def primera_clase_programa(request, codigo, periodo):
     """
     Obtiene la primera clase de un programa académico para un periodo específico.
@@ -270,7 +267,6 @@ def render_pdf(html_content):
 
 
 @login_required(login_url="/login")
-@user_passes_test(lambda u: u.has_perm("academico.add_programa"))
 def enviar_para_aprobacion(request, codigo, periodo):
     """
     Envía una solicitud de aprobación de un programa académico.
@@ -283,6 +279,7 @@ def enviar_para_aprobacion(request, codigo, periodo):
     Returns:
         HttpResponseRedirect: Una redirección a la página de visualización del programa académico.
     """
+    request.user.usuario.init_groups()
     try:
         if request.method == "POST":
             body = json.loads(request.body.decode("utf-8"))
@@ -336,7 +333,6 @@ def enviar_para_aprobacion(request, codigo, periodo):
 
 
 @login_required(login_url="/login")
-@user_passes_test(lambda u: u.has_perm("academico.add_programa"))
 def importar_malla(request, codigo, periodo):
     """
     Importa una malla curricular desde un periodo anterior al periodo actual.
@@ -350,6 +346,9 @@ def importar_malla(request, codigo, periodo):
         JsonResponse: Un objeto JSON con un mensaje de éxito si la malla curricular se importó correctamente,
         o un objeto JSON con un mensaje de error si ocurrió un error al importar la malla curricular.
     """
+    
+    request.user.usuario.init_groups()
+    
     body = json.loads(request.body.decode("utf-8"))
 
     primera_clase_actual = datetime.strptime(
@@ -410,7 +409,6 @@ def importar_malla(request, codigo, periodo):
 
 
 @login_required(login_url="/login")
-@user_passes_test(lambda u: u.has_perm("academico.add_programa"))
 def actualizar_malla(request, codigo, periodo):
     """
     Actualiza la malla curricular de un programa académico para un periodo específico.
@@ -423,6 +421,9 @@ def actualizar_malla(request, codigo, periodo):
     Returns:
         HttpResponseRedirect: Una redirección a la vista del programa académico actualizado.
     """
+    
+    request.user.usuario.init_groups()
+    
     body = json.loads(request.body.decode("utf-8"))
     for key in body:
         if (
@@ -446,7 +447,6 @@ def actualizar_malla(request, codigo, periodo):
 
 
 @login_required(login_url="/login")
-@user_passes_test(lambda u: u.has_perm("academico.view_programa"))
 def malla_curricular(request, codigo, periodo):
     """
     Función de vista para mostrar la malla curricular de un programa.
@@ -459,6 +459,9 @@ def malla_curricular(request, codigo, periodo):
     Returns:
         HttpResponse: El objeto de respuesta HTTP que contiene la plantilla renderizada.
     """
+    
+    request.user.usuario.init_groups()
+    
     programa = get_object_or_404(Programa, codigo=codigo)
     malla = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
@@ -556,7 +559,6 @@ def export_program_data(codigo_programa, periodo):
 
 
 @login_required(login_url="/login")
-@user_passes_test(lambda u: u.has_perm("academico.view_programa"))
 def export_to_pdf(request, codigo_programa, periodo):
     template = get_template('programa_pdf.html')
     html_content = template.render(export_program_data(codigo_programa, periodo))
@@ -565,7 +567,6 @@ def export_to_pdf(request, codigo_programa, periodo):
 
 
 @login_required(login_url="/login")
-@user_passes_test(lambda u: u.has_perm("academico.view_programa"))
 def export_to_excel(request, codigo_programa, periodo):
     programa = get_object_or_404(Programa, codigo=codigo_programa)
     clases = []

@@ -21,7 +21,9 @@
       </div>
       <div class="nombre-de-seccion">Información general</div>
     </a>
+    {%if user.is_lider %}
     <a class="btn btn-primary mt-2"  onclick="show()">Nuevo modulo<img class="icon" src="{% static 'img/add.webp' %}"></a>
     {% include 'planeacion_materias.html' with size="lg" %}
+    {%endif%}
   </div>
 </div>

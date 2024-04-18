@@ -26,6 +26,13 @@ function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente,cambiar_ot
     docente_clase.value = docente;
 
     var checkbox = document.getElementById("editar_relacionadas_e");
+    if(cambiar_otros==true){
+        checkbox.disabled = true;
+        document.getElementById("warning-message_e").style.display = "block";
+    }else{
+        checkbox.disabled = false;
+        document.getElementById("warning-message_e").style.display = "none";
+    }
     checkbox.checked = cambiar_otros;
 }
 
@@ -100,7 +107,9 @@ function eliminarClase(claseId) {
 
 function cambiar_checkbox_edicion(){
     var checkbox = document.getElementById("editar_relacionadas_e");
-    checkbox.checked = !checkbox.checked;
+    if(!checkbox.disabled){
+        checkbox.checked = !checkbox.checked;
+    }
 }
 
 function Solicitud_Salones(event, cursoNrc){

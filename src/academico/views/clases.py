@@ -24,6 +24,9 @@ def solicitar_salones(request, curso_id):
     Returns:
         HttpResponse: La respuesta HTTP que muestra la página de solicitud de salones.
     """
+    
+    request.user.usuario.init_groups()
+    
     curso = get_object_or_404(Curso, nrc=curso_id)
     # Solicitud.objects.create(curso=curso, tipo="Salones")
 
@@ -44,6 +47,9 @@ def crear_clase(request, curso_id):
         Http404: Si el curso no existe.
 
     """
+
+    request.user.usuario.init_groups()
+    
     if request.method == "POST":
 
         start_day = datetime.strptime(request.POST.get("start_day"), "%Y-%m-%dT%H:%M")
@@ -115,6 +121,9 @@ def editar_clase(request, clase_id):
         Http404: Si la clase no existe.
 
     """
+    
+    request.user.usuario.init_groups()
+    
     clase = get_object_or_404(Clase, id=clase_id)
     if request.method == "POST":
         fecha_inicio = datetime.strptime(
@@ -172,15 +181,11 @@ def editar_clase(request, clase_id):
                 if clase_i.fecha_inicio > old_fecha_inicio:
                     fecha_inicio += timedelta(days=7)
                     fecha_fin += timedelta(days=7)
-                    if old_fecha_inicio.date() != clase.fecha_inicio.date():
-                        clase_i.fecha_inicio = fecha_inicio
-                    if old_fecha_fin.date() != clase.fecha_fin.date():
-                        clase_i.fecha_fin = fecha_fin
+                    clase_i.fecha_inicio = fecha_inicio
+                    clase_i.fecha_fin = fecha_fin
                     if old_espacio != clase.espacio:
                         clase_i.espacio = tipo_espacio
                     if old_modalidad != clase.modalidad:
-                        clase_i.espacio = tipo_espacio
-                    if old_docente != clase.docente:
                         clase_i.modalidad = modalidad
                     if old_docente != clase.docente:
                         clase_i.docente = docente
@@ -247,6 +252,9 @@ def eliminar_clase(request, clase_id):
     Returns:
         HttpResponseRedirect: Una redirección a la página de visualización del curso al que pertenecía la clase.
     """
+    
+    request.user.usuario.init_groups()
+    
     if request.method == "POST":
         clase = get_object_or_404(Clase, id=clase_id)
         clase.delete()
@@ -254,6 +262,7 @@ def eliminar_clase(request, clase_id):
         return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 
 
+@login_required(login_url="/login")
 def nuevas_clases(request,grupo,cantidad):
     """
     Crea nuevas clases para un grupo de clases
@@ -266,6 +275,9 @@ def nuevas_clases(request,grupo,cantidad):
     Returns:
         HttpResponseRedirect: Una redirección a la página de visualización del curso al que pertenecía la clase.
     """
+    
+    request.user.usuario.init_groups()
+    
     grupo = get_object_or_404(GrupoDeClase, id=grupo)
     ultima_clase = Clase.objects.filter(grupo_clases=grupo).order_by("fecha_inicio").last()
     curso = Curso.objects.filter(clase=ultima_clase).first()
@@ -287,7 +299,7 @@ def nuevas_clases(request,grupo,cantidad):
     
     return redirect("visualizar-curso", curso_id=curso.nrc)
 
-
+@login_required(login_url="/login")
 def eliminar_grupo_de_clases(request, grupo):
     """
     Elimina un grupo de clases del sistema.
@@ -299,6 +311,9 @@ def eliminar_grupo_de_clases(request, grupo):
     Returns:
         HttpResponseRedirect: Una redirección a la página de visualización del curso al que pertenecía la clase.
     """
+    
+    request.user.usuario.init_groups()
+    
     if request.method == "POST":
         grupo = get_object_or_404(GrupoDeClase, id=grupo)
         curso = Curso.objects.filter(clase__grupo_clases=grupo).first()

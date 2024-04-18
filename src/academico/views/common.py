@@ -16,16 +16,16 @@ def args_principal(user, seleccionado):
     
     sites = {}
     
-    if user.has_perm("academico.view_programa"):
+    if user.is_gestor or user.is_director:
         sites["Programas posgrado"] = {"url": "/academico/programas", "seleccionado": seleccionado=="programas"}
     
-    if user.has_perm("academico.view_materia"):
+    if user.is_gestor or user.is_director:
         sites["Materias posgrado"] = {"url": "/academico/materias", "seleccionado": seleccionado=="materias"}
     
-    if user.has_perm("academico.view_docente"):
+    if user.is_gestor:
         sites["Docentes posgrado"] = {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
     
-    if user.has_perm("academico.add_viatico"):
+    if user.is_gestor:
         sites["Solicitud"] = {"url": "/solicitud/crear_viatico", "seleccionado": seleccionado=="solicitud"}
         
     return sites

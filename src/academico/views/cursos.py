@@ -27,6 +27,8 @@ def crear_curso(request, codigo, periodo):
     Raises:
         Http404: Si el período especificado no existe.
     """
+    request.user.usuario.init_groups()
+    
     if request.method == "POST":
         form = request.POST
         cupo = form["cantidad_de_cupos"]
@@ -77,10 +79,12 @@ def visualizacion_curso(request, curso_id):
     Returns:
         HttpResponse: La respuesta HTTP que muestra la visualización del curso.
     """
+    request.user.usuario.init_groups()
+
     curso = get_object_or_404(Curso, nrc=curso_id)
     grupos_clases = []
     total_horas_programadas = timedelta()
-    
+
     for grupo_clase in GrupoDeClase.objects.filter(clase__curso=curso).distinct().order_by("id"):
         clases = Clase.objects.filter(curso=curso,grupo_clases=grupo_clase).select_related("docente").order_by("fecha_inicio")
         for clase in clases:
@@ -88,12 +92,10 @@ def visualizacion_curso(request, curso_id):
             clase.horas_programadas = horas_programadas
             total_horas_programadas += horas_programadas
         grupos_clases.append(clases)
-        
+
     docentes_con_clases = Docente.objects.filter(clase__curso=curso).distinct()
     for docente in docentes_con_clases:
         docente.num_clases = len(Clase.objects.filter(docente=docente, curso=curso))
-
-    
 
     return render(
         request,
