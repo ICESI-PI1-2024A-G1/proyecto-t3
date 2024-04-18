@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
-from academico.models import Clase, Curso, Docente, Periodo
+from academico.models import Clase, Curso, Docente, GrupoDeClase, Periodo
 
 from .clases import crear_clase
 
@@ -78,27 +78,29 @@ def visualizacion_curso(request, curso_id):
         HttpResponse: La respuesta HTTP que muestra la visualización del curso.
     """
     curso = get_object_or_404(Curso, nrc=curso_id)
-    clases = (
-        Clase.objects.filter(curso=curso)
-        .select_related("docente")
-        .order_by("fecha_inicio")
-    )
+    grupos_clases = []
+    total_horas_programadas = timedelta()
+    
+    for grupo_clase in GrupoDeClase.objects.filter(clase__curso=curso).distinct().order_by("id"):
+        clases = Clase.objects.filter(curso=curso,grupo_clases=grupo_clase).select_related("docente").order_by("fecha_inicio")
+        for clase in clases:
+            horas_programadas = clase.fecha_fin - clase.fecha_inicio
+            clase.horas_programadas = horas_programadas
+            total_horas_programadas += horas_programadas
+        grupos_clases.append(clases)
+        
     docentes_con_clases = Docente.objects.filter(clase__curso=curso).distinct()
     for docente in docentes_con_clases:
         docente.num_clases = len(Clase.objects.filter(docente=docente, curso=curso))
 
-    total_horas_programadas = timedelta()
-    for clase in clases:
-        horas_programadas = clase.fecha_fin - clase.fecha_inicio
-        clase.horas_programadas = horas_programadas
-        total_horas_programadas += horas_programadas
+    
 
     return render(
         request,
         "visualizar-curso.html",
         {
             "curso": curso,
-            "clases": clases,
+            "grupos_clases": grupos_clases,
             "docentes_con_clases": docentes_con_clases,
             "total_horas_programadas": total_horas_programadas,
             "side": "sidebar_curso.html",

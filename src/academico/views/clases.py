@@ -153,7 +153,11 @@ def editar_clase(request, clase_id):
         else:
             docente = None
 
-        old_date = clase.fecha_inicio
+        old_fecha_inicio = clase.fecha_inicio
+        old_fecha_fin = clase.fecha_fin
+        old_espacio = clase.espacio
+        old_modalidad = clase.modalidad
+        old_docente = clase.docente
 
         clase.fecha_inicio = fecha_inicio
         clase.fecha_fin = fecha_fin
@@ -165,14 +169,21 @@ def editar_clase(request, clase_id):
         if editar_relacionadas:
             for clase_i in Clase.objects.filter(grupo_clases=clase.grupo_clases):
                 clase.fecha_inicio
-                if clase_i.fecha_inicio > old_date:
+                if clase_i.fecha_inicio > old_fecha_inicio:
                     fecha_inicio += timedelta(days=7)
                     fecha_fin += timedelta(days=7)
-                    clase_i.fecha_inicio = fecha_inicio
-                    clase_i.fecha_fin = fecha_fin
-                    clase_i.espacio = tipo_espacio
-                    clase_i.modalidad = modalidad
-                    clase_i.docente = docente
+                    if old_fecha_inicio.date() != clase.fecha_inicio.date():
+                        clase_i.fecha_inicio = fecha_inicio
+                    if old_fecha_fin.date() != clase.fecha_fin.date():
+                        clase_i.fecha_fin = fecha_fin
+                    if old_espacio != clase.espacio:
+                        clase_i.espacio = tipo_espacio
+                    if old_modalidad != clase.modalidad:
+                        clase_i.espacio = tipo_espacio
+                    if old_docente != clase.docente:
+                        clase_i.modalidad = modalidad
+                    if old_docente != clase.docente:
+                        clase_i.docente = docente
                     clase_i.save()
 
         # Estudiantes
@@ -241,3 +252,59 @@ def eliminar_clase(request, clase_id):
         clase.delete()
 
         return redirect("visualizar-curso", curso_id=clase.curso.nrc)
+
+
+def nuevas_clases(request,grupo,cantidad):
+    """
+    Crea nuevas clases para un grupo de clases
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        grupo (int): El ID del grupo de clases al que pertenecen las clases a crear.
+        cantidad (int): La cantidad de clases a crear.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualización del curso al que pertenecía la clase.
+    """
+    grupo = get_object_or_404(GrupoDeClase, id=grupo)
+    ultima_clase = Clase.objects.filter(grupo_clases=grupo).order_by("fecha_inicio").last()
+    curso = Curso.objects.filter(clase=ultima_clase).first()
+    
+    for i in range(cantidad):
+        nueva_clase = Clase.objects.create(
+            fecha_inicio=ultima_clase.fecha_inicio + timedelta(days=7),
+            fecha_fin=ultima_clase.fecha_fin + timedelta(days=7),
+            espacio_asignado=ultima_clase.espacio_asignado,
+            curso=ultima_clase.curso,
+            espacio=ultima_clase.espacio,
+            modalidad=ultima_clase.modalidad,
+            docente=ultima_clase.docente,
+            grupo_clases=grupo,
+        )
+        ultima_clase = nueva_clase
+    
+    
+    
+    return redirect("visualizar-curso", curso_id=curso.nrc)
+
+
+def eliminar_grupo_de_clases(request, grupo):
+    """
+    Elimina un grupo de clases del sistema.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        grupo (int): El ID del grupo de clases a eliminar.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualización del curso al que pertenecía la clase.
+    """
+    if request.method == "POST":
+        grupo = get_object_or_404(GrupoDeClase, id=grupo)
+        curso = Curso.objects.filter(clase__grupo_clases=grupo).first()
+        clases = Clase.objects.filter(grupo_clases=grupo)
+        clases.delete()
+        grupo.delete()
+        return redirect("visualizar-curso", curso_id=curso.nrc)
+    else:
+        return redirect("programas")

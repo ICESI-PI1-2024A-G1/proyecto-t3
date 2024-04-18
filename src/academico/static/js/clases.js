@@ -1,5 +1,6 @@
-function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente) {
+function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente,cambiar_otros) {
     clase_seleccionada_id = evt.target.id;
+    console.log(clase_seleccionada_id);
     editModal.style.display = "block";
     var form = document.getElementById('editClassForm');
     form.action = "/academico/clases/" + clase_seleccionada_id;
@@ -23,6 +24,9 @@ function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente) {
         docente = "None";
     }
     docente_clase.value = docente;
+
+    var checkbox = document.getElementById("editar_relacionadas_e");
+    checkbox.checked = cambiar_otros;
 }
 
 
@@ -113,4 +117,60 @@ function solicitarSalon(cursoNrc) {
     });
     console.log(clasesSeleccionadas);
         
+}
+
+function display_group(id){
+    var group = document.getElementById(id);
+    var icon = document.getElementById(id + "_icon");
+    if(group.style.display == "none"){
+        group.style.display = "flex";
+        icon.style.transform = "rotate(-90deg)";
+    }else{
+        group.style.display = "none";
+        icon.style.transform = "rotate(180deg)";
+    }
+}
+
+var group;
+function agregar_en(popup_id, group_id){
+    show(popup_id);
+    group = group_id;
+}
+
+function agregar_clases(){
+    numero = document.getElementById("num_semanas_add").value;
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = "/academico/clases/" + group + "/" + numero;
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'csrfmiddlewaretoken';
+    input.value = csrfToken;
+    form.appendChild(input);
+    
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function confirmarEliminarGrupo(event, claseId) {
+    var confirmacion = confirm('¿Estás seguro de que quieres eliminar este grupo?');
+    if (confirmacion) {
+        eliminarGrupo(claseId);
+    }
+}
+
+function eliminarGrupo(grupoId){
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = "/academico/grupo_clases/" + grupoId + "/eliminar";
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'csrfmiddlewaretoken';
+    input.value = csrfToken;
+    form.appendChild(input);
+    
+    document.body.appendChild(form);
+    form.submit();
 }
