@@ -1,0 +1,370 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<head>
+  {% load static %}
+  <script src="{% static 'js/clases.js' %}"></script>
+</head>
+<div class="container mt-6">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title bg-primary p-2 mb-4 text-white">Información básica del curso</h1>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="card-text"><img src="{% static 'img/hashtag.png' %}" class="icon" alt="NRC">
+                                <b>NRC: </b> {{ curso.nrc }}
+                            </p>
+                            <p class="card-text"><img src="{% static 'img/group.png' %}" class="icon" alt="Grupo">
+                                <b>Grupo: </b> {{ curso.grupo }}
+                            </p>
+                            <p class="card-text"><img src="{% static 'img/curso.png' %}" class="icon"
+                                    alt="Cantidad de Cupos"> <b>Cantidad de Cupos: </b> {{ curso.cupo }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="card-text"><img src="{% static 'img/book.png' %}" class="icon" alt="Materia">
+                                <b>Materia: </b>{{ curso.materia.nombre }}
+                            </p>
+                            <p class="card-text"><img src="{% static 'img/calendar.png' %}" class="icon" alt="Periodo">
+                                <b>Periodo: </b> {{ curso.periodo.semestre }}
+                            </p>
+                            <p class="card-text"><img src="{% static 'img/reloj.png' %}" class="icon"
+                                alt="Total horas programadas"> <b>Total horas programadas: </b> {{total_horas_programadas }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-md-12">
+          <div class="card">
+              <div class="card-body">
+                  <h1 class="card-title bg-primary p-2 mb-4 text-white">Docentes</h1>
+                  <div class="docentes-container" style="display: flex; flex-wrap: wrap;">
+                      {% if docentes_con_clases.count == 0 %}
+                      <div class="alert alert-warning w-100" role="alert">
+                          No hay docentes asignados a este curso.
+                      </div>
+                      {% endif %}
+                      {% for docente in docentes_con_clases %}
+                      <div class="col-md-6 docente-item"
+                          style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
+                          <div class="card btn-secondary linkeable" onclick="window.location.href ='/docentes/{{docente.cedula}}/{{curso.periodo.semestre}}'">
+                              <div class="card-body">
+                                  <div class="docente-info row">
+                                      <img src="{{ docente.foto }}" alt="{{ docente.nombre }}"
+                                          class="img-fluid docente-img rounded" style="max-width: 100px; height: auto;">
+                                          <div class="col">
+                                            <h5 style="margin-left: 10px;">{{ docente.nombre }}</h5>
+                                            <label class="linkeable" style="margin-left: 10px;">Número de clases: {{ docente.num_clases}}</label>
+                                          </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    {% if user.is_lider %}
+    {% include 'agregar_clase.html' with popup_id=1 popup_title="Agregar clases"%}
+    {% endif %}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title bg-primary p-2 mb-4 text-white">Clases</h1>
+
+                    {% if user.is_lider %}
+                    <div class="d-flex justify-content-center">
+                      <!--POR FAVOR CAMBIAR ESTE BOTÓN-->
+                      <button type="button" class="btn btn-primary mt-2 w-30" onclick="seleccionarTodasLasClases()">Seleccionar todas las clases</button>
+                    </div>
+                    {% endif %}
+
+                    <div class="clases-container" style="display: flex; flex-wrap: wrap;">
+                        {% if clases.count == 0 %}
+                        <div class="alert alert-warning w-100" role="alert">
+                            No hay clases creadas para este curso
+                        </div>
+                        {% endif %}
+                        {% for grupo in grupos_clases %}
+                          <div class="card row mt-1 w-100 mb-2" style="align-items: start;">
+                            <div class="row ml-1 mt-1 mb-1" style="align-items: center; justify-content: space-between; width: 100%;">
+                              {% if user.is_lider %}
+                              <div class="row card-title bg-secondary rounded linkeable" style=" width: 80%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
+                              {% else %}
+                              <div class="row card-title bg-secondary rounded linkeable mr-2" style=" width: 100%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
+                              {% endif %}
+                                <img id="class_group{{grupo.0.grupo_clases.id}}_icon" src="{% static 'img/arrow_back.png' %}" class="icon ml-2" alt="Modulo de clases" style="transform: rotate(180deg); filter:invert(100%);">
+                                <h2 class="text-white">Modulo de clases {{ forloop.counter }}</h2>
+                                <label></label>  
+                              </div>
+                              {% if user.is_lider %}
+                              <div class="row align-items-center" style="justify-content: space-between; width: 20%;" >
+                                <a class="rounded btn-secondary p-2 linkeable ml-1" onclick="agregar_en(1,'{{grupo.0.grupo_clases.id}}')">
+                                  <img id="{{grupo.0.grupo_clases..id}}" src="{% static 'img/add.webp' %}" class="icon btn">
+                                </a>
+                                <a id="{{grupo.0.id}}" class="rounded btn-secondary p-2 linkeable" onclick="show_pop(event,'{{grupo.0.fecha_inicio}}', '{{grupo.0.fecha_fin}}','{{grupo.0.espacio_asignado}}','{{grupo.0.espacio.id}}','{{grupo.0.modalidad.id}}' ,'{{grupo.0.docente.cedula}}',true)">
+                                  <img id="{{grupo.0.id}}" src="{% static 'img/pencil.png' %}" class="icon btn">
+                                </a>
+                                <a id="{{grupo.0.grupo_clases.id}}" class="rounded btn-secondary p-2 linkeable"onclick="confirmarEliminarGrupo(event, '{{grupo.0.grupo_clases.id}}')">
+                                  <img src="{% static 'img/Eliminar.png' %}" class="icon btn">
+                                </a>
+                                <div class="form-check p-2 mr-1">
+                                  <input id="check-grupo{{grupo.0.grupo_clases.id}}" class="form-check-input clase-checkbox" type="checkbox" value="{{clase.id}}" id="clase{{clase.id}}" style="transform: scale(1.5);" onchange="cambiarEstadoGrupo('{{grupo.0.grupo_clases.id}}')">
+                                </div>
+                              </div>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <div id="class_group{{grupo.0.grupo_clases.id}}" class="clases-container" style="display: none; flex-wrap: wrap; align-items: center; justify-content: space-between; min-width: 100%;">
+                            {% for clase in grupo %}
+                            <div class="col-md-6 clase-item" style="flex-basis: calc(50% - 20px); margin-bottom: 20px;">
+                              {%if clase.docente == None %}
+                              <div class="card" style="background-color: #ffe6e6c5;">
+                              {% else %}
+                              <div class="card">
+                              {%endif%}
+                                  <div class="card-body">
+                                      <div class="row row justify-content-center align-items-center">
+                                        <h5 class="card-title flex-grow-1 text-center">Clase {{ forloop.counter }} </h5>
+                                      </div>
+                                      {% if user.is_gestor %}
+                                      <!-- Lógica de gestión de viaticos para cada clase -->
+                                      <!-- debería haber un botón (se puede unificar con las opciones de arriba) -->
+                                      <!-- Se debería mostrar un popup (ver las otras implementaciones y preguntar en caso de ser necesario) -->
+                                      <!-- Donde se muestren las opciones de viáticos para dicha clase -->
+                                      {% if user.is_lider %}
+                                      <!--- Corregir para que los tres botones estén agrupados en uno solo (un tipo tuerca, que sea de ajustes) -->
+                                        <div class="d-flex flex-column align-items-end">
+                                          <img id="{{clase.id}}" src="{% static 'img/pencil.png' %}" class="icon btn" onclick="show_pop(event,'{{clase.fecha_inicio}}', '{{clase.fecha_fin}}','{{clase.espacio_asignado}}','{{clase.espacio.id}}','{{clase.modalidad.id}}' ,'{{clase.docente.cedula}}')">
+                                          <img id="{{clase.id}}" src="{% static 'img/Eliminar.png' %}" class="icon btn" onclick="confirmarEliminarClase(event, '{{clase.id}}')">
+                                          <div class="form-check" style="margin-top: 1px;">
+                                            <input class="form-check-input clase-checkbox clase-checkbox-{{clase.grupo_clases.id}}" type="checkbox" value="{{clase.id}}" id="clase{{clase.id}}" style="transform: scale(1.5);">
+                                          </div>
+                                        </div>
+                                        {% endif %}
+                                      {% endif %}
+
+                                      <p class="card-text">
+                                          <img src="{% static 'img/calendar.png' %}" class="icon" alt="Fecha de Inicio">
+                                          <strong>Fecha de Inicio:</strong> {{ clase.fecha_inicio }}
+                                      </p>
+                                      <p class="card-text">
+                                          <img src="{% static 'img/calendar.png' %}" class="icon" alt="Fecha de Fin">
+                                          <strong>Fecha de Fin:</strong> {{ clase.fecha_fin }}
+                                      </p>
+                                      <p class="card-text">
+                                          <img src="{% static 'img/reloj.png' %}" class="icon" alt="Horas programadas">
+                                          <strong>Horas programadas:</strong> {{ clase.horas_programadas }}
+                                      </p>
+                                      <p class="card-text">
+                                          <img src="{% static 'img/location.png' %}" class="icon" alt="Espacio Asignado">
+                                          <strong>Espacio Asignado:</strong> 
+                                          {% if clase.espacio_asignado != None %}
+                                          {{ clase.espacio_asignado }}
+                                          {% else %}
+                                          Sin asignar
+                                          {% endif %}
+                                        </p>
+                                        <p class="card-text">
+                                          <img src="{% static 'img/user.png' %}" class="icon" alt="Docente">
+                                          <strong>Docente:</strong> 
+                                          {%if clase.docente != None %}
+                                          {{ clase.docente.nombre }}
+                                          {% else %}
+                                          Sin asignar
+                                          {% endif %}
+                                      </p>
+                                  </div>
+                              </div>
+                          </div>
+                          {% endfor %}
+                          </div>
+                          {% endfor %}
+                      </div>
+                      {% if user.is_lider %}
+                      <div class="d-flex justify-content-center">
+                          <button class="btn btn-primary mt-2 w-100"  onclick="Solicitud_Salones(event, '{{curso.nrc}}')">Solicitar Salones<img class="icon" src="{% static 'img/Solicitud.png' %}">
+                      </div>
+                      {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="editModal" style="display: none">
+  <div class="modal moodle-has-zindex show background-shadow">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="popup-content form-group">
+          <span class="close" onclick="hideEditModal()"></span>
+          <h3 class="h2">Editar Clase</h3>
+          <form id="editClassForm" method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" id="clase_id" name="clase_id">
+            
+          <div id="warning-message_e" class="alert-warning mt-2" style="display: none;">Esta acción reescribirá todas las clases y comenzará desde la fecha seleccionada</div>
+          <div class="form-group row justify-content-center">  
+            <label for="fecha_inicio" class="col-sm-2 col-form-label text-left">Fecha de Inicio:</label>
+            <div class="col-sm-8 text-right">
+              <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" class="form-control" required/>
+            </div>  
+          </div>
+
+          <div class="form-group row justify-content-center">
+            <label for="fecha_fin" class="col-sm-2 col-form-label text-left">Fecha de Fin:</label>
+            <div class="col-sm-8 text-right">
+              <input type="datetime-local" id="fecha_fin" name="fecha_fin" class="form-control" required/>
+            </div>
+          </div>
+
+          <span id="error-message_e" style="color: red; display: block; height: auto; visibility: visible;"></span>
+          
+          <div class="form-group row justify-content-center">
+            <label for="espacio_asignado" class="col-sm-2 col-form-label text-left">Espacio Asignado:</label>
+            <div class="col-sm-8 text-right">
+              <input type="text" id="espacio_asignado" name="espacio_asignado" value="" disabled="true" class="form-control" >
+            </div>
+          </div>
+
+          <div class="form-group row justify-content-center">
+              <label for="tipo_espacio" class="col-sm-2 col-form-label text-left">Tipo de espacio:</label>
+              <div class="col-sm-8 text-right">
+                <select id="tipo_espacio_e" name="tipo_espacio_e" class="form-control" required>
+                  {% for espacio in espacios %}
+                  <option value="{{ espacio.id }}">{{ espacio.tipo }} : [{{espacio.capacidad}} MAX] </option>
+                  {% endfor %}
+                </select>
+              </div>
+          </div>
+
+          <div class="form-group row justify-content-center">
+              <label for="modalidad_clase" class="col-sm-2 col-form-label text-left">Modalidad:</label>
+              <div class="col-sm-8 text-right">
+                <select id="modalidad_clase_e" name="modalidad_clase_e" class="form-control" required/>
+                  {% for modalidad in modalidades %}
+                  <option value="{{modalidad.id}}">{{modalidad.metodologia}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+          </div>
+
+          <div class="form-group row justify-content-center">
+              <label for="docente_clase" class="col-sm-2 col-form-label text-left">Docente Encargado:</label>
+              <div class="col-sm-8 text-right">
+                <select id="docente_clase_e" name="docente_clase_e" class="form-control" required/>
+                <option value="None">Sin asignar</option>
+                  {% for docente in docentes %} 
+                  <option value="{{docente.cedula}}">{{docente.nombre}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+          </div>
+
+          <div class="form-inline row mt-2" style="justify-content: center;">
+            <div class="checkbox px-0">
+                <div class="form-check d-flex btn" onclick="cambiar_checkbox_edicion()">
+                    <div>
+                        <div class="custom-control custom-switch mx-0"style="justify-content: center;">
+                            <input id="editar_relacionadas_e" name="editar_relacionadas_e" type="checkbox" class="custom-control-input"/>
+                            <label class="custom-control-label" for="checkbox">Cambiar todas las relacionadas</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+          <div class="d-flex justify-content-center">
+              <button class="btn btn-primary mt-3 mb-3" type="submit" style="width: 250px; height: 50px;">Actualizar Clase</button>
+          </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    tabindex="-1"
+    style="position: fixed; top: 0px; left: 0px"
+    aria-hidden="true"
+    data-aria-hidden-tab-index="0"
+  ></div>
+</div>
+
+<script>
+    var editModal = document.getElementById("editModal");
+  
+    // Cerrar popup al hacer clic en el botón de cerrar
+    function closePopup() {
+        editModal.style.display = "none";
+    }
+  
+    // Cerrar popup al dar clic afuera
+    window.onclick = function (event) {
+      if (event.target == editModal) {
+        editModal.style.display = "none";
+      }
+    };
+</script>
+
+<script>
+    document.getElementById('editClassForm').addEventListener('submit', function(event) {
+        var start_day = new Date(document.getElementById('fecha_inicio').value.replace('T', ' ') + ' UTC');
+        var end_day = new Date(document.getElementById('fecha_fin').value.replace('T', ' ') + ' UTC');
+        var diffMs = (end_day - start_day);
+        var diffHrs = Math.floor(diffMs / 3600000); // hours
+        if (diffHrs > 24) {
+            event.preventDefault();
+            // En lugar de mostrar una alerta, cambia el contenido del elemento de mensaje de error
+            document.getElementById('error-message_e').textContent = 'La duración de la clase no puede ser mayor a 24 horas.';
+          } else if (diffMs < 0) {
+            event.preventDefault();
+            // Si la fecha/hora de inicio es posterior a la fecha/hora de finalización, muestra un mensaje de error
+            document.getElementById('error-message_e').textContent = 'La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.';
+          } else {
+            // Si la duración es válida, asegúrate de que el mensaje de error esté vacío
+            document.getElementById('error-message_e').textContent = '';
+            document.getElementById("editar_relacionadas_e").disabled = false;
+          }
+        });
+</script>
+
+<script>
+  function seleccionarTodasLasClases() {
+    var checkboxes = document.querySelectorAll('.clase-checkbox');
+    checkboxes.forEach(function(checkbox) {
+      checkbox.checked = true;
+    });
+  }
+
+  function cambiarEstadoGrupo(group_id) {
+    value = document.getElementById('check-grupo'+group_id).checked;
+    var checkboxes = document.querySelectorAll('.clase-checkbox-'+group_id);
+
+    checkboxes.forEach(function(checkbox) {
+      checkbox.checked = value;
+    });
+  }
+</script>
+
+
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="{% static 'academico/js/popup.js' %}"></script>
+{% endblock %}

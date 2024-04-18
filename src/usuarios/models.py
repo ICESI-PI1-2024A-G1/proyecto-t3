@@ -1,3 +1,6 @@
+from typing import Any
+
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -110,3 +113,20 @@ class Docente(Persona):
     contrato_codigo = models.ForeignKey(Contrato, on_delete=models.CASCADE, to_field="codigo")
     estado = models.ForeignKey(EstadoDocente, on_delete=models.CASCADE)
     foto = models.URLField(max_length=200, blank=True, null=True)
+
+class Usuario(models.Model):
+    """
+    Modelo para representar a los usuarios.
+    
+    Atributos:
+        usuario (OneToOneField): Usuario de Django.
+        persona (OneToOneField): Persona asociada al usuario.
+    """
+
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    persona = models.OneToOneField(Persona, on_delete=models.CASCADE)
+
+    def init_groups(self):
+        self.usuario.is_director = self.usuario.groups.filter(name="directores").exists()
+        self.usuario.is_lider = self.usuario.groups.filter(name="lideres").exists()
+        self.usuario.is_gestor = self.usuario.groups.filter(name="gestores").exists()

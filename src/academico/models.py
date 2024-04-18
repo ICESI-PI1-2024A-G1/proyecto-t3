@@ -1,6 +1,6 @@
 from django.db import models
 
-from usuarios.models import Director, Docente
+from usuarios.models import Director, Docente, Persona
 
 
 class EstadoSolicitud(models.Model):
@@ -204,9 +204,41 @@ class Curso(models.Model):
     cupo = models.IntegerField()
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE, to_field="codigo")
     periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, to_field="semestre", default=1)
+    intu_generado = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('grupo', 'materia','periodo')
+
+class GrupoDeClase(models.Model):
+    """
+    Modelo para representar los grupos de clase.
+
+    Atributos:
+        id (AutoField): Identificador único del grupo de clase.
+        nombre (CharField): Nombre descriptivo del grupo de clase.
+        clases (ManyToManyField): Clases asociadas al grupo de clase.
+    """
+
+    id = models.AutoField(primary_key=True)
+    entrega_notas = models.BooleanField(default=False)
+
+class EspacioClase(models.Model):
+    """
+    Modelo para representar los espacios físicos.
+
+    Atributos:
+        id (AutoField): Identificador único del espacio.
+        tipo (CharField): Tipo de espacio (aula, laboratorio, etc.).
+        capacidad (IntegerField): Capacidad máxima del espacio.
+    """
+
+    id = models.AutoField(primary_key=True)
+    tipo = models.ForeignKey(Espacio, on_delete=models.CASCADE)
+    edificio = models.CharField(max_length=255)
+    numero = models.IntegerField()
+
+    class Meta:
+        unique_together = ("edificio", "numero")
 
 
 class Clase(models.Model):
@@ -222,12 +254,38 @@ class Clase(models.Model):
         modalidad (ForeignKey): Modalidad de enseñanza de la clase.
         espacio (ForeignKey): Espacio físico de la clase.
     """
-    
+
     id = models.AutoField(primary_key=True)
     fecha_inicio = models.DateTimeField(null=True)
     fecha_fin = models.DateTimeField(null=True)
-    espacio_asignado = models.CharField(max_length=255, null=True)
+    espacio_asignado = models.ForeignKey(EspacioClase, on_delete=models.CASCADE, null=True, blank=True)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="nrc")
     modalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, to_field="id")
     espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE, null=True, blank=True)
+    grupo_clases = models.ForeignKey(GrupoDeClase, on_delete=models.CASCADE, null=True, blank=True)
+
+
+class Estudiante(Persona):
+    """
+    Modelo para representar a los estudiantes.
+
+    Atributos:
+        codigo (CharField): Código del estudiante.
+    """
+    codigo = models.CharField(max_length=30, unique=True)
+    programa = models.ForeignKey(Programa, on_delete=models.CASCADE, to_field="codigo")
+    periodo_inscripcion = models.ForeignKey(Periodo, on_delete=models.CASCADE, to_field="semestre")
+    cursos = models.ManyToManyField(Curso, through="Inscripcion")
+
+class Inscripcion(models.Model):
+    """
+    Modelo para representar las inscripciones de los estudiantes.
+
+    Atributos:
+        estudiante (CharField): Código del estudiante.
+        fecha_inscripcion (DateField): Fecha de inscripción del estudiante.
+    """
+
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, to_field="codigo")
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="nrc")

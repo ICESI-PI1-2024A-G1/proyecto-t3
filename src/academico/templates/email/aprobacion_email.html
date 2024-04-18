@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+<head>
+    <title>{{ clase.id }} class change</title>
+    <style>
+        /* Reset styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        /* Email wrapper */
+        .email-wrapper {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        /* Header */
+        .header {
+            background-color: #204589;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        /* Content */
+        .content {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .label {
+            font-weight: bold;
+        }
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #204589;
+            color: #ffffff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="header">
+            <h1>Icesi Banner</h1>
+        </div>
+        <div class="content">
+            <h2 class="mt-2"><strong>{{ programa.codigo }}:</strong> {{ programa.nombre }}</h2>
+            <label class="col ml-3"><strong>Facultad:</strong> {{ programa.facultad.nombre }}</label>
+
+            {%if comentarios %}
+            <h2 class="h4">Comentarios agregados:</h2>
+            <div>
+                {% for comentario in comentarios %}
+                <label>{{ comentario }}</label><br>
+                {% endfor %}
+            </div>
+            {%endif%}
+            <p>
+                <strong>Puedes ver el programa completo, en:</strong> {{ url }}
+            </p>
+        </div>
+        <div class="footer">
+          <p>&copy; Copyright 2024 Universidad Icesi</p>
+        </div>
+    </div>
+</body>
+</html>

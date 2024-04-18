@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Solicitud de Viaticos</title>
+    {% load static %}
+    <script src="{% static 'js/viaticos.js' %}"></script>
+</head>
+
+<div class="container">
+  <h1 class="display-3 align-center">Lista de Solicitud de Viaticos</h1>
+  <div class="mb-3">
+    <!-- Formulario para búsqueda -->
+    <form method="GET" action="{% url 'viaticos' %}" class="form-inline">
+      <div class="form-group flex-grow-1 position-relative">
+        <label for="q" class="sr-only">Buscar por nombre de docente o cedula</label>
+        <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por nombre de docente o cedula" />
+        <img src="{% static 'img/search.png' %}" alt="Buscar"
+          style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
+          onclick="document.getElementById('search-form').submit();">
+      </div>
+    </form>
+
+    <!-- Formulario para filtrado y ordenamiento -->
+    <form method="GET" action="{% url 'docentes' %}" class="form-inline">
+      <div class="form-group mr-2 d-flex">
+        <label for="ordenar_por" class="mr-2" style="margin:15px">Ordenar por:</label>
+        <select name="ordenar_por" id="ordenar_por" class="form-control mr-2" onchange="toggleFiltrado()">
+          <option value="">Sin orden</option>
+          <option value="estado">Estado</option>
+          <option value="contrato_codigo">Tipo de contrato</option>
+        </select>
+
+        <!-- Contenedor para Filtrado por estado de docente -->
+        <div id="estadoDiv" style="display: none" class="mr-2">
+          <select name="estado" class="form-control">
+            <option value="">Todas los estados</option>
+            {% for estado in estados %}
+            <option value="{{ estado.id }}">{{ estado.estado }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Filtrado por tipo de contrato -->
+        <div id="contratoDiv" style="display: none" class="mr-2">
+          <select name="contrato" class="form-control">
+            <option value="">Todos los tipos de contrato</option>
+            {% for contrato in contratos %}
+            <option value="{{ contrato.id }}">{{ contrato.tipo }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin: 15px">Filtrar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de docentes -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Cedula</th>
+        <th>Nombre del docente</th>
+        <th>Fecha Ida</th>
+        <th>Fecha Vuelta </th>
+        <th>Tiquetes</th>
+        <th>Hospedaje</th>
+        <th>Alimentacion</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for viatico in Viaticos %}
+      <tr class="linkeable" onclick="window.location.href=">
+        <td>{{ viatico.docente.cedula }}</td>
+        <td>{{ viatico.nombre }}</td>
+        <td>{{ docente.email }}</td>
+        <td>{{ docente.contrato_codigo.codigo }}</td>
+        <td>{{ docente.contrato_codigo.tipo_contrato.tipo }}</td>
+        <td>{{ docente.estado.estado }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Paginación -->
+  <div class="pagination">
+    <span class="step-links">
+        {% if docentes.has_previous %}
+            <a href="?page=1">&laquo; Primero</a>
+            <a href="?page={{ docentes.previous_page_number }}">Anterior</a>
+        {% endif %}
+
+        <span class="current">
+            Página {{ docentes.number }} de {{ docentes.paginator.num_pages }}.
+        </span>
+
+        {% if docentes.has_next %}
+            <a href="?page={{ docentes.next_page_number }}">Siguiente</a>
+            <a href="?page={{ docentes.paginator.num_pages }}">Último &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

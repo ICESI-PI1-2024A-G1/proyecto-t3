@@ -1,8 +1,4 @@
 {%load static %}
-<head>
-  {% load static %}
-  <script src="{% static 'js/popup.js' %}"></script>
-</head>
 <div class="side">
   <div class="col">
     <div class="border-bottom">
@@ -13,15 +9,13 @@
     </div>
     <div class="pt-3 pl-3 pr-3 text-wrapper">Secciones</div>
     <div class="btn"></div>
-    <a class="section-button btn btn-secondary">
+    <a class="section-button btn btn-secondary" href="/solicitud/crear_viatico">
       <div class="frame-wrapper">
         <div class="state-btn">
           <div class="state-{{info.seleccionado}}"></div>
         </div>
       </div>
-      <div class="nombre-de-seccion">Información general</div>
+      <div class="nombre-de-seccion">Solicitar viático</div>
     </a>
-    <a class="btn btn-primary mt-2"  onclick="show()">Nueva clase<img class="icon" src="{% static 'img/add.webp' %}"></a>
-    {% include 'planeacion_materias.html' %}
   </div>
 </div>
