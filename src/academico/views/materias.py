@@ -1,4 +1,3 @@
-
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
@@ -25,6 +24,13 @@ def materias(request):
     """
     materias = Materia.objects.all()
     programas = Programa.objects.all()
+    
+    request.user.usuario.init_groups()
+    
+    if request.user.is_director:
+        materias = materias.filter(programas__director__cedula=request.user.usuario.persona.cedula)
+        programas = programas.filter(director__cedula=request.user.usuario.persona.cedula)
+        
 
     # Búsqueda y filtrado
     if request.method == "GET":
@@ -61,7 +67,7 @@ def materias(request):
             "materias": materias,
             "programas": programas,
             "side": "sidebar_principal.html",
-            "side_args": args_principal("materias"),
+            "side_args": args_principal(request.user,"materias"),
         },
     )
 
@@ -82,6 +88,8 @@ def visualizacion_materia(request, codigo, periodo):
     Raises:
         Http404: Si no se encuentra la materia con el código especificado.
     """
+
+    request.user.usuario.init_groups()
 
     materia = get_object_or_404(Materia, codigo=codigo)
     cursos = Curso.objects.filter(materia__codigo=codigo, periodo__semestre=periodo)

@@ -55,10 +55,10 @@ class PropositoViaje(models.Model):
     proposito = models.CharField(max_length=128)
 
 class SolicitudViatico(Solicitud):
-    docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
-    fecha_ida = models.DateField()
-    fecha_vuelta = models.DateTimeField()
-    propositoViaje = models.ForeignKey(PropositoViaje, on_delete=models.CASCADE, to_field="id")
-    tiquete= models.BooleanField()
+    clase = models.OneToOneField(Clase, on_delete=models.CASCADE, null=True, blank=True)
+    fecha_ida = models.DateField(null=True, blank=True)
+    fecha_vuelta = models.DateTimeField(null=True, blank=True)
+    propositoViaje = models.ForeignKey(PropositoViaje, on_delete=models.CASCADE, to_field="id", null=True, blank=True)
+    tiquete = models.BooleanField()
     hospedaje= models.BooleanField()
     alimentacion= models.BooleanField()

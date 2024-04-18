@@ -3,7 +3,7 @@ import random
 from academico.models import Clase
 
 
-def args_principal(seleccionado):
+def args_principal(user, seleccionado):
     """
     Genera un diccionario con la información de los menús de la barra lateral del menú principal.
 
@@ -13,13 +13,22 @@ def args_principal(seleccionado):
     Returns:
         dict: Un diccionario con la información de los menús, donde la clave es el nombre del menú y el valor es otro diccionario con la URL y si está seleccionado o no.
     """
-    return {
-        "Programas posgrado": {"url": "/academico/programas", "seleccionado": seleccionado=="programas"},
-        "Materias posgrado": {"url": "/academico/materias", "seleccionado": seleccionado=="materias"},
-        "Docentes posgrado": {"url": "/docentes", "seleccionado": seleccionado=="docentes"},
-        "Solicitud": {"url": "/solicitud/crear_viatico", "seleccionado": seleccionado=="solicitud"}
-    }
-
+    
+    sites = {}
+    
+    if user.is_gestor or user.is_director:
+        sites["Programas posgrado"] = {"url": "/academico/programas", "seleccionado": seleccionado=="programas"}
+    
+    if user.is_gestor or user.is_director:
+        sites["Materias posgrado"] = {"url": "/academico/materias", "seleccionado": seleccionado=="materias"}
+    
+    if user.is_gestor:
+        sites["Docentes posgrado"] = {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
+    
+    if user.is_gestor:
+        sites["Solicitud"] = {"url": "/solicitud/crear_viatico", "seleccionado": seleccionado=="solicitud"}
+        
+    return sites
 
 def color_suave():
     """

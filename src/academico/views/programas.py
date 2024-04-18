@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
@@ -40,6 +40,11 @@ def programas(request):
         None
     """
     programas = Programa.objects.all()
+    
+    request.user.usuario.init_groups()
+    
+    if request.user.is_director:
+        programas = programas.filter(director__cedula=request.user.usuario.persona.cedula)
 
     # Búsqueda y filtrado
     if request.method == "GET":
@@ -92,7 +97,7 @@ def programas(request):
             "facultades": facultades,
             "estados": estados,
             "side": "sidebar_principal.html",
-            "side_args": args_principal("programas"),
+            "side_args": args_principal(request.user,"programas"),
         },
     )
 
@@ -121,6 +126,9 @@ def programa(request, codigo, periodo):
             - 'modalidad': La modalidad del currículo.
 
     """
+    
+    request.user.usuario.init_groups()
+    
     programa = get_object_or_404(Programa, codigo=codigo)
     materias = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
@@ -271,6 +279,7 @@ def enviar_para_aprobacion(request, codigo, periodo):
     Returns:
         HttpResponseRedirect: Una redirección a la página de visualización del programa académico.
     """
+    request.user.usuario.init_groups()
     try:
         if request.method == "POST":
             body = json.loads(request.body.decode("utf-8"))
@@ -337,6 +346,9 @@ def importar_malla(request, codigo, periodo):
         JsonResponse: Un objeto JSON con un mensaje de éxito si la malla curricular se importó correctamente,
         o un objeto JSON con un mensaje de error si ocurrió un error al importar la malla curricular.
     """
+    
+    request.user.usuario.init_groups()
+    
     body = json.loads(request.body.decode("utf-8"))
 
     primera_clase_actual = datetime.strptime(
@@ -396,6 +408,7 @@ def importar_malla(request, codigo, periodo):
     return JsonResponse({"success": "Malla curricular importada exitosamente."})
 
 
+@login_required(login_url="/login")
 def actualizar_malla(request, codigo, periodo):
     """
     Actualiza la malla curricular de un programa académico para un periodo específico.
@@ -408,6 +421,9 @@ def actualizar_malla(request, codigo, periodo):
     Returns:
         HttpResponseRedirect: Una redirección a la vista del programa académico actualizado.
     """
+    
+    request.user.usuario.init_groups()
+    
     body = json.loads(request.body.decode("utf-8"))
     for key in body:
         if (
@@ -443,6 +459,9 @@ def malla_curricular(request, codigo, periodo):
     Returns:
         HttpResponse: El objeto de respuesta HTTP que contiene la plantilla renderizada.
     """
+    
+    request.user.usuario.init_groups()
+    
     programa = get_object_or_404(Programa, codigo=codigo)
     malla = MallaCurricular.objects.filter(
         programa__codigo=codigo, periodo__semestre=periodo
@@ -539,12 +558,15 @@ def export_program_data(codigo_programa, periodo):
     }
 
 
+@login_required(login_url="/login")
 def export_to_pdf(request, codigo_programa, periodo):
     template = get_template('programa_pdf.html')
     html_content = template.render(export_program_data(codigo_programa, periodo))
 
     return render_pdf_from_html(html_content)
 
+
+@login_required(login_url="/login")
 def export_to_excel(request, codigo_programa, periodo):
     programa = get_object_or_404(Programa, codigo=codigo_programa)
     clases = []
