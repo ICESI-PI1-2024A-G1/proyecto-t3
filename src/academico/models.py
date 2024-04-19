@@ -204,6 +204,7 @@ class Curso(models.Model):
     cupo = models.IntegerField()
     materia = models.ForeignKey(Materia, on_delete=models.CASCADE, to_field="codigo")
     periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, to_field="semestre", default=1)
+    intu_generado = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('grupo', 'materia','periodo')
@@ -219,6 +220,7 @@ class GrupoDeClase(models.Model):
     """
 
     id = models.AutoField(primary_key=True)
+    entrega_notas = models.BooleanField(default=False)
 
 class EspacioClase(models.Model):
     """
