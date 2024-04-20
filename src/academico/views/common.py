@@ -24,7 +24,7 @@ def args_principal(user, seleccionado):
     sites = {}
 
     if user.is_gestor or user.is_director:
-        sites["Inicio"] = {"url": "/academico/inicio", "seleccionado": seleccionado=="inicio"}
+        sites["Inicio"] = {"url": "/academico/inicio", "seleccionado": seleccionado=="Inicio"}
     
     if user.is_gestor or user.is_director:
         sites["Programas posgrado"] = {"url": "/academico/programas", "seleccionado": seleccionado=="programas"}
@@ -74,6 +74,8 @@ def obtener_modalidad(malla):
 
 @login_required(login_url="/login")
 def inicio(request):
+
+    request.user.usuario.init_groups()
     total_programas = Programa.objects.count()
     total_docentes = Docente.objects.count()
     total_materias = Materia.objects.count()
@@ -90,6 +92,6 @@ def inicio(request):
         "estados_programas_json": json.dumps(estados_programas),
         "clases_por_dia_json": json.dumps(clases_por_dia),
         "side": "sidebar_principal.html",
-        "side_args": args_principal("Inicio"),
+        "side_args": args_principal(request.user, "Inicio"),
     },
 )
