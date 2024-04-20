@@ -23,5 +23,5 @@ urlpatterns = [
     path('programas/<str:codigo_programa>/<str:periodo>/export/pdf/', views.export_to_pdf, name='export_to_pdf'),
     path('programas/<str:codigo_programa>/<str:periodo>/export/excel/', views.export_to_excel, name='export_to_excel'),
     path("clases/<int:clase_id>/eliminar", views.eliminar_clase, name='eliminar_clase'),
-
+    path("inicio", views.inicio, name="inicio"),
 ]
