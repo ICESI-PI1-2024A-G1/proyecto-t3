@@ -1,0 +1,59 @@
+{% extends 'base.html' %} {% block content %}
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Usuarios</title>
+    {% load static %}
+    <script src="{% static 'js/usuarios.js' %}"></script>
+</head>
+
+<div class="container">
+    <h1 class="display-3 align-center">Lista de Usuarios</h1>
+    <div class="mb-3">
+        <!-- Formulario para búsqueda -->
+        <form method="GET" action="{% url 'administrador' %}" class="form-inline">
+            <div class="form-group flex-grow-1 position-relative">
+                <label for="q" class="sr-only">Buscar por nombre de usuario o email</label>
+                <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por usuario o email" />
+                <img src="{% static 'img/search.png' %}" alt="Buscar"
+                    style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
+                    onclick="document.getElementById('search-form').submit();">
+            </div>
+        </form>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol principal</th>
+                <th>Último inicio de sesión</th>
+                <th>Estado de actividad</th>
+                <th>Ajustes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.persona.nombre }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>{{ usuario.rol_principal }}</td>
+                <td>{{ usuario.last_login }}</td>
+                <td>
+                    <input type="checkbox" {% if usuario.is_active %} checked {% endif %} disabled />
+                </td>
+                <td>
+                    <a href="">
+                        <i class="fas fa-cog
+                        "></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    
+{% endblock %}
