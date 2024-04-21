@@ -126,10 +126,8 @@ def editar_clase(request, clase_id):
     
     clase = get_object_or_404(Clase, id=clase_id)
     if request.method == "POST":
-        fecha_inicio = datetime.strptime(
-            request.POST.get("fecha_inicio"), "%Y-%m-%dT%H:%M"
-        )
-        fecha_fin = datetime.strptime(request.POST.get("fecha_fin"), "%Y-%m-%dT%H:%M")
+        fecha_inicio = request.POST.get("fecha_inicio")
+        fecha_fin = request.POST.get("fecha_fin")
         tipo_espacio_id = request.POST.get("tipo_espacio_e")
         modalidad_id = request.POST.get("modalidad_clase_e")
         docente_cedula = request.POST.get("docente_clase_e")
@@ -142,6 +140,9 @@ def editar_clase(request, clase_id):
             or modalidad_id == None
         ):
             raise Http404("Todos los campos son requeridos.")
+
+        fecha_inicio = datetime.strptime(request.POST.get("fecha_inicio"), "%Y-%m-%dT%H:%M")
+        fecha_fin = datetime.strptime(request.POST.get("fecha_fin"), "%Y-%m-%dT%H:%M")
 
         try:
             tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)

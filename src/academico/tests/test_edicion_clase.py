@@ -11,6 +11,7 @@ from mixer.backend.django import mixer
 from academico.models import (Clase, Curso, Departamento, Docente, Espacio,
                               Materia, Modalidad, Periodo, TipoDeMateria)
 from academico.views import editar_clase
+from usuarios.models import Persona, Usuario
 
 
 @pytest.fixture
@@ -34,6 +35,8 @@ def autenticacion(db, rf):
         request: Objeto de la solicitud HTTP con el usuario autenticado.
     """
     user = User.objects.create_user(username='admin', password='admin')
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     request = rf.get(reverse('visualizar-curso', kwargs={'curso_id': 1}))
     request.user = user
     return request
@@ -129,8 +132,8 @@ def test_editar_clase_post_negativo_clase_inexistente(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'fecha_inicio': clase.fecha_inicio,
-       'fecha_fin': clase.fecha_fin,
+       'fecha_inicio': str(clase.fecha_inicio)[0:-10].replace(" ","T"),
+       'fecha_fin': str(clase.fecha_fin)[0:-10].replace(" ","T"),
        "espacio_asignado": None,
        "tipo_espacio_e": clase.espacio.id,
         "modalidad_clase_e": clase.modalidad.id,
@@ -158,7 +161,7 @@ def test_editar_clase_post_negativo_fecha_inicio_None(autenticacion, clase):
     request.method = 'POST'
     request.POST = {
        'fecha_inicio': None,
-       'fecha_fin': clase.fecha_fin,
+       'fecha_fin': str(clase.fecha_fin)[0:-10].replace(" ","T"),
        "espacio_asignado": None,
        "tipo_espacio_e": clase.espacio.id,
         "modalidad_clase_e": clase.modalidad.id,
@@ -185,7 +188,7 @@ def test_editar_clase_post_negativo_fecha_fin_None(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'fecha_inicio': clase.fecha_inicio,
+       'fecha_inicio': str(clase.fecha_inicio)[0:-10].replace(" ","T"),
        'fecha_fin': None,
        "espacio_asignado": None,
        "tipo_espacio_e": clase.espacio.id,
@@ -213,8 +216,8 @@ def test_editar_clase_post_negativo_tipo_espacio_None(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'fecha_inicio': clase.fecha_inicio,
-       'fecha_fin': clase.fecha_fin,
+       'fecha_inicio': str(clase.fecha_inicio)[0:-10].replace(" ","T"),
+       'fecha_fin': str(clase.fecha_fin)[0:-10].replace(" ","T"),
        "espacio_asignado": None,
        "tipo_espacio_e": None,
         "modalidad_clase_e": clase.modalidad.id,
@@ -241,8 +244,8 @@ def test_editar_clase_post_negativo_tipo_espacio_invalido(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'fecha_inicio': clase.fecha_inicio,
-       'fecha_fin': clase.fecha_fin,
+       'fecha_inicio': str(clase.fecha_inicio)[0:-10].replace(" ","T"),
+       'fecha_fin': str(clase.fecha_fin)[0:-10].replace(" ","T"),
        "espacio_asignado": None,
        "tipo_espacio_e": 100,
         "modalidad_clase_e": clase.modalidad.id,
@@ -269,8 +272,8 @@ def test_editar_clase_post_negativo_modalidad_None(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'fecha_inicio': clase.fecha_inicio,
-       'fecha_fin': clase.fecha_fin,
+       'fecha_inicio': str(clase.fecha_inicio)[0:-10].replace(" ","T"),
+       'fecha_fin': str(clase.fecha_fin)[0:-10].replace(" ","T"),
        "espacio_asignado": None,
        "tipo_espacio_e": clase.espacio.id,
         "modalidad_clase_e": None,
@@ -297,8 +300,8 @@ def test_editar_clase_post_negativo_modalidad_invalido(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'fecha_inicio': clase.fecha_inicio,
-       'fecha_fin': clase.fecha_fin,
+       'fecha_inicio': str(clase.fecha_inicio)[0:-10].replace(" ","T"),
+       'fecha_fin': str(clase.fecha_fin)[0:-10].replace(" ","T"),
        "espacio_asignado": None,
        "tipo_espacio_e": clase.espacio.id,
         "modalidad_clase_e": 100,
@@ -325,8 +328,8 @@ def test_editar_clase_post_negativo_docente_invalido(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'fecha_inicio': clase.fecha_inicio,
-       'fecha_fin': clase.fecha_fin,
+       'fecha_inicio': str(clase.fecha_inicio)[0:-10].replace(" ","T"),
+       'fecha_fin': str(clase.fecha_fin)[0:-10].replace(" ","T"),
        'espacio_asignado': None,
        'tipo_espacio_e': clase.espacio.id,
         'modalidad_clase_e': clase.modalidad.id,
@@ -353,8 +356,8 @@ def test_editar_clase_post_positivo(autenticacion, clase):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-       'fecha_inicio': clase.fecha_inicio,
-       'fecha_fin': clase.fecha_fin,
+       'fecha_inicio': str(clase.fecha_inicio)[0:-10].replace(" ","T"),
+       'fecha_fin': str(clase.fecha_fin)[0:-10].replace(" ","T"),
        "espacio_asignado": None,
        "tipo_espacio_e": clase.espacio.id,
         "modalidad_clase_e": clase.modalidad.id,
