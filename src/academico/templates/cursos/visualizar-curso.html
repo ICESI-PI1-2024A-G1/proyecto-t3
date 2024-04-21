@@ -105,7 +105,32 @@
                               {% endif %}
                                 <img id="class_group{{grupo.0.grupo_clases.id}}_icon" src="{% static 'img/arrow_back.png' %}" class="icon ml-2" alt="Modulo de clases" style="transform: rotate(180deg); filter:invert(100%);">
                                 <h2 class="text-white">Modulo de clases {{ forloop.counter }}</h2>
-                                <label></label>  
+                                <label></label>
+                                <div class="block card m-2 p-2">
+                                
+                                  <h5>Entregó notas?
+                                  {% if user.is_lider %}
+                                    {% if grupo.0.grupo_clases.entrega_notas %}
+                                    <button id="btnNotasL" class="btn btn-secondary e p-2" style="border-radius: 8px; text-align: start; background-color: rgba(186, 250, 114, 0.773); " data-grupo-id="{{ grupo.0.grupo_clases.id }}">
+                                        <label class="col"> Si </label>
+                                    {% else %}
+                                    <button id="btnNotasL" class="btn btn-secondary e p-2" style="border-radius: 8px; text-align: start; background-color: rgba(243, 119, 136 , 0.773);" data-grupo-id="{{ grupo.0.grupo_clases.id }}">
+                                        <label class="col"> No </label>
+                                    {% endif %}
+                                    </button>
+                                  {% else %}
+                                    {% if grupo.0.grupo_clases.entrega_notas %}
+                                    <button id="btnNotas" class="btn btn-secondary e p-2" style="border-radius: 8px; text-align: start; background-color: rgba(186, 250, 114, 0.773); ">
+                                        <label class="col"> Si </label>
+                                    {% else %}
+                                    <button id="btnNotas" class="btn btn-secondary e p-2" style="border-radius: 8px; text-align: start; background-color: rgba(243, 119, 136 , 0.773);">
+                                        <label class="col"> No </label>
+                                    {% endif %}
+                                    </button>
+                                  {% endif%}
+                                  </h5> 
+                                </div>  
+
                               </div>
                               {% if user.is_lider %}
                               <div class="row align-items-center" style="justify-content: space-between; width: 20%;" >
@@ -324,13 +349,66 @@
   ></div>
 </div>
 
+<!--popup para cambiar estado-->
+<form method="POST" action="/academico/cursos/{{curso_id}}">
+{% csrf_token %}
+  <div id="popupNotas" style="display: none">
+    <div class="modal moodle-has-zindex show background-shadow">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="popup-content form-group">
+
+            <span class="close" onclick="closePopup()"></span>
+            <h3 class="h2">Cambiar entrega de notas</h3>
+            <input type="hidden" name="grupo_id" id="grupo_id" value="">
+            <select
+                        id="nuevoNotas"
+                        class="custom-select mr-2 mb-5"
+                        name="nuevoNotas"
+                        >
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
+                        </select>
+              <button class="btn btn-primary mb-5" type="submit">Actualizar</button>  
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      tabindex="-1"
+      style="position: fixed; top: 0px; left: 0px"
+      aria-hidden="true"
+      data-aria-hidden-tab-index="0"
+    ></div>
+  </div>
+</form>
+
 <script>
     var editModal = document.getElementById("editModal");
+    var popupNotas = document.getElementById("popupNotas");
   
     // Cerrar popup al hacer clic en el botón de cerrar
     function closePopup() {
         editModal.style.display = "none";
+        popupNotas.style.display = "none";
     }
+    
+    // Obtén todos los botones con id 'btnNotasL'
+    var botones = document.querySelectorAll("#btnNotasL");
+
+    // Añade un evento 'click' a cada botón
+    botones.forEach(function(btn) {
+        btn.onclick = function () {
+            // Muestra el popup
+            popupNotas.style.display = "block";
+
+            // Obtiene el id del grupo del atributo 'data-grupo-id' del botón
+            var grupoId = this.getAttribute("data-grupo-id");
+
+            // Asigna el id del grupo al campo oculto 'grupo_id' en el formulario
+            document.getElementById("grupo_id").value = grupoId;
+        };
+    });
   
     // Cerrar popup al dar clic afuera
     window.onclick = function (event) {
