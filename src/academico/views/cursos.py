@@ -97,6 +97,26 @@ def visualizacion_curso(request, curso_id):
     for docente in docentes_con_clases:
         docente.num_clases = len(Clase.objects.filter(docente=docente, curso=curso))
 
+    if request.method == "POST":
+            nuevoNotas = request.POST.get("nuevoNotas", None)
+            grupo_id = request.POST.get("grupo_id", None)
+            grupo = GrupoDeClase.objects.get(id=grupo_id)
+            clasesG = Clase.objects.filter(curso=curso, grupo_clases=grupo)
+            claseX = clasesG.first()
+            notasG = claseX.grupo_clases.entrega_notas
+
+            if(((notasG==False) and nuevoNotas=="No") or ((notasG==True) and nuevoNotas=="Si")):
+                return redirect("visualizar-curso", curso_id=curso_id)
+            
+            if grupo_id != None:
+                if(nuevoNotas=="Si"):
+                    grupo.entrega_notas=True
+                    grupo.save()
+                else:
+                    grupo.entrega_notas=False
+                    grupo.save()
+
+            
     return render(
         request,
         "visualizar-curso.html",
