@@ -1,6 +1,13 @@
+import json
 import random
 
-from academico.models import Clase
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.db.models.functions import ExtractWeekDay
+from django.shortcuts import render
+
+from academico.models import Clase, Materia, Programa
+from usuarios.models import Docente
 
 
 def args_principal(user, seleccionado):
@@ -15,6 +22,9 @@ def args_principal(user, seleccionado):
     """
     
     sites = {}
+
+    if user.is_gestor or user.is_director:
+        sites["Inicio"] = {"url": "/academico/inicio", "seleccionado": seleccionado=="Inicio"}
     
     if user.is_gestor or user.is_director:
         sites["Programas posgrado"] = {"url": "/academico/programas", "seleccionado": seleccionado=="programas"}
@@ -27,6 +37,8 @@ def args_principal(user, seleccionado):
     
     if user.is_gestor:
         sites["Solicitud"] = {"url": "/solicitud/crear_viatico", "seleccionado": seleccionado=="solicitud"}
+    
+    sites["Solicitud de Salones"] = {"url": "/solicitud/salones_solicitud", "seleccionado": seleccionado=="solicitud_clase"}
         
     return sites
 
@@ -61,3 +73,27 @@ def obtener_modalidad(malla):
         except:
             continue
     return max(set(modalidades), key=modalidades.count)
+
+@login_required(login_url="/login")
+def inicio(request):
+
+    request.user.usuario.init_groups()
+    total_programas = Programa.objects.count()
+    total_docentes = Docente.objects.count()
+    total_materias = Materia.objects.count()
+    total_clases = Clase.objects.count()
+
+    estados_programas = list(Programa.objects.values('estado_solicitud__nombre').annotate(total=Count('estado_solicitud')))
+    clases_por_dia = list(Clase.objects.annotate(dia_semana=ExtractWeekDay('fecha_inicio')).values('dia_semana').annotate(total=Count('id')))
+
+    return render(request, "inicio.html", {
+        "total_programas": total_programas,
+        "total_docentes": total_docentes,
+        "total_materias": total_materias,
+        "total_clases": total_clases,
+        "estados_programas_json": json.dumps(estados_programas),
+        "clases_por_dia_json": json.dumps(clases_por_dia),
+        "side": "sidebar_principal.html",
+        "side_args": args_principal(request.user, "Inicio"),
+    },
+)

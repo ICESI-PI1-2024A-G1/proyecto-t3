@@ -10,6 +10,7 @@ from django.views.decorators.http import require_POST
 
 from academico.models import (Clase, Curso, Docente, Espacio, Estudiante,
                               GrupoDeClase, Modalidad)
+from solicitud.models import (SolicitudEspacio, Usuario, EstadoSolicitud, SolicitudClases)
 from ccsa_project import settings
 
 
@@ -24,11 +25,25 @@ def solicitar_salones(request, curso_id):
     Returns:
         HttpResponse: La respuesta HTTP que muestra la página de solicitud de salones.
     """
+    curso = get_object_or_404(Curso, nrc=curso_id)
     
     request.user.usuario.init_groups()
+    if request.method == "POST":
+
+        responsable = Usuario.objects.get(usuario=request.user)
+        estado_en_espera = EstadoSolicitud.objects.get(estado=1)
+        solicitud = SolicitudEspacio.objects.create(responsable = responsable, estado=estado_en_espera)
+        clase_ids = request.POST.getlist('clases')
+        if clase_ids:
+            clases = Clase.objects.filter(id__in=clase_ids)
+            for clase in clases:
+                SolicitudClases.objects.create(solicitud=solicitud, clase=clase)
+
+        return redirect('visualizar-curso', curso_id=curso.nrc)
+    else:
+        return redirect('visualizar-curso', curso_id=curso.nrc)
+
     
-    curso = get_object_or_404(Curso, nrc=curso_id)
-    # Solicitud.objects.create(curso=curso, tipo="Salones")
 
 
 @login_required(login_url="/login")
