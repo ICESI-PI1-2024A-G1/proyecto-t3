@@ -83,10 +83,7 @@
                     <h1 class="card-title bg-primary p-2 mb-4 text-white">Clases</h1>
 
                     {% if user.is_lider %}
-                    <div class="d-flex justify-content-center">
-                      <!--POR FAVOR CAMBIAR ESTE BOTÓN-->
-                      <button type="button" class="btn btn-primary mt-2 w-30" onclick="seleccionarTodasLasClases()">Seleccionar todas las clases</button>
-                    </div>
+
                     {% endif %}
 
                     <div class="clases-container" style="display: flex; flex-wrap: wrap;">
@@ -112,7 +109,7 @@
                                 <a class="rounded btn-secondary p-2 linkeable ml-1" onclick="agregar_en(1,'{{grupo.0.grupo_clases.id}}')">
                                   <img id="{{grupo.0.grupo_clases..id}}" src="{% static 'img/add.webp' %}" class="icon btn">
                                 </a>
-                                <a id="{{grupo.0.id}}" class="rounded btn-secondary p-2 linkeable" onclick="show_pop(event,'{{grupo.0.fecha_inicio}}', '{{grupo.0.fecha_fin}}','{{grupo.0.espacio_asignado}}','{{grupo.0.espacio.id}}','{{grupo.0.modalidad.id}}' ,'{{grupo.0.docente.cedula}}',true)">
+                                <a id="{{grupo.0.id}}" class="rounded btn-secondary p-2 linkeable" onclick="show_pop('{{grupo.0.id}}','{{grupo.0.fecha_inicio}}', '{{grupo.0.fecha_fin}}','{{grupo.0.espacio_asignado}}','{{grupo.0.espacio.id}}','{{grupo.0.modalidad.id}}' ,'{{grupo.0.docente.cedula}}',true)">
                                   <img id="{{grupo.0.id}}" src="{% static 'img/pencil.png' %}" class="icon btn">
                                 </a>
                                 <a id="{{grupo.0.grupo_clases.id}}" class="rounded btn-secondary p-2 linkeable"onclick="confirmarEliminarGrupo(event, '{{grupo.0.grupo_clases.id}}')">
@@ -134,8 +131,25 @@
                               <div class="card">
                               {%endif%}
                                   <div class="card-body">
-                                      <div class="row row justify-content-center align-items-center">
-                                        <h5 class="card-title flex-grow-1 text-center">Clase {{ forloop.counter }} </h5>
+                                      <div class="d-flex justify-content-between align-items-center">
+                                        <div class="form-check">
+                                          <input class="form-check-input clase-checkbox clase-checkbox-{{clase.grupo_clases.id}}" type="checkbox" value="{{clase.id}}" id="clase{{clase.id}}" style="transform: scale(1.5);">
+                                          <label for="clase{{clase.id}}">Seleccionar</label>
+                                        </div>
+                                        <h5 class="card-title text-center mb-0">Clase {{ forloop.counter }}</h5>
+                                        <div class="dropdown">
+                                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <img src="{% static 'img/tuerca.png' %}" class="icon">
+                                          </button>
+                                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#" onclick="show_pop('{{clase.id}}','{{clase.fecha_inicio}}', '{{clase.fecha_fin}}','{{clase.espacio_asignado}}','{{clase.espacio.id}}','{{clase.modalidad.id}}' ,'{{clase.docente.cedula}}')">
+                                              <img src="{% static 'img/pencil.png' %}" class="icon"> Editar
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="confirmarEliminarClase(event, '{{clase.id}}')">
+                                              <img src="{% static 'img/Eliminar.png' %}" class="icon"> Eliminar
+                                            </a>
+                                          </div>
+                                        </div>
                                       </div>
                                       {% if user.is_gestor %}
                                       <!-- Lógica de gestión de viaticos para cada clase -->
@@ -152,27 +166,7 @@
                                           {% endfor %}
                                         </form>
 
-                                        <div class="card-body">
-                                          <div class="dropdown-item form-check" style="margin-top: 1px;">
-                                            <input class="form-check-input clase-checkbox clase-checkbox-{{clase.grupo_clases.id}}" type="checkbox" value="{{clase.id}}" id="clase{{clase.id}}" style="transform: scale(1.5);"> Seleccionar
-                                          </div>
-                                        </div>
-
-                                        <div class="card-body">
-                                          <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                              <img src="{% static 'img/tuerca.png' %}" class="icon">
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                              <a class="dropdown-item" href="#" onclick="show_pop(event,'{{clase.fecha_inicio}}', '{{clase.fecha_fin}}','{{clase.espacio_asignado}}','{{clase.espacio.id}}','{{clase.modalidad.id}}' ,'{{clase.docente.cedula}}')">
-                                                <img src="{% static 'img/pencil.png' %}" class="icon"> Editar
-                                              </a>
-                                              <a class="dropdown-item" href="#" onclick="confirmarEliminarClase(event, '{{clase.id}}')">
-                                                <img src="{% static 'img/Eliminar.png' %}" class="icon"> Eliminar
-                                              </a>
-                                            </div>
-                                          </div>
-                                        </div>
+                                    
                                           {% endif %}
                                       {% endif %}
 
