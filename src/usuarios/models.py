@@ -144,4 +144,6 @@ class Usuario(models.Model):
             self.usuario.rol_principal = "Administrador"
             self.usuario.is_gestor = True
             self.usuario.is_lider = True
-            
+        
+        if not self.usuario.is_director and not self.usuario.is_lider and not self.usuario.is_gestor and not self.usuario.is_superuser:
+            self.usuario.rol_principal = "No asignado"

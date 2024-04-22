@@ -9,6 +9,7 @@
 </head>
 
 <div class="container">
+    {% csrf_token %}
     <h1 class="display-3 align-center">Lista de Usuarios</h1>
     <div class="mb-3">
         <!-- Formulario para búsqueda -->
@@ -30,7 +31,7 @@
                 <th>Email</th>
                 <th>Rol principal</th>
                 <th>Último inicio de sesión</th>
-                <th>Estado de actividad</th>
+                <th>Activo</th>
                 <th>Ajustes</th>
             </tr>
         </thead>
@@ -42,13 +43,28 @@
                 <td>{{ usuario.rol_principal }}</td>
                 <td>{{ usuario.last_login }}</td>
                 <td>
-                    <input type="checkbox" {% if usuario.is_active %} checked {% endif %} disabled />
+                    <input type="checkbox" {% if usuario.is_active %} checked {% endif %} onchange="changeStateTo('{{usuario.username}}')"/>
                 </td>
                 <td>
-                    <a href="">
-                        <i class="fas fa-cog
-                        "></i>
-                    </a>
+                    <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{% static 'img/tuerca.png' %}" class="icon">
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Gestor')">
+                          {% if usuario.rol_principal == 'Gestor' %}
+                            <img src="{% static 'img/check.png' %}" class="icon">
+                          {%endif%}
+                          Gestor
+                        </a>
+                        <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Lider')">
+                            {% if usuario.rol_principal == 'Lider' %}
+                            <img src="{% static 'img/check.png' %}" class="icon">
+                            {%endif%}
+                            Líder
+                        </a>
+                      </div>
+                    </div>
                 </td>
             </tr>
             {% endfor %}
