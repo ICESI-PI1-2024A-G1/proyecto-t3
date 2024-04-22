@@ -1,5 +1,5 @@
-function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente,cambiar_otros) {
-    clase_seleccionada_id = evt.target.id;
+function show_pop(clase_id, inicio, fin, espacio, tipo, modalidad, docente, cambiar_otros) {
+    clase_seleccionada_id = clase_id;
     console.log(clase_seleccionada_id);
     editModal.style.display = "block";
     var form = document.getElementById('editClassForm');
