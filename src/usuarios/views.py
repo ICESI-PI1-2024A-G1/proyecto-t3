@@ -1,4 +1,5 @@
 import random
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,13 +10,14 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
+                              MallaCurricular, Materia, Modalidad, Periodo,
+                              Programa)
 from academico.views import args_principal
 
 from .forms import DocenteForm
 from .models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
                      EstadoDocente, Persona, TipoContrato)
-from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
 
 # Create your views here.
 
@@ -82,6 +84,9 @@ def docente_Detail(request, cedula, periodo):
     Raises:
         Http404: Si no se encuentra el docente con el código especificado.
     """
+    
+    request.user.usuario.init_groups()
+    
     docentes = Docente.objects.all()
     docente = get_object_or_404(Docente, cedula=cedula)
     estados = EstadoDocente.objects.all()
@@ -158,6 +163,7 @@ def traducir_a_español(dia):
     }
 
     return dias_semana.get(dia, dia)
+
 @login_required(login_url="/login")
 def docentes(request):
     """
@@ -176,6 +182,9 @@ def docentes(request):
     Raises:
         None
     """
+    
+    request.user.usuario.init_groups()
+    
     docentes = Docente.objects.all()
 
     # Búsqueda y filtrado
@@ -222,7 +231,7 @@ def docentes(request):
             "estados": estados,
             "contratos": contratos,
             "side": "sidebar_principal.html",
-            "side_args": args_principal("docentes"),
+            "side_args": args_principal(request.user,"docentes"),
         },
     )
 

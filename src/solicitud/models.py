@@ -1,19 +1,7 @@
 from django.db import models
 
-from academico.models import Espacio
-from usuarios.models import Docente
-
-class TipoContable(models.Model):
-    """
-    Modelo para representar los tipos contables.
-
-    Atributos:
-        id (AutoField): Identificador único del tipo contable.
-        tipo (CharField): Descripción del tipo contable.
-    """
-
-    id = models.AutoField(primary_key=True)
-    tipo = models.CharField(max_length=32)
+from academico.models import Clase
+from usuarios.models import Docente, Usuario
 
 
 class EstadoSolicitud(models.Model):
@@ -41,47 +29,36 @@ class Solicitud(models.Model):
 
     id = models.AutoField(primary_key=True)
     descripcion = models.CharField(max_length=1024)
-    fecha_solicitud = models.DateField()
-
-
-class SolicitudContable(Solicitud):
-    """
-    Modelo para representar una solicitud contable.
-
-    Atributos:
-        presupuesto (FloatField): Presupuesto asociado a la solicitud contable.
-        cuenta_cobro (CharField): Cuenta de cobro asociada a la solicitud contable.
-        tipo_contable (ForeignKey): Tipo contable asociado a la solicitud contable.
-    """
-
-    presupuesto = models.FloatField()
-    cuenta_cobro = models.CharField(max_length=10)
-    tipo_contable = models.ForeignKey(TipoContable, on_delete=models.CASCADE)
-
+    fecha_solicitud = models.DateField(auto_now_add=True)
 
 class SolicitudEspacio(Solicitud):
     """
     Modelo para representar una solicitud de espacio.
-
+    
     Atributos:
-        espacio (ForeignKey): Espacio físico solicitado.
-        fecha_inicio (DateField): Fecha de inicio de la solicitud de espacio.
-        fecha_fin (DateField): Fecha de fin de la solicitud de espacio.
+        estado (ForeignKey): Estado de la solicitud.
+        responsable (ForeignKey): Usuario responsable de la solicitud.
+        clases (ManyToManyField): Clases asociadas a la solicitud.
     """
 
-    espacio = models.ForeignKey(Espacio, on_delete=models.CASCADE)
-    fecha_inicio = models.DateField()
-    fecha_fin = models.DateField()
+    estado = models.ForeignKey(EstadoSolicitud, on_delete=models.CASCADE, null=True)
+    responsable = models.ForeignKey(Usuario, on_delete=models.CASCADE,null=True)
+    clases = models.ManyToManyField(Clase, through='SolicitudClases')
+
+class SolicitudClases(models.Model):
+    solicitud = models.ForeignKey(SolicitudEspacio, on_delete=models.CASCADE)
+    clase = models.ForeignKey(Clase, on_delete=models.CASCADE)
+
 
 class PropositoViaje(models.Model):
     id = models.AutoField(primary_key=True)
     proposito = models.CharField(max_length=128)
 
 class SolicitudViatico(Solicitud):
-    docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
-    fecha_ida = models.DateField()
-    fecha_vuelta = models.DateTimeField()
-    propositoViaje = models.ForeignKey(PropositoViaje, on_delete=models.CASCADE, to_field="id")
-    tiquete= models.BooleanField()
+    clase = models.OneToOneField(Clase, on_delete=models.CASCADE, null=True, blank=True)
+    fecha_ida = models.DateField(null=True, blank=True)
+    fecha_vuelta = models.DateTimeField(null=True, blank=True)
+    propositoViaje = models.ForeignKey(PropositoViaje, on_delete=models.CASCADE, to_field="id", null=True, blank=True)
+    tiquete = models.BooleanField()
     hospedaje= models.BooleanField()
     alimentacion= models.BooleanField()

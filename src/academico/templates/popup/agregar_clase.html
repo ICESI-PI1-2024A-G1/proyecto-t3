@@ -1,0 +1,12 @@
+{% extends 'popup.html' %} {% block content %} {% load static %}
+
+  <div class="form-group row justify-content-center">
+    <label for="num_semanas" class="col-sm-2 col-form-label text-left"
+      >N° de clases:</label>
+    <div class="col-sm-8 text right">
+      <input type="number" id="num_semanas_add" name="num_semanas_add" class="form-control" />
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="agregar_clases()">Agregar</button>
+{%endblock%}
