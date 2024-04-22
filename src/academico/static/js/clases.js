@@ -1,5 +1,5 @@
-function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente,cambiar_otros) {
-    clase_seleccionada_id = evt.target.id;
+function show_pop(clase_id, inicio, fin, espacio, tipo, modalidad, docente, cambiar_otros) {
+    clase_seleccionada_id = clase_id;
     console.log(clase_seleccionada_id);
     editModal.style.display = "block";
     var form = document.getElementById('editClassForm');
@@ -112,21 +112,25 @@ function cambiar_checkbox_edicion(){
     }
 }
 
-function Solicitud_Salones(event, cursoNrc){
+function Solicitud_Salones(){
     var confirmacion = confirm('¿Estás seguro de que quieres solicitar los salones para este curso?');
     if (confirmacion) {
-        solicitarSalon(cursoNrc);
+        var checkboxes = document.querySelectorAll('.clase-checkbox');
+        var form = document.getElementById("solicitud-form");
+        checkboxes.forEach(function(checkbox, index){
+            if(checkbox.checked && checkbox.value){
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "clases";
+                input.value = checkbox.value;
+                form.appendChild(input);
+            }
+        });
+        form.submit();
     }
 }
 
-function solicitarSalon(cursoNrc) {
-    var checkboxes = document.querySelectorAll('.clase-checkbox');
-    var clasesSeleccionadas = Array.from(checkboxes).map(function(checkbox) {
-        return checkbox.checked;
-    });
-    console.log(clasesSeleccionadas);
-        
-}
+
 
 function display_group(id){
     var group = document.getElementById(id);
