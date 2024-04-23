@@ -65,4 +65,18 @@ def solicitud_viaticos(request):
             "side": "sidebar_crearViatico.html"
         }
     )
+    
+@login_required(login_url="/login")
+def salones_solicitud(request):
+    
+    request.user.usuario.init_groups()
+    
+    return render(
+        request,
+        "salones_solicitud.html",
+        {
+            "side": "sidebar_principal.html",
+            "side_args": args_principal(request.user,"solicitud_clase")
+        }
+    )
 
