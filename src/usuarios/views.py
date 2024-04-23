@@ -37,12 +37,12 @@ def login_page(request):
         user = authenticate(request, username=form['username'], password=form['password'])
         if user is not None:
             login(request, user)
-            return redirect("programas")
+            return redirect("inicio")
         else:
             messages.error(request, "Usuario y/o contraseña incorrectos. Por favor, inténtelo nuevamente.")
 
     elif request.user.is_authenticated:
-        return redirect('programas')
+        return redirect("inicio")
 
     return render(request, 'login.html', {
         'form': AuthenticationForm
