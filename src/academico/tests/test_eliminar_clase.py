@@ -1,18 +1,18 @@
 import datetime
 from datetime import datetime
 
-from django.shortcuts import get_object_or_404
 import pytest
 from django.contrib.auth.models import User
 from django.http import Http404, HttpResponseNotFound
+from django.shortcuts import get_object_or_404
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from mixer.backend.django import mixer
 
 from academico.models import (Clase, Curso, Departamento, Docente, Espacio,
                               Materia, Modalidad, Periodo, TipoDeMateria)
-from academico.views import editar_clase
-from academico.views import eliminar_clase
+from academico.views import editar_clase, eliminar_clase
+from usuarios.models import Persona, Usuario
 
 
 @pytest.fixture
@@ -36,6 +36,8 @@ def autenticacion(db, rf):
         request: Objeto de la solicitud HTTP con el usuario autenticado.
     """
     user = User.objects.create_user(username='admin', password='admin')
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     request = rf.get(reverse('visualizar-curso', kwargs={'curso_id': 1}))
     request.user = user
     return request

@@ -6,14 +6,18 @@ from django.test import RequestFactory
 from django.urls import reverse
 from mixer.backend.django import mixer
 
-from academico.models import (Clase, Curso, Espacio, MallaCurricular, Materia,
+from academico.models import (Clase, Curso, Espacio, EspacioClase,
+                              GrupoDeClase, MallaCurricular, Materia,
                               Modalidad, Periodo, Programa)
 from academico.views import importar_malla, primera_clase_programa
+from usuarios.models import Persona, Usuario
 
 
 @pytest.fixture
 def create_user():
     user = mixer.blend(User, username="testuser", password="testpassword")
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     return user
 
 
@@ -77,6 +81,8 @@ def create_curso(create_malla):
 
 @pytest.fixture
 def create_clases(create_curso, create_modalidad, create_espacio):
+    grupo_clases = GrupoDeClase.objects.create()
+    espacio = EspacioClase.objects.create(tipo=create_espacio, edificio="Edificio D", numero=101)
     for i in range(1, 9):
         clase = mixer.blend(
             Clase,
@@ -85,7 +91,8 @@ def create_clases(create_curso, create_modalidad, create_espacio):
             espacio=create_espacio,
             fecha_inicio=f"2022-0{i}-01",
             fecha_fin=f"2022-0{i}-15",
-            espacio_asignado="Aula 101",
+            espacio_asignado=espacio,
+            grupo_clases=grupo_clases,
         )
     return clase
 
