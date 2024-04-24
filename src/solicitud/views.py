@@ -14,7 +14,8 @@ from academico.views import args_principal
 from usuarios.models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
                      EstadoDocente, Persona, TipoContrato)
 from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
+                     MallaCurricular, Materia, Modalidad, Periodo, Programa, EspacioClase)
+from solicitud.models import (Solicitud,EstadoSolicitud,SolicitudEspacio,SolicitudClases)
 
 from .models import *
 
@@ -69,18 +70,9 @@ def solicitud_viaticos(request):
 @login_required(login_url="/login")
 def salones_solicitud(request):
     request.user.usuario.init_groups()
-
     solicitudespacios = SolicitudEspacio.objects.all()
+    espaciosclase = EspacioClase.objects.all()
 
-    estado_salon = request.GET.get('estado_salon')
-    if estado_salon:
-        solicitudespacios = solicitudespacios.filter(estado__id=estado_salon)
-
-    print(solicitudespacios)
-
-    responsable = request.GET.get('responsable')
-    if responsable:
-        solicitudespacios = solicitudespacios.filter(responsable__id=responsable)
 
     return render(
         request,
@@ -89,6 +81,23 @@ def salones_solicitud(request):
             "side": "sidebar_principal.html",
             "side_args": args_principal(request.user,"solicitud_clase"),
             "solicitudespacios": solicitudespacios,
+            "espaciosclase": espaciosclase
         }
     )
 
+@login_required(login_url="/login")
+def asignar_espacio(request, solicitud_id):
+    espacio_id = request.POST.get('espacio_asignado')
+    solicitud = get_object_or_404(SolicitudEspacio, id=solicitud_id)
+    espacio = get_object_or_404(EspacioClase, id=espacio_id)
+
+    # Obtenemos todas las SolicitudClases asociadas con la SolicitudEspacio
+    solicitudclases = SolicitudClases.objects.filter(solicitud=solicitud)
+
+    # Para cada SolicitudClases, asignamos el EspacioClase a la Clase asociada
+    for solicitudclase in solicitudclases:
+        clase = solicitudclase.clase
+        clase.espacio_asignado = espacio
+        clase.save()
+
+    return redirect('salones_solicitud')

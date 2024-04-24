@@ -40,6 +40,9 @@ def args_principal(user, seleccionado):
     
     if user.is_gestor:
         sites["Solicitud de Salones"] = {"url": "/solicitud/salones_solicitud", "seleccionado": seleccionado=="solicitud_clase"}
+    
+    if user.is_superuser:
+        sites["Administrador"] = {"url": "/administrador", "seleccionado": seleccionado=="administrador"}
         
     return sites
 
