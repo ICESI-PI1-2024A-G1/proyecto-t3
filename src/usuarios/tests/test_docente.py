@@ -1,14 +1,20 @@
-import pytest
-from django.test import RequestFactory
-from django.http import Http404
-from django.http import HttpRequest
-from django.contrib.auth.models import User
-from usuarios.models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
-                     EstadoDocente, Persona, TipoContrato)
-from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa, Departamento, TipoDeMateria)
 from datetime import datetime
+
+import pytest
+from django.contrib.auth.models import User
+from django.http import Http404, HttpRequest
+from django.test import RequestFactory
+from mixer.backend.django import mixer
+
+from academico.models import (Clase, Curso, Departamento, Espacio,
+                              EstadoSolicitud, Facultad, MallaCurricular,
+                              Materia, Modalidad, Periodo, Programa,
+                              TipoDeMateria)
+from usuarios.models import (Ciudad, Contrato, Director, Docente,
+                             EstadoContrato, EstadoDocente, Persona,
+                             TipoContrato, Usuario)
 from usuarios.views import docente_Detail
+
 
 def autenticar_usuario(request):
     """
@@ -21,6 +27,8 @@ def autenticar_usuario(request):
     None
     """ 
     user = User.objects.create_user(username='admin', password='admin')
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     request.user = user
 
 @pytest.fixture
