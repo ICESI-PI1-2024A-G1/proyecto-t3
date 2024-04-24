@@ -98,3 +98,10 @@ def inicio(request):
         "side_args": args_principal(request.user, "Inicio"),
     },
 )
+
+def solicitudes_salones(request):
+    return render(request, "salones_solicitud.html", {
+        "side": "sidebar_principal.html",
+        "side_args": args_principal(request.user, "Solicitud de Salones"),
+    }
+)

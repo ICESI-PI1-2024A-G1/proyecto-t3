@@ -1,9 +1,122 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Solicitudes</title>
+    {% load static %}
+    <script src="{% static 'js/busqueda_solicitud.js' %}"></script>
+</head>
+
+
 <div class="container">
-    <div class="header">
-        <h1 class="mt-2"> Solicitud de viaticos </h1>
+    <h1 class="display-3 align-center">Lista de solicitudes</h1>
+    <div class="mb-3">
+        <!-- Búsqueda por estado de la solicitud -->
+        <form id="search-form" method="GET" action="{% url 'salones_solicitud' %}" class="form-inline">
+            <div class="form-group flex-grow-1 position-relative">
+              <label for="q" class="sr-only">Buscar</label>
+              <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por estado o responsable" />
+              <img src="{% static 'img/search.png' %}" alt="Buscar"
+                style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
+                onclick="document.getElementById('search-form').submit();">
+            </div>
+        </form>
+
+        <!-- Formulario para filtrado y ordenamiento -->
+        <div class="d-flex flex-wrap justify-content-between">
+            <form method="GET" action="{% url 'salones_solicitud' %}" class="form-inline mb-2 mb-md-0 mr-2">
+                <div class="form-group">
+                    <label for="ordenar_por" class="mr-2">Ordenar por:</label>
+                    <select name="ordenar_por" id="ordenar_por" class="form-control mr-2" onchange="filtrado_busqueda()">
+                      <option value="">Sin orden</option>
+                      <option value="solicitud">Solicitud</option>
+                      <option value="estado_salon">Estados</option>
+                      <option value="responsable">Responsable</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Contenedor para Filtrado por Solicitud y Estado -->
+                <div id="filtradoDiv" class="d-flex align-items-center flex-column flex-md-row">
+                    <div id="solicitudDiv" style="display: none;" class="mr-2 mb-2 mb-md-0">
+                        <select name="solicitud" class="form-control">
+                          <option value="">Todas las solicitudes</option>
+                          {% for solicitudespacio in solicitudespacios %}
+                          <option value="{{ solicitudespacio.id }}">{{ solicitudespacio.descripcion }}</option>
+                          {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Filtrado por estado -->
+                <div id="estado_salonDiv" style="display: none;" class="mr-2 mb-2 mb-md-0">
+                    <select name="estado_salon" class="form-control">
+                      <option value="">Todos los estados</option>
+                      {% for solicitudespacio in solicitudespacios %}
+                      <option value="{{ solicitudespacio.estado }}">{{ solicitudespacio.estado }}</option>
+                      {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Filtrado por Responsable -->
+                <div id="responsableDiv" style="display: none;" class="mr-2 mb-2 mb-md-0">
+                    <select name="responsable" class="form-control">
+                      <option value="">Todos los responsables</option>
+                      {% for solicitudespacio in solicitudespacios %}
+                      <option value="{{ solicitudespacio.responsable }}">{{ solicitudespacio.responsable }}</option>
+                      {% endfor %}
+                    </select>
+                </div>
+                <!-- Botón de Filtrar -->
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </form>
+        </div>
     </div>
+
+    <!-- Grandes -->
+    <div class="d-none d-md- block">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Id de solicitud</th>
+                    <th>Nombre del responsable</th>
+                    <th>Estado de Solicitud</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitudespacio in solicitudespacios %}
+                <tr>
+                    <td>{{ solicitudespacio.id }}</td>
+                    <td>{{ solicitudespacio.responsable.username }}</td>
+                    <td>{{ solicitudespacio.estado.descripcion }}</td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Pequeñas -->
+    <div class="table-responsive d-md-none">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Id de solicitud</th>
+          <th>Nombre del responsable</th>
+          <th>Facultad</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for solicitudespacio in solicitudespacios %}
+        <tr>
+          <td>{{ solicitudespacio.id }}</td>
+          <td>{{ solicitudespacio.responsable.user }}</td>
+          <td>{{ solicitudespacio.estado.descripcion }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

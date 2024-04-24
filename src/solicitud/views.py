@@ -68,15 +68,27 @@ def solicitud_viaticos(request):
     
 @login_required(login_url="/login")
 def salones_solicitud(request):
-    
     request.user.usuario.init_groups()
-    
+
+    solicitudespacios = SolicitudEspacio.objects.all()
+
+    estado_salon = request.GET.get('estado_salon')
+    if estado_salon:
+        solicitudespacios = solicitudespacios.filter(estado__id=estado_salon)
+
+    print(solicitudespacios)
+
+    responsable = request.GET.get('responsable')
+    if responsable:
+        solicitudespacios = solicitudespacios.filter(responsable__id=responsable)
+
     return render(
         request,
         "salones_solicitud.html",
         {
             "side": "sidebar_principal.html",
-            "side_args": args_principal(request.user,"solicitud_clase")
+            "side_args": args_principal(request.user,"solicitud_clase"),
+            "solicitudespacios": solicitudespacios,
         }
     )
 
