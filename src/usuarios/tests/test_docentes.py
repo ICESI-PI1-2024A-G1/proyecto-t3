@@ -1,12 +1,16 @@
 import pytest
-from django.test import RequestFactory
-from django.http import HttpRequest
 from django.contrib.auth.models import User
-from usuarios.models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
-                     EstadoDocente, Persona, TipoContrato)
+from django.http import HttpRequest
+from django.test import RequestFactory
+from mixer.backend.django import mixer
+
+from usuarios.models import (Ciudad, Contrato, Director, Docente,
+                             EstadoContrato, EstadoDocente, Persona,
+                             TipoContrato, Usuario)
 from usuarios.views import docentes
 
-#SetUp de 3 docentes e la lista de docentes
+
+# SetUp de 3 docentes e la lista de docentes
 def crear_instancias():
     """
     Crea instancias de objetos en la base de datos para realizar pruebas.
@@ -47,6 +51,8 @@ def autenticar_usuario(request):
     None
     """ 
     user = User.objects.create_user(username='admin', password='admin')
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     request.user = user
 
 @pytest.mark.django_db
@@ -177,6 +183,3 @@ def test_filtrar_docente_por_contrato():
     assert b'Daniel' not in response.content
     assert b'Esteban' in response.content
     assert b'Maria' in response.content
-    
-
-
