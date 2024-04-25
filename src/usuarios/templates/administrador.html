@@ -6,6 +6,7 @@
     <title>Lista de Usuarios</title>
     {% load static %}
     <script src="{% static 'js/usuarios.js' %}"></script>
+    <script src="{% static 'js/popup.js' %}"></script>
 </head>
 
 <div class="container">
@@ -70,6 +71,12 @@
             {% endfor %}
         </tbody>
     </table>
+    <!-- Agregar usuario que puede ver-->
+    <div class = "d-flex justify-content-end">
+        <a class="btn btn-primary mt-2"  onclick="show()">Nuevo usuario<img class="icon" src="{% static 'img/add.webp' %}"></a>
+        {% include 'crear-usuario.html' with size="lg" popup_title="Registro de usuario" %}
+    </div>
+
 </div>
     
 {% endblock %}
