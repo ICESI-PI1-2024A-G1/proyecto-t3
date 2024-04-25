@@ -87,7 +87,7 @@
                     {% endif %}
 
                     <div class="clases-container" style="display: flex; flex-wrap: wrap;">
-                        {% if clases.count == 0 %}
+                        {% if not grupos_clases %}
                         <div class="alert alert-warning w-100" role="alert">
                             No hay clases creadas para este curso
                         </div>

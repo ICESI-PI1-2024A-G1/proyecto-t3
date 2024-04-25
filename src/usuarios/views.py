@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import Group, User
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import IntegrityError
 from django.db.models import Q
@@ -36,12 +37,12 @@ def login_page(request):
         user = authenticate(request, username=form['username'], password=form['password'])
         if user is not None:
             login(request, user)
-            return redirect("programas")
+            return redirect("inicio")
         else:
             messages.error(request, "Usuario y/o contraseña incorrectos. Por favor, inténtelo nuevamente.")
 
     elif request.user.is_authenticated:
-        return redirect('programas')
+        return redirect("inicio")
 
     return render(request, 'login.html', {
         'form': AuthenticationForm
@@ -238,3 +239,99 @@ def docentes(request):
 
 def error_404(request, exception):
     return render(request, '404.html', status=404)
+
+def administrador(request):
+    """
+    Vista que permite la visualización y gestión de usuarios del sistema.
+    Abarca las funcionalidades de creación, edición y eliminación de usuarios.
+    Así como la asignación y eliminación de roles a usuarios.
+    
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+    
+    Returns:
+        HttpResponse: La respuesta HTTP que contiene la página de administrador.
+    """
+    request.user.usuario.init_groups()
+
+    if request.method == "GET":
+        query = request.GET.get("q", None)
+        ordenar_por = request.GET.get("ordenar_por", None)
+        rol = request.GET.get("rol", None)
+        estado = request.GET.get("estado", None)
+
+        users = User.objects.all().order_by("is_active", "first_name", "last_name").exclude(username=request.user.username).exclude(is_superuser=True)
+        for user in users:
+            user.usuario.init_groups()
+            user.persona = user.usuario.persona
+
+        if query:
+            users = users.filter(
+                Q(username__icontains=query) | Q(email__icontains=query)
+            )
+
+        if ordenar_por:
+            users = users.order_by(ordenar_por)
+
+        if rol:
+            users = users.filter(groups__id=rol)
+
+        if estado:
+            users = users.filter(is_active=estado)
+
+    return render(
+        request,
+        "administrador.html",
+        {
+            "usuarios": users,
+            "roles": Group.objects.all(),
+            "estados": [True, False],
+            "side": "sidebar_principal.html",
+            "side_args": args_principal(request.user, "administrador"),
+        },
+    )
+
+
+@login_required(login_url="/login")
+def change_state(request, username):
+    """
+    Vista que permite cambiar el estado de un usuario (activo/inactivo).
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        username (str): El nombre de usuario del usuario a modificar.
+
+    Returns:
+        HttpResponse: Una redirección a la página de administrador.
+    """
+    if username != request.user.username:
+        user_to_change = get_object_or_404(User, username=username)
+        user_to_change.is_active = not user_to_change.is_active
+        user_to_change.save()
+    return redirect("administrador")
+
+@login_required(login_url="/login")
+def change_rol(request, username, rol):
+    """
+    Vista que permite cambiar el rol de un usuario.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        username (str): El nombre de usuario del usuario a modificar.
+
+    Returns:
+        HttpResponse: Una redirección a la página de administrador.
+    """
+    if username != request.user.username:
+        user_to_change = get_object_or_404(User, username=username)
+        user_to_change.usuario.init_groups()
+        if rol:
+            user_to_change.groups.clear()
+            if rol == "Gestor" and user_to_change.rol_principal != "Gestor":
+                user_to_change.groups.add(Group.objects.get(name="gestores"))
+            
+            if rol == "Lider" and user_to_change.rol_principal != "Lider":
+                user_to_change.groups.add(Group.objects.get(name="gestores"))
+                user_to_change.groups.add(Group.objects.get(name="lideres"))
+                
+    return redirect("administrador")

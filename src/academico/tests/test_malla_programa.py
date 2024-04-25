@@ -4,12 +4,13 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, render
 from django.test import RequestFactory
+from mixer.backend.django import mixer
 
 from academico.models import (Departamento, EstadoSolicitud, Facultad,
                               MallaCurricular, Materia, Periodo, Programa,
                               TipoDeMateria, TipoDePrograma)
 from academico.views import malla_curricular
-from usuarios.models import Ciudad, Director
+from usuarios.models import Ciudad, Director, Persona, Usuario
 
 
 def crear_instancias():
@@ -79,6 +80,8 @@ def autenticar_usuario(request):
     None
     """
     user = User.objects.create_user(username='admin', password='admin')
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     request.user = user
 
 @pytest.mark.django_db

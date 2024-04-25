@@ -39,6 +39,9 @@ def args_principal(user, seleccionado):
         sites["Solicitud"] = {"url": "/solicitud/crear_viatico", "seleccionado": seleccionado=="solicitud"}
     
     sites["Solicitud de Salones"] = {"url": "/solicitud/salones_solicitud", "seleccionado": seleccionado=="solicitud_clase"}
+    
+    if user.is_superuser:
+        sites["Administrador"] = {"url": "/administrador", "seleccionado": seleccionado=="administrador"}
         
     return sites
 
