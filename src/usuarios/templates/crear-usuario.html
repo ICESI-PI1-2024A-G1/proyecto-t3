@@ -1,0 +1,69 @@
+{% extends "popup.html" %} 
+{% block content %}
+<div class="p-3">  
+  <form id="classForm" method="POST" action="/administrador/crear-usuario" class="mx-auto" style="max-width: 600px;">
+    {% csrf_token %}
+
+    <div class="row">
+      <!-- Primera columna -->
+      <div class="col-sm-6 pr-sm-2">
+        <div class="form-group mb-4 text-left">
+          <label for="cedula">Cédula:</label>
+          <input type="text" id="cedula" name="cedula" class="form-control" required/>
+        </div>
+
+        <div class="form-group mb-4 text-left">
+          <label for="nombre">Nombres:</label>
+          <input type="text" id="nombre" name="nombre" class="form-control" required/>
+        </div>
+
+        <div class="form-group mb-4 text-left">
+          <label for="apellido">Apellidos:</label>
+          <input type="text" id="apellido" name="apellido" class="form-control" required/>
+        </div>
+
+        <div class="form-group mb-4 text-left">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" class="form-control" required/>
+        </div>
+      </div>
+
+      <!-- Segunda columna -->
+      <div class="col-sm-6 pl-sm-2">
+        <div class="form-group mb-4 text-left">
+          <label for="telefono">Teléfono:</label>
+          <input type="text" id="telefono" name="telefono" class="form-control" required/>
+        </div>
+
+        <div class="form-group mb-4 text-left">
+          <label for="ciudad">Ciudad:</label>
+          <select id="ciudad" name="ciudad" class="form-control" required>
+            {% for ciudad in ciudades %}
+            <option value="{{ciudad.id}}">{{ciudad.ciudad}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group mb-4 text-left">
+          <label for="birthdate">Fecha de nacimiento:</label>
+          <input type="datetime-local" id="birthdate" name="birthdate" class="form-control" required/>
+        </div>
+
+        <div class="form-group mb-4 text-left">
+          <label for="rol">Rol:</label>
+          <select id="rol" name="rol" class="form-control" required>
+            {% for rol in roles %}
+            <option value="{{rol}}">{{rol}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-3">
+      <button class="btn btn-success" type="submit" style="font-size: 18px;">Crear Usuario</button>
+    </div>
+
+  </form>
+</div>
+{% endblock %}
