@@ -70,8 +70,11 @@ def solicitud_viaticos(request):
 @login_required(login_url="/login")
 def salones_solicitud(request):
     request.user.usuario.init_groups()
-    solicitudespacios = SolicitudEspacio.objects.all()
+    solicitudespendientes = SolicitudEspacio.objects.exclude(estado=2).exclude(estado=3)
+    solicitudesaceptadas = SolicitudEspacio.objects.filter(estado=2)
+    solicitudesnegadas = SolicitudEspacio.objects.filter(estado=3)
     espaciosclase = EspacioClase.objects.all()
+
 
 
     return render(
@@ -80,7 +83,9 @@ def salones_solicitud(request):
         {
             "side": "sidebar_principal.html",
             "side_args": args_principal(request.user,"solicitud_clase"),
-            "solicitudespacios": solicitudespacios,
+            "solicitudespacios": solicitudespendientes,
+            "solicitudesaceptadas": solicitudesaceptadas,
+            "solicitudesnegadas": solicitudesnegadas,
             "espaciosclase": espaciosclase
         }
     )
@@ -99,5 +104,17 @@ def asignar_espacio(request, solicitud_id):
         clase = solicitudclase.clase
         clase.espacio_asignado = espacio
         clase.save()
+    estado_aceptado = EstadoSolicitud.objects.get(estado=2)
+    solicitud.estado = estado_aceptado
+    solicitud.save()
 
+    return redirect('salones_solicitud')
+
+@login_required(login_url="/login")
+def rechazar_solicitud(request, solicitud_id):
+    solicitud = get_object_or_404(SolicitudEspacio, id=solicitud_id)
+    
+    estado_rechazado = EstadoSolicitud.objects.get(estado=3)
+    solicitud.estado = estado_rechazado
+    solicitud.save()
     return redirect('salones_solicitud')
