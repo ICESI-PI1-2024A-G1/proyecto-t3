@@ -60,7 +60,7 @@ def log_out(request):
         Una redirección a la página de inicio de sesión.
     """
     logout(request)
-    return redirect("login")
+    return redirect("/")
 
 @login_required(login_url="/login")
 def docente_Detail(request, cedula, periodo):
