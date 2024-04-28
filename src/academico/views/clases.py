@@ -87,10 +87,16 @@ def crear_clase(request, curso_id):
         end_day = datetime.strptime(request.POST.get("end_day"), "%Y-%m-%dT%H:%M")
 
         tipo_espacio = int(request.POST.get("tipo_espacio"))
+        espacio = Espacio.objects.get(id=tipo_espacio)
+        curso = Curso.objects.get(nrc=curso_id)
         modalidad_clase = int(request.POST.get("modalidad_clase"))
         num_semanas_str = request.POST.get("num_semanas", "1")
         num_semanas = 1 if num_semanas_str == "" else int(num_semanas_str)
         docente_cedula = request.POST.get("docente_clase")
+
+        if espacio.capacidad < curso.cupo:
+            messages.error(request, "El espacio seleccionado no tiene la capacidad suficiente para el curso")
+            return redirect("visualizar-curso", curso_id=curso_id)
 
         if not Curso.objects.filter(nrc=curso_id).exists():
             raise Http404("El curso no existe.")
