@@ -1,12 +1,12 @@
 import random
-from datetime import timedelta
-
+from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from academico.models import Clase, Curso, Docente, GrupoDeClase, Periodo
+from solicitud.models import Solicitud, SolicitudViatico
 
 from .clases import crear_clase
 
@@ -83,6 +83,7 @@ def visualizacion_curso(request, curso_id):
 
     curso = get_object_or_404(Curso, nrc=curso_id)
     grupos_clases = []
+    clases_Viaticos = []
     total_horas_programadas = timedelta()
 
     for grupo_clase in GrupoDeClase.objects.filter(clase__curso=curso).distinct().order_by("id"):
@@ -92,36 +93,21 @@ def visualizacion_curso(request, curso_id):
             clase.horas_programadas = horas_programadas
             total_horas_programadas += horas_programadas
         grupos_clases.append(clases)
+    
+    for viatico in SolicitudViatico.objects.all():
+        if viatico.clase is not None:
+            clases_Viaticos.append(viatico.clase.id)
 
     docentes_con_clases = Docente.objects.filter(clase__curso=curso).distinct()
     for docente in docentes_con_clases:
         docente.num_clases = len(Clase.objects.filter(docente=docente, curso=curso))
-
-    if request.method == "POST":
-            nuevoNotas = request.POST.get("nuevoNotas", None)
-            grupo_id = request.POST.get("grupo_id", None)
-            grupo = GrupoDeClase.objects.get(id=grupo_id)
-            clasesG = Clase.objects.filter(curso=curso, grupo_clases=grupo)
-            claseX = clasesG.first()
-            notasG = claseX.grupo_clases.entrega_notas
-
-            if(((notasG==False) and nuevoNotas=="No") or ((notasG==True) and nuevoNotas=="Si")):
-                return redirect("visualizar-curso", curso_id=curso_id)
-            
-            if grupo_id != None:
-                if(nuevoNotas=="Si"):
-                    grupo.entrega_notas=True
-                    grupo.save()
-                else:
-                    grupo.entrega_notas=False
-                    grupo.save()
-
             
     return render(
         request,
         "visualizar-curso.html",
         {
             "curso": curso,
+            "viaticos": clases_Viaticos, 
             "grupos_clases": grupos_clases,
             "docentes_con_clases": docentes_con_clases,
             "total_horas_programadas": total_horas_programadas,
@@ -129,3 +115,25 @@ def visualizacion_curso(request, curso_id):
         }
         | crear_clase(request, curso_id),
     )
+
+@login_required(login_url="/login")
+def change_notas(request, curso_id, grupoId):
+    request.user.usuario.init_groups()
+    grupo = get_object_or_404(GrupoDeClase, id=grupoId)
+    curso = get_object_or_404(Curso, nrc=curso_id)
+    if request.method == "POST":
+        grupo.entrega_notas=not grupo.entrega_notas
+        grupo.save()
+    return redirect("visualizar-curso", curso_id=curso.nrc)
+
+
+@login_required(login_url="/login")
+def change_intu(request, curso_id):
+    request.user.usuario.init_groups()
+    curso = get_object_or_404(Curso, nrc=curso_id)
+    if request.method == "POST":
+        curso.intu_generado = not curso.intu_generado
+        curso.save()
+    return redirect("visualizar-curso", curso_id=curso.nrc)
+
+        

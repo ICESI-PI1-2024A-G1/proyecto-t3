@@ -13,45 +13,58 @@
   <h1 class="display-3 align-center">Lista de Solicitud de Viaticos</h1>
   <div class="mb-3">
     <!-- Formulario para búsqueda -->
-    <form method="GET" action="{% url 'viaticos' %}" class="form-inline">
+    <form id="search-form" method="GET" action="{% url 'viaticos' %}" class="form-inline">
       <div class="form-group flex-grow-1 position-relative">
-        <label for="q" class="sr-only">Buscar por nombre de docente o cedula</label>
-        <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por nombre de docente o cedula" />
+        <label for="q" class="sr-only">Buscar por id de clase</label>
+        <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por id de clase" />
         <img src="{% static 'img/search.png' %}" alt="Buscar"
           style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
           onclick="document.getElementById('search-form').submit();">
       </div>
+      <div class="form-group position-relative">
+        <label for="q2" class="sr-only">Buscar por fecha de solicitud de clase</label>
+        <input type="date" name="q2" id="q2" class="form-control w-100 pl-4" placeholder="Buscar por id de clase o fecha de solicitud" onchange="submitForm();"/>
+      </div>
     </form>
 
     <!-- Formulario para filtrado y ordenamiento -->
-    <form method="GET" action="{% url 'docentes' %}" class="form-inline">
+    <form method="GET" action="{% url 'viaticos' %}" class="form-inline">
       <div class="form-group mr-2 d-flex">
         <label for="ordenar_por" class="mr-2" style="margin:15px">Ordenar por:</label>
         <select name="ordenar_por" id="ordenar_por" class="form-control mr-2" onchange="toggleFiltrado()">
           <option value="">Sin orden</option>
-          <option value="estado">Estado</option>
-          <option value="contrato_codigo">Tipo de contrato</option>
+          <option value="tiquete">Tiquetes</option>
+          <option value="hospedaje">Hospedaje</option>
+          <option value="alimentacion">Alimentacion</option>
         </select>
 
-        <!-- Contenedor para Filtrado por estado de docente -->
-        <div id="estadoDiv" style="display: none" class="mr-2">
-          <select name="estado" class="form-control">
-            <option value="">Todas los estados</option>
-            {% for estado in estados %}
-            <option value="{{ estado.id }}">{{ estado.estado }}</option>
-            {% endfor %}
+        <!-- Contenedor para Filtrado por respuesta de tiquete -->
+        <div id="tiqueteDiv" style="display: none" class="mr-2">
+          <select name="tiquete" class="form-control">
+            <option value="">Todas</option>
+            <option value="True">Si</option>
+            <option value="False">No</option>
           </select>
         </div>
 
-        <!-- Filtrado por tipo de contrato -->
-        <div id="contratoDiv" style="display: none" class="mr-2">
-          <select name="contrato" class="form-control">
-            <option value="">Todos los tipos de contrato</option>
-            {% for contrato in contratos %}
-            <option value="{{ contrato.id }}">{{ contrato.tipo }}</option>
-            {% endfor %}
+        <!-- Contenedor para Filtrado por respuesta de hospedaje -->
+        <div id="hospedajeDiv" style="display: none" class="mr-2">
+          <select name="hospdaje" class="form-control">
+            <option value="">Todas</option>
+            <option value="True">Si</option>
+            <option value="False">No</option>
           </select>
         </div>
+
+        <!-- Contenedor para Filtrado por respuesta de tiquete -->
+        <div id="alimentacionDiv" style="display: none" class="mr-2">
+          <select name="alimentacion" class="form-control">
+            <option value="">Todas</option>
+            <option value="True">Si</option>
+            <option value="False">No</option>
+          </select>
+        </div>
+
 
         <button type="submit" class="btn btn-primary" style="margin: 15px">Filtrar</button>
       </div>
@@ -62,24 +75,24 @@
   <table class="table table-bordered">
     <thead>
       <tr>
-        <th>Cedula</th>
-        <th>Nombre del docente</th>
-        <th>Fecha Ida</th>
-        <th>Fecha Vuelta </th>
+        <th>Clase</th>
+        <th>Curso</th>
+        <th>Fecha solicitud</th>
         <th>Tiquetes</th>
         <th>Hospedaje</th>
-        <th>Alimentacion</th>
+        <th>Alimentación</th>
       </tr>
     </thead>
     <tbody>
-      {% for viatico in Viaticos %}
-      <tr class="linkeable" onclick="window.location.href=">
-        <td>{{ viatico.docente.cedula }}</td>
-        <td>{{ viatico.nombre }}</td>
-        <td>{{ docente.email }}</td>
-        <td>{{ docente.contrato_codigo.codigo }}</td>
-        <td>{{ docente.contrato_codigo.tipo_contrato.tipo }}</td>
-        <td>{{ docente.estado.estado }}</td>
+      {% for viatico in viaticos %}
+      <tr class="linkeable" onclick="window.location.href='/academico/cursos/{{viatico.clase.curso.nrc}}'">
+        <td>{{ viatico.clase.id}}</td>
+        <td>{{viatico.clase.curso.nrc}}</td>
+        <td>{{ viatico.fecha_solicitud}}</td>
+        <td>{{ viatico.tiquete|yesno:"Sí,No" }}</td>
+        <td>{{ viatico.hospedaje|yesno:"Sí,No" }}</td>
+        <td>{{ viatico.alimentacion|yesno:"Sí,No" }}</td>
+
       </tr>
       {% endfor %}
     </tbody>
@@ -88,19 +101,25 @@
   <!-- Paginación -->
   <div class="pagination">
     <span class="step-links">
-        {% if docentes.has_previous %}
+        {% if viaticos.has_previous %}
             <a href="?page=1">&laquo; Primero</a>
-            <a href="?page={{ docentes.previous_page_number }}">Anterior</a>
+            <a href="?page={{ viaticos.previous_page_number }}">Anterior</a>
         {% endif %}
 
         <span class="current">
-            Página {{ docentes.number }} de {{ docentes.paginator.num_pages }}.
+            Página {{ viaticos.number }} de {{ viaticos.paginator.num_pages }}.
         </span>
 
-        {% if docentes.has_next %}
-            <a href="?page={{ docentes.next_page_number }}">Siguiente</a>
-            <a href="?page={{ docentes.paginator.num_pages }}">Último &raquo;</a>
+        {% if viaticos.has_next %}
+            <a href="?page={{ viaticos.next_page_number }}">Siguiente</a>
+            <a href="?page={{ viaticos.paginator.num_pages }}">Último &raquo;</a>
         {% endif %}
     </span>
 </div>
+
+<script>
+  function submitForm() {
+    document.getElementById('search-form').submit();
+  }
+</script>
 {% endblock %}

@@ -5,6 +5,8 @@ from . import views
 urlpatterns = [
     path("materias/<str:codigo>/<str:periodo>/crear-curso", views.crear_curso, name="crear-curso"),
     path("cursos/<int:curso_id>", views.visualizacion_curso, name="visualizar-curso"),
+    path("cursos/<int:curso_id>/<int:grupoId>/change_notas", views.change_notas, name="change_notas"),
+    path("cursos/<int:curso_id>/change_intu", views.change_intu, name="change_intu"),
     path("programas", views.programas, name="programas"),
     path("programas/<str:codigo>/<str:periodo>", views.programa, name="programa"),
     path("programas/<str:codigo>/<str:periodo>/obtener-primera-clase", views.primera_clase_programa, name="primera-clase"),
@@ -17,6 +19,7 @@ urlpatterns = [
     path("materias", views.materias, name="materias"),
     #path("cursos/<int:curso_id>/editar_clase", views.editar_clase, name="editar_clase"),
     path("clases/<int:clase_id>", views.editar_clase, name="editar_clase"),
+    path("clases/<int:clase_id>/solicitar_viatico", views.solicitar_viaticos, name="solicitar_viaticos"),
     path("clases/<int:grupo>/<int:cantidad>", views.nuevas_clases, name="nuevas_clases"),
     path("grupo_clases/<int:grupo>/eliminar", views.eliminar_grupo_de_clases, name="eliminar_grupo_de_clases"),
     #path("cursos/<int:curso_id>/clases/<int:clase_id>/editar_clase", views.editar_clase, name="editar_clase"),

@@ -36,7 +36,7 @@ def args_principal(user, seleccionado):
         sites["Docentes posgrado"] = {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
     
     if user.is_gestor:
-        sites["Solicitud"] = {"url": "/solicitud/crear_viatico", "seleccionado": seleccionado=="solicitud"}
+        sites["Solicitud"] = {"url": "/solicitud/viaticos", "seleccionado": seleccionado=="solicitud"}
     
     sites["Solicitud de Salones"] = {"url": "/solicitud/salones_solicitud", "seleccionado": seleccionado=="solicitud_clase"}
     
