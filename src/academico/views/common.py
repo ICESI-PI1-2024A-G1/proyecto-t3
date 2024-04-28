@@ -38,7 +38,8 @@ def args_principal(user, seleccionado):
     if user.is_gestor:
         sites["Solicitud"] = {"url": "/solicitud/viaticos", "seleccionado": seleccionado=="solicitud"}
     
-    sites["Solicitud de Salones"] = {"url": "/solicitud/salones_solicitud", "seleccionado": seleccionado=="solicitud_clase"}
+    if user.is_gestor:
+        sites["Solicitud de Salones"] = {"url": "/solicitud/salones_solicitud", "seleccionado": seleccionado=="solicitud_clase"}
     
     if user.is_superuser:
         sites["Administrador"] = {"url": "/administrador", "seleccionado": seleccionado=="administrador"}
@@ -99,4 +100,11 @@ def inicio(request):
         "side": "sidebar_principal.html",
         "side_args": args_principal(request.user, "Inicio"),
     },
+)
+
+def solicitudes_salones(request):
+    return render(request, "salones_solicitud.html", {
+        "side": "sidebar_principal.html",
+        "side_args": args_principal(request.user, "Solicitud de Salones"),
+    }
 )

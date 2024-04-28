@@ -9,9 +9,35 @@ from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
 from academico.models import (Clase, Curso, Docente, Espacio, Estudiante,
-                              GrupoDeClase, Modalidad)
-from solicitud.models import (SolicitudEspacio, Usuario, EstadoSolicitud, SolicitudClases, SolicitudViatico)
+                              GrupoDeClase, Modalidad, EspacioClase)
+from solicitud.models import (SolicitudEspacio, Usuario, EstadoSolicitud, SolicitudClases,SolicitudViatico)
 from ccsa_project import settings
+
+
+
+@login_required(login_url="/login")
+def asignar_salon(request, solicitud_id, espacio_id):
+    """
+    Asigna un EspacioClase a todas las Clases asociadas a una SolicitudEspacio.
+
+    Args:
+        solicitud_id (int): El ID de la SolicitudEspacio.
+        espacio_id (int): El ID del EspacioClase.
+
+    Returns:
+        None
+    
+    """
+    solicitud = get_object_or_404(SolicitudEspacio, id=solicitud_id)
+    espacio = get_object_or_404(EspacioClase, id=espacio_id)
+
+    clases_solicitud = SolicitudClases.objects.filter(solicitud=solicitud)
+
+    for clase_solicitud in clases_solicitud:
+        clase = clase_solicitud.clase
+        clase.espacio_asignado = espacio
+        clase.save()
+
 
 
 @login_required(login_url="/login")

@@ -29,4 +29,5 @@ urlpatterns = [
     path("clases/<int:clase_id>/editar_clase", views.editar_clase, name="editar_clase"),
     path("inicio", views.inicio, name="inicio"),
     path("cursos/<int:curso_id>/solicitar_salones", views.solicitar_salones, name="solicitar_salones"),
+    path("solicitud/salones_solicitud", views.solicitudes_salones, name="salones_solicitud"),
 ]

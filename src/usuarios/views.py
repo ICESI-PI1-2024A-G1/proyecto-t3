@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -18,7 +19,7 @@ from academico.views import args_principal
 
 from .forms import DocenteForm
 from .models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
-                     EstadoDocente, Persona, TipoContrato)
+                     EstadoDocente, Persona, TipoContrato, Usuario)
 
 # Create your views here.
 
@@ -252,45 +253,45 @@ def administrador(request):
     Returns:
         HttpResponse: La respuesta HTTP que contiene la página de administrador.
     """
+    ciudades = Ciudad.objects.all()
     request.user.usuario.init_groups()
 
-    if request.method == "GET":
-        query = request.GET.get("q", None)
-        ordenar_por = request.GET.get("ordenar_por", None)
-        rol = request.GET.get("rol", None)
-        estado = request.GET.get("estado", None)
-
-        users = User.objects.all().order_by("is_active", "first_name", "last_name").exclude(username=request.user.username).exclude(is_superuser=True)
-        for user in users:
-            user.usuario.init_groups()
-            user.persona = user.usuario.persona
-
-        if query:
-            users = users.filter(
-                Q(username__icontains=query) | Q(email__icontains=query)
-            )
-
-        if ordenar_por:
-            users = users.order_by(ordenar_por)
-
-        if rol:
-            users = users.filter(groups__id=rol)
-
-        if estado:
-            users = users.filter(is_active=estado)
-
+    query = request.GET.get("q", None)
+    ordenar_por = request.GET.get("ordenar_por", None)
+    rol = request.GET.get("rol", None)
+    estado = request.GET.get("estado", None)
+    users = User.objects.all().order_by("is_active", "first_name", "last_name").exclude(username=request.user.username).exclude(is_superuser=True)
+    
+    for user in users:
+        user.usuario.init_groups()
+        user.persona = user.usuario.persona
+    
+    if query:
+        users = users.filter(
+            Q(username__icontains=query) | Q(email__icontains=query)
+        )
+    
+    if ordenar_por:
+        users = users.order_by(ordenar_por)
+    
+    if rol:
+        users = users.filter(groups__id=rol)
+    
+    if estado:
+        users = users.filter(is_active=estado)
+    
     return render(
         request,
         "administrador.html",
         {
             "usuarios": users,
-            "roles": Group.objects.all(),
+            "roles": Group.objects.all().exclude(name="directores"),
             "estados": [True, False],
             "side": "sidebar_principal.html",
             "side_args": args_principal(request.user, "administrador"),
+            'ciudades': 'crear-usuario.html', 'ciudades': ciudades,
         },
     )
-
 
 @login_required(login_url="/login")
 def change_state(request, username):
@@ -335,3 +336,43 @@ def change_rol(request, username, rol):
                 user_to_change.groups.add(Group.objects.get(name="lideres"))
                 
     return redirect("administrador")
+
+def crear_usuario(request):
+    request.user.usuario.init_groups()
+
+    if request.method == 'POST':
+        cedula = request.POST['cedula']
+        username = request.POST['cedula']
+        first_name = request.POST['nombre']
+        last_name = request.POST['apellido']
+        email = request.POST['email']
+        telefono = request.POST['telefono']
+        ciudad_id = request.POST['ciudad']
+        birthdate = datetime.strptime(request.POST['birthdate'], "%Y-%m-%dT%H:%M") 
+        rol = request.POST['rol']
+
+        ciudad = Ciudad.objects.get(id=ciudad_id)
+        group = Group.objects.get(name=rol)
+
+        user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=username)
+        fullname = first_name + " " + last_name
+        user.groups.add(group)
+        user.save()
+        if rol == "lideres":
+            user.groups.add(Group.objects.get(name="gestores"))
+
+        persona = Persona.objects.create(
+            cedula = cedula,
+            nombre=fullname, 
+            email=email,
+            telefono=telefono,
+            ciudad=ciudad,
+            fechaNacimiento=birthdate,
+        )
+        usuario = Usuario.objects.create(usuario=user, persona=persona)
+        
+        return redirect('/administrador')
+    else:
+        ciudades = Ciudad.objects.all()
+        roles = Group.objects.all()
+        return redirect('/administrador')
