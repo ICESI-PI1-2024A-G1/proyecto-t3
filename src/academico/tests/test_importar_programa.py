@@ -16,6 +16,8 @@ from usuarios.models import Persona, Usuario
 @pytest.fixture
 def create_user():
     user = mixer.blend(User, username="testuser", password="testpassword")
+    grupo = mixer.blend("auth.Group", name="lideres")
+    user.groups.add(grupo)
     persona = mixer.blend(Persona)
     mixer.blend(Usuario, persona=persona, usuario=user)
     return user

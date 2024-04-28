@@ -19,6 +19,10 @@ class LoginPageTestCase(SeleniumTestCase):
 
     def setUp(self):
         self.user = User.objects.create_user("user", "user@example.com", "user")
+        grupo = mixer.blend("auth.Group", name="gestores")
+        self.user.groups.add(grupo)
+        self.user.save()
+        
         persona = mixer.blend(Persona)
         mixer.blend(Usuario, persona=persona, usuario=self.user)
 
