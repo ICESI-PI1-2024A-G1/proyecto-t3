@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 
 from academico.models import (Clase, Curso, Docente, Espacio, Estudiante,
                               GrupoDeClase, Modalidad, EspacioClase)
-from solicitud.models import (SolicitudEspacio, Usuario, EstadoSolicitud, SolicitudClases)
+from solicitud.models import (SolicitudEspacio, Usuario, EstadoSolicitud, SolicitudClases,SolicitudViatico)
 from ccsa_project import settings
 
 
@@ -69,6 +69,40 @@ def solicitar_salones(request, curso_id):
     else:
         return redirect('visualizar-curso', curso_id=curso.nrc)
 
+@login_required(login_url="/login")
+def solicitar_viaticos(request, clase_id):
+    clase= get_object_or_404(Clase, id=clase_id)
+
+    request.user.usuario.init_groups()
+    if request.method == "POST":
+        tiquetesR = request.POST.get("tiquetes", None)
+        alimentacionR = request.POST.get("alimentacion", None)
+        hospedajeR = request.POST.get("hospedaje", None)
+        print("tiq"+str(tiquetesR)+"ali"+str(alimentacionR)+"hospedaje"+str(hospedajeR))
+        tiquetes = False
+        alimentacion = False
+        hospedaje = False
+        if(tiquetesR=="on" and tiquetesR!=None):
+            tiquetes=True
+        if(hospedajeR=="on" and hospedajeR!=None):
+            hospedaje=True
+        if(alimentacionR=="on" and alimentacionR!=None):
+            alimentacion=True
+        desc="requirio"+ clase.docente.nombre + "para la clase: "+ str(clase.id) + "en el curso: "+ str(clase.curso.nrc) +"."
+
+        claseBuscar = SolicitudViatico.objects.filter(clase=clase_id).first()
+        if(tiquetes or alimentacion or hospedaje):
+            if not claseBuscar:
+                SolicitudViatico.objects.create(clase=clase, tiquete=tiquetes, hospedaje=hospedaje, alimentacion=alimentacion, descripcion=desc, fecha_solicitud=datetime.now())
+                return redirect("visualizar-curso", curso_id=clase.curso.nrc)
+            else:
+                claseBuscar.alimentacion= alimentacion
+                claseBuscar.hospedaje = hospedaje
+                claseBuscar.tiquete = tiquetes
+                claseBuscar.save()
+                return redirect("visualizar-curso", curso_id=clase.curso.nrc)
+        else:
+            return redirect("visualizar-curso", curso_id=clase.curso.nrc)
     
 
 
