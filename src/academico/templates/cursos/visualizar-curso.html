@@ -99,9 +99,9 @@
                           <div class="card row mt-1 w-100 mb-2" style="align-items: start;">
                             <div class="row ml-1 mt-1 mb-1" style="align-items: center; justify-content: space-between; width: 100%;">
                               {% if user.is_lider %}
-                              <div class="row card-title bg-secondary rounded linkeable" style=" width: 80%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
+                              <div class="row card-title bg-secondary rounded linkeable h-100" style=" width: 80%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
                               {% else %}
-                              <div class="row card-title bg-secondary rounded linkeable mr-2" style=" width: 100%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
+                              <div class="row card-title bg-secondary rounded linkeable mr-2 h-100" style=" width: 100%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
                               {% endif %}
                                 <img id="class_group{{grupo.0.grupo_clases.id}}_icon" src="{% static 'img/arrow_back.png' %}" class="icon ml-2" alt="Modulo de clases" style="transform: rotate(180deg); filter:invert(100%);">
                                 <h2 class="text-white">Modulo de clases {{ forloop.counter }}</h2>
