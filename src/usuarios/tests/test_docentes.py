@@ -51,6 +51,8 @@ def autenticar_usuario(request):
     None
     """ 
     user = User.objects.create_user(username='admin', password='admin')
+    grupo = mixer.blend("auth.Group", name="lideres")
+    user.groups.add(grupo)
     persona = mixer.blend(Persona)
     mixer.blend(Usuario, persona=persona, usuario=user)
     request.user = user

@@ -35,6 +35,8 @@ def autenticacion(db, rf):
         request: Objeto de la solicitud HTTP con el usuario autenticado.
     """
     user = User.objects.create_user(username='admin', password='admin')
+    grupo = mixer.blend("auth.Group", name="lideres")
+    user.groups.add(grupo)
     persona = mixer.blend(Persona)
     mixer.blend(Usuario, persona=persona, usuario=user)
     request = rf.get(reverse('visualizar-curso', kwargs={'curso_id': 1}))
@@ -144,7 +146,7 @@ def test_editar_clase_post_negativo_clase_inexistente(autenticacion, clase):
         assert False
     except Http404 as e:
         assert True
-        
+
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_fecha_inicio_None(autenticacion, clase):
     """
@@ -172,7 +174,7 @@ def test_editar_clase_post_negativo_fecha_inicio_None(autenticacion, clase):
         assert False
     except Http404 as e:
         assert str(e) == "Todos los campos son requeridos."
-        
+
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_fecha_fin_None(autenticacion, clase):
     """
@@ -200,7 +202,7 @@ def test_editar_clase_post_negativo_fecha_fin_None(autenticacion, clase):
         assert False
     except Http404 as e:
         assert str(e) == "Todos los campos son requeridos."
-        
+
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_tipo_espacio_None(autenticacion, clase):
     """
@@ -284,7 +286,7 @@ def test_editar_clase_post_negativo_modalidad_None(autenticacion, clase):
         assert False
     except Http404 as e:
         assert str(e) == "Todos los campos son requeridos."
-        
+
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_modalidad_invalido(autenticacion, clase):
     """
@@ -312,7 +314,7 @@ def test_editar_clase_post_negativo_modalidad_invalido(autenticacion, clase):
         assert False
     except Http404 as e:
         assert str(e) == "Modalidad no existe."
-        
+
 @pytest.mark.django_db
 def test_editar_clase_post_negativo_docente_invalido(autenticacion, clase):
     """
@@ -340,7 +342,7 @@ def test_editar_clase_post_negativo_docente_invalido(autenticacion, clase):
         assert False
     except Http404 as e:
         assert str(e) == "Docente no existe."
-        
+
 @pytest.mark.django_db
 def test_editar_clase_post_positivo(autenticacion, clase):
     """

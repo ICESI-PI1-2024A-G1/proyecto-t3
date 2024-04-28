@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -15,7 +15,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
                               MallaCurricular, Materia, Modalidad, Periodo,
                               Programa)
-from academico.views import args_principal
+from academico.views import args_principal, verificar_permisos
 
 from .forms import DocenteForm
 from .models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
@@ -38,11 +38,17 @@ def login_page(request):
         user = authenticate(request, username=form['username'], password=form['password'])
         if user is not None:
             login(request, user)
+            user.usuario.init_groups()
+            if user.is_banner:
+                return redirect("salones_solicitud")
             return redirect("inicio")
         else:
             messages.error(request, "Usuario y/o contraseña incorrectos. Por favor, inténtelo nuevamente.")
 
     elif request.user.is_authenticated:
+        request.user.usuario.init_groups()
+        if request.user.is_banner:
+            return redirect("salones_solicitud")
         return redirect("inicio")
 
     return render(request, 'login.html', {
@@ -60,9 +66,10 @@ def log_out(request):
         Una redirección a la página de inicio de sesión.
     """
     logout(request)
-    return redirect("login")
+    return redirect("/")
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["lideres", "directores"]))
 def docente_Detail(request, cedula, periodo):
     """
     Vista que permite renderizar la pantalla 'docenteProfile.html' con información del docente.
@@ -166,7 +173,9 @@ def traducir_a_español(dia):
 
     return dias_semana.get(dia, dia)
 
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["lideres"]))
 def docentes(request):
     """
     Vista para mostrar la lista de docentes de posgrado.
@@ -241,6 +250,8 @@ def docentes(request):
 def error_404(request, exception):
     return render(request, '404.html', status=404)
 
+@login_required(login_url="/login")
+@user_passes_test(lambda u: u.is_superuser)
 def administrador(request):
     """
     Vista que permite la visualización y gestión de usuarios del sistema.
@@ -260,7 +271,7 @@ def administrador(request):
     ordenar_por = request.GET.get("ordenar_por", None)
     rol = request.GET.get("rol", None)
     estado = request.GET.get("estado", None)
-    users = User.objects.all().order_by("is_active", "first_name", "last_name").exclude(username=request.user.username).exclude(is_superuser=True)
+    users = User.objects.all().order_by("is_active", "first_name", "last_name").exclude(username=request.user.username).exclude(is_superuser=True).exclude(groups__name="banner")
     
     for user in users:
         user.usuario.init_groups()
@@ -294,6 +305,7 @@ def administrador(request):
     )
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.is_superuser)
 def change_state(request, username):
     """
     Vista que permite cambiar el estado de un usuario (activo/inactivo).
@@ -311,7 +323,9 @@ def change_state(request, username):
         user_to_change.save()
     return redirect("administrador")
 
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.is_superuser)
 def change_rol(request, username, rol):
     """
     Vista que permite cambiar el rol de un usuario.
@@ -328,15 +342,20 @@ def change_rol(request, username, rol):
         user_to_change.usuario.init_groups()
         if rol:
             user_to_change.groups.clear()
-            if rol == "Gestor" and user_to_change.rol_principal != "Gestor":
+            if rol == "Gestor" and (not user_to_change.is_gestor or user_to_change.is_lider):
                 user_to_change.groups.add(Group.objects.get(name="gestores"))
-            
-            if rol == "Lider" and user_to_change.rol_principal != "Lider":
+
+            if rol == "Lider" and not user_to_change.is_lider:
                 user_to_change.groups.add(Group.objects.get(name="gestores"))
                 user_to_change.groups.add(Group.objects.get(name="lideres"))
-                
+
+            if user_to_change.rol_principal == "Director":
+                user_to_change.groups.add(Group.objects.get(name="directores"))
     return redirect("administrador")
 
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: u.is_superuser)
 def crear_usuario(request):
     request.user.usuario.init_groups()
 
@@ -354,22 +373,30 @@ def crear_usuario(request):
         ciudad = Ciudad.objects.get(id=ciudad_id)
         group = Group.objects.get(name=rol)
 
-        user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=username)
-        fullname = first_name + " " + last_name
-        user.groups.add(group)
-        user.save()
-        if rol == "lideres":
-            user.groups.add(Group.objects.get(name="gestores"))
-
-        persona = Persona.objects.create(
-            cedula = cedula,
-            nombre=fullname, 
-            email=email,
-            telefono=telefono,
-            ciudad=ciudad,
-            fechaNacimiento=birthdate,
-        )
-        usuario = Usuario.objects.create(usuario=user, persona=persona)
+        try:
+            user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=username)
+            fullname = first_name + " " + last_name
+            user.groups.add(group)
+            user.save()
+            if rol == "lideres":
+                user.groups.add(Group.objects.get(name="gestores"))
+            
+            if Persona.objects.filter(cedula=cedula).exists():
+                persona = Persona.objects.get(cedula=cedula)
+                persona.nombre = fullname
+                persona.telefono = telefono
+                persona.email = email
+                persona.ciudad = ciudad
+                persona.fechaNacimiento = birthdate
+                persona.save()
+            else:
+                persona = Persona.objects.create(cedula=cedula, nombre=fullname, email=email, telefono=telefono, ciudad=ciudad, fechaNacimiento=birthdate)
+            
+            Usuario.objects.create(usuario=user, persona=persona)
+        
+        except IntegrityError:
+            messages.error(request, "Ya existe un usuario con la cédula ingresada.")
+            return redirect('/administrador')
         
         return redirect('/administrador')
     else:
