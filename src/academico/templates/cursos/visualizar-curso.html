@@ -245,8 +245,10 @@
               <input type="datetime-local" id="fecha_fin" name="fecha_fin" class="form-control" required/>
             </div>
           </div>
+          
 
           <span id="error-message_e" style="color: red; display: block; height: auto; visibility: visible;"></span>
+          
           
           <div class="form-group row justify-content-center">
             <label for="espacio_asignado" class="col-sm-2 col-form-label text-left">Espacio Asignado:</label>
@@ -336,26 +338,81 @@
 </script>
 
 <script>
-    document.getElementById('editClassForm').addEventListener('submit', function(event) {
-        var start_day = new Date(document.getElementById('fecha_inicio').value.replace('T', ' ') + ' UTC');
-        var end_day = new Date(document.getElementById('fecha_fin').value.replace('T', ' ') + ' UTC');
-        var diffMs = (end_day - start_day);
-        var diffHrs = Math.floor(diffMs / 3600000); // hours
-        if (diffHrs > 24) {
-            event.preventDefault();
-            // En lugar de mostrar una alerta, cambia el contenido del elemento de mensaje de error
-            document.getElementById('error-message_e').textContent = 'La duración de la clase no puede ser mayor a 24 horas.';
-          } else if (diffMs < 0) {
-            event.preventDefault();
-            // Si la fecha/hora de inicio es posterior a la fecha/hora de finalización, muestra un mensaje de error
-            document.getElementById('error-message_e').textContent = 'La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.';
-          } else {
-            // Si la duración es válida, asegúrate de que el mensaje de error esté vacío
-            document.getElementById('error-message_e').textContent = '';
-            document.getElementById("editar_relacionadas_e").disabled = false;
-          }
+  $(document).ready(function() {
+    $('#editClassForm').on('submit', function(e) {
+        e.preventDefault();
+
+        // Recoge los nuevos valores de la clase del formulario
+        var claseId = $('#clase_id').val();
+        var nuevaFechaInicio = $('#fecha_inicio').val();
+        var nuevaFechaFin = $('#fecha_fin').val();
+        var espacioAsignado = $('#espacio_asignado').val();
+        var tipoEspacio = $('#tipo_espacio_e').val();
+        var modalidadClase = $('#modalidad_clase_e').val();
+        var docenteClase = $('#docente_clase_e').val();
+        var editarRelacionadas = $('#editar_relacionadas_e').is(':checked');
+
+        $.ajax({
+            url: '/editar_clase/' + claseId, // Reemplaza esto con la URL de tu vista
+            type: 'POST',
+            data: {
+                'clase_id': claseId,
+                'fecha_inicio': nuevaFechaInicio,
+                'fecha_fin': nuevaFechaFin,
+                'espacio_asignado': espacioAsignado,
+                'tipo_espacio_e': tipoEspacio,
+                'modalidad_clase_e': modalidadClase,
+                'docente_clase_e': docenteClase,
+                'editar_relacionadas_e': editarRelacionadas
+            },
+            success: function(data) {
+                if (data.error) {
+                    // Si hay un error, muéstralo en el span y hazlo visible
+                    var errorMessageElement = $('#error-message_e');
+                    errorMessageElement.text(data.error);
+                    errorMessageElement.css('visibility', 'visible');
+                } else {
+                    // Si no hay error, oculta el span y recarga la página
+                    $('#error-message_e').css('visibility', 'hidden');
+                    location.reload();
+                }
+            }
         });
+    });
+});
 </script>
+
+<script>
+  document.getElementById('editClassForm').addEventListener('submit', function(event) {
+      var start_day = new Date(document.getElementById('fecha_inicio').value.replace('T', ' ') + ' UTC');
+      var end_day = new Date(document.getElementById('fecha_fin').value.replace('T', ' ') + ' UTC');
+      var diffMs = (end_day - start_day);
+      var diffHrs = Math.floor(diffMs / 3600000); // hours
+      if (diffHrs > 24) {
+          event.preventDefault();
+          document.getElementById('error-message_e').textContent = 'La duración de la clase no puede ser mayor a 24 horas.';
+      } else if (diffMs < 0) {
+          event.preventDefault();
+          document.getElementById('error-message_e').textContent = 'La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.';
+      } else {
+          // Si la duración es válida, verifica si hay conflictos de horario
+          var classes = {{clases|safe}}; // Aquí debes obtener la lista de clases existentes
+          for (var i = 0; i < classes.length; i++) {
+              var class_start = new Date(classes[i].fecha_inicio.replace('T', ' ') + ' UTC');
+              var class_end = new Date(classes[i].fecha_fin.replace('T', ' ') + ' UTC');
+              if ((start_day >= class_start && start_day < class_end) || 
+                  (end_day > class_start && end_day <= class_end) ||
+                  (start_day <= class_start && end_day >= class_end)) {
+                  event.preventDefault();
+                  document.getElementById('error-message_e').textContent = 'Hay un conflicto de horario con otra clase.';
+                  return;
+              }
+          }
+          document.getElementById('error-message_e').textContent = '';
+          document.getElementById("editar_relacionadas_e").disabled = false;
+      }
+  });
+  </script>
 
 <script>
   function seleccionarTodasLasClases() {

@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
@@ -12,32 +13,21 @@ from academico.models import (Clase, Curso, Docente, Espacio, Estudiante,
                               GrupoDeClase, Modalidad, EspacioClase)
 from solicitud.models import (SolicitudEspacio, Usuario, EstadoSolicitud, SolicitudClases)
 from ccsa_project import settings
+from django.contrib import messages
 
 
 
-@login_required(login_url="/login")
-def asignar_salon(request, solicitud_id, espacio_id):
-    """
-    Asigna un EspacioClase a todas las Clases asociadas a una SolicitudEspacio.
-
-    Args:
-        solicitud_id (int): El ID de la SolicitudEspacio.
-        espacio_id (int): El ID del EspacioClase.
-
-    Returns:
-        None
+def validar_horario(start_day, end_day, grupo_clases):
     
-    """
-    solicitud = get_object_or_404(SolicitudEspacio, id=solicitud_id)
-    espacio = get_object_or_404(EspacioClase, id=espacio_id)
-
-    clases_solicitud = SolicitudClases.objects.filter(solicitud=solicitud)
-
-    for clase_solicitud in clases_solicitud:
-        clase = clase_solicitud.clase
-        clase.espacio_asignado = espacio
-        clase.save()
-
+    start_day = timezone.make_aware(start_day)
+    end_day = timezone.make_aware(end_day)
+    
+    for clase in grupo_clases.clase_set.all():
+        if (start_day >= clase.fecha_inicio and start_day < clase.fecha_fin) or \
+           (end_day > clase.fecha_inicio and end_day <= clase.fecha_fin) or \
+           (start_day <= clase.fecha_inicio and end_day >= clase.fecha_fin):
+            return False
+    return True
 
 
 @login_required(login_url="/login")
@@ -184,7 +174,8 @@ def editar_clase(request, clase_id):
 
         fecha_inicio = datetime.strptime(request.POST.get("fecha_inicio"), "%Y-%m-%dT%H:%M")
         fecha_fin = datetime.strptime(request.POST.get("fecha_fin"), "%Y-%m-%dT%H:%M")
-
+            
+        
         try:
             tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)
         except Espacio.DoesNotExist:
@@ -203,19 +194,27 @@ def editar_clase(request, clase_id):
                 raise Http404("Docente no existe.")
         else:
             docente = None
+        
+        conflict = Clase.objects.filter(grupo_clases=clase.grupo_clases).exclude(id=clase_id).filter(
+            fecha_inicio__lt=fecha_fin, fecha_fin__gt=fecha_inicio).exists()
+        if conflict:
+        # Si hay un conflicto, devuelve un mensaje de error
+            return JsonResponse({'error': 'La clase entra en conflicto con otra clase en el mismo grupo.'})
+        else:
+            
 
-        old_fecha_inicio = clase.fecha_inicio
-        old_fecha_fin = clase.fecha_fin
-        old_espacio = clase.espacio
-        old_modalidad = clase.modalidad
-        old_docente = clase.docente
+            old_fecha_inicio = clase.fecha_inicio
+            old_fecha_fin = clase.fecha_fin
+            old_espacio = clase.espacio
+            old_modalidad = clase.modalidad
+            old_docente = clase.docente
 
-        clase.fecha_inicio = fecha_inicio
-        clase.fecha_fin = fecha_fin
-        clase.espacio = tipo_espacio
-        clase.modalidad = modalidad
-        clase.docente = docente
-        clase.save()
+            clase.fecha_inicio = fecha_inicio
+            clase.fecha_fin = fecha_fin
+            clase.espacio = tipo_espacio
+            clase.modalidad = modalidad
+            clase.docente = docente
+            clase.save()
 
         if editar_relacionadas:
             for clase_i in Clase.objects.filter(grupo_clases=clase.grupo_clases):
