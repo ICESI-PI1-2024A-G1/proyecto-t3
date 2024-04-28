@@ -14,7 +14,8 @@ from academico.views import args_principal
 from usuarios.models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
                      EstadoDocente, Persona, TipoContrato)
 from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa)
+                     MallaCurricular, Materia, Modalidad, Periodo, Programa, EspacioClase)
+from solicitud.models import (Solicitud,EstadoSolicitud,SolicitudEspacio,SolicitudClases)
 
 from .models import *
 
@@ -65,4 +66,55 @@ def solicitud_viaticos(request):
             "side": "sidebar_crearViatico.html"
         }
     )
+    
+@login_required(login_url="/login")
+def salones_solicitud(request):
+    request.user.usuario.init_groups()
+    solicitudespendientes = SolicitudEspacio.objects.exclude(estado=2).exclude(estado=3)
+    solicitudesaceptadas = SolicitudEspacio.objects.filter(estado=2)
+    solicitudesnegadas = SolicitudEspacio.objects.filter(estado=3)
+    espaciosclase = EspacioClase.objects.all()
 
+
+
+    return render(
+        request,
+        "salones_solicitud.html",
+        {
+            "side": "sidebar_principal.html",
+            "side_args": args_principal(request.user,"solicitud_clase"),
+            "solicitudespacios": solicitudespendientes,
+            "solicitudesaceptadas": solicitudesaceptadas,
+            "solicitudesnegadas": solicitudesnegadas,
+            "espaciosclase": espaciosclase
+        }
+    )
+
+@login_required(login_url="/login")
+def asignar_espacio(request, solicitud_id):
+    espacio_id = request.POST.get('espacio_asignado')
+    solicitud = get_object_or_404(SolicitudEspacio, id=solicitud_id)
+    espacio = get_object_or_404(EspacioClase, id=espacio_id)
+
+    # Obtenemos todas las SolicitudClases asociadas con la SolicitudEspacio
+    solicitudclases = SolicitudClases.objects.filter(solicitud=solicitud)
+
+    # Para cada SolicitudClases, asignamos el EspacioClase a la Clase asociada
+    for solicitudclase in solicitudclases:
+        clase = solicitudclase.clase
+        clase.espacio_asignado = espacio
+        clase.save()
+    estado_aceptado = EstadoSolicitud.objects.get(estado=2)
+    solicitud.estado = estado_aceptado
+    solicitud.save()
+
+    return redirect('salones_solicitud')
+
+@login_required(login_url="/login")
+def rechazar_solicitud(request, solicitud_id):
+    solicitud = get_object_or_404(SolicitudEspacio, id=solicitud_id)
+    
+    estado_rechazado = EstadoSolicitud.objects.get(estado=3)
+    solicitud.estado = estado_rechazado
+    solicitud.save()
+    return redirect('salones_solicitud')
