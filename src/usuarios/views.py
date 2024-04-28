@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -15,7 +15,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
                               MallaCurricular, Materia, Modalidad, Periodo,
                               Programa)
-from academico.views import args_principal
+from academico.views import args_principal, verificar_permisos
 
 from .forms import DocenteForm
 from .models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
@@ -69,6 +69,7 @@ def log_out(request):
     return redirect("/")
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["lideres", "directores"]))
 def docente_Detail(request, cedula, periodo):
     """
     Vista que permite renderizar la pantalla 'docenteProfile.html' con información del docente.
@@ -172,7 +173,9 @@ def traducir_a_español(dia):
 
     return dias_semana.get(dia, dia)
 
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["lideres"]))
 def docentes(request):
     """
     Vista para mostrar la lista de docentes de posgrado.
@@ -247,6 +250,8 @@ def docentes(request):
 def error_404(request, exception):
     return render(request, '404.html', status=404)
 
+@login_required(login_url="/login")
+@user_passes_test(lambda u: u.is_superuser)
 def administrador(request):
     """
     Vista que permite la visualización y gestión de usuarios del sistema.
@@ -300,6 +305,7 @@ def administrador(request):
     )
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.is_superuser)
 def change_state(request, username):
     """
     Vista que permite cambiar el estado de un usuario (activo/inactivo).
@@ -317,7 +323,9 @@ def change_state(request, username):
         user_to_change.save()
     return redirect("administrador")
 
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: u.is_superuser)
 def change_rol(request, username, rol):
     """
     Vista que permite cambiar el rol de un usuario.
@@ -345,6 +353,9 @@ def change_rol(request, username, rol):
                 user_to_change.groups.add(Group.objects.get(name="directores"))
     return redirect("administrador")
 
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: u.is_superuser)
 def crear_usuario(request):
     request.user.usuario.init_groups()
 

@@ -1,7 +1,7 @@
 import json
 import random
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.db.models.functions import ExtractWeekDay
 from django.shortcuts import render
@@ -9,6 +9,22 @@ from django.shortcuts import render
 from academico.models import Clase, Materia, Programa
 from usuarios.models import Docente
 
+
+def verificar_permisos(user, roles):
+    """
+    Valida si el usuario tiene alguno de los roles especificados.
+
+    Args:
+        user (User): El usuario a validar.
+        roles (list): Lista de roles a validar.
+
+    Returns:
+        bool: True si el usuario tiene alguno de los roles especificados, False en caso contrario.
+    """
+    for rol in roles:
+        if user.groups.filter(name=rol).exists():
+            return True
+    return False
 
 def args_principal(user, seleccionado):
     """
@@ -78,7 +94,9 @@ def obtener_modalidad(malla):
             continue
     return max(set(modalidades), key=modalidades.count)
 
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["gestores", "directores"]))
 def inicio(request):
 
     request.user.usuario.init_groups()
@@ -108,19 +126,3 @@ def solicitudes_salones(request):
         "side_args": args_principal(request.user, "Solicitud de Salones"),
     }
 )
-
-def verificar_permisos(user, roles):
-    """
-    Valida si el usuario tiene alguno de los roles especificados.
-
-    Args:
-        user (User): El usuario a validar.
-        roles (list): Lista de roles a validar.
-
-    Returns:
-        bool: True si el usuario tiene alguno de los roles especificados, False en caso contrario.
-    """
-    for rol in roles:
-        if user.groups.filter(name=rol).exists():
-            return True
-    return False
