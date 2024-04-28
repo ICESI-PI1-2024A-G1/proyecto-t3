@@ -16,6 +16,7 @@ from ccsa_project import settings
 from django.contrib import messages
 from solicitud.models import (EstadoSolicitud, SolicitudClases,
                               SolicitudEspacio, SolicitudViatico, Usuario)
+from django.db.models import Q
 
 
 
@@ -132,6 +133,19 @@ def crear_clase(request, curso_id):
         num_semanas_str = request.POST.get("num_semanas", "1")
         num_semanas = 1 if num_semanas_str == "" else int(num_semanas_str)
         docente_cedula = request.POST.get("docente_clase")
+
+        if docente_cedula is not None and docente_cedula != "None":
+            docente = Docente.objects.get(cedula=docente_cedula)
+
+            clases_conflictivas = Clase.objects.filter(docente=docente).filter(
+                Q(fecha_inicio__lt=start_day, fecha_fin__gt=start_day) |
+                Q(fecha_inicio__lt=end_day, fecha_fin__gt=end_day)
+            )
+            if clases_conflictivas.exists():
+                messages.error(request, "El docente seleccionado tiene clases conflictivas.")
+                return redirect("visualizar-curso", curso_id=curso_id)
+            else:
+                docente = None
 
         if espacio.capacidad < curso.cupo:
             messages.error(request, "El espacio seleccionado no tiene la capacidad suficiente para el curso")
