@@ -108,3 +108,19 @@ def solicitudes_salones(request):
         "side_args": args_principal(request.user, "Solicitud de Salones"),
     }
 )
+
+def verificar_permisos(user, roles):
+    """
+    Valida si el usuario tiene alguno de los roles especificados.
+
+    Args:
+        user (User): El usuario a validar.
+        roles (list): Lista de roles a validar.
+
+    Returns:
+        bool: True si el usuario tiene alguno de los roles especificados, False en caso contrario.
+    """
+    for rol in roles:
+        if user.groups.filter(name=rol).exists():
+            return True
+    return False

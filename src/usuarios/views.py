@@ -266,7 +266,7 @@ def administrador(request):
     ordenar_por = request.GET.get("ordenar_por", None)
     rol = request.GET.get("rol", None)
     estado = request.GET.get("estado", None)
-    users = User.objects.all().order_by("is_active", "first_name", "last_name").exclude(username=request.user.username).exclude(is_superuser=True)
+    users = User.objects.all().order_by("is_active", "first_name", "last_name").exclude(username=request.user.username).exclude(is_superuser=True).exclude(groups__name="banner")
     
     for user in users:
         user.usuario.init_groups()
@@ -334,13 +334,15 @@ def change_rol(request, username, rol):
         user_to_change.usuario.init_groups()
         if rol:
             user_to_change.groups.clear()
-            if rol == "Gestor" and user_to_change.rol_principal != "Gestor":
+            if rol == "Gestor" and (not user_to_change.is_gestor or user_to_change.is_lider):
                 user_to_change.groups.add(Group.objects.get(name="gestores"))
-            
-            if rol == "Lider" and user_to_change.rol_principal != "Lider":
+
+            if rol == "Lider" and not user_to_change.is_lider:
                 user_to_change.groups.add(Group.objects.get(name="gestores"))
                 user_to_change.groups.add(Group.objects.get(name="lideres"))
-                
+
+            if user_to_change.rol_principal == "Director":
+                user_to_change.groups.add(Group.objects.get(name="directores"))
     return redirect("administrador")
 
 def crear_usuario(request):
