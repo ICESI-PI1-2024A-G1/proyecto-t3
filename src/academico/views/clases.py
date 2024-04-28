@@ -197,12 +197,8 @@ def editar_clase(request, clase_id):
         
         conflict = Clase.objects.filter(grupo_clases=clase.grupo_clases).exclude(id=clase_id).filter(
             fecha_inicio__lt=fecha_fin, fecha_fin__gt=fecha_inicio).exists()
-        if conflict:
-        # Si hay un conflicto, devuelve un mensaje de error
-            return JsonResponse({'error': 'La clase entra en conflicto con otra clase en el mismo grupo.'})
-        else:
+        if not conflict:
             
-
             old_fecha_inicio = clase.fecha_inicio
             old_fecha_fin = clase.fecha_fin
             old_espacio = clase.espacio
