@@ -36,6 +36,55 @@ function show_pop(clase_id, inicio, fin, espacio, tipo, modalidad, docente, camb
     checkbox.checked = cambiar_otros;
 }
 
+function show_popViatico(clase_id) {
+    popupViaticos.style.display = "block";
+    var form = document.getElementById('solicitarViatico');
+    form.action = "/academico/clases/" + clase_id + "/solicitar_viatico";
+
+    var tiquetes = document.getElementById("tiquetes");
+    console.log(tiquetes,"aaaaaaaaa")
+    var hospedaje = document.getElementById("hospedaje");
+    var alimentacion = document.getElementById("alimentacion");
+    document.getElementById("clase_id").value = clase_id;
+    if(tiquetes.checked){
+        tiquetes.value="True";
+    }
+    if(hospedaje.checked){
+        hospedaje.value = "True";
+    }
+    if(alimentacion.checked){
+        alimentacion.value = "True";
+    }
+}
+
+function changeNota(curso,grupoId){
+    var form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/academico/cursos/" + curso + "/" + grupoId +"/change_notas";
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "csrfmiddlewaretoken";
+    input.value = csrfToken;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function changeIntu(curso){
+    var form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/academico/cursos/" + curso + "/change_intu";
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "csrfmiddlewaretoken";
+    input.value = csrfToken;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+}
+
 
 
 function format_date(date){

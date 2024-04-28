@@ -16,7 +16,10 @@
                     <div class="row">
                         <div class="col-md-6">
                             <p class="card-text"><img src="{% static 'img/hashtag.png' %}" class="icon" alt="NRC">
-                                <b>NRC: </b> {{ curso.nrc }}
+                              <b>NRC: </b> {{ curso.nrc }}
+                            </p>
+                            <p class="card-text"><img src="{% static 'img/pc.png' %}" class="icon" alt="Intu">
+                              <b>Intu generado: </b> <input type="checkbox" {% if curso.intu_generado %} checked {% endif %} onchange="changeIntu('{{curso.nrc}}')">
                             </p>
                             <p class="card-text"><img src="{% static 'img/group.png' %}" class="icon" alt="Grupo">
                                 <b>Grupo: </b> {{ curso.grupo }}
@@ -96,16 +99,36 @@
                           <div class="card row mt-1 w-100 mb-2" style="align-items: start;">
                             <div class="row ml-1 mt-1 mb-1" style="align-items: center; justify-content: space-between; width: 100%;">
                               {% if user.is_lider %}
-                              <div class="row card-title bg-secondary rounded linkeable" style=" width: 80%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
+                              <div class="row card-title bg-secondary rounded linkeable h-100" style=" width: 80%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
                               {% else %}
-                              <div class="row card-title bg-secondary rounded linkeable mr-2" style=" width: 100%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
+                              <div class="row card-title bg-secondary rounded linkeable mr-2 h-100" style=" width: 100%; justify-content: space-between; align-items: center; margin-bottom: 0;"onclick="display_group('class_group{{grupo.0.grupo_clases.id}}')">
                               {% endif %}
                                 <img id="class_group{{grupo.0.grupo_clases.id}}_icon" src="{% static 'img/arrow_back.png' %}" class="icon ml-2" alt="Modulo de clases" style="transform: rotate(180deg); filter:invert(100%);">
                                 <h2 class="text-white">Modulo de clases {{ forloop.counter }}</h2>
-                                <label></label>  
+                                <label></label> 
+
                               </div>
                               {% if user.is_lider %}
+                              
                               <div class="row align-items-center" style="justify-content: space-between; width: 20%;" >
+                                
+                                <h5 class="m-1 p-2">Entregó notas?
+                                {% if user.is_lider %}
+                                  <input type="checkbox"
+                                    {% if grupo.0.grupo_clases.entrega_notas %}
+                                      checked
+                                    {% endif %}
+                                    onchange="changeNota('{{curso.nrc}}','{{grupo.0.grupo_clases.id}}')"
+                                  >
+                                {% elif user.is_gestor %}
+                                  <input type="checkbox"
+                                    {% if grupo.0.grupo_clases.entrega_notas %}
+                                      checked
+                                    {% endif %}
+                                    disabled
+                                  >
+                                {% endif%}
+                                </h5>  
                                 <a class="rounded btn-secondary p-2 linkeable ml-1" onclick="agregar_en(1,'{{grupo.0.grupo_clases.id}}')">
                                   <img id="{{grupo.0.grupo_clases..id}}" src="{% static 'img/add.webp' %}" class="icon btn">
                                 </a>
@@ -148,6 +171,13 @@
                                             <a class="dropdown-item" href="#" onclick="confirmarEliminarClase(event, '{{clase.id}}')">
                                               <img src="{% static 'img/Eliminar.png' %}" class="icon"> Eliminar
                                             </a>
+                                            {% if user.is_gestor %}
+                                              {% if clase.id not in viaticos %}
+                                              <a class= "dropdown-item" href=# onclick="show_popViatico('{{clase.id}}')">
+                                                <img src="{% static 'img/pencil.png' %}" class="icon"> Viaticos {{viatico.id}}
+                                              </a>
+                                              {% endif %}
+                                            {% endif %}
                                           </div>
                                         </div>
                                       </div>
@@ -319,18 +349,88 @@
   ></div>
 </div>
 
+
+<!--popup para viaticos-->
+
+<div id="popupViaticos" style="display: none">
+  <div class="modal moodle-has-zindex show background-shadow">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="popup-content form-group">
+
+          <span class="close" onclick="closePopup()"></span>
+          <h3 class="h2">Solicitar viatico</h3>
+          <form id= "solicitarViatico" method="POST" action="">
+          {% csrf_token %}
+            
+            <input type="hidden" name="clase_id" id="clase_id" value="">
+            <div class="d-flex justify-content-center flex-column">
+              <label> Seleccione uno o más items que haya requerido el docente para dar la clase </label>
+              <div class="col" >
+                <div class="col">
+                  <input
+                    type="checkbox"
+                    id="tiquetes"
+                    name="tiquetes"
+                    placeholder=""
+                  > Tiquetes
+                </div>
+                <div class="col">
+                  <input
+                      type="checkbox"
+                      id="hospedaje"
+                      class=""
+                      name="hospedaje"
+                      placeholder=""
+                  >  Hospedaje
+                </div>
+                <div class="col">
+                  <input
+                      type="checkbox"
+                      id="alimentacion"
+                      class=""
+                      name="alimentacion"
+                      placeholder=""
+                  >  Alimentacion
+                </div>
+                
+                
+              </div>
+              <div class="col mt-2">
+                  <button class="btn btn-primary mb-5" type="submit">Solicitar</button>
+                </div>
+            </div>
+          </form>  
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    tabindex="-1"
+    style="position: fixed; top: 0px; left: 0px"
+    aria-hidden="true"
+    data-aria-hidden-tab-index="0"
+  ></div>
+</div>
+
+
 <script>
     var editModal = document.getElementById("editModal");
+    var popupViaticos = document.getElementById("popupViaticos");
   
     // Cerrar popup al hacer clic en el botón de cerrar
     function closePopup() {
         editModal.style.display = "none";
+        popupViaticos.style.display = "none";
     }
-  
+
     // Cerrar popup al dar clic afuera
     window.onclick = function (event) {
       if (event.target == editModal) {
         editModal.style.display = "none";
+      }
+      if(event.target == popupViaticos){
+        popupViaticos.style.display = "none";
       }
     };
 </script>
