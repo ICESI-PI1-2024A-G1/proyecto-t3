@@ -377,9 +377,7 @@ def importar_malla(request, codigo, periodo):
                 periodo=Periodo.objects.get(semestre=periodo),
                 semestre=malla_anterior.semestre,
             )
-            Curso.objects.filter(
-                materia=malla_anterior.materia, periodo__semestre=periodo
-            ).distinct().delete()
+            Curso.objects.filter(materia=malla_anterior.materia, periodo__semestre=periodo).delete()
             for curso_anterior in Curso.objects.filter(
                 materia=malla_anterior.materia, periodo=malla_anterior.periodo
             ).distinct():
@@ -403,8 +401,8 @@ def importar_malla(request, codigo, periodo):
                         modalidad=clase_anterior.modalidad,
                         docente=clase_anterior.docente if incluir_docentes else None,
                     )
-    except:
-        return JsonResponse({"error": "Error al importar la malla curricular."})
+    except Exception as e:
+        return JsonResponse({"error": e.__str__()})
     return JsonResponse({"success": "Malla curricular importada exitosamente."})
 
 
