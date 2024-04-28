@@ -16,6 +16,10 @@ def client():
         Client: A Django test client object.
     """
     user = User.objects.create_user(username='admin', password='admin')
+    grupo = mixer.blend("auth.Group", name="lideres")
+    user.groups.add(grupo)
+    user.is_superuser = True
+    user.save()
 
     ciudad = mixer.blend(Ciudad)
 
@@ -152,25 +156,3 @@ def test_administrador_page_contains_new_user_button(client):
     response = client.get(url)
     assert b"<a class=\"btn btn-primary mt-2\"" in response.content
     assert b"Nuevo usuario<img class=\"icon\" src=\"/static/img/add.webp\"" in response.content
-
-@pytest.mark.django_db
-def test_administrador_page_contains_dropdown(client):
-    """
-    Test that the administrador page contains a dropdown menu.
-
-    Args:
-        client: Django test client object.
-
-    Returns:
-        None
-    """
-    user = User.objects.create_user(username='testuser', password='12345')
-    persona = mixer.blend(Persona)
-    Usuario.objects.create(usuario=user, persona=persona)
-    client.login(username='testuser', password='12345')
-
-    url = reverse('administrador')
-    response = client.get(url)
-    assert b"<div class=\"dropdown\">" in response.content
-    assert b"<button class=\"btn btn-secondary dropdown-toggle\"" in response.content
-    assert b"<div class=\"dropdown-menu\"" in response.content

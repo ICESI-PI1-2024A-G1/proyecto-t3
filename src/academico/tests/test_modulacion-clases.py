@@ -38,6 +38,10 @@ def autenticacion(db, rf):
         request: Objeto de la solicitud HTTP con el usuario autenticado.
     """
     user = User.objects.create_user(username="admin", password="admin")
+    grupo = mixer.blend("auth.Group", name="gestores")
+    user.groups.add(grupo)
+    grupo = mixer.blend("auth.Group", name="lideres")
+    user.groups.add(grupo)
     persona = mixer.blend(Persona)
     mixer.blend(Usuario, persona=persona, usuario=user)
     request = rf.get(reverse("visualizar-curso", kwargs={"curso_id": 1}))
