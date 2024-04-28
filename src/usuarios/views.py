@@ -38,11 +38,17 @@ def login_page(request):
         user = authenticate(request, username=form['username'], password=form['password'])
         if user is not None:
             login(request, user)
+            user.usuario.init_groups()
+            if user.is_banner:
+                return redirect("salones_solicitud")
             return redirect("inicio")
         else:
             messages.error(request, "Usuario y/o contraseña incorrectos. Por favor, inténtelo nuevamente.")
 
     elif request.user.is_authenticated:
+        request.user.usuario.init_groups()
+        if request.user.is_banner:
+            return redirect("salones_solicitud")
         return redirect("inicio")
 
     return render(request, 'login.html', {
@@ -354,22 +360,30 @@ def crear_usuario(request):
         ciudad = Ciudad.objects.get(id=ciudad_id)
         group = Group.objects.get(name=rol)
 
-        user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=username)
-        fullname = first_name + " " + last_name
-        user.groups.add(group)
-        user.save()
-        if rol == "lideres":
-            user.groups.add(Group.objects.get(name="gestores"))
-
-        persona = Persona.objects.create(
-            cedula = cedula,
-            nombre=fullname, 
-            email=email,
-            telefono=telefono,
-            ciudad=ciudad,
-            fechaNacimiento=birthdate,
-        )
-        usuario = Usuario.objects.create(usuario=user, persona=persona)
+        try:
+            user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=username)
+            fullname = first_name + " " + last_name
+            user.groups.add(group)
+            user.save()
+            if rol == "lideres":
+                user.groups.add(Group.objects.get(name="gestores"))
+            
+            if Persona.objects.filter(cedula=cedula).exists():
+                persona = Persona.objects.get(cedula=cedula)
+                persona.nombre = fullname
+                persona.telefono = telefono
+                persona.email = email
+                persona.ciudad = ciudad
+                persona.fechaNacimiento = birthdate
+                persona.save()
+            else:
+                persona = Persona.objects.create(cedula=cedula, nombre=fullname, email=email, telefono=telefono, ciudad=ciudad, fechaNacimiento=birthdate)
+            
+            Usuario.objects.create(usuario=user, persona=persona)
+        
+        except IntegrityError:
+            messages.error(request, "Ya existe un usuario con la cédula ingresada.")
+            return redirect('/administrador')
         
         return redirect('/administrador')
     else:

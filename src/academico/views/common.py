@@ -32,13 +32,13 @@ def args_principal(user, seleccionado):
     if user.is_gestor or user.is_director:
         sites["Materias posgrado"] = {"url": "/academico/materias", "seleccionado": seleccionado=="materias"}
     
-    if user.is_gestor:
+    if user.is_lider:
         sites["Docentes posgrado"] = {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
     
     if user.is_gestor:
         sites["Solicitud"] = {"url": "/solicitud/viaticos", "seleccionado": seleccionado=="solicitud"}
     
-    if user.is_gestor:
+    if user.is_banner:
         sites["Solicitud de Salones"] = {"url": "/solicitud/salones_solicitud", "seleccionado": seleccionado=="solicitud_clase"}
     
     if user.is_superuser:

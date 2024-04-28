@@ -24,6 +24,13 @@
             </div>
         </form>
     </div>
+    {% if messages %}
+        <div class="loginerrors mt-3">
+            {% for message in messages %}
+            <div class="alert alert-danger" role="alert">{{message}}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <table class="table table-bordered">
         <thead>
