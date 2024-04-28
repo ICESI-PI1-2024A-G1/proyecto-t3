@@ -1,9 +1,9 @@
-from datetime import datetime
 import random
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -12,15 +12,19 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
-from academico.views import args_principal
-from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa, EspacioClase)
-from solicitud.models import (Solicitud,EstadoSolicitud,SolicitudEspacio,SolicitudClases)
+from academico.models import (Clase, Curso, Espacio, EspacioClase,
+                              EstadoSolicitud, Facultad, MallaCurricular,
+                              Materia, Modalidad, Periodo, Programa)
+from academico.views import (args_principal, verificar_permisos,
+                             visualizacion_curso)
+from solicitud.models import (EstadoSolicitud, Solicitud, SolicitudClases,
+                              SolicitudEspacio)
 
 from .models import *
-from academico.views import visualizacion_curso
+
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["gestores"]))
 def solicitud_viaticos(request):
     docentes = Docente.objects.all()
     propositos = PropositoViaje.objects.all()
@@ -67,8 +71,10 @@ def solicitud_viaticos(request):
             "side": "sidebar_crearViatico.html"
         }
     )
-    
+
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["banner"]))
 def salones_solicitud(request):
     request.user.usuario.init_groups()
     solicitudespendientes = SolicitudEspacio.objects.exclude(estado=2).exclude(estado=3)
@@ -91,7 +97,9 @@ def salones_solicitud(request):
         }
     )
 
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["banner"]))
 def asignar_espacio(request, solicitud_id):
     espacio_id = request.POST.get('espacio_asignado')
     solicitud = get_object_or_404(SolicitudEspacio, id=solicitud_id)
@@ -112,6 +120,7 @@ def asignar_espacio(request, solicitud_id):
     return redirect('salones_solicitud')
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["banner"]))
 def rechazar_solicitud(request, solicitud_id):
     solicitud = get_object_or_404(SolicitudEspacio, id=solicitud_id)
     
@@ -119,7 +128,10 @@ def rechazar_solicitud(request, solicitud_id):
     solicitud.estado = estado_rechazado
     solicitud.save()
     return redirect('salones_solicitud')
+
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["gestores"]))
 def viaticos(request):
         """
     Vista para mostrar la lista de docentes de posgrado.

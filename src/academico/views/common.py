@@ -1,7 +1,7 @@
 import json
 import random
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.db.models.functions import ExtractWeekDay
 from django.shortcuts import render
@@ -9,6 +9,22 @@ from django.shortcuts import render
 from academico.models import Clase, Materia, Programa
 from usuarios.models import Docente
 
+
+def verificar_permisos(user, roles):
+    """
+    Valida si el usuario tiene alguno de los roles especificados.
+
+    Args:
+        user (User): El usuario a validar.
+        roles (list): Lista de roles a validar.
+
+    Returns:
+        bool: True si el usuario tiene alguno de los roles especificados, False en caso contrario.
+    """
+    for rol in roles:
+        if user.groups.filter(name=rol).exists():
+            return True
+    return False
 
 def args_principal(user, seleccionado):
     """
@@ -32,13 +48,13 @@ def args_principal(user, seleccionado):
     if user.is_gestor or user.is_director:
         sites["Materias posgrado"] = {"url": "/academico/materias", "seleccionado": seleccionado=="materias"}
     
-    if user.is_gestor:
+    if user.is_lider:
         sites["Docentes posgrado"] = {"url": "/docentes", "seleccionado": seleccionado=="docentes"}
     
     if user.is_gestor:
         sites["Solicitud"] = {"url": "/solicitud/viaticos", "seleccionado": seleccionado=="solicitud"}
     
-    if user.is_gestor:
+    if user.is_banner:
         sites["Solicitud de Salones"] = {"url": "/solicitud/salones_solicitud", "seleccionado": seleccionado=="solicitud_clase"}
     
     if user.is_superuser:
@@ -78,7 +94,9 @@ def obtener_modalidad(malla):
             continue
     return max(set(modalidades), key=modalidades.count)
 
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["gestores", "directores"]))
 def inicio(request):
 
     request.user.usuario.init_groups()

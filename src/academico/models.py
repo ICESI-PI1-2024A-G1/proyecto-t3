@@ -238,7 +238,7 @@ class EspacioClase(models.Model):
     numero = models.IntegerField()
 
     def __str__(self):
-        return str(self.edificio) + ' ' + self.numero
+        return f"{self.edificio}{self.numero}"
 
     class Meta:
         unique_together = ("edificio", "numero")

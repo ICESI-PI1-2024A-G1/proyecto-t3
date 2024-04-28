@@ -130,6 +130,7 @@ class Usuario(models.Model):
         self.usuario.is_director = self.usuario.groups.filter(name="directores").exists()
         self.usuario.is_lider = self.usuario.groups.filter(name="lideres").exists()
         self.usuario.is_gestor = self.usuario.groups.filter(name="gestores").exists()
+        self.usuario.is_banner = self.usuario.groups.filter(name="banner").exists()
         
         if self.usuario.is_gestor:
             self.usuario.rol_principal = "Gestor"
