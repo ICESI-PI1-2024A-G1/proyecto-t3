@@ -1,46 +1,23 @@
 from datetime import datetime, timedelta
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
-from academico.models import (Clase, Curso, Docente, Espacio, Estudiante,
-                              GrupoDeClase, Modalidad, EspacioClase)
-from solicitud.models import (SolicitudEspacio, Usuario, EstadoSolicitud, SolicitudClases,SolicitudViatico)
+from academico.models import (Clase, Curso, Docente, Espacio, EspacioClase,
+                              Estudiante, GrupoDeClase, Modalidad)
+from academico.views.common import verificar_permisos
 from ccsa_project import settings
-
-
-
-@login_required(login_url="/login")
-def asignar_salon(request, solicitud_id, espacio_id):
-    """
-    Asigna un EspacioClase a todas las Clases asociadas a una SolicitudEspacio.
-
-    Args:
-        solicitud_id (int): El ID de la SolicitudEspacio.
-        espacio_id (int): El ID del EspacioClase.
-
-    Returns:
-        None
-    
-    """
-    solicitud = get_object_or_404(SolicitudEspacio, id=solicitud_id)
-    espacio = get_object_or_404(EspacioClase, id=espacio_id)
-
-    clases_solicitud = SolicitudClases.objects.filter(solicitud=solicitud)
-
-    for clase_solicitud in clases_solicitud:
-        clase = clase_solicitud.clase
-        clase.espacio_asignado = espacio
-        clase.save()
-
+from solicitud.models import (EstadoSolicitud, SolicitudClases,
+                              SolicitudEspacio, SolicitudViatico, Usuario)
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['lideres']))
 def solicitar_salones(request, curso_id):
     """
     Vista que permite solicitar salones para las clases de un curso.
@@ -70,6 +47,7 @@ def solicitar_salones(request, curso_id):
         return redirect('visualizar-curso', curso_id=curso.nrc)
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
 def solicitar_viaticos(request, clase_id):
     clase= get_object_or_404(Clase, id=clase_id)
 
@@ -136,6 +114,7 @@ def editar_alimentacion(request, clase_id):
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['lideres']))
 def crear_clase(request, curso_id):
     """
     Crea una nueva clase para un curso en el sistema.
@@ -155,7 +134,6 @@ def crear_clase(request, curso_id):
     request.user.usuario.init_groups()
     
     if request.method == "POST":
-
         start_day = datetime.strptime(request.POST.get("start_day"), "%Y-%m-%dT%H:%M")
         end_day = datetime.strptime(request.POST.get("end_day"), "%Y-%m-%dT%H:%M")
 
@@ -196,19 +174,34 @@ def crear_clase(request, curso_id):
             end_day += timedelta(days=7)
 
         return redirect("visualizar-curso", curso_id=curso_id)
-    else:
-        espacios = Espacio.objects.all()
-        modalidades = Modalidad.objects.all()
-        docentes = Docente.objects.all()
-        return {
-            "espacios": espacios,
-            "modalidades": modalidades,
-            "docentes": docentes,
-            "curso_id": curso_id,
-        }
+    return obtener_clases(request, curso_id)
+    
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores','directores']))
+def obtener_clases(request, curso_id):
+    """
+    Obtiene las clases de un curso.
 
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        curso_id (str): El código del curso.
+
+    Returns:
+        HttpResponse: La respuesta HTTP que muestra la página de visualización de clases.
+    """
+    
+    espacios = Espacio.objects.all()
+    modalidades = Modalidad.objects.all()
+    docentes = Docente.objects.all()
+    return {
+        "espacios": espacios,
+        "modalidades": modalidades,
+        "docentes": docentes,
+        "curso_id": curso_id,
+    }
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['lideres']))
 def editar_clase(request, clase_id):
     """
     Permite editar los atributos de una clase
@@ -345,6 +338,7 @@ def editar_clase(request, clase_id):
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['lideres']))
 @require_POST
 def eliminar_clase(request, clase_id):
     """
@@ -368,6 +362,7 @@ def eliminar_clase(request, clase_id):
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['lideres']))
 def nuevas_clases(request,grupo,cantidad):
     """
     Crea nuevas clases para un grupo de clases
@@ -405,6 +400,7 @@ def nuevas_clases(request,grupo,cantidad):
     return redirect("visualizar-curso", curso_id=curso.nrc)
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['lideres']))
 def eliminar_grupo_de_clases(request, grupo):
     """
     Elimina un grupo de clases del sistema.

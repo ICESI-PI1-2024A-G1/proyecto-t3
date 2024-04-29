@@ -24,6 +24,13 @@
             </div>
         </form>
     </div>
+    {% if messages %}
+        <div class="loginerrors mt-3">
+            {% for message in messages %}
+            <div class="alert alert-danger" role="alert">{{message}}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <table class="table table-bordered">
         <thead>
@@ -53,13 +60,13 @@
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Gestor')">
-                          {% if usuario.rol_principal == 'Gestor' %}
+                          {% if usuario.is_gestor and not usuario.is_lider %}
                             <img src="{% static 'img/check.png' %}" class="icon">
                           {%endif%}
                           Gestor
                         </a>
                         <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Lider')">
-                            {% if usuario.rol_principal == 'Lider' %}
+                            {% if usuario.is_lider %}
                             <img src="{% static 'img/check.png' %}" class="icon">
                             {%endif%}
                             Líder

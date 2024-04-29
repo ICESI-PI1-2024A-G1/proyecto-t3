@@ -34,6 +34,10 @@ def autenticacion(db, rf):
     """
 
     user = User.objects.create_user(username='admin', password='admin')
+    grupo = mixer.blend("auth.Group", name="lideres")
+    user.groups.add(grupo)
+    grupo = mixer.blend("auth.Group", name="gestores")
+    user.groups.add(grupo)
     persona = mixer.blend(Persona)
     mixer.blend(Usuario, persona=persona, usuario=user)
     request = rf.get(reverse('visualizacion_materias', kwargs={'codigo': 101, 'periodo': 202401} ))

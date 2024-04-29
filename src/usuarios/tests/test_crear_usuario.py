@@ -14,6 +14,8 @@ def client():
     Group.objects.get_or_create(name='admin')
 
     user = User.objects.create_user(username='admin', password='admin')
+    user.is_superuser = True
+    user.save()
 
     ciudad = mixer.blend(Ciudad)
 
