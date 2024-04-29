@@ -88,7 +88,7 @@ def solicitar_viaticos(request, clase_id):
             hospedaje=True
         if(alimentacionR=="on" and alimentacionR!=None):
             alimentacion=True
-        desc="requirio"+ clase.docente.nombre + "para la clase: "+ str(clase.id) + "en el curso: "+ str(clase.curso.nrc) +"."
+        desc="requirio "+ clase.docente.nombre + " para la clase: "+ str(clase.id) + " en el curso: "+ str(clase.curso.nrc) +"."
 
         claseBuscar = SolicitudViatico.objects.filter(clase=clase_id).first()
         if(tiquetes or alimentacion or hospedaje):
@@ -103,7 +103,36 @@ def solicitar_viaticos(request, clase_id):
                 return redirect("visualizar-curso", curso_id=clase.curso.nrc)
         else:
             return redirect("visualizar-curso", curso_id=clase.curso.nrc)
-    
+
+@login_required(login_url="/login")
+def editar_tiquete(request, clase_id):
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+    if request.method == "POST":
+        viatico.tiquete = not viatico.tiquete
+        viatico.save()
+    return redirect('/solicitud/viaticos')
+
+@login_required(login_url="/login")
+def editar_hospedaje(request, clase_id):
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    if request.method == "POST":
+        viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+        viatico.hospedaje = not viatico.hospedaje
+        viatico.save()
+    return redirect('/solicitud/viaticos')
+
+@login_required(login_url="/login")
+def editar_alimentacion(request, clase_id):
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    if request.method == "POST":
+        viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+        viatico.alimentacion = not viatico.alimentacion
+        viatico.save()
+    return redirect('/solicitud/viaticos')
 
 
 @login_required(login_url="/login")

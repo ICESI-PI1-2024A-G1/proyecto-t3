@@ -85,13 +85,13 @@
     </thead>
     <tbody>
       {% for viatico in viaticos %}
-      <tr class="linkeable" onclick="window.location.href='/academico/cursos/{{viatico.clase.curso.nrc}}'">
+      <tr>
         <td>{{ viatico.clase.id}}</td>
-        <td>{{viatico.clase.curso.nrc}}</td>
+        <td class="linkeable" onclick="window.location.href='/academico/cursos/{{viatico.clase.curso.nrc}}'">{{viatico.clase.curso.nrc}}</td>
         <td>{{ viatico.fecha_solicitud}}</td>
-        <td>{{ viatico.tiquete|yesno:"Sí,No" }}</td>
-        <td>{{ viatico.hospedaje|yesno:"Sí,No" }}</td>
-        <td>{{ viatico.alimentacion|yesno:"Sí,No" }}</td>
+        <td><input type="checkbox" {% if viatico.tiquete %} checked {% endif %} onchange="changeTiquete('{{viatico.clase.id}}')"></td>
+        <td><input type="checkbox" {% if viatico.hospedaje %} checked {% endif %} onchange="changeHospedaje('{{viatico.clase.id}}')"/></td>
+        <td><input type="checkbox" {% if viatico.alimentacion %} checked {% endif %} onchange="changeAlimentacion('{{viatico.clase.id}}')"/></td>
 
       </tr>
       {% endfor %}
@@ -118,6 +118,7 @@
 </div>
 
 <script>
+
   function submitForm() {
     document.getElementById('search-form').submit();
   }
