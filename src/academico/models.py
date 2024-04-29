@@ -237,6 +237,9 @@ class EspacioClase(models.Model):
     edificio = models.CharField(max_length=255)
     numero = models.IntegerField()
 
+    def __str__(self):
+        return f"{self.edificio}{self.numero}"
+
     class Meta:
         unique_together = ("edificio", "numero")
 

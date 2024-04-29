@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio</title>
+    {% load static %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center" style="padding-top: 20px; padding-bottom: 5px;">Bienvenido al sistema de control académico</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <img src="{% static 'img/banner-especializaciones-2023.jpg' %}" class="img-fluid" alt="Imagen de banner">
+        </div>
+    </div>
+    </br>
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Estadísticas</h2>
+            <h3 style = "text-align: start;">Datos generales</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card text-white bg-primary mb-3" style="max-width: 15rem; margin: 1rem;">
+                        <div class="card-header" style = "font-weight: bold;">Programas</div>
+                        <div class="card-body">
+                            <p class="card-title text-white" style = "font-size: 2em; font-weight: bold;">{{ total_programas }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-primary mb-3" style="max-width: 15rem; margin: 1rem;">
+                        <div class="card-header" style = "font-weight: bold;">Docentes</div>
+                        <div class="card-body">
+                            <p class="card-title text-white" style = "font-size: 2em; font-weight: bold;">{{ total_docentes }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-primary mb-3" style="max-width: 15rem; margin: 1rem;">
+                        <div class="card-header" style = "font-weight: bold;">Materias</div>
+                        <div class="card-body">
+                            <p class="card-title text-white" style = "font-size: 2em; font-weight: bold;">{{ total_materias }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-primary mb-3" style="max-width: 15rem; margin: 1rem;">
+                        <div class="card-header" style = "font-weight: bold;">Clases</div>
+                        <div class="card-body">
+                            <p class="card-title text-white" style = "font-size: 2em; font-weight: bold;">{{ total_clases }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </br>
+            <h3 style = "text-align: start;">Gráficas</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Gráfica 1 -->
+                    <canvas id="myChart" style="width: 400px; height: 400px;"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <!-- Gráfica 2 -->
+                    <canvas id="myChartDias" style="width: 400px; height: 400px;"></canvas>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var estadosProgramas = JSON.parse('{{ estados_programas_json|escapejs }}');
+        var labels = estadosProgramas.map(function(e) { return e.estado_solicitud__nombre; });
+        var data = estadosProgramas.map(function(e) { return e.total; });
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '# de Programas',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ]
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Programas por estado de solicitud'
+                    }
+                }
+            }
+        });
+
+        var clasesPorDia = JSON.parse('{{ clases_por_dia_json|escapejs }}');
+        var labelsDias = clasesPorDia.map(function(e) {
+            var diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            return diasSemana[e.dia_semana - 1];
+        });
+        var dataDias = clasesPorDia.map(function(e) { return e.total; });
+
+        var ctxDias = document.getElementById('myChartDias').getContext('2d');
+        var myChartDias = new Chart(ctxDias, {
+            type: 'pie',
+            data: {
+                labels: labelsDias,
+                datasets: [{
+                    data: dataDias,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ]
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribución de clases por día de la semana'
+                    }
+                }
+            }
+        });
+    };
+</script>
+
+{% endblock %}
