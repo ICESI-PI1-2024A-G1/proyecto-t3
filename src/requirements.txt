@@ -8,3 +8,4 @@ django-selenium-test
 gunicorn
 uvicorn
 whitenoise
+openpyxl
