@@ -4,7 +4,7 @@
   --structurebackground: rgba(255, 255, 255, 1);
   --structurebackgroundaccent: rgba(240, 242, 245, 1);
   --structureaccentcolor: rgba(32, 69, 137, 1);
-  --structureprimarycolor: rgba(41, 96, 195, 1);
+  --structureprimarycolor: #2960c3;
   --structuresecondarycolor: rgba(119, 193, 249, 1);
   --structureinputbox: rgba(239, 243, 244, 1);
   --structureblackover: rgba(15, 20, 25, 0.3);
@@ -76420,7 +76420,7 @@ http://yuilibrary.com/license/
     font-size: 146px;
     font-weight: 700;
     margin: 0px;
-    color: #232323;
+    color: #2960c3;
   }
   
   .notfound .notfound-404 h1>span {
@@ -76441,7 +76441,7 @@ http://yuilibrary.com/license/
     font-weight: 700;
     margin: 0;
     text-transform: uppercase;
-    color: #232323;
+    color: #2960c3;
   }
   
   .notfound p {
@@ -76455,7 +76455,7 @@ http://yuilibrary.com/license/
     display: inline-block;
     padding: 12px 30px;
     font-weight: 700;
-    background-color: #f99827;
+    background-color: #2960c3;
     color: #fff;
     border-radius: 40px;
     text-decoration: none;

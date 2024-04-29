@@ -248,6 +248,17 @@ def docentes(request):
 
 
 def error_404(request, exception):
+    if request.user.is_authenticated:
+        request.user.usuario.init_groups()
+        return render(
+            request,
+            "404_logged.html",
+            status=404,
+            context={
+                "side": "sidebar_principal.html",
+                "side_args": args_principal(request.user, "404"),
+            },
+        )
     return render(request, '404.html', status=404)
 
 @login_required(login_url="/login")
