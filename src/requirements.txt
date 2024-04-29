@@ -4,6 +4,7 @@ dj-database-url
 sqlparse
 xhtml2pdf
 psycopg2-binary
+django-selenium-test
 gunicorn
 uvicorn
 whitenoise
