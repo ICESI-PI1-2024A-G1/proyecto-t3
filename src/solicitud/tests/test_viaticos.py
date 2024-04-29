@@ -1,14 +1,16 @@
-import pytest
 from datetime import datetime
+
+import pytest
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.test import RequestFactory
 from mixer.backend.django import mixer
 
-from usuarios.models import (Persona, Usuario)
-from academico.models import (Clase,Curso)
-from solicitud.models import (SolicitudViatico)
+from academico.models import Clase, Curso
+from solicitud.models import SolicitudViatico
 from solicitud.views import viaticos
+from usuarios.models import Persona, Usuario
+
 
 def crear_instancias():
     curso= Curso.objects.create(nrc="1")
@@ -30,6 +32,8 @@ def autenticar_usuario(request):
     None
     """ 
     user = User.objects.create_user(username='admin', password='admin')
+    grupo = mixer.blend("auth.Group", name="gestores")
+    user.groups.add(grupo)
     persona = mixer.blend(Persona)
     mixer.blend(Usuario, persona=persona, usuario=user)
     request.user = user
@@ -58,4 +62,3 @@ def test_busqueda_clase_existe():
 
     assert response.status_code == 200
     assert b'100' in response.content
-

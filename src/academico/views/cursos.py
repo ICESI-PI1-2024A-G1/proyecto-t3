@@ -1,17 +1,20 @@
 import random
 from datetime import datetime, timedelta
-from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import IntegrityError
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from academico.models import Clase, Curso, Docente, GrupoDeClase, Periodo
+from academico.views import verificar_permisos
 from solicitud.models import Solicitud, SolicitudViatico
 
-from .clases import crear_clase
+from .clases import obtener_clases
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["lideres"]))
 def crear_curso(request, codigo, periodo):
     """
     Crea un nuevo curso en el sistema.
@@ -68,6 +71,7 @@ def crear_curso(request, codigo, periodo):
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["gestores", "directores"]))
 def visualizacion_curso(request, curso_id):
     """
     Vista que muestra la visualización de un curso.
@@ -113,10 +117,11 @@ def visualizacion_curso(request, curso_id):
             "total_horas_programadas": total_horas_programadas,
             "side": "sidebar_curso.html",
         }
-        | crear_clase(request, curso_id),
+        | obtener_clases(request, curso_id)
     )
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["gestores"]))
 def change_notas(request, curso_id, grupoId):
     request.user.usuario.init_groups()
     grupo = get_object_or_404(GrupoDeClase, id=grupoId)
@@ -128,6 +133,7 @@ def change_notas(request, curso_id, grupoId):
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["gestores"]))
 def change_intu(request, curso_id):
     request.user.usuario.init_groups()
     curso = get_object_or_404(Curso, nrc=curso_id)
