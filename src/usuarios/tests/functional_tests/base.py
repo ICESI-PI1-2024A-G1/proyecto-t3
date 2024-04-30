@@ -47,8 +47,12 @@ class BaseTestCase(SeleniumTestCase):
         persona = mixer.blend(Persona)
         mixer.blend(Usuario, persona=persona, usuario=self.user)
         
-
     def login(self):
         self.selenium.get(self.live_server_url)
         self.selenium.login(username=self.__username__, password=self.__password__)
 
+    def setup_data(self):
+        # Crear datos de prueba
+        # Por implementar
+        pass
+        
