@@ -1,13 +1,15 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 
 from academico.models import Clase, Curso, Docente, Materia, Periodo, Programa
 
-from .common import args_principal, color_suave
+from .common import args_principal, color_suave, verificar_permisos
 
 
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["gestores", "directores"]))
 def materias(request):
     """
     Vista que muestra la lista de materias.
@@ -73,6 +75,7 @@ def materias(request):
 
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u, ["gestores", "directores"]))
 def visualizacion_materia(request, codigo, periodo):
     """
     Renderiza la página de visualización de información de una materia.

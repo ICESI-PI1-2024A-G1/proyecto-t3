@@ -16,6 +16,9 @@ class EstadoSolicitud(models.Model):
     estado = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=128)
 
+    def __str__(self):
+        return self.nombre
+
 
 class Solicitud(models.Model):
     """
