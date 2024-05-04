@@ -99,6 +99,8 @@ class TestGestionPrograma(BaseTestCase):
 
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
 
+        self.wait_for_element(By.ID, "periodo")
+
         # Validar programa
         self.asserts_basicos_programa_1(semestre)
         self.assertIn("Enviar para revisión", self.selenium.page_source) # Debe aparecer el botón de enviar para revisión
@@ -123,6 +125,7 @@ class TestGestionPrograma(BaseTestCase):
 
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
 
+        self.wait_for_element(By.ID, "periodo")
         # Validar programa
         self.asserts_basicos_programa_1(semestre)
         self.assertIn("Programa En espera", self.selenium.page_source) # Debe aparecer el estado del programa del director
@@ -148,6 +151,8 @@ class TestGestionPrograma(BaseTestCase):
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
 
         # Validar programa
+
+        self.wait_for_element(By.ID, "periodo")
         self.asserts_basicos_programa_1(semestre)
         self.assertNotIn("Programa En espera", self.selenium.page_source) # No debe aparecer el estado del programa del director
         self.assertNotIn("Enviar para revisión", self.selenium.page_source) # No debe aparecer el botón de enviar para revisión
@@ -172,12 +177,14 @@ class TestGestionPrograma(BaseTestCase):
 
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre_1}")
 
+        self.wait_for_element(By.ID, "periodo")
         # Verificar que se cargue correctamente el primer periodo
         self.asserts_basicos_programa_1(semestre_1)
 
         # Cambiar a otro periodo
         Select(self.select_periodo).select_by_value(f"{codigo}/{semestre_2}")
 
+        self.wait_for_element(By.ID, "periodo")
         # Verificar que se cargue correctamente el nuevo periodo
         self.asserts_basicos_programa_1(semestre_2)
 
@@ -201,6 +208,7 @@ class TestGestionPrograma(BaseTestCase):
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo_1}/{semestre}")
 
         # Validar programa 1
+        self.wait_for_element(By.ID, "periodo")
         self.asserts_basicos_programa_1(semestre)
         self.assertIn("Enviar para revisión", self.selenium.page_source) # Debe aparecer el botón de enviar para revisión
         self.assertIn("Importar malla", self.selenium.page_source) # Debe aparecer el botón de importar malla
@@ -209,6 +217,7 @@ class TestGestionPrograma(BaseTestCase):
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo_2}/{semestre}")
 
         # Validar programa 2
+        self.wait_for_element(By.ID, "periodo")
         self.asserts_basicos_programa_2(semestre)
         self.assertIn("Enviar para revisión", self.selenium.page_source) # Debe aparecer el botón de enviar para revisión
         self.assertIn("Importar malla", self.selenium.page_source) # Debe aparecer el botón de importar malla

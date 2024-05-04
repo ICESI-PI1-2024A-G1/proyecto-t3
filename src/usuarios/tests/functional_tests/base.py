@@ -1,9 +1,10 @@
 from unittest import skipUnless
 
 from django.conf import settings
-from django.contrib.auth.models import User
-from django_selenium_test import SeleniumTestCase
+from django.contrib.auth.models import Group, User
+from django_selenium_test import PageElement, SeleniumTestCase
 from mixer.backend.django import mixer
+from selenium.webdriver.common.by import By
 
 from academico.models import (Clase, Curso, Espacio, EspacioClase,
                               GrupoDeClase, MallaCurricular, Materia, Periodo,
@@ -17,26 +18,33 @@ class BaseTestCase(SeleniumTestCase):
     __username__ = "user"
     __password__ = "user"
 
+    def wait_for_element(self, by, value):
+        element = PageElement(by, value)
+        element.wait_until_exists(10)
+
     def como_gestor(self):
-        grupo = mixer.blend("auth.Group", name="gestores")
-        self.user.groups.add(grupo)
+        if not Group.objects.filter(name="gestores").exists():
+            mixer.blend("auth.Group", name="gestores")
+        self.user.groups.add(Group.objects.get(name="gestores"))
         self.user.save()
 
     def como_lider(self):
-        grupo = mixer.blend("auth.Group", name="lideres")
-        self.user.groups.add(grupo)
-        grupo = mixer.blend("auth.Group", name="gestores")
-        self.user.groups.add(grupo)
+        self.como_gestor()
+        if not Group.objects.filter(name="lideres").exists():
+            mixer.blend("auth.Group", name="lideres")
+        self.user.groups.add(Group.objects.get(name="lideres"))
         self.user.save()
 
     def como_director(self):
-        grupo = mixer.blend("auth.Group", name="directores")
-        self.user.groups.add(grupo)
+        if not Group.objects.filter(name="directores").exists():
+            mixer.blend("auth.Group", name="directores")
+        self.user.groups.add(Group.objects.get(name="directores"))
         self.user.save()
 
-    def como_banner(self):
-        grupo = mixer.blend("auth.Group", name="banner")
-        self.user.groups.add(grupo)
+    def como_banner(self):  
+        if not Group.objects.filter(name="lideres").exists():
+            mixer.blend("auth.Group", name="banner")
+        self.user.groups.add(Group.objects.get(name="banner"))
         self.user.save()
 
     def como_administrador(self):
@@ -61,8 +69,30 @@ class BaseTestCase(SeleniumTestCase):
         self.setup_programas()
         self.setup_materias()
         self.setup_clases()
+        self.setup_roles()
+
+
+
+    def setup_roles(self):
+        if not Group.objects.filter(name="lideres").exists():
+            mixer.blend("auth.Group", name="lideres")
+            
+        if not Group.objects.filter(name="directores").exists():
+            mixer.blend("auth.Group", name="directores")
+        
+        if not Group.objects.filter(name="gestores").exists():
+            mixer.blend("auth.Group", name="gestores")
+
+        if not Group.objects.filter(name="banner").exists():
+            mixer.blend("auth.Group", name="banner")
 
     def setup_programas(self):
+        mixer.blend("usuarios.Ciudad")
+        mixer.blend("usuarios.Ciudad")
+        mixer.blend("usuarios.Ciudad")
+        mixer.blend("usuarios.Ciudad")
+        mixer.blend("usuarios.Ciudad")
+
         if not self.initial_db.get("persona"):
             self.initial_db["persona"] = mixer.blend(Persona)
         self.initial_db["director_1"] = mixer.blend(Director, persona=self.initial_db["persona"])
