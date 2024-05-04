@@ -83,6 +83,7 @@ def solicitar_viaticos(request, clase_id):
             return redirect("visualizar-curso", curso_id=clase.curso.nrc)
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
 def editar_tiquete(request, clase_id):
     clase= get_object_or_404(Clase, id=clase_id)
     request.user.usuario.init_groups()
@@ -92,7 +93,10 @@ def editar_tiquete(request, clase_id):
         viatico.save()
     return redirect('/solicitud/viaticos')
 
+
+
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
 def editar_hospedaje(request, clase_id):
     clase= get_object_or_404(Clase, id=clase_id)
     request.user.usuario.init_groups()
@@ -103,6 +107,7 @@ def editar_hospedaje(request, clase_id):
     return redirect('/solicitud/viaticos')
 
 @login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
 def editar_alimentacion(request, clase_id):
     clase= get_object_or_404(Clase, id=clase_id)
     request.user.usuario.init_groups()
@@ -110,6 +115,16 @@ def editar_alimentacion(request, clase_id):
         viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
         viatico.alimentacion = not viatico.alimentacion
         viatico.save()
+    return redirect('/solicitud/viaticos')
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
+def eliminar_viatico(request, clase_id):
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    if request.method == "POST":
+        viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+        viatico.delete()
     return redirect('/solicitud/viaticos')
 
 

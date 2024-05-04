@@ -20,6 +20,7 @@ urlpatterns = [
     #path("cursos/<int:curso_id>/editar_clase", views.editar_clase, name="editar_clase"),
     path("clases/<int:clase_id>", views.editar_clase, name="editar_clase"),
     path("clases/<int:clase_id>/solicitar_viatico", views.solicitar_viaticos, name="solicitar_viaticos"),
+    path("clases/<int:clase_id>/eliminar_viatico", views.eliminar_viatico, name="eliminar_viatico"),
     path("clases/<int:clase_id>/editar_tiquete", views.editar_tiquete, name="editar_tiquete"),
     path("clases/<int:clase_id>/editar_hospedaje", views.editar_hospedaje, name="editar_hospedaje"),
     path("clases/<int:clase_id>/editar_alimentacion", views.editar_alimentacion, name="editar_alimentacion"),
