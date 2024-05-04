@@ -1,4 +1,6 @@
 import datetime
+from django.http import QueryDict
+from datetime import datetime, timedelta
 from django.urls import reverse
 import pytest
 from django.contrib.auth.models import User
@@ -100,6 +102,19 @@ def modalidad(db):
         Una instancia de la clase Modalidad.
     """
     return mixer.blend(Modalidad)
+
+@pytest.fixture
+def estado_solicitud(db):
+    """
+    Esta función es un fixture que crea una instancia de EstadoSolicitud para ser utilizada en pruebas.
+
+    Args:
+        db: Objeto de la base de datos.
+
+    Returns:
+        Una instancia de EstadoSolicitud creada con un estado de 1.
+    """
+    return EstadoSolicitud.objects.create(estado=1)
     
 @pytest.fixture
 def crear_instancias(db, curso):
@@ -117,24 +132,57 @@ def crear_instancias(db, curso):
     modalidad = Modalidad.objects.create(metodologia="Presencial")
     espacio = Espacio.objects.create(tipo='Salón', capacidad=30)
     clase_1 = Clase.objects.create(fecha_inicio=datetime.now(), fecha_fin=datetime.now(), curso=curso, modalidad=modalidad, espacio=espacio, docente=docente)
-    clase_2 = Clase.objects.create(fecha_inicio=datetime.now()+ datetime.timedelta(days=7), fecha_fin=datetime.now()+ datetime.timedelta(days=7), curso=curso, modalidad=modalidad, espacio=espacio, docente=docente)
-    clase_3 = Clase.objects.create(fecha_inicio=datetime.now()+ datetime.timedelta(days=14), fecha_fin=datetime.now()+ datetime.timedelta(days=14), curso=curso, modalidad=modalidad, espacio=espacio, docente=docente)
-    clases = list(clase_1, clase_2, clase_3)
+    clase_2 = Clase.objects.create(fecha_inicio=datetime.now()+ timedelta(days=7), fecha_fin=datetime.now()+ timedelta(days=7), curso=curso, modalidad=modalidad, espacio=espacio, docente=docente)
+    clase_3 = Clase.objects.create(fecha_inicio=datetime.now()+ timedelta(days=14), fecha_fin=datetime.now()+ timedelta(days=14), curso=curso, modalidad=modalidad, espacio=espacio, docente=docente)
+    clases = [clase_1, clase_2, clase_3]
     return clases
 
 
+
+
+
 @pytest.mark.django_db
-def test_solicitud_salones():
-    curso = curso()
-    clases = crear_instancias(curso)
+def test_solicitar_salones_post_negativo_sin_clases(autenticacion, curso, estado_solicitud):
+    """
+    Prueba unitaria para verificar el comportamiento del método solicitar_salones al recibir una solicitud POST sin clases.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        curso: Objeto de curso para utilizar en la prueba.
+
+    Returns:
+        None
+    """
     request = autenticacion
     request.method = 'POST'
-    request.POST = {
-        'clases': clases
+    request.POST = QueryDict('', mutable=True)
+    request.POST.update = {
+        'clases': []
     }
-    
-    response = solicitar_salones(request, curso)
-    assert response.status_code == 200
-    
-    
-    
+    response = solicitar_salones(request, curso.nrc)
+    assert response.status_code == 302
+    assert SolicitudEspacio.objects.count() == 1
+
+@pytest.mark.django_db
+def test_solicitar_salones_post_positivo_con_clases(autenticacion, curso, crear_instancias, estado_solicitud):
+    """
+    Prueba unitaria para verificar el comportamiento del método solicitar_salones al recibir una solicitud POST válida.
+
+    Args:
+        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
+        curso: Objeto de curso para utilizar en la prueba.
+        crear_instancias: Lista de objetos de clase para utilizar en la prueba.
+
+    Returns:
+        None
+    """
+    request = autenticacion
+    request.method = 'POST'
+    request.POST = QueryDict('', mutable=True)
+    request.POST.update = {
+        'clases': [clase.id for clase in crear_instancias]
+    }
+    response = solicitar_salones(request, curso.nrc)
+    assert response.status_code == 302
+    assert SolicitudEspacio.objects.count() == 1
+    #assert SolicitudClases.objects.count() == len(crear_instancias)

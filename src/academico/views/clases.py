@@ -52,13 +52,17 @@ def solicitar_salones(request, curso_id):
     if request.method == "POST":
 
         responsable = Usuario.objects.get(usuario=request.user)
-        estado_en_espera = EstadoSolicitud.objects.get(estado=1)
+        estado_en_espera, created = EstadoSolicitud.objects.get_or_create(estado=1)
         solicitud = SolicitudEspacio.objects.create(responsable = responsable, estado=estado_en_espera)
         clase_ids = request.POST.getlist('clases')
+        print(f'clase_ids: {clase_ids}')
         if clase_ids:
             clases = Clase.objects.filter(id__in=clase_ids)
+            print(f'clases: {clases}')
             for clase in clases:
-                SolicitudClases.objects.create(solicitud=solicitud, clase=clase)
+                solicitud_clase = SolicitudClases.objects.create(solicitud=solicitud, clase=clase)
+                print(f'solicitud_clase: {solicitud_clase}')
+                
 
         return redirect('visualizar-curso', curso_id=curso.nrc)
     else:
