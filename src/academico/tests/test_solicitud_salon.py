@@ -2,19 +2,20 @@ import datetime
 from django.http import QueryDict
 from datetime import datetime, timedelta
 from django.urls import reverse
+
 import pytest
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.test import RequestFactory
+from django.urls import reverse
 from mixer.backend.django import mixer
 
-from academico.models import (EstadoSolicitud, Facultad, Programa,
-                              TipoDePrograma)
 from academico.models import (Clase, Curso, Departamento, Docente, Espacio,
-                              Materia, Modalidad, Periodo, TipoDeMateria)
+                              EstadoSolicitud, Facultad, Materia, Modalidad,
+                              Periodo, Programa, TipoDeMateria, TipoDePrograma)
 from academico.views import programas, solicitar_salones
+from solicitud.models import SolicitudClases, SolicitudEspacio
 from usuarios.models import Ciudad, Director, Persona, Usuario
-from solicitud.models import SolicitudEspacio, SolicitudClases
 
 
 @pytest.fixture
@@ -142,22 +143,11 @@ def crear_instancias(db, curso):
 
 
 @pytest.mark.django_db
-def test_solicitar_salones_post_negativo_sin_clases(autenticacion, curso, estado_solicitud):
-    """
-    Prueba unitaria para verificar el comportamiento del método solicitar_salones al recibir una solicitud POST sin clases.
-
-    Args:
-        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
-        curso: Objeto de curso para utilizar en la prueba.
-
-    Returns:
-        None
-    """
+def test_solicitud_salones(crear_instancias):
     request = autenticacion
     request.method = 'POST'
-    request.POST = QueryDict('', mutable=True)
-    request.POST.update = {
-        'clases': []
+    request.POST = {
+        'clases': crear_instancias,
     }
     response = solicitar_salones(request, curso.nrc)
     assert response.status_code == 302

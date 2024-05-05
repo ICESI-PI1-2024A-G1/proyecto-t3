@@ -50,7 +50,7 @@ def test_crear_usuario_form(client):
         'email': 'mikey.mouse@example.com',
         'telefono': '1234567890',
         'ciudad': '1',
-        'birthdate': '2022-01-01T00:00',
+        'birthdate': '2022-01-01',
         'rol': 'admin'
     })
 
@@ -74,7 +74,7 @@ def test_crear_usuario_submit(client):
         'email': 'mikey.mouse@example.com',
         'telefono': '1234567890',
         'ciudad': '1',
-        'birthdate': '2022-01-01T00:00',
+        'birthdate': '2022-01-01',
         'rol': 'admin'
     })
 
@@ -98,7 +98,7 @@ def test_successful_user_creation(client):
         'email': 'mikey.mouse@example.com',
         'telefono': '1234567890',
         'ciudad': '1',
-        'birthdate': '2022-01-01T00:00',
+        'birthdate': '2022-01-01',
         'rol': 'admin'
     })
 
