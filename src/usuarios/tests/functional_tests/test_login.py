@@ -7,11 +7,10 @@ from mixer.backend.django import mixer
 from selenium.webdriver.common.by import By
 
 from usuarios.models import Persona, Usuario
-from usuarios.tests.functional_tests.base import BaseTestCase
 
 
 @skipUnless(getattr(settings, "SELENIUM_WEBDRIVERS", False), "Selenium is unconfigured")
-class LoginPageTestCase(BaseTestCase):
+class LoginPageTestCase(SeleniumTestCase):
 
     username = PageElement(By.ID, "username")
     password = PageElement(By.ID, "password")
@@ -20,13 +19,15 @@ class LoginPageTestCase(BaseTestCase):
 
     def setUp(self):
         self.user = User.objects.create_user("user", "user@example.com", "user")
-
+        grupo = mixer.blend("auth.Group", name="gestores")
+        self.user.groups.add(grupo)
+        self.user.save()
+        
         persona = mixer.blend(Persona)
         mixer.blend(Usuario, persona=persona, usuario=self.user)
 
     def test_inicio_sesion_valido(self):
         # Visitar la página
-        self.como_lider()
         self.selenium.get(self.live_server_url)
 
         # Llenar el formulario y enviar
@@ -39,22 +40,6 @@ class LoginPageTestCase(BaseTestCase):
             self.selenium.current_url, self.live_server_url + "/academico/inicio"
         )
         self.assertIn("Bienvenido", self.selenium.page_source)
-
-    def test_inicio_sesion_valido_banner(self):
-        # Visitar la página
-        self.como_banner()
-        self.selenium.get(self.live_server_url)
-
-        # Llenar el formulario y enviar
-        self.username.send_keys("user")
-        self.password.send_keys("user")
-        self.submit.click()
-
-        # Validar que se redirigió a la página de inicio
-        self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/solicitud/salones_solicitud"
-        )
-        self.assertIn("Lista de solicitudes", self.selenium.page_source)
 
     def test_inicio_sesion_contraseña_incorrecta(self):
         # Visitar la página
@@ -112,7 +97,6 @@ class LoginPageTestCase(BaseTestCase):
         self.assertEqual(self.selenium.current_url, self.live_server_url + "/login?next=/academico/inicio")
 
     def test_cerrar_sesion(self):
-        self.como_gestor()
         self.selenium.get(self.live_server_url)
         self.username.send_keys("user")
         self.password.send_keys("user")

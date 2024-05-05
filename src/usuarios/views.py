@@ -368,7 +368,7 @@ def crear_usuario(request):
         email = request.POST['email']
         telefono = request.POST['telefono']
         ciudad_id = request.POST['ciudad']
-        birthdate = datetime.strptime(request.POST['birthdate'], "%Y-%m-%d") 
+        birthdate = datetime.strptime(request.POST['birthdate'], "%Y-%m-%dT%H:%M") 
         rol = request.POST['rol']
 
         ciudad = Ciudad.objects.get(id=ciudad_id)

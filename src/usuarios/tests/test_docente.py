@@ -161,6 +161,28 @@ def test_visualizacion_docente_inexistente():
         assert True
 
 @pytest.mark.django_db
+def test_visualizacion_seccion_clase_vacia(docente, periodo):
+    """
+    Prueba que verifica la visualización de la seccion de clases de un docente, la cual está vacía.
+
+    Args:
+        docente: Fixture de objeto de Docente de prueba
+        periodo: Fixture de objeto de Prueba
+
+    Returns:
+        None
+    """
+    request = HttpRequest()
+    autenticar_usuario(request)
+    response = docente_Detail(request, docente.cedula, "202101")
+
+    assert response.status_code == 200
+    assert docente.cedula.encode() in response.content
+    assert docente.nombre.encode() in response.content
+    assert b"202101" in response.content
+    assert b"No hay clases programados para este periodo" in response.content
+
+@pytest.mark.django_db
 def test_visualizacion_seccion_una_clase(docente, periodo, clase):
     """
     Prueba que verifica la visualización de la seccion de clases de un docente, la cual contiene una clase.
