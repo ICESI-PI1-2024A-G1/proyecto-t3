@@ -40,7 +40,7 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.email_input.send_keys('juan@example.com')
         self.telefono_input.send_keys('1234567890')
         Select(self.ciudad_select).select_by_index(1)
-        self.birthdate_input.send_keys('1990-01-01T00:00')
+        self.birthdate_input.send_keys('01/01/1990 00:00')
         Select(self.rol_select).select_by_visible_text("lideres")
         self.crear_usuario_btn.click()
 
@@ -59,7 +59,7 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.email_input.send_keys('drodriguez@example.com')
         self.telefono_input.send_keys('55667722')
         Select(self.ciudad_select).select_by_index(3)
-        self.birthdate_input.send_keys('1990-01-01T00:00')
+        self.birthdate_input.send_keys('01/01/1990 00:00')
         Select(self.rol_select).select_by_visible_text("gestores")
         self.crear_usuario_btn.click()
 
@@ -78,7 +78,7 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.email_input.send_keys('sara.com')
         self.telefono_input.send_keys('55667722')
         Select(self.ciudad_select).select_by_index(3)
-        self.birthdate_input.send_keys('1990-01-01T00:00')
+        self.birthdate_input.send_keys('01/01/1990 00:00')
         Select(self.rol_select).select_by_visible_text("gestores")
         self.crear_usuario_btn.click()
         
@@ -97,7 +97,7 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.email_input.send_keys('manuf@gmail.com')
         self.telefono_input.send_keys('55667722')
         Select(self.ciudad_select).select_by_index(2)
-        self.birthdate_input.send_keys('1990-01-01T00:00')
+        self.birthdate_input.send_keys('01/01/1990 00:00')
         Select(self.rol_select).select_by_visible_text("gestores")
         self.crear_usuario_btn.click()
 
