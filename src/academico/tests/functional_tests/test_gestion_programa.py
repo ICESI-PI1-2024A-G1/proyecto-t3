@@ -16,6 +16,10 @@ class TestGestionPrograma(BaseTestCase):
     check_incluir_docentes = PageElement(By.ID, "incluir-docentes")
     submit_importar = PageElement(By.ID, "submit-import")
 
+    enviar_btn = PageElement(By.CSS_SELECTOR, 'a[onclick="show(2)"]')
+    comentarios = PageElement(By.ID, "pp-comentarios")
+    confirmar = PageElement(By.ID, "submit-aprobacion")
+    
     def setUp(self):
         """
         Configura el entorno de prueba configurando los datos necesarios,
@@ -315,3 +319,62 @@ class TestGestionPrograma(BaseTestCase):
 
         self.wait_for_text_in_element(By.ID, "form-state", "No hay clases registradas en el periodo seleccionado")
         self.assertIn("No hay clases registradas en el periodo seleccionado", self.selenium.page_source)
+
+    def test_enviar_programa(self):
+        """
+        Prueba funcional para verificar el envío de un programa académico para revisión.
+        
+        Debe permitir enviar un programa académico para revisión.
+        
+        Returns:
+            None
+        """
+        self.como_lider()
+
+        # Variables a utilizar
+        codigo = self.initial_db["programa_1"].codigo
+        semestre = self.initial_db["periodo_1"].semestre
+
+        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
+
+        self.wait_for_element(By.ID, "periodo")
+        self.enviar_btn.click()
+        self.comentarios.send_keys("Comentarios de prueba")
+        self.confirmar.click()
+        
+        self.wait_for_text_in_element(By.ID, "form-state-aprobacion", "Enviado correctamente")
+        self.assertIn("Enviado correctamente", self.selenium.page_source)
+        
+        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
+        self.wait_for_element(By.ID, "periodo")
+        
+        self.assertIn("Por aprobar", self.selenium.page_source)
+        
+    def test_enviar_programa_sin_comentarios(self):
+        """
+        Prueba funcional para verificar el envío de un programa académico para revisión.
+        
+        Debe permitir enviar un programa académico para revisión.
+        
+        Returns:
+            None
+        """
+        self.como_lider()
+
+        # Variables a utilizar
+        codigo = self.initial_db["programa_1"].codigo
+        semestre = self.initial_db["periodo_1"].semestre
+
+        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
+
+        self.wait_for_element(By.ID, "periodo")
+        self.enviar_btn.click()
+        self.confirmar.click()
+        
+        self.wait_for_text_in_element(By.ID, "form-state-aprobacion", "Enviado correctamente")
+        self.assertIn("Enviado correctamente", self.selenium.page_source)
+        
+        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
+        self.wait_for_element(By.ID, "periodo")
+        
+        self.assertIn("Por aprobar", self.selenium.page_source)
