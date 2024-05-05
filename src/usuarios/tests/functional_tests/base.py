@@ -21,6 +21,10 @@ class BaseTestCase(SeleniumTestCase):
     def wait_for_element(self, by, value):
         element = PageElement(by, value)
         element.wait_until_exists(10)
+        
+    def wait_for_text_in_element(self, by, value, text):
+        element = PageElement(by, value)
+        element.wait_until_contains(text, 10)
 
     def como_gestor(self):
         if not Group.objects.filter(name="gestores").exists():

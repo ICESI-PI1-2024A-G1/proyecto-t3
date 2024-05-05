@@ -6,6 +6,7 @@
 <div class="form-inline row" style="justify-content: center;">
     <label for="periodo_importar" class="col-3 mr-2">Periodo a importar:</label>
     <select class="custom-select mr-2 w-100" id="periodo_importar" onchange="obtener_primera_clase_periodo()" required>
+        <option value="" selected>Seleccione</option>
         {% for periodo in periodos %}
         {%if periodo.semestre != periodo_seleccionado %}
         <option value="{{programa.codigo}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>
