@@ -1,3 +1,5 @@
+from time import sleep
+
 from django.contrib.auth.models import Group, User
 from django_selenium_test import PageElement
 from selenium.webdriver.common.by import By
@@ -33,34 +35,36 @@ class CrearUsuarioTestCase(BaseTestCase):
     def test_como_lider(self):
         self.como_lider()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
-        self.wait_for_element(By.ID, "page_sidebar_content")
+        sleep(1)
         self.assertIn("notfound", self.selenium.page_source)
 
     def test_como_gestor(self):
         self.como_gestor()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
-        self.wait_for_element(By.ID, "page_sidebar_content")
+        sleep(1)
         self.assertIn("notfound", self.selenium.page_source)
 
     def test_como_director(self):
         self.como_director()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
-        self.wait_for_element(By.ID, "page_sidebar_content")
+        sleep(1)
         self.assertIn("notfound", self.selenium.page_source)
 
     def test_como_banner(self):
         self.como_banner()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
-        self.wait_for_element(By.ID, "page_sidebar_content")
+        sleep(1)
         self.assertIn("notfound", self.selenium.page_source)
 
     def test_inactivar_y_activar_usuario(self):
         self.como_administrador()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
-
+        
+        self.wait_for_element(By.CSS_SELECTOR, 'input[onchange="changeStateTo(\'usuario_1\')"')
         PageElement(By.CSS_SELECTOR, 'input[onchange="changeStateTo(\'usuario_1\')"').click()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
 
+        self.wait_for_element(By.CSS_SELECTOR, 'input[onchange="changeStateTo(\'usuario_1\')"')
         PageElement(By.CSS_SELECTOR, 'input[onchange="changeStateTo(\'usuario_1\')"').click()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
         assert User.objects.get(username="usuario_1").is_active == True
@@ -69,6 +73,7 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.como_administrador()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
 
+        self.wait_for_element(By.CSS_SELECTOR, 'button[class="btn btn-secondary dropdown-toggle"]')
         PageElement(By.CSS_SELECTOR, 'button[class="btn btn-secondary dropdown-toggle"]').click()
         PageElement(By.CSS_SELECTOR, 'a[onclick="changeRolTo(\'usuario_1\',\'Lider\')"]').click()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
@@ -78,6 +83,7 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.como_administrador()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
 
+        self.wait_for_element(By.CSS_SELECTOR, 'button[class="btn btn-secondary dropdown-toggle"]')
         PageElement(By.CSS_SELECTOR, 'button[class="btn btn-secondary dropdown-toggle"]').click()
         PageElement(By.CSS_SELECTOR, 'a[onclick="changeRolTo(\'usuario_1\',\'Lider\')"]').click()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
@@ -87,9 +93,4 @@ class CrearUsuarioTestCase(BaseTestCase):
         PageElement(By.CSS_SELECTOR, 'a[onclick="changeRolTo(\'usuario_1\',\'Gestor\')"]').click()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
 
-        Select(PageElement(By.ID, "filtrar_por_programa")).select_by_value("Clase_1")
-        
-        
-        
-        
         assert User.objects.get(username="usuario_1").groups.filter(name="gestores").exists()
