@@ -25,7 +25,7 @@ class MateriasTestCase(SeleniumTestCase):
     logout = PageElement(By.ID, "logout-btn")
     lista_materias = PageElement(By.ID, "Materias posgrado btn")
     filtrar_por_programa = PageElement(By.ID, "filtrar_por_programa")
-    filtro_submit = PageElement(By.ID, "filtrar_materias")
+    filtrar_btn = PageElement(By.CSS_SELECTOR, 'button[type="submit"]')
 
     def setUp(self):
         self.user = User.objects.create_user("user", "user@example.com", "user")
@@ -103,20 +103,16 @@ class MateriasTestCase(SeleniumTestCase):
         # Buscar listado de sidebar
         self.lista_materias.click()
         
-        #Llenar form para filrado
         self.filtrar_por_programa.click()
         
          # Seleccionar el programa correcto de la lista desplegable
-        Select(self.ordenar_por_select).select_by_visible_text("Estado de Solicitud")
-        self.wait_for_element(By.NAME, "estado")
-        Select(self.estado_select).select_by_visible_text("En espera")
+        self.programa1 = PageElement(By.NAME, "Programa 1")
+        
+        Select(self.filtrar_por_programa).select_by_visible_text("Todos los programas")
+        self.wait_for_element(By.NAME, "Programa 1")
+        Select(self.programa1).select_by_visible_text("Programa 1")
         self.filtrar_btn.click()
         
-        Select(PageElement(By.ID, "filtrar_por_programa"))
-        programa_option.click()
-        
-        # filtrar
-        self.filtro_submit.click()
 
         # Validar que se redirigió a la página de inicio
         self.assertEqual(
@@ -136,15 +132,15 @@ class MateriasTestCase(SeleniumTestCase):
         # Buscar listado de sidebar
         self.lista_materias.click()
         
-        #Llenar form para filrado
         self.filtrar_por_programa.click()
         
-         # Seleccionar el programa correcto de la lista desplegable
-        programa_option = self.selenium.find_element(By.XPATH, "//select[@id='filtrar_por_programa']/option[text()='Programa 2']")
-        programa_option.click()
+        # Seleccionar el programa correcto de la lista desplegable
+        self.programa1 = PageElement(By.NAME, "Programa 2")
         
-        # filtrar
-        self.filtro_submit.click()
+        Select(self.filtrar_por_programa).select_by_visible_text("Todos los programas")
+        self.wait_for_element(By.NAME, "Programa 2")
+        Select(self.programa).select_by_visible_text("Programa 2")
+        self.filtrar_btn.click()
 
         # Validar que se redirigió a la página de inicio
         self.assertEqual(
@@ -165,9 +161,11 @@ class MateriasTestCase(SeleniumTestCase):
         # Buscar listado de sidebar
         self.lista_materias.click()
         
+        self.filtrar_por_programa.click()
+        
         
         # filtrar
-        self.filtro_submit.click()
+        self.filtrar_btn.click()
 
         # Validar que se redirigió a la página de inicio
         self.assertEqual(
