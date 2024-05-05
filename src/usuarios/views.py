@@ -98,6 +98,7 @@ def docente_Detail(request, cedula, periodo):
     
     docentes = Docente.objects.all()
     docente = get_object_or_404(Docente, cedula=cedula)
+    periodo = get_object_or_404(Periodo, semestre=periodo)
     estados = EstadoDocente.objects.all()
     if request.method == "POST":
         id_nuevo_estado = request.POST.get('nuevoEstado',None)
