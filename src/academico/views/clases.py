@@ -42,6 +42,7 @@ def solicitar_salones(request, curso_id):
 
     Args:
         request (HttpRequest): La solicitud HTTP recibida.
+        curso_id (int): Recibe el id del curso.
 
     Returns:
         HttpResponse: La respuesta HTTP que muestra la página de solicitud de salones.
@@ -67,6 +68,20 @@ def solicitar_salones(request, curso_id):
 @login_required(login_url="/login")
 @user_passes_test(lambda u: verificar_permisos(u,['gestores']))
 def solicitar_viaticos(request, clase_id):
+    """
+    Crea una nueva solicitud de un viatico para una clase en el sistema.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualizacion del curso.
+
+    Raises:
+        Http404: Si la clase no existe.
+
+    """
     clase= get_object_or_404(Clase, id=clase_id)
 
     request.user.usuario.init_groups()
@@ -84,7 +99,7 @@ def solicitar_viaticos(request, clase_id):
             hospedaje=True
         if(alimentacionR=="on" and alimentacionR!=None):
             alimentacion=True
-        desc="requirio"+ clase.docente.nombre + "para la clase: "+ str(clase.id) + "en el curso: "+ str(clase.curso.nrc) +"."
+        desc="requirio "+ clase.docente.nombre + " para la clase: "+ str(clase.id) + " en el curso: "+ str(clase.curso.nrc) +"."
 
         claseBuscar = SolicitudViatico.objects.filter(clase=clase_id).first()
         if(tiquetes or alimentacion or hospedaje):
@@ -99,7 +114,98 @@ def solicitar_viaticos(request, clase_id):
                 return redirect("visualizar-curso", curso_id=clase.curso.nrc)
         else:
             return redirect("visualizar-curso", curso_id=clase.curso.nrc)
-    
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
+def editar_tiquete(request, clase_id):
+    """
+    Edita el valor del atributo tiquete de un viatico a su opuesto.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de viaticos (listado de solicitudes de viaticos).
+
+    Raises:
+        Http404: Si la clase no existe.
+    """
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+    viatico.tiquete = not viatico.tiquete
+    viatico.save()
+    return redirect('/solicitud/viaticos')
+
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
+def editar_hospedaje(request, clase_id):
+    """
+    Edita el valor del atributo hospedaje de un viatico a su opuesto.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de viaticos (listado de solicitudes de viaticos).
+
+    Raises:
+        Http404: Si la clase no existe.
+    """
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+    viatico.hospedaje = not viatico.hospedaje
+    viatico.save()
+    return redirect('/solicitud/viaticos')
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
+def editar_alimentacion(request, clase_id):
+    """
+    Edita el valor del atributo alimentacion de un viatico a su opuesto.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de viaticos (listado de solicitudes de viaticos).
+
+    Raises:
+        Http404: Si la clase no existe.
+    """
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+    viatico.alimentacion = not viatico.alimentacion
+    viatico.save()
+    return redirect('/solicitud/viaticos')
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
+def eliminar_viatico(request, clase_id):
+    """
+    Elimina un viatico existente.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de viaticos (listado de solicitudes de viaticos).
+
+    Raises:
+        Http404: Si la clase no existe.
+    """
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+    viatico.delete()
+    return redirect('/solicitud/viaticos')
 
 
 @login_required(login_url="/login")
@@ -110,7 +216,7 @@ def crear_clase(request, curso_id):
 
     Args:
         request (HttpRequest): La solicitud HTTP recibida.
-        curso_id (str): Recibe el codigo del curso.
+        curso_id (int): Recibe el codigo del curso.
 
     Returns:
         HttpResponseRedirect: Una redirección a la página de visualizacion clases dentro del curso.
@@ -192,7 +298,7 @@ def obtener_clases(request, curso_id):
 
     Args:
         request (HttpRequest): La solicitud HTTP recibida.
-        curso_id (str): El código del curso.
+        curso_id (int): El código del curso.
 
     Returns:
         HttpResponse: La respuesta HTTP que muestra la página de visualización de clases.
