@@ -1,5 +1,10 @@
 from unittest import skipUnless
 
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select, WebDriverWait
+
+from usuarios.tests.functional_tests.base import BaseTestCase
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django_selenium_test import PageElement, SeleniumTestCase
@@ -102,7 +107,12 @@ class MateriasTestCase(SeleniumTestCase):
         self.filtrar_por_programa.click()
         
          # Seleccionar el programa correcto de la lista desplegable
-        Select(PageElement(By.ID, "filtrar_por_programa").select)
+        Select(self.ordenar_por_select).select_by_visible_text("Estado de Solicitud")
+        self.wait_for_element(By.NAME, "estado")
+        Select(self.estado_select).select_by_visible_text("En espera")
+        self.filtrar_btn.click()
+        
+        Select(PageElement(By.ID, "filtrar_por_programa"))
         programa_option.click()
         
         # filtrar
