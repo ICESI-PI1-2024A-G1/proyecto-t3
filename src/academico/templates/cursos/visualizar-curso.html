@@ -115,7 +115,7 @@
                               <div class="row align-items-center" style="justify-content: space-between; width: 20%;" >
                                 
                                 <h5 class="m-1 p-2">Entregó notas?
-                                <input type="checkbox"{% if grupo.0.grupo_clases.entrega_notas %}checked{% endif %}onchange="changeNota('{{curso.nrc}}','{{grupo.0.grupo_clases.id}}')">
+                                <input type="checkbox"{% if grupo.0.grupo_clases.entrega_notas %}checked{% endif %} onchange="changeNota('{{curso.nrc}}','{{grupo.0.grupo_clases.id}}')">
                                 </h5>
                                 {% if user.is_lider %}
                                 <a class="rounded btn-secondary p-2 linkeable ml-1" onclick="agregar_en(1,'{{grupo.0.grupo_clases.id}}')">
