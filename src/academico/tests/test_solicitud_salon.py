@@ -1,18 +1,18 @@
 import datetime
-from django.urls import reverse
+
 import pytest
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.test import RequestFactory
+from django.urls import reverse
 from mixer.backend.django import mixer
 
-from academico.models import (EstadoSolicitud, Facultad, Programa,
-                              TipoDePrograma)
 from academico.models import (Clase, Curso, Departamento, Docente, Espacio,
-                              Materia, Modalidad, Periodo, TipoDeMateria)
+                              EstadoSolicitud, Facultad, Materia, Modalidad,
+                              Periodo, Programa, TipoDeMateria, TipoDePrograma)
 from academico.views import programas, solicitar_salones
+from solicitud.models import SolicitudClases, SolicitudEspacio
 from usuarios.models import Ciudad, Director, Persona, Usuario
-from solicitud.models import SolicitudEspacio, SolicitudClases
 
 
 @pytest.fixture
@@ -124,13 +124,11 @@ def crear_instancias(db, curso):
 
 
 @pytest.mark.django_db
-def test_solicitud_salones():
-    curso = curso()
-    clases = crear_instancias(curso)
+def test_solicitud_salones(crear_instancias):
     request = autenticacion
     request.method = 'POST'
     request.POST = {
-        'clases': clases
+        'clases': crear_instancias,
     }
     
     response = solicitar_salones(request, curso)
