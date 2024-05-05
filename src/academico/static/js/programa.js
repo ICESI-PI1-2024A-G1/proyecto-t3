@@ -214,6 +214,9 @@ function send_import_request() {
       document.getElementById("form-state").style.display = "block";
 
       // Esperar 2 segundos y recargar la página
+      setTimeout(function () {
+        location.reload();
+      }, 2000);
       
     });
 }

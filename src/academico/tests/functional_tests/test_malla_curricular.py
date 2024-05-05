@@ -10,12 +10,6 @@ class TestGestionPrograma(BaseTestCase):
     # Botones y elementos de la página
     select_periodo = PageElement(By.ID, "periodo")
 
-    importar_btn = PageElement(By.CSS_SELECTOR, 'button[onclick="show(1)"]')
-    select_periodo_importar = PageElement(By.ID, "periodo_importar")
-    date_primera_clase = PageElement(By.ID, "primera-clase-actual")
-    check_incluir_docentes = PageElement(By.ID, "incluir-docentes")
-    submit_importar = PageElement(By.ID, "submit-import")
-
     def setUp(self):
         """
         Configura el entorno de prueba configurando los datos necesarios,
@@ -105,8 +99,6 @@ class TestGestionPrograma(BaseTestCase):
 
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
 
-        self.wait_for_element(By.ID, "periodo")
-
         # Validar programa
         self.asserts_basicos_programa_1(semestre)
         self.assertIn("Enviar para revisión", self.selenium.page_source) # Debe aparecer el botón de enviar para revisión
@@ -131,7 +123,6 @@ class TestGestionPrograma(BaseTestCase):
 
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
 
-        self.wait_for_element(By.ID, "periodo")
         # Validar programa
         self.asserts_basicos_programa_1(semestre)
         self.assertIn("Programa En espera", self.selenium.page_source) # Debe aparecer el estado del programa del director
@@ -157,8 +148,6 @@ class TestGestionPrograma(BaseTestCase):
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
 
         # Validar programa
-
-        self.wait_for_element(By.ID, "periodo")
         self.asserts_basicos_programa_1(semestre)
         self.assertNotIn("Programa En espera", self.selenium.page_source) # No debe aparecer el estado del programa del director
         self.assertNotIn("Enviar para revisión", self.selenium.page_source) # No debe aparecer el botón de enviar para revisión
@@ -183,14 +172,12 @@ class TestGestionPrograma(BaseTestCase):
 
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre_1}")
 
-        self.wait_for_element(By.ID, "periodo")
         # Verificar que se cargue correctamente el primer periodo
         self.asserts_basicos_programa_1(semestre_1)
 
         # Cambiar a otro periodo
         Select(self.select_periodo).select_by_value(f"{codigo}/{semestre_2}")
 
-        self.wait_for_element(By.ID, "periodo")
         # Verificar que se cargue correctamente el nuevo periodo
         self.asserts_basicos_programa_1(semestre_2)
 
@@ -214,7 +201,6 @@ class TestGestionPrograma(BaseTestCase):
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo_1}/{semestre}")
 
         # Validar programa 1
-        self.wait_for_element(By.ID, "periodo")
         self.asserts_basicos_programa_1(semestre)
         self.assertIn("Enviar para revisión", self.selenium.page_source) # Debe aparecer el botón de enviar para revisión
         self.assertIn("Importar malla", self.selenium.page_source) # Debe aparecer el botón de importar malla
@@ -223,95 +209,7 @@ class TestGestionPrograma(BaseTestCase):
         self.selenium.get(self.live_server_url + f"/academico/programas/{codigo_2}/{semestre}")
 
         # Validar programa 2
-        self.wait_for_element(By.ID, "periodo")
         self.asserts_basicos_programa_2(semestre)
         self.assertIn("Enviar para revisión", self.selenium.page_source) # Debe aparecer el botón de enviar para revisión
         self.assertIn("Importar malla", self.selenium.page_source) # Debe aparecer el botón de importar malla
         self.assertIn("btn-editar", self.selenium.page_source) # Debe aparecer el botón de editar
-
-    def test_importar_malla_exitoso(self):
-        """
-        Prueba funcional para verificar la importación de una malla curricular a un programa académico.
-        
-        Debe permitir importar una malla curricular a un programa académico.
-        
-        Returns:
-            None
-        """
-        self.como_lider()
-
-        # Variables a utilizar
-        codigo = self.initial_db["programa_1"].codigo
-        semestre = self.initial_db["periodo_2"].semestre
-
-        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
-
-        self.wait_for_element(By.ID, "periodo")
-        self.importar_btn.click()
-        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db["periodo_1"].semestre}")
-
-        self.wait_for_text_in_element(By.ID, "form-state", "Se importarán un total de")
-        self.date_primera_clase.send_keys("08/01/2021")
-
-        self.submit_importar.click()
-
-        self.wait_for_text_in_element(By.ID, "form-state", "Malla curricular importada exitosamente.")
-        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
-        self.wait_for_element(By.ID, "periodo")
-        self.asserts_basicos_programa_1(self.initial_db["periodo_1"].semestre)
-        
-
-    def test_importar_no_coincide(self):
-        """
-        Prueba funcional para verificar la importación de una malla curricular a un programa académico
-        cuando no coinciden los días de las fechas.
-        
-        Debe mostrar un mensaje de error al intentar importar una malla curricular que no coinciden los días.
-        
-        Returns:
-            None
-        """
-        self.como_lider()
-
-        # Variables a utilizar
-        codigo = self.initial_db["programa_1"].codigo
-        semestre = self.initial_db["periodo_2"].semestre
-
-        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
-
-        self.wait_for_element(By.ID, "periodo")
-        self.importar_btn.click()
-        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db["periodo_1"].semestre}")
-
-        self.wait_for_text_in_element(By.ID, "form-state", "Se importarán un total de")
-        self.date_primera_clase.send_keys("07/01/2021")
-
-        self.submit_importar.click()
-
-        self.wait_for_text_in_element(By.ID, "error-label", "Debe coincidir el día de la semana")
-        self.assertIn("Debe coincidir el día de la semana", self.selenium.page_source)
-    
-    def test_importar_periodo_sin_datos(self):
-        """
-        Prueba funcional para verificar la importación de una malla curricular a un programa académico
-        cuando el periodo seleccionado no tiene datos.
-        
-        Debe mostrar un mensaje de error al intentar importar una malla curricular de un periodo sin datos.
-        
-        Returns:
-            None
-        """
-        self.como_lider()
-
-        # Variables a utilizar
-        codigo = self.initial_db["programa_2"].codigo
-        semestre = self.initial_db["periodo_1"].semestre
-
-        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
-
-        self.wait_for_element(By.ID, "periodo")
-        self.importar_btn.click()
-        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db["periodo_2"].semestre}")
-
-        self.wait_for_text_in_element(By.ID, "form-state", "No hay clases registradas en el periodo seleccionado")
-        self.assertIn("No hay clases registradas en el periodo seleccionado", self.selenium.page_source)

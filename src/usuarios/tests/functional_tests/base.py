@@ -21,6 +21,10 @@ class BaseTestCase(SeleniumTestCase):
     def wait_for_element(self, by, value):
         element = PageElement(by, value)
         element.wait_until_exists(10)
+        
+    def wait_for_text_in_element(self, by, value, text):
+        element = PageElement(by, value)
+        element.wait_until_contains(text, 10)
 
     def como_gestor(self):
         if not Group.objects.filter(name="gestores").exists():
@@ -139,5 +143,5 @@ class BaseTestCase(SeleniumTestCase):
         self.initial_db["espacio_clase_1"] = mixer.blend(EspacioClase)
         self.initial_db["espacio_clase_2"] = mixer.blend(EspacioClase)
 
-        self.initial_db["clase_1"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_1"], espacio_asignado=self.initial_db["espacio_clase_1"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"])
-        self.initial_db["clase_2"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_2"], espacio_asignado=self.initial_db["espacio_clase_2"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"])
+        self.initial_db["clase_1"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_1"], espacio_asignado=self.initial_db["espacio_clase_1"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"], fecha_inicio="2021-01-01", fecha_fin="2021-01-01")
+        self.initial_db["clase_2"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_2"], espacio_asignado=self.initial_db["espacio_clase_2"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"], fecha_inicio="2021-01-01", fecha_fin="2021-01-01")
