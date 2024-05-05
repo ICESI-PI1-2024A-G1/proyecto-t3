@@ -53,16 +53,21 @@ def solicitar_salones(request, curso_id):
 
         responsable = Usuario.objects.get(usuario=request.user)
         estado_en_espera, created = EstadoSolicitud.objects.get_or_create(estado=1)
-        solicitud = SolicitudEspacio.objects.create(responsable = responsable, estado=estado_en_espera)
         clase_ids = request.POST.getlist('clases')
         print(f'clase_ids: {clase_ids}')
         if clase_ids:
             clases = Clase.objects.filter(id__in=clase_ids)
             print(f'clases: {clases}')
+
             for clase in clases:
+                if SolicitudClases.objects.filter(clase=clase).exists():
+                    print(f'Ya existe una solicitud para la clase {clase.id}')
+                    return redirect('visualizar-curso', curso_id=curso.nrc)
+
+            solicitud = SolicitudEspacio.objects.create(responsable=responsable, estado=estado_en_espera)
+            for clase in clases:   
                 solicitud_clase = SolicitudClases.objects.create(solicitud=solicitud, clase=clase)
-                print(f'solicitud_clase: {solicitud_clase}')
-                
+                print(f'Solicitud creada para la clase {clase.id}')
 
         return redirect('visualizar-curso', curso_id=curso.nrc)
     else:
@@ -135,8 +140,12 @@ def crear_clase(request, curso_id):
         curso = Curso.objects.get(nrc=curso_id)
         modalidad_clase = int(request.POST.get("modalidad_clase"))
         num_semanas_str = request.POST.get("num_semanas", "1")
-        num_semanas = 1 if num_semanas_str == "" else int(num_semanas_str)
+        num_semanas = int(num_semanas_str) if num_semanas_str else 1
         docente_cedula = request.POST.get("docente_clase")
+
+        if num_semanas > 16:
+            messages.error(request, "No se pueden crear más de 18 clases.")
+            return redirect("visualizar-curso", curso_id=curso_id)
 
         if docente_cedula is not None and docente_cedula != "None":
             docente = Docente.objects.get(cedula=docente_cedula)

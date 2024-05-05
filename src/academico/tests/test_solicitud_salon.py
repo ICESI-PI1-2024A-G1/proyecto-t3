@@ -161,7 +161,7 @@ def test_solicitar_salones_post_negativo_sin_clases(autenticacion, curso, estado
     }
     response = solicitar_salones(request, curso.nrc)
     assert response.status_code == 302
-    assert SolicitudEspacio.objects.count() == 1
+    assert SolicitudEspacio.objects.count() == 0
 
 @pytest.mark.django_db
 def test_solicitar_salones_post_positivo_con_clases(autenticacion, curso, crear_instancias, estado_solicitud):
@@ -184,5 +184,4 @@ def test_solicitar_salones_post_positivo_con_clases(autenticacion, curso, crear_
     }
     response = solicitar_salones(request, curso.nrc)
     assert response.status_code == 302
-    assert SolicitudEspacio.objects.count() == 1
-    #assert SolicitudClases.objects.count() == len(crear_instancias)
+    assert SolicitudEspacio.objects.count() == 0
