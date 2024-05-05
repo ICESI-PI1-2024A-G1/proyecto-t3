@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
-from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
@@ -12,8 +13,25 @@ from academico.models import (Clase, Curso, Docente, Espacio, EspacioClase,
                               Estudiante, GrupoDeClase, Modalidad)
 from academico.views.common import verificar_permisos
 from ccsa_project import settings
+from django.contrib import messages
 from solicitud.models import (EstadoSolicitud, SolicitudClases,
                               SolicitudEspacio, SolicitudViatico, Usuario)
+from django.db.models import Q
+
+
+
+def validar_horario(start_day, end_day, grupo_clases):
+    
+    start_day = timezone.make_aware(start_day)
+    end_day = timezone.make_aware(end_day)
+    
+    for clase in grupo_clases.clase_set.all():
+        if (start_day >= clase.fecha_inicio and start_day < clase.fecha_fin) or \
+           (end_day > clase.fecha_inicio and end_day <= clase.fecha_fin) or \
+           (start_day <= clase.fecha_inicio and end_day >= clase.fecha_fin):
+            return False
+    return True
+
 
 
 @login_required(login_url="/login")
@@ -109,10 +127,29 @@ def crear_clase(request, curso_id):
         end_day = datetime.strptime(request.POST.get("end_day"), "%Y-%m-%dT%H:%M")
 
         tipo_espacio = int(request.POST.get("tipo_espacio"))
+        espacio = Espacio.objects.get(id=tipo_espacio)
+        curso = Curso.objects.get(nrc=curso_id)
         modalidad_clase = int(request.POST.get("modalidad_clase"))
         num_semanas_str = request.POST.get("num_semanas", "1")
         num_semanas = 1 if num_semanas_str == "" else int(num_semanas_str)
         docente_cedula = request.POST.get("docente_clase")
+
+        if docente_cedula is not None and docente_cedula != "None":
+            docente = Docente.objects.get(cedula=docente_cedula)
+
+            clases_conflictivas = Clase.objects.filter(docente=docente).filter(
+                Q(fecha_inicio__lt=start_day, fecha_fin__gt=start_day) |
+                Q(fecha_inicio__lt=end_day, fecha_fin__gt=end_day)
+            )
+            if clases_conflictivas.exists():
+                messages.error(request, "El docente seleccionado tiene clases conflictivas.")
+                return redirect("visualizar-curso", curso_id=curso_id)
+            else:
+                docente = None
+
+        if espacio.capacidad < curso.cupo:
+            messages.error(request, "El espacio seleccionado no tiene la capacidad suficiente para el curso")
+            return redirect("visualizar-curso", curso_id=curso_id)
 
         if not Curso.objects.filter(nrc=curso_id).exists():
             raise Http404("El curso no existe.")
@@ -211,7 +248,8 @@ def editar_clase(request, clase_id):
 
         fecha_inicio = datetime.strptime(request.POST.get("fecha_inicio"), "%Y-%m-%dT%H:%M")
         fecha_fin = datetime.strptime(request.POST.get("fecha_fin"), "%Y-%m-%dT%H:%M")
-
+            
+        
         try:
             tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)
         except Espacio.DoesNotExist:
@@ -230,19 +268,23 @@ def editar_clase(request, clase_id):
                 raise Http404("Docente no existe.")
         else:
             docente = None
+        
+        conflict = Clase.objects.filter(grupo_clases=clase.grupo_clases).exclude(id=clase_id).filter(
+            fecha_inicio__lt=fecha_fin, fecha_fin__gt=fecha_inicio).exists()
+        if not conflict:
+            
+            old_fecha_inicio = clase.fecha_inicio
+            old_fecha_fin = clase.fecha_fin
+            old_espacio = clase.espacio
+            old_modalidad = clase.modalidad
+            old_docente = clase.docente
 
-        old_fecha_inicio = clase.fecha_inicio
-        old_fecha_fin = clase.fecha_fin
-        old_espacio = clase.espacio
-        old_modalidad = clase.modalidad
-        old_docente = clase.docente
-
-        clase.fecha_inicio = fecha_inicio
-        clase.fecha_fin = fecha_fin
-        clase.espacio = tipo_espacio
-        clase.modalidad = modalidad
-        clase.docente = docente
-        clase.save()
+            clase.fecha_inicio = fecha_inicio
+            clase.fecha_fin = fecha_fin
+            clase.espacio = tipo_espacio
+            clase.modalidad = modalidad
+            clase.docente = docente
+            clase.save()
 
         if editar_relacionadas:
             for clase_i in Clase.objects.filter(grupo_clases=clase.grupo_clases):

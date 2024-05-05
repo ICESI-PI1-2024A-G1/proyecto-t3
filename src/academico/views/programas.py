@@ -15,7 +15,8 @@ from django.urls import reverse
 from xhtml2pdf import pisa
 
 from academico.models import (Clase, Curso, Docente, EstadoSolicitud, Facultad,
-                              MallaCurricular, Materia, Periodo, Programa)
+                              GrupoDeClase, MallaCurricular, Materia, Periodo,
+                              Programa)
 from ccsa_project import settings
 
 from .common import (args_principal, color_suave, obtener_modalidad,
@@ -352,9 +353,9 @@ def importar_malla(request, codigo, periodo):
         JsonResponse: Un objeto JSON con un mensaje de éxito si la malla curricular se importó correctamente,
         o un objeto JSON con un mensaje de error si ocurrió un error al importar la malla curricular.
     """
-    
+
     request.user.usuario.init_groups()
-    
+
     body = json.loads(request.body.decode("utf-8"))
 
     primera_clase_actual = datetime.strptime(
@@ -393,20 +394,25 @@ def importar_malla(request, codigo, periodo):
                     materia=curso_anterior.materia,
                     periodo=Periodo.objects.get(semestre=periodo),
                 )
-                for clase_anterior in (
-                    Clase.objects.filter(curso=curso_anterior)
-                    .distinct()
-                    .order_by("fecha_inicio")
-                ):
-                    Clase.objects.create(
-                        fecha_inicio=clase_anterior.fecha_inicio
-                        + timedelta(days=delta),
-                        fecha_fin=clase_anterior.fecha_fin + timedelta(days=delta),
-                        espacio=clase_anterior.espacio,
-                        curso=curso,
-                        modalidad=clase_anterior.modalidad,
-                        docente=clase_anterior.docente if incluir_docentes else None,
-                    )
+                for grupo_anterior in GrupoDeClase.objects.filter(
+                    clase__curso=curso_anterior
+                ).distinct():
+                    grupo = GrupoDeClase.objects.create()
+                    for clase_anterior in Clase.objects.filter(
+                        grupo_clases=grupo_anterior
+                    ).distinct():
+                        Clase.objects.create(
+                            fecha_inicio=clase_anterior.fecha_inicio
+                            + timedelta(days=delta),
+                            fecha_fin=clase_anterior.fecha_fin + timedelta(days=delta),
+                            espacio=clase_anterior.espacio,
+                            curso=curso,
+                            modalidad=clase_anterior.modalidad,
+                            docente=(
+                                clase_anterior.docente if incluir_docentes else None
+                            ),
+                            grupo_clases=grupo,
+                        )
     except Exception as e:
         return JsonResponse({"error": e.__str__()})
     return JsonResponse({"success": "Malla curricular importada exitosamente."})
