@@ -18,8 +18,8 @@ class MateriasTestCase(SeleniumTestCase):
     password = PageElement(By.ID, "password")
     submit = PageElement(By.ID, "submit")
     logout = PageElement(By.ID, "logout-btn")
-    lista_materias = PageElement(By.ID, "Materias posgrado btn")
-    search = PageElement(By.ID, "search-form")
+    lista_posgrados = PageElement(By.ID, "Programas posgrado btn")
+    search = PageElement(By.ID, "q")
     filtro_submit = PageElement(By.ID, "filtrar_materias")
 
     def setUp(self):
@@ -68,7 +68,7 @@ class MateriasTestCase(SeleniumTestCase):
 
         
 
-    def test_filtrado_positivo_valido(self):
+    def test_filtrado_positivo_lista_filtrada(self):
         # Visitar la página
         self.selenium.get(self.live_server_url)
 
@@ -78,7 +78,7 @@ class MateriasTestCase(SeleniumTestCase):
         self.submit.click()
         
         # Buscar listado de sidebar
-        self.lista_materias.click()
+        self.lista_posgrados.click()
         
         #Llenar form para filrado
         self.search.send_keys("Departamento 1")
@@ -88,7 +88,6 @@ class MateriasTestCase(SeleniumTestCase):
 
         # Validar que se redirigió a la página de inicio
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/materias?q=Ingeniería"
+            self.selenium.current_url, self.live_server_url + "/academico/materias?q=Departamento+1"
         )
         self.assertNotIn("Departamento 2", self.selenium.page_source)
-
