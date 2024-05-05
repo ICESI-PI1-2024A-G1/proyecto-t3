@@ -66,4 +66,9 @@
 
   </form>
 </div>
+<script>
+  document.getElementById('cedula').addEventListener('keypress', function (e) {
+      if (isNaN(String.fromCharCode(e.which))) e.preventDefault();
+  });
+</script>
 {% endblock %}
