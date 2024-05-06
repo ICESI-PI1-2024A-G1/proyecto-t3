@@ -21,7 +21,7 @@ class BaseTestCase(SeleniumTestCase):
     def wait_for_element(self, by, value):
         element = PageElement(by, value)
         element.wait_until_exists(10)
-        
+
     def wait_for_text_in_element(self, by, value, text):
         element = PageElement(by, value)
         element.wait_until_contains(text, 10)
@@ -75,15 +75,13 @@ class BaseTestCase(SeleniumTestCase):
         self.setup_clases()
         self.setup_roles()
 
-
-
     def setup_roles(self):
         if not Group.objects.filter(name="lideres").exists():
             mixer.blend("auth.Group", name="lideres")
-            
+
         if not Group.objects.filter(name="directores").exists():
             mixer.blend("auth.Group", name="directores")
-        
+
         if not Group.objects.filter(name="gestores").exists():
             mixer.blend("auth.Group", name="gestores")
 
@@ -114,6 +112,16 @@ class BaseTestCase(SeleniumTestCase):
 
         self.initial_db["programa_1"] = mixer.blend(Programa, estado_solicitud=espera, director=self.initial_db["director_1"])
         self.initial_db["programa_2"] = mixer.blend(Programa, estado_solicitud=espera, director=self.initial_db["director_2"])
+
+    def setup_otros_usuarios(self):
+        self.setup_roles()
+        
+        usuario = User.objects.create_user("usuario_1", "usuario_1@example.com", "usuario_1")
+        persona = mixer.blend(Persona)
+        mixer.blend(Usuario, persona=persona, usuario=usuario)
+        
+        usuario.groups.add(Group.objects.get(name="gestores"))
+        
 
     def setup_materias(self):
         self.initial_db["materia_1"] = mixer.blend(Materia, creditos=1)

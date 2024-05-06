@@ -1,3 +1,6 @@
+import os
+import time
+
 from django_selenium_test import PageElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
@@ -252,7 +255,7 @@ class TestGestionPrograma(BaseTestCase):
 
         self.wait_for_element(By.ID, "periodo")
         self.importar_btn.click()
-        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db["periodo_1"].semestre}")
+        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db['periodo_1'].semestre}")
 
         self.wait_for_text_in_element(By.ID, "form-state", "Se importarán un total de")
         self.date_primera_clase.send_keys("08/01/2021")
@@ -285,7 +288,7 @@ class TestGestionPrograma(BaseTestCase):
 
         self.wait_for_element(By.ID, "periodo")
         self.importar_btn.click()
-        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db["periodo_1"].semestre}")
+        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db['periodo_1'].semestre}")
 
         self.wait_for_text_in_element(By.ID, "form-state", "Se importarán un total de")
         self.date_primera_clase.send_keys("07/01/2021")
@@ -315,7 +318,7 @@ class TestGestionPrograma(BaseTestCase):
 
         self.wait_for_element(By.ID, "periodo")
         self.importar_btn.click()
-        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db["periodo_2"].semestre}")
+        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db['periodo_2'].semestre}")
 
         self.wait_for_text_in_element(By.ID, "form-state", "No hay clases registradas en el periodo seleccionado")
         self.assertIn("No hay clases registradas en el periodo seleccionado", self.selenium.page_source)
@@ -378,3 +381,30 @@ class TestGestionPrograma(BaseTestCase):
         self.wait_for_element(By.ID, "periodo")
         
         self.assertIn("Por aprobar", self.selenium.page_source)
+    
+    def test_exportar_programa_pdf(self):
+        """
+        Prueba funcional para verificar la exportación de un programa académico a PDF.
+        
+        Debe permitir exportar un programa académico a PDF.
+        
+        Returns:
+            None
+        """
+        self.como_lider()
+
+        # Variables a utilizar
+        codigo = self.initial_db["programa_1"].codigo
+        semestre = self.initial_db["periodo_1"].semestre
+
+        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
+
+        self.wait_for_element(By.ID, "periodo")
+        PageElement(By.CSS_SELECTOR, 'button[class="btn btn-primary dropdown-toggle"]').click()
+        
+        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}/export/pdf/")
+        
+        time.sleep(2)
+
+        downloadPath = os.path.expanduser("~")
+        assert os.path.exists(os.path.join(downloadPath, "Downloads", "programa.pdf"))
