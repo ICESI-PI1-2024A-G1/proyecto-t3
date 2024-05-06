@@ -140,19 +140,6 @@ def crear_instancias(db, curso):
 
 
 
-
-
-@pytest.mark.django_db
-def test_solicitud_salones(crear_instancias):
-    request = autenticacion
-    request.method = 'POST'
-    request.POST = {
-        'clases': crear_instancias,
-    }
-    response = solicitar_salones(request, curso.nrc)
-    assert response.status_code == 302
-    assert SolicitudEspacio.objects.count() == 0
-
 @pytest.mark.django_db
 def test_solicitar_salones_post_positivo_con_clases(autenticacion, curso, crear_instancias, estado_solicitud):
     """

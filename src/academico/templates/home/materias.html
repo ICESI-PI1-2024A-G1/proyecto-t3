@@ -23,11 +23,11 @@
             <select name="programa" id="filtrar_por_programa" class="form-control w-100">
                 <option value="">Todos los programas</option>
                 {% for programa in programas %}
-                <option value="{{ programa.codigo }}">{{ programa.nombre }}</option>
+                <option value="{{ programa.codigo }}" id="{{programa.nombre}} select">{{ programa.nombre }}</option>
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <button type="submit" class="btn btn-primary" id = "filtro_materias">Filtrar</button>
     </form>
 
 </div>
