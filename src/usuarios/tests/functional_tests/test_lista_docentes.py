@@ -13,7 +13,7 @@ class TestListadoDocentes(BaseTestCase):
     contrato_select = PageElement(By.NAME, 'contrato')
 
     def setUp(self):
-        self.setup_data()
+        self.setup_data2()
         self.create_user()
         self.login()
     
