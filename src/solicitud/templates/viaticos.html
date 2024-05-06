@@ -81,17 +81,35 @@
         <th>Tiquetes</th>
         <th>Hospedaje</th>
         <th>Alimentación</th>
+        <th>Ajustes</th>
       </tr>
     </thead>
     <tbody>
       {% for viatico in viaticos %}
-      <tr class="linkeable" onclick="window.location.href='/academico/cursos/{{viatico.clase.curso.nrc}}'">
+      {% csrf_token %}
+      <tr>
         <td>{{ viatico.clase.id}}</td>
-        <td>{{viatico.clase.curso.nrc}}</td>
+        <td class="linkeable" onclick="window.location.href='/academico/cursos/{{viatico.clase.curso.nrc}}'">{{viatico.clase.curso.nrc}}</td>
         <td>{{ viatico.fecha_solicitud}}</td>
-        <td>{{ viatico.tiquete|yesno:"Sí,No" }}</td>
-        <td>{{ viatico.hospedaje|yesno:"Sí,No" }}</td>
-        <td>{{ viatico.alimentacion|yesno:"Sí,No" }}</td>
+        <td><input type="checkbox" id="tiquete-{{viatico.clase.id}}" {% if viatico.tiquete %} checked {% endif %} onchange="changeTiquete('{{viatico.clase.id}}')" disabled></td>
+        <td><input type="checkbox" id="hospedaje-{{viatico.clase.id}}" {% if viatico.hospedaje %} checked {% endif %} onchange="changeHospedaje('{{viatico.clase.id}}')" disabled/></td>
+        <td><input type="checkbox" id="alimentacion-{{viatico.clase.id}}" {% if viatico.alimentacion %} checked {% endif %} onchange="changeAlimentacion('{{viatico.clase.id}}')" disabled/></td>
+
+        <td>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="{% static 'img/tuerca.png' %}" class="icon">
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#" onclick="habilitarEdicion(event, '{{viatico.clase.id}}')">
+                  Editar
+              </a>
+              <a class="dropdown-item" href="#" onclick="confirmarEliminarClase(event, '{{viatico.clase.id}}')">
+                Eliminar
+              </a>
+            </div>
+          </div>
+      </td>
 
       </tr>
       {% endfor %}
@@ -118,6 +136,7 @@
 </div>
 
 <script>
+
   function submitForm() {
     document.getElementById('search-form').submit();
   }

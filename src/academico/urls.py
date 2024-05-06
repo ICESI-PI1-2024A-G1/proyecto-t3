@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+
+
 urlpatterns = [
     path("materias/<str:codigo>/<str:periodo>/crear-curso", views.crear_curso, name="crear-curso"),
     path("cursos/<int:curso_id>", views.visualizacion_curso, name="visualizar-curso"),
@@ -20,6 +22,10 @@ urlpatterns = [
     #path("cursos/<int:curso_id>/editar_clase", views.editar_clase, name="editar_clase"),
     path("clases/<int:clase_id>", views.editar_clase, name="editar_clase"),
     path("clases/<int:clase_id>/solicitar_viatico", views.solicitar_viaticos, name="solicitar_viaticos"),
+    path("clases/<int:clase_id>/eliminar_viatico", views.eliminar_viatico, name="eliminar_viatico"),
+    path("clases/<int:clase_id>/editar_tiquete", views.editar_tiquete, name="editar_tiquete"),
+    path("clases/<int:clase_id>/editar_hospedaje", views.editar_hospedaje, name="editar_hospedaje"),
+    path("clases/<int:clase_id>/editar_alimentacion", views.editar_alimentacion, name="editar_alimentacion"),
     path("clases/<int:grupo>/<int:cantidad>", views.nuevas_clases, name="nuevas_clases"),
     path("grupo_clases/<int:grupo>/eliminar", views.eliminar_grupo_de_clases, name="eliminar_grupo_de_clases"),
     #path("cursos/<int:curso_id>/clases/<int:clase_id>/editar_clase", views.editar_clase, name="editar_clase"),

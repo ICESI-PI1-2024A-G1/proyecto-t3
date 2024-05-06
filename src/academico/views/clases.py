@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.mail import send_mail
-from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect
+from django.http import Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
@@ -12,8 +13,25 @@ from academico.models import (Clase, Curso, Docente, Espacio, EspacioClase,
                               Estudiante, GrupoDeClase, Modalidad)
 from academico.views.common import verificar_permisos
 from ccsa_project import settings
+from django.contrib import messages
 from solicitud.models import (EstadoSolicitud, SolicitudClases,
                               SolicitudEspacio, SolicitudViatico, Usuario)
+from django.db.models import Q
+
+
+
+def validar_horario(start_day, end_day, grupo_clases):
+    
+    start_day = timezone.make_aware(start_day)
+    end_day = timezone.make_aware(end_day)
+    
+    for clase in grupo_clases.clase_set.all():
+        if (start_day >= clase.fecha_inicio and start_day < clase.fecha_fin) or \
+           (end_day > clase.fecha_inicio and end_day <= clase.fecha_fin) or \
+           (start_day <= clase.fecha_inicio and end_day >= clase.fecha_fin):
+            return False
+    return True
+
 
 
 @login_required(login_url="/login")
@@ -24,6 +42,7 @@ def solicitar_salones(request, curso_id):
 
     Args:
         request (HttpRequest): La solicitud HTTP recibida.
+        curso_id (int): Recibe el id del curso.
 
     Returns:
         HttpResponse: La respuesta HTTP que muestra la página de solicitud de salones.
@@ -49,6 +68,20 @@ def solicitar_salones(request, curso_id):
 @login_required(login_url="/login")
 @user_passes_test(lambda u: verificar_permisos(u,['gestores']))
 def solicitar_viaticos(request, clase_id):
+    """
+    Crea una nueva solicitud de un viatico para una clase en el sistema.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualizacion del curso.
+
+    Raises:
+        Http404: Si la clase no existe.
+
+    """
     clase= get_object_or_404(Clase, id=clase_id)
 
     request.user.usuario.init_groups()
@@ -66,7 +99,7 @@ def solicitar_viaticos(request, clase_id):
             hospedaje=True
         if(alimentacionR=="on" and alimentacionR!=None):
             alimentacion=True
-        desc="requirio"+ clase.docente.nombre + "para la clase: "+ str(clase.id) + "en el curso: "+ str(clase.curso.nrc) +"."
+        desc="requirio "+ clase.docente.nombre + " para la clase: "+ str(clase.id) + " en el curso: "+ str(clase.curso.nrc) +"."
 
         claseBuscar = SolicitudViatico.objects.filter(clase=clase_id).first()
         if(tiquetes or alimentacion or hospedaje):
@@ -81,7 +114,98 @@ def solicitar_viaticos(request, clase_id):
                 return redirect("visualizar-curso", curso_id=clase.curso.nrc)
         else:
             return redirect("visualizar-curso", curso_id=clase.curso.nrc)
-    
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
+def editar_tiquete(request, clase_id):
+    """
+    Edita el valor del atributo tiquete de un viatico a su opuesto.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de viaticos (listado de solicitudes de viaticos).
+
+    Raises:
+        Http404: Si la clase no existe.
+    """
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+    viatico.tiquete = not viatico.tiquete
+    viatico.save()
+    return redirect('/solicitud/viaticos')
+
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
+def editar_hospedaje(request, clase_id):
+    """
+    Edita el valor del atributo hospedaje de un viatico a su opuesto.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de viaticos (listado de solicitudes de viaticos).
+
+    Raises:
+        Http404: Si la clase no existe.
+    """
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+    viatico.hospedaje = not viatico.hospedaje
+    viatico.save()
+    return redirect('/solicitud/viaticos')
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
+def editar_alimentacion(request, clase_id):
+    """
+    Edita el valor del atributo alimentacion de un viatico a su opuesto.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de viaticos (listado de solicitudes de viaticos).
+
+    Raises:
+        Http404: Si la clase no existe.
+    """
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+    viatico.alimentacion = not viatico.alimentacion
+    viatico.save()
+    return redirect('/solicitud/viaticos')
+
+@login_required(login_url="/login")
+@user_passes_test(lambda u: verificar_permisos(u,['gestores']))
+def eliminar_viatico(request, clase_id):
+    """
+    Elimina un viatico existente.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        clase_id (int): Recibe el id de la clase.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de viaticos (listado de solicitudes de viaticos).
+
+    Raises:
+        Http404: Si la clase no existe.
+    """
+    clase= get_object_or_404(Clase, id=clase_id)
+    request.user.usuario.init_groups()
+    viatico = SolicitudViatico.objects.filter(clase=clase.id).first()
+    viatico.delete()
+    return redirect('/solicitud/viaticos')
 
 
 @login_required(login_url="/login")
@@ -92,7 +216,7 @@ def crear_clase(request, curso_id):
 
     Args:
         request (HttpRequest): La solicitud HTTP recibida.
-        curso_id (str): Recibe el codigo del curso.
+        curso_id (int): Recibe el codigo del curso.
 
     Returns:
         HttpResponseRedirect: Una redirección a la página de visualizacion clases dentro del curso.
@@ -109,10 +233,29 @@ def crear_clase(request, curso_id):
         end_day = datetime.strptime(request.POST.get("end_day"), "%Y-%m-%dT%H:%M")
 
         tipo_espacio = int(request.POST.get("tipo_espacio"))
+        espacio = Espacio.objects.get(id=tipo_espacio)
+        curso = Curso.objects.get(nrc=curso_id)
         modalidad_clase = int(request.POST.get("modalidad_clase"))
         num_semanas_str = request.POST.get("num_semanas", "1")
         num_semanas = 1 if num_semanas_str == "" else int(num_semanas_str)
         docente_cedula = request.POST.get("docente_clase")
+
+        if docente_cedula is not None and docente_cedula != "None":
+            docente = Docente.objects.get(cedula=docente_cedula)
+
+            clases_conflictivas = Clase.objects.filter(docente=docente).filter(
+                Q(fecha_inicio__lt=start_day, fecha_fin__gt=start_day) |
+                Q(fecha_inicio__lt=end_day, fecha_fin__gt=end_day)
+            )
+            if clases_conflictivas.exists():
+                messages.error(request, "El docente seleccionado tiene clases conflictivas.")
+                return redirect("visualizar-curso", curso_id=curso_id)
+            else:
+                docente = None
+
+        if espacio.capacidad < curso.cupo:
+            messages.error(request, "El espacio seleccionado no tiene la capacidad suficiente para el curso")
+            return redirect("visualizar-curso", curso_id=curso_id)
 
         if not Curso.objects.filter(nrc=curso_id).exists():
             raise Http404("El curso no existe.")
@@ -155,7 +298,7 @@ def obtener_clases(request, curso_id):
 
     Args:
         request (HttpRequest): La solicitud HTTP recibida.
-        curso_id (str): El código del curso.
+        curso_id (int): El código del curso.
 
     Returns:
         HttpResponse: La respuesta HTTP que muestra la página de visualización de clases.
@@ -211,7 +354,8 @@ def editar_clase(request, clase_id):
 
         fecha_inicio = datetime.strptime(request.POST.get("fecha_inicio"), "%Y-%m-%dT%H:%M")
         fecha_fin = datetime.strptime(request.POST.get("fecha_fin"), "%Y-%m-%dT%H:%M")
-
+            
+        
         try:
             tipo_espacio = Espacio.objects.get(id=tipo_espacio_id)
         except Espacio.DoesNotExist:
@@ -230,19 +374,23 @@ def editar_clase(request, clase_id):
                 raise Http404("Docente no existe.")
         else:
             docente = None
+        
+        conflict = Clase.objects.filter(grupo_clases=clase.grupo_clases).exclude(id=clase_id).filter(
+            fecha_inicio__lt=fecha_fin, fecha_fin__gt=fecha_inicio).exists()
+        if not conflict:
+            
+            old_fecha_inicio = clase.fecha_inicio
+            old_fecha_fin = clase.fecha_fin
+            old_espacio = clase.espacio
+            old_modalidad = clase.modalidad
+            old_docente = clase.docente
 
-        old_fecha_inicio = clase.fecha_inicio
-        old_fecha_fin = clase.fecha_fin
-        old_espacio = clase.espacio
-        old_modalidad = clase.modalidad
-        old_docente = clase.docente
-
-        clase.fecha_inicio = fecha_inicio
-        clase.fecha_fin = fecha_fin
-        clase.espacio = tipo_espacio
-        clase.modalidad = modalidad
-        clase.docente = docente
-        clase.save()
+            clase.fecha_inicio = fecha_inicio
+            clase.fecha_fin = fecha_fin
+            clase.espacio = tipo_espacio
+            clase.modalidad = modalidad
+            clase.docente = docente
+            clase.save()
 
         if editar_relacionadas:
             for clase_i in Clase.objects.filter(grupo_clases=clase.grupo_clases):

@@ -98,6 +98,7 @@ def docente_Detail(request, cedula, periodo):
     
     docentes = Docente.objects.all()
     docente = get_object_or_404(Docente, cedula=cedula)
+    periodo = get_object_or_404(Periodo, semestre=periodo)
     estados = EstadoDocente.objects.all()
     if request.method == "POST":
         id_nuevo_estado = request.POST.get('nuevoEstado',None)
@@ -307,7 +308,7 @@ def administrador(request):
         "administrador.html",
         {
             "usuarios": users,
-            "roles": Group.objects.all().exclude(name="directores"),
+            "roles": Group.objects.all().exclude(name="directores").exclude(name="banner"),
             "estados": [True, False],
             "side": "sidebar_principal.html",
             "side_args": args_principal(request.user, "administrador"),
@@ -378,7 +379,7 @@ def crear_usuario(request):
         email = request.POST['email']
         telefono = request.POST['telefono']
         ciudad_id = request.POST['ciudad']
-        birthdate = datetime.strptime(request.POST['birthdate'], "%Y-%m-%dT%H:%M") 
+        birthdate = datetime.strptime(request.POST['birthdate'], "%Y-%m-%d") 
         rol = request.POST['rol']
 
         ciudad = Ciudad.objects.get(id=ciudad_id)

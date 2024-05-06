@@ -123,6 +123,19 @@ def visualizacion_curso(request, curso_id):
 @login_required(login_url="/login")
 @user_passes_test(lambda u: verificar_permisos(u, ["gestores"]))
 def change_notas(request, curso_id, grupoId):
+    """
+    Edita el valor del atributo entrega_notas de un grupo de clases en un curso.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        curso_id (int): Recibe el id del curso.
+        grupoId (int): Recibe el id del grupo de clases.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualización del curso.
+    Raises:
+        Http404: Si el curso o el grupo no existen.
+    """
     request.user.usuario.init_groups()
     grupo = get_object_or_404(GrupoDeClase, id=grupoId)
     curso = get_object_or_404(Curso, nrc=curso_id)
@@ -135,6 +148,19 @@ def change_notas(request, curso_id, grupoId):
 @login_required(login_url="/login")
 @user_passes_test(lambda u: verificar_permisos(u, ["gestores"]))
 def change_intu(request, curso_id):
+    """
+    Edita el valor del atributo intu_generado de un grupo de clases en un curso.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP recibida.
+        curso_id (int): Recibe el id del curso.
+        grupoId (int): Recibe el id del grupo de clases.
+
+    Returns:
+        HttpResponseRedirect: Una redirección a la página de visualización del curso.
+    Raises:
+        Http404: Si el curso o el grupo no existen.
+    """
     request.user.usuario.init_groups()
     curso = get_object_or_404(Curso, nrc=curso_id)
     if request.method == "POST":
