@@ -84,17 +84,12 @@ class LoginPageTestCase(BaseTestCase):
         docente = Docente.objects.create(cedula="1", nombre="juan", email="a",  telefono="1", ciudad=ciudad, fechaNacimiento="2021-01-01", contrato_codigo=contrato, estado=estado_docente, foto="a")
 
 
-
-
-    
-    def test_crear_clase_1(self):
-    # Iniciar sesión primero
-        self.selenium.get(self.live_server_url)
+    def test_crear_clase_7(self):
+        self.selenium.get(self.live_server_url + '/login')
         self.selenium.find_element(By.NAME, "username").send_keys("user")
         self.selenium.find_element(By.NAME, "password").send_keys("user")
         self.selenium.find_element(By.ID, "submit").click()
         self.como_lider()
-
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
@@ -106,14 +101,14 @@ class LoginPageTestCase(BaseTestCase):
         curso.click()
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
-        
+
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
         self.selenium.find_element(By.NAME, "start_day").send_keys(Keys.TAB)
         self.selenium.find_element(By.NAME, "start_day").send_keys("1600PM")
 
         self.selenium.find_element(By.NAME, "end_day").send_keys("02/20/2024")
         self.selenium.find_element(By.NAME, "end_day").send_keys(Keys.TAB)
-        self.selenium.find_element(By.NAME, "end_day").send_keys("1800PM")
+        self.selenium.find_element(By.NAME, "end_day").send_keys("1500PM")
 
         self.selenium.find_element(By.NAME, "tipo_espacio").send_keys(1)
 
@@ -126,5 +121,4 @@ class LoginPageTestCase(BaseTestCase):
         self.assertEqual(
             self.selenium.current_url, self.live_server_url + "/academico/cursos/1"
         )
-        self.assertIn("Clase 1", self.selenium.page_source)
-    
+        self.assertIn("La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.", self.selenium.page_source)

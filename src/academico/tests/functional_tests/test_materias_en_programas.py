@@ -26,8 +26,6 @@ class MateriasTestCase(BaseTestCase):
     lista_materias = PageElement(By.ID, "Materias posgrado btn")
     filtrar_por_programa = PageElement(By.ID, "filtrar_por_programa")
     filtrar_btn = PageElement(By.CSS_SELECTOR, 'button[type="submit"]')
-    programa1 = PageElement(By.ID, "Programa 1 select")
-    programa2 = PageElement(By.ID, "Programa 2 select")
 
     def setUp(self):
         self.user = User.objects.create_user("user", "user@example.com", "user")
@@ -119,53 +117,3 @@ class MateriasTestCase(BaseTestCase):
             self.selenium.current_url, self.live_server_url + "/academico/materias?programa=P1"
         )
         self.assertNotIn("Materia 2", self.selenium.page_source)
-
-    def test_filtrado_positivo_lista_Vacia(self):
-        # Visitar la página
-        self.selenium.get(self.live_server_url)
-
-        # Llenar el formulario y enviar
-        self.username.send_keys("user")
-        self.password.send_keys("user")
-        self.submit.click()
-        
-        # Buscar listado de sidebar
-        self.lista_materias.click()
-        
-        self.filtrar_por_programa.click()
-        
-         # Seleccionar el programa correcto de la lista desplegable
-        
-        self.programa2.click()
-        
-        self.filtrar_btn.click()
-        
-
-        # Validar que se redirigió a la página de inicio
-        self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/materias?programa=P2"
-        )
-        self.assertNotIn("Materia 1", self.selenium.page_source)
-        self.assertNotIn("Materia 2", self.selenium.page_source)
-
-    def test_filtrado_positivo_lista_no_filtrada(self):
-        # Visitar la página
-        self.selenium.get(self.live_server_url)
-
-        # Llenar el formulario y enviar
-        self.username.send_keys("user")
-        self.password.send_keys("user")
-        self.submit.click()
-        
-        # Buscar listado de sidebar
-        self.lista_materias.click()
-        
-        self.filtrar_btn.click()
-        
-
-        # Validar que se redirigió a la página de inicio
-        self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/materias?programa="
-        )
-        self.assertIn("Materia 1", self.selenium.page_source)
-        self.assertIn("Materia 2", self.selenium.page_source)

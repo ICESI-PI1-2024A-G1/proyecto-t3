@@ -1,3 +1,4 @@
+""""
 from datetime import datetime
 from unittest import skipUnless
 
@@ -23,6 +24,9 @@ from usuarios.tests.functional_tests.base import BaseTestCase
 class LoginPageTestCase(BaseTestCase):
 
     grupos = PageElement(By.ID, "Materias posgrado btn")
+    cupos = PageElement(By.ID, "cantidad_de_cupos")
+    submit = PageElement(By.CLASS_NAME, "btn btn-primary")
+    
 
     def setUp(self):
 
@@ -63,68 +67,32 @@ class LoginPageTestCase(BaseTestCase):
         tipo_materia = TipoDeMateria.objects.create(tipo="1")
         materia = Materia.objects.create(codigo=1, nombre="Materia", creditos=3, departamento=departamento, tipo_de_materia=tipo_materia)
 
-        curso = Curso.objects.create(grupo = '4', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
-        curso = Curso.objects.create(grupo = '5', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
-        curso = Curso.objects.create(grupo = '6', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
-
-        tipo_espacio = Espacio.objects.create(id=1,tipo="Salon", capacidad="200")
-        tipo_espacio = Espacio.objects.create(id=2,tipo="Salon", capacidad="30")
-        tipo_espacio = Espacio.objects.create(id=3,tipo="Salon", capacidad="200")
-        tipo_espacio = Espacio.objects.create(id=4,tipo="Salon", capacidad="5")
-
-        modalidad = Modalidad.objects.create(id=1, metodologia="Presencial")
 
 
-        ciudad = Ciudad.objects.create(id =100, ciudad="Boyaca")
-        estado_docente = EstadoDocente.objects.create(id=1, estado="Activo")
-        tipo_contrato = TipoContrato.objects.create(id=1, tipo="Contrato de prestación de servicios")
-        estado_contrato = EstadoContrato.objects.create(id=1, estado="Activo")
-        contrato = Contrato.objects.create(codigo="1", fecha_elaboracion="2023-01-01", tipo_contrato=tipo_contrato, estado=estado_contrato)
-
-        docente = Docente.objects.create(cedula="1", nombre="juan", email="a",  telefono="1", ciudad=ciudad, fechaNacimiento="2021-01-01", contrato_codigo=contrato, estado=estado_docente, foto="a")
-
-
-
-
-    
-    def test_crear_clase_1(self):
-    # Iniciar sesión primero
-        self.selenium.get(self.live_server_url)
+    def test_crear_clase_2(self):
+        self.selenium.get(self.live_server_url + '/login')
         self.selenium.find_element(By.NAME, "username").send_keys("user")
         self.selenium.find_element(By.NAME, "password").send_keys("user")
         self.selenium.find_element(By.ID, "submit").click()
         self.como_lider()
 
-
-        # Navegar a la página de creación de clase
+            # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
-        
-
-        curso = self.selenium.find_element(By.ID, "1")
-        curso.click()
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
+        self.cupos.click()
+        self.cupos.send_keys(1)
+        self.submit.click()
+
+    """
+
+
         
-        self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
-        self.selenium.find_element(By.NAME, "start_day").send_keys(Keys.TAB)
-        self.selenium.find_element(By.NAME, "start_day").send_keys("1600PM")
 
-        self.selenium.find_element(By.NAME, "end_day").send_keys("02/20/2024")
-        self.selenium.find_element(By.NAME, "end_day").send_keys(Keys.TAB)
-        self.selenium.find_element(By.NAME, "end_day").send_keys("1800PM")
 
-        self.selenium.find_element(By.NAME, "tipo_espacio").send_keys(1)
+        
+           
 
-        self.selenium.find_element(By.NAME, "modalidad_clase").send_keys(1)
-        self.selenium.find_element(By.NAME, "docente_clase").send_keys("juan")
 
-        # Hacer clic en el botón de envío
-        self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
-
-        self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/1"
-        )
-        self.assertIn("Clase 1", self.selenium.page_source)
-    

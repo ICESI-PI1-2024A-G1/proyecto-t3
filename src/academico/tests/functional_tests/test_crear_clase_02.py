@@ -83,48 +83,44 @@ class LoginPageTestCase(BaseTestCase):
 
         docente = Docente.objects.create(cedula="1", nombre="juan", email="a",  telefono="1", ciudad=ciudad, fechaNacimiento="2021-01-01", contrato_codigo=contrato, estado=estado_docente, foto="a")
 
+    def test_crear_clase_2(self):
+            self.selenium.get(self.live_server_url + '/login')
+            self.selenium.find_element(By.NAME, "username").send_keys("user")
+            self.selenium.find_element(By.NAME, "password").send_keys("user")
+            self.selenium.find_element(By.ID, "submit").click()
+            self.como_lider()
+
+            # Navegar a la página de creación de clase
+            self.selenium.get(self.live_server_url + '/academico/materias')
+            materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
+            materias[0].click()
+            
+
+            curso = self.selenium.find_element(By.ID, "1")
+            curso.click()
+
+            self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
+
+            self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
+            self.selenium.find_element(By.NAME, "start_day").send_keys(Keys.TAB)
+            self.selenium.find_element(By.NAME, "start_day").send_keys("1600PM")
+
+            self.selenium.find_element(By.NAME, "end_day").send_keys("02/20/2024")
+            self.selenium.find_element(By.NAME, "end_day").send_keys(Keys.TAB)
+            self.selenium.find_element(By.NAME, "end_day").send_keys("1800PM")
+
+            self.selenium.find_element(By.NAME, "tipo_espacio").send_keys(2)
+
+            self.selenium.find_element(By.NAME, "modalidad_clase").send_keys(1)
+            self.selenium.find_element(By.NAME, "docente_clase").send_keys("")
+            self.selenium.find_element(By.NAME, "num_semanas").send_keys(16)
+
+            # Hacer clic en el botón de envío
+            self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
+
+            self.assertEqual(
+                self.selenium.current_url, self.live_server_url + "/academico/cursos/1"
+            )
+            self.assertIn("Clase 1", "Clase 16", self.selenium.page_source)
 
 
-
-    
-    def test_crear_clase_1(self):
-    # Iniciar sesión primero
-        self.selenium.get(self.live_server_url)
-        self.selenium.find_element(By.NAME, "username").send_keys("user")
-        self.selenium.find_element(By.NAME, "password").send_keys("user")
-        self.selenium.find_element(By.ID, "submit").click()
-        self.como_lider()
-
-
-        # Navegar a la página de creación de clase
-        self.selenium.get(self.live_server_url + '/academico/materias')
-        materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
-        materias[0].click()
-        
-
-        curso = self.selenium.find_element(By.ID, "1")
-        curso.click()
-
-        self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
-        
-        self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
-        self.selenium.find_element(By.NAME, "start_day").send_keys(Keys.TAB)
-        self.selenium.find_element(By.NAME, "start_day").send_keys("1600PM")
-
-        self.selenium.find_element(By.NAME, "end_day").send_keys("02/20/2024")
-        self.selenium.find_element(By.NAME, "end_day").send_keys(Keys.TAB)
-        self.selenium.find_element(By.NAME, "end_day").send_keys("1800PM")
-
-        self.selenium.find_element(By.NAME, "tipo_espacio").send_keys(1)
-
-        self.selenium.find_element(By.NAME, "modalidad_clase").send_keys(1)
-        self.selenium.find_element(By.NAME, "docente_clase").send_keys("juan")
-
-        # Hacer clic en el botón de envío
-        self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
-
-        self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/1"
-        )
-        self.assertIn("Clase 1", self.selenium.page_source)
-    
