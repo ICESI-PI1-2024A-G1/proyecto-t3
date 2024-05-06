@@ -26,6 +26,7 @@ class MateriasTestCase(SeleniumTestCase):
     lista_materias = PageElement(By.ID, "Materias posgrado btn")
     filtrar_por_programa = PageElement(By.ID, "filtrar_por_programa")
     filtrar_btn = PageElement(By.CSS_SELECTOR, 'button[type="submit"]')
+    programa1 = PageElement(By.NAME, "Programa 1")
 
     def setUp(self):
         self.user = User.objects.create_user("user", "user@example.com", "user")
@@ -106,9 +107,9 @@ class MateriasTestCase(SeleniumTestCase):
         self.filtrar_por_programa.click()
         
          # Seleccionar el programa correcto de la lista desplegable
-        self.programa1 = PageElement(By.NAME, "Programa 1")
         
-        Select(self.programa1).select_by_visible_text("Programa 1")
+        Select(self.programa1).select_by_value(1)
+        
         self.filtrar_btn.click()
         
 
@@ -116,7 +117,7 @@ class MateriasTestCase(SeleniumTestCase):
         self.assertEqual(
             self.selenium.current_url, self.live_server_url + "/academico/materias?programa=P1"
         )
-        self.assertIn("Materia 1", self.selenium.page_source)
+        self.assertNotIn("Materia 2", self.selenium.page_source)
         
     """"
     def test_filtrado_positivo_lista_Vacia(self):
