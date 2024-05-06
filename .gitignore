@@ -3,5 +3,4 @@
 **/*.git
 **/*.DS_Store
 **/__pycache__
-**/migrations
 **/venv/

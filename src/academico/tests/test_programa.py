@@ -4,11 +4,12 @@ from django.contrib.messages import get_messages
 from django.http import Http404, HttpRequest
 from django.test import RequestFactory
 from django.urls import reverse
+from mixer.backend.django import mixer
 
 from academico.models import (Director, EstadoSolicitud, Facultad, Programa,
                               TipoDePrograma)
 from academico.views import export_to_excel, export_to_pdf, programa
-from usuarios.models import Ciudad
+from usuarios.models import Ciudad, Persona, Usuario
 
 
 @pytest.fixture
@@ -61,6 +62,12 @@ def test_programa_view(nuevo_programa):
         reverse("programa", args=[nuevo_programa.codigo, "2021-01"])
     )
     request.user = User.objects.create_user(username="admin", password="admin")
+    grupo = mixer.blend("auth.Group", name="lideres")
+    request.user.groups.add(grupo)
+    grupo = mixer.blend("auth.Group", name="gestores")
+    request.user.groups.add(grupo)
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=request.user)
 
     response = programa(request, nuevo_programa.codigo, "2021-01")
 
@@ -116,6 +123,12 @@ def test_programa_view_invalid_programa(nuevo_programa):
     """
     request = RequestFactory().get(reverse("programa", args=["P2", "202101"]))
     request.user = User.objects.create_user(username="admin", password="admin")
+    grupo = mixer.blend("auth.Group", name="lideres")
+    request.user.groups.add(grupo)
+    grupo = mixer.blend("auth.Group", name="gestores")
+    request.user.groups.add(grupo)
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=request.user)
 
     try:
         programa(request, "P2", "202101")
@@ -139,6 +152,12 @@ def test_malla_curricular_empty_page(nuevo_programa):
         reverse("programa", args=[nuevo_programa.codigo, "2021-01"])
     )
     request.user = User.objects.create_user(username="admin", password="admin")
+    grupo = mixer.blend("auth.Group", name="lideres")
+    request.user.groups.add(grupo)
+    grupo = mixer.blend("auth.Group", name="gestores")
+    request.user.groups.add(grupo)
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=request.user)
 
     response = programa(request, nuevo_programa.codigo, "2021-01")
 
@@ -154,6 +173,12 @@ def test_export_to_pdf(nuevo_programa):
         reverse("export_to_pdf", args=[nuevo_programa.codigo, "2021-01"])
     )
     request.user = User.objects.create_user(username="admin", password="admin")
+    grupo = mixer.blend("auth.Group", name="lideres")
+    request.user.groups.add(grupo)
+    grupo = mixer.blend("auth.Group", name="gestores")
+    request.user.groups.add(grupo)
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=request.user)
 
     response = export_to_pdf(request, nuevo_programa.codigo, "2021-01")
 
@@ -167,6 +192,12 @@ def test_export_to_excel(nuevo_programa):
         reverse("export_to_excel", args=[nuevo_programa.codigo, "2021-01"])
     )
     request.user = User.objects.create_user(username="admin", password="admin")
+    grupo = mixer.blend("auth.Group", name="lideres")
+    request.user.groups.add(grupo)
+    grupo = mixer.blend("auth.Group", name="gestores")
+    request.user.groups.add(grupo)
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=request.user)
 
     response = export_to_excel(request, nuevo_programa.codigo, "2021-01")
 

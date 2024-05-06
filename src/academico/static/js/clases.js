@@ -1,5 +1,5 @@
-function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente,cambiar_otros) {
-    clase_seleccionada_id = evt.target.id;
+function show_pop(clase_id, inicio, fin, espacio, tipo, modalidad, docente, cambiar_otros) {
+    clase_seleccionada_id = clase_id;
     console.log(clase_seleccionada_id);
     editModal.style.display = "block";
     var form = document.getElementById('editClassForm');
@@ -34,6 +34,55 @@ function show_pop(evt, inicio, fin, espacio, tipo, modalidad, docente,cambiar_ot
         document.getElementById("warning-message_e").style.display = "none";
     }
     checkbox.checked = cambiar_otros;
+}
+
+function show_popViatico(clase_id) {
+    popupViaticos.style.display = "block";
+    var form = document.getElementById('solicitarViatico');
+    form.action = "/academico/clases/" + clase_id + "/solicitar_viatico";
+
+    var tiquetes = document.getElementById("tiquetes");
+    console.log(tiquetes,"aaaaaaaaa")
+    var hospedaje = document.getElementById("hospedaje");
+    var alimentacion = document.getElementById("alimentacion");
+    document.getElementById("clase_id").value = clase_id;
+    if(tiquetes.checked){
+        tiquetes.value="True";
+    }
+    if(hospedaje.checked){
+        hospedaje.value = "True";
+    }
+    if(alimentacion.checked){
+        alimentacion.value = "True";
+    }
+}
+
+function changeNota(curso,grupoId){
+    var form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/academico/cursos/" + curso + "/" + grupoId +"/change_notas";
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "csrfmiddlewaretoken";
+    input.value = csrfToken;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function changeIntu(curso){
+    var form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/academico/cursos/" + curso + "/change_intu";
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "csrfmiddlewaretoken";
+    input.value = csrfToken;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
 }
 
 
@@ -112,21 +161,25 @@ function cambiar_checkbox_edicion(){
     }
 }
 
-function Solicitud_Salones(event, cursoNrc){
+function Solicitud_Salones(){
     var confirmacion = confirm('¿Estás seguro de que quieres solicitar los salones para este curso?');
     if (confirmacion) {
-        solicitarSalon(cursoNrc);
+        var checkboxes = document.querySelectorAll('.clase-checkbox');
+        var form = document.getElementById("solicitud-form");
+        checkboxes.forEach(function(checkbox, index){
+            if(checkbox.checked && checkbox.value){
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "clases";
+                input.value = checkbox.value;
+                form.appendChild(input);
+            }
+        });
+        form.submit();
     }
 }
 
-function solicitarSalon(cursoNrc) {
-    var checkboxes = document.querySelectorAll('.clase-checkbox');
-    var clasesSeleccionadas = Array.from(checkboxes).map(function(checkbox) {
-        return checkbox.checked;
-    });
-    console.log(clasesSeleccionadas);
-        
-}
+
 
 function display_group(id){
     var group = document.getElementById(id);

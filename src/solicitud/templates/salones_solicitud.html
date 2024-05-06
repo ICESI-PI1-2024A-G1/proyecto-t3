@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Solicitudes</title>
+    {% load static %}
+    <script src="{% static 'js/busqueda_solicitud.js' %}"></script>
+</head>
+
+
+<div class="container">
+    <h1 class="display-3 align-center">Lista de solicitudes</h1>
+
+    <h2>Solicitudes pendientes</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Responsable</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solicitudespacio in solicitudespacios %}
+            <tr>
+                <td>{{ solicitudespacio.id }}</td>
+                <td>{{ solicitudespacio.responsable.usuario }}</td>
+                <td>{{ solicitudespacio.estado }}</td>
+
+                <td>
+                    <form method="post" action="{% url 'asignar_espacio' solicitudespacio.id %}">
+                        {% csrf_token %}
+                        <select name="espacio_asignado">
+                            {% for espacio in espaciosclase %}
+                            <option value="{{espacio.id}}">{{espacio.numero}} {{espacio.edificio}} {{espacio.tipo.tipo}}</option>
+                            {% endfor %}
+                        </select>
+                        
+                            
+                        <button type="submit" class="btn btn-primary" style="margin-left: 20px;"  onclick="Solicitud_Salones()">Aceptar<img class="icon" src="{% static 'img/Solicitud.png' %}"></button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action="{% url 'rechazar_solicitud' solicitudespacio.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" style="display: block;">Rechazar<img class="icon" src="{% static 'img/rechazar.png' %}"></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h2>Solicitudes aceptadas</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Responsable</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solicitud in solicitudesaceptadas %}
+            <tr>
+                <td>{{ solicitud.id }}</td>
+                <td>{{ solicitud.responsable.usuario }}</td>
+                <td>{{ solicitud.estado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Solicitudes rechazadas</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Responsable</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solicitud in solicitudesnegadas %}
+            <tr>
+                <td>{{ solicitud.id }}</td>
+                <td>{{ solicitud.responsable.usuario }}</td>
+                <td>{{ solicitud.estado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

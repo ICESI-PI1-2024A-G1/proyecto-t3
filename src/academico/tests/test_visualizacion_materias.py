@@ -1,12 +1,16 @@
-from django.http import Http404
+from datetime import datetime
+
 import pytest
-from django.test import RequestFactory
 from django.contrib.auth.models import User
+from django.http import Http404
+from django.test import RequestFactory
 from django.urls import reverse
 from mixer.backend.django import mixer
-from academico.models import Curso, Clase, Departamento, Materia, Modalidad, Periodo, TipoDeMateria, Espacio
+
+from academico.models import (Clase, Curso, Departamento, Espacio, Materia,
+                              Modalidad, Periodo, TipoDeMateria)
 from academico.views import visualizacion_materia
-from datetime import datetime
+from usuarios.models import Persona, Usuario
 
 pytest.fixture
 def rf():
@@ -28,8 +32,14 @@ def autenticacion(db, rf):
     Returns:
         request: Objeto de la clase HttpRequest con la autenticación del usuario.
     """
-    
+
     user = User.objects.create_user(username='admin', password='admin')
+    grupo = mixer.blend("auth.Group", name="lideres")
+    user.groups.add(grupo)
+    grupo = mixer.blend("auth.Group", name="gestores")
+    user.groups.add(grupo)
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     request = rf.get(reverse('visualizacion_materias', kwargs={'codigo': 101, 'periodo': 202401} ))
     request.user = user
     return request

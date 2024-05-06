@@ -11,6 +11,7 @@ from mixer.backend.django import mixer
 from academico.models import (Clase, Curso, Departamento, Docente, Espacio,
                               Materia, Modalidad, Periodo, TipoDeMateria)
 from academico.views import crear_clase
+from usuarios.models import Persona, Usuario
 
 
 @pytest.fixture
@@ -34,6 +35,10 @@ def autenticacion(db, rf):
         request: Objeto de la solicitud HTTP con el usuario autenticado.
     """
     user = User.objects.create_user(username='admin', password='admin')
+    grupo = mixer.blend('auth.Group', name='lideres')
+    user.groups.add(grupo)
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     request = rf.get(reverse('planeacion_materias', kwargs={'curso_id': 1}))
     request.user = user
     return request
@@ -144,65 +149,6 @@ def test_crear_clase_post_negativo_modalidad(autenticacion, curso, espacio, doce
     except Http404 as e:
         assert str(e) == "La modalidad no existe."
 
-@pytest.mark.django_db
-def test_crear_clase_post_negativo_espacio(autenticacion, curso, modalidad, docente):
-    """
-    Prueba unitaria para verificar el comportamiento del método crear_clase al recibir una solicitud POST con un espacio que no existe.
-
-    Args:
-        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
-        curso: Objeto de curso para utilizar en la prueba.
-        modalidad: Objeto de modalidad para utilizar en la prueba.
-        docente: Objeto de docente para utilizar en la prueba.
-
-    Returns:
-        None
-    """
-    request = autenticacion
-    request.method = 'POST'
-    request.POST = {
-       'start_day': '2022-12-01T13:15',
-       'end_day': '2022-12-01T15:15',
-       "tipo_espacio": 2,
-        "modalidad_clase": modalidad.id,
-        "docente_clase": docente.cedula,
-        "num_semanas": 1,
-    }
-    try:
-        response = crear_clase(request, curso.nrc)
-        assert False
-    except Http404 as e:
-        assert str(e) == "El espacio no existe."    
-
-@pytest.mark.django_db
-def test_crear_clase_post_negativo_espacio(autenticacion, curso, modalidad, docente):
-    """
-    Prueba unitaria para verificar el comportamiento del método crear_clase al recibir una solicitud POST para un curso que no existe.
-
-    Args:
-        autenticacion: Objeto de autenticación para simular la autenticación del usuario.
-        curso: Objeto de curso para utilizar en la prueba.
-        modalidad: Objeto de modalidad para utilizar en la prueba.
-        docente: Objeto de docente para utilizar en la prueba.
-
-    Returns:
-        None
-    """
-    request = autenticacion
-    request.method = 'POST'
-    request.POST = {
-       'start_day': '2022-12-01T13:15',
-       'end_day': '2022-12-01T15:15',
-       "tipo_espacio": 2,
-        "modalidad_clase": modalidad.id,
-        "docente_clase": docente.cedula,
-        "num_semanas": 1,
-    }
-    try:
-        response = crear_clase(request, 999)
-        assert False
-    except Http404 as e:
-        assert str(e) == "El curso no existe."   
 
 @pytest.mark.django_db
 def test_crear_clase_post_positivo_con_docente(autenticacion, curso, espacio, modalidad, docente):

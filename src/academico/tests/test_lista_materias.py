@@ -1,10 +1,13 @@
+import pytest
+from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.test import RequestFactory
-from django.contrib.auth.models import User
+from mixer.backend.django import mixer
 
-import pytest
-from academico.models import Materia, TipoDeMateria, Departamento, Programa
+from academico.models import Departamento, Materia, Programa, TipoDeMateria
 from academico.views import materias
+from usuarios.models import Persona, Usuario
+
 
 def crear_instancias():
     """
@@ -30,6 +33,10 @@ def autenticar_usuario(request):
         None
     """
     user = User.objects.create_user(username='admin', password='admin')
+    grupo = mixer.blend("auth.Group", name="gestores")
+    user.groups.add(grupo)
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     request.user = user
 
 @pytest.mark.django_db

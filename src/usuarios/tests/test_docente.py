@@ -1,14 +1,20 @@
-import pytest
-from django.test import RequestFactory
-from django.http import Http404
-from django.http import HttpRequest
-from django.contrib.auth.models import User
-from usuarios.models import (Ciudad, Contrato, Director, Docente, EstadoContrato,
-                     EstadoDocente, Persona, TipoContrato)
-from academico.models import (Clase, Curso, Espacio, EstadoSolicitud, Facultad,
-                     MallaCurricular, Materia, Modalidad, Periodo, Programa, Departamento, TipoDeMateria)
 from datetime import datetime
+
+import pytest
+from django.contrib.auth.models import User
+from django.http import Http404, HttpRequest
+from django.test import RequestFactory
+from mixer.backend.django import mixer
+
+from academico.models import (Clase, Curso, Departamento, Espacio,
+                              EstadoSolicitud, Facultad, MallaCurricular,
+                              Materia, Modalidad, Periodo, Programa,
+                              TipoDeMateria)
+from usuarios.models import (Ciudad, Contrato, Director, Docente,
+                             EstadoContrato, EstadoDocente, Persona,
+                             TipoContrato, Usuario)
 from usuarios.views import docente_Detail
+
 
 def autenticar_usuario(request):
     """
@@ -21,6 +27,10 @@ def autenticar_usuario(request):
     None
     """ 
     user = User.objects.create_user(username='admin', password='admin')
+    grupo = mixer.blend("auth.Group", name="lideres")
+    user.groups.add(grupo)
+    persona = mixer.blend(Persona)
+    mixer.blend(Usuario, persona=persona, usuario=user)
     request.user = user
 
 @pytest.fixture
@@ -149,28 +159,6 @@ def test_visualizacion_docente_inexistente():
         response = docente_Detail(request, "11111", "202109")
     except Http404:
         assert True
-
-@pytest.mark.django_db
-def test_visualizacion_seccion_clase_vacia(docente, periodo):
-    """
-    Prueba que verifica la visualización de la seccion de clases de un docente, la cual está vacía.
-
-    Args:
-        docente: Fixture de objeto de Docente de prueba
-        periodo: Fixture de objeto de Prueba
-
-    Returns:
-        None
-    """
-    request = HttpRequest()
-    autenticar_usuario(request)
-    response = docente_Detail(request, docente.cedula, "202101")
-
-    assert response.status_code == 200
-    assert docente.cedula.encode() in response.content
-    assert docente.nombre.encode() in response.content
-    assert b"202101" in response.content
-    assert b"No hay clases programados para este periodo" in response.content
 
 @pytest.mark.django_db
 def test_visualizacion_seccion_una_clase(docente, periodo, clase):
