@@ -1,3 +1,6 @@
+import os
+import time
+
 from django_selenium_test import PageElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
@@ -378,3 +381,30 @@ class TestGestionPrograma(BaseTestCase):
         self.wait_for_element(By.ID, "periodo")
         
         self.assertIn("Por aprobar", self.selenium.page_source)
+    
+    def test_exportar_programa_pdf(self):
+        """
+        Prueba funcional para verificar la exportación de un programa académico a PDF.
+        
+        Debe permitir exportar un programa académico a PDF.
+        
+        Returns:
+            None
+        """
+        self.como_lider()
+
+        # Variables a utilizar
+        codigo = self.initial_db["programa_1"].codigo
+        semestre = self.initial_db["periodo_1"].semestre
+
+        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}")
+
+        self.wait_for_element(By.ID, "periodo")
+        PageElement(By.CSS_SELECTOR, 'button[class="btn btn-primary dropdown-toggle"]').click()
+        
+        self.selenium.get(self.live_server_url + f"/academico/programas/{codigo}/{semestre}/export/pdf/")
+        
+        time.sleep(2)
+
+        downloadPath = os.path.expanduser("~")
+        assert os.path.exists(os.path.join(downloadPath, "Downloads", "programa.pdf"))
