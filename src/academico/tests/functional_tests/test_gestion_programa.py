@@ -255,7 +255,7 @@ class TestGestionPrograma(BaseTestCase):
 
         self.wait_for_element(By.ID, "periodo")
         self.importar_btn.click()
-        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db["periodo_1"].semestre}")
+        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db['periodo_1'].semestre}")
 
         self.wait_for_text_in_element(By.ID, "form-state", "Se importarán un total de")
         self.date_primera_clase.send_keys("08/01/2021")
@@ -288,7 +288,7 @@ class TestGestionPrograma(BaseTestCase):
 
         self.wait_for_element(By.ID, "periodo")
         self.importar_btn.click()
-        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db["periodo_1"].semestre}")
+        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db['periodo_1'].semestre}")
 
         self.wait_for_text_in_element(By.ID, "form-state", "Se importarán un total de")
         self.date_primera_clase.send_keys("07/01/2021")
@@ -318,7 +318,7 @@ class TestGestionPrograma(BaseTestCase):
 
         self.wait_for_element(By.ID, "periodo")
         self.importar_btn.click()
-        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db["periodo_2"].semestre}")
+        Select(self.select_periodo_importar).select_by_visible_text(f"{self.initial_db['periodo_2'].semestre}")
 
         self.wait_for_text_in_element(By.ID, "form-state", "No hay clases registradas en el periodo seleccionado")
         self.assertIn("No hay clases registradas en el periodo seleccionado", self.selenium.page_source)
