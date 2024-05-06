@@ -9,18 +9,8 @@ from selenium.webdriver.support.ui import Select, WebDriverWait
 from usuarios.tests.functional_tests.base import BaseTestCase
 
 
-class CrearUsuarioTestCase(BaseTestCase):
+class ControlPermisosTestCase(BaseTestCase):
 
-    nuevo_usuario_btn = PageElement(By.CSS_SELECTOR, 'a[onclick="show()"]')
-    cedula_input = PageElement(By.ID, 'cedula')
-    nombre_input = PageElement(By.ID, 'nombre')
-    apellido_input = PageElement(By.ID, 'apellido')
-    email_input = PageElement(By.ID, 'email')
-    telefono_input = PageElement(By.ID, 'telefono')
-    ciudad_select = PageElement(By.ID, 'ciudad')
-    birthdate_input = PageElement(By.ID, 'birthdate')
-    rol_select = PageElement(By.ID, 'rol')
-    crear_usuario_btn = PageElement(By.CSS_SELECTOR, 'button[type="submit"]')
 
     def setUp(self):
         """
