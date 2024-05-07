@@ -13,7 +13,7 @@
   <h1 class="display-3 align-center">Lista de Docentes</h1>
   <div class="mb-3">
     <!-- Formulario para búsqueda -->
-    <form method="GET" action="{% url 'docentes' %}" class="form-inline">
+    <form id="search-form" method="GET" action="{% url 'docentes' %}" class="form-inline">
       <div class="form-group flex-grow-1 position-relative">
         <label for="q" class="sr-only">Buscar por nombre de docente o numero id</label>
         <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por docente o cedula" />

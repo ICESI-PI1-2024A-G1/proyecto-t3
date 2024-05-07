@@ -297,7 +297,7 @@ def administrador(request):
         "administrador.html",
         {
             "usuarios": users,
-            "roles": Group.objects.all().exclude(name="directores"),
+            "roles": Group.objects.all().exclude(name="directores").exclude(name="banner"),
             "estados": [True, False],
             "side": "sidebar_principal.html",
             "side_args": args_principal(request.user, "administrador"),
