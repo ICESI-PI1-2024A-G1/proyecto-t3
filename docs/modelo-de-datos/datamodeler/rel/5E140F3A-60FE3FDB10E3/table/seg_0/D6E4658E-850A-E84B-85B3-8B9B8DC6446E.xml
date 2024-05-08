@@ -77,7 +77,7 @@
 <previousColumn>false</previousColumn>
 <autoIncrementCycle>false</autoIncrementCycle>
 <associations>
-<colAssociation fkAssociation="E320AB45-FDD7-C7A3-76E4-C848FB2A8B0B" referredColumn="6E605BCA-AE2C-4EA9-31CF-3729E88FAC35"/>
+<colAssociation fkAssociation="15B78C21-E89F-4FD1-4CE1-9DA9A2A0F622" referredColumn="6E605BCA-AE2C-4EA9-31CF-3729E88FAC35"/>
 </associations>
 </Column>
 <Column name="ESTADO_SOLICITUD_estado" id="BC1CA632-58CA-DF1C-4BB7-E6EB7747B401">
@@ -132,17 +132,6 @@
 <colUsage columnID="32BC18B3-2ACB-C852-DDB4-83E9D8625852"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="CFD98392-5625-4F18-C027-0A4817DC3C2F" name="PROGRAMA_DIRECTOR_FK">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>9FD84896-F735-B9E2-7016-80C43A2CEC40</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<indexState>Foreign Key</indexState>
-<isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="4971179F-EC04-0FE6-47BD-19116EC6F151"/>
-</indexColumnUsage>
-</ind_PK_UK>
 <ind_PK_UK id="DD78D8DB-8FC7-130B-9446-04A98644BA2C" name="PROGRAMA_ESTADO_SOLICITUD_FK">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
@@ -163,6 +152,17 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="B10ED0EF-93A9-35DC-CE86-3468F6F2062F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="6A7FA384-3094-307F-24E0-4668BAC75940" name="PROGRAMA_DIRECTOR_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>9FD84896-F735-B9E2-7016-80C43A2CEC40</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4971179F-EC04-0FE6-47BD-19116EC6F151"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

@@ -1,5 +1,5 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="AF820B5C-CA49-6590-2767-CFB41F78FA35" name="MATERIA_PROGRAMA">
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="AF820B5C-CA49-6590-2767-CFB41F78FA35" name="MALLA_CURRICULAR">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>2FEA8BE4-1B35-437E-2DD6-3159D04D2F8F</generatorID>
@@ -19,7 +19,7 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="PERIODO_ACADEMICO_semestre" id="2B55CB3C-BB59-F1EE-541A-10D5CAAB09D7">
+<Column name="PERIODO_semestre" id="2B55CB3C-BB59-F1EE-541A-10D5CAAB09D7">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>2F69D6C9-8771-4AD0-013B-8E95045D3928</generatorID>
@@ -68,6 +68,17 @@
 <associations>
 <colAssociation fkAssociation="9628C1B5-0DD3-8CDC-A235-AFAAFF50C8D5" referredColumn="4CE53124-0D50-3D55-5A5C-10A151527632"/>
 </associations>
+</Column>
+<Column name="n_semestre" id="53508DCF-CFAB-D278-E18D-399B01A0716E">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>03F64B71-2A93-E721-D83B-F8F21405AD79</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">

@@ -57,20 +57,32 @@
 <colAssociation fkAssociation="06A37AD2-CD0F-92CF-95C2-5A161A0B20A6" referredColumn="4CE53124-0D50-3D55-5A5C-10A151527632"/>
 </associations>
 </Column>
-<Column name="USUARIO_identificacion" id="9ACEA42B-804A-1710-A606-A08FA43F6D6B">
+<Column name="intu_generado" id="BB18492A-3100-6A69-FCE1-62936D3AC825">
 <createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>43624358-EBB0-9576-C63A-4F3CFD67FE2B</generatorID>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>A6BB7107-5A25-1675-ACFF-9B5619D23338</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="PERIODO_semestre" id="975FBD89-F654-4E1C-870F-5EB3DE364C42">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>5CC951D3-3478-F479-D239-CCADF15B74CC</generatorID>
 <ownerDesignName>datamodeler</ownerDesignName>
 <nullsAllowed>true</nullsAllowed>
 <use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
-<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <previousColumn>false</previousColumn>
 <autoIncrementCycle>false</autoIncrementCycle>
 <associations>
-<colAssociation fkAssociation="DBAF9E72-139D-F33B-ABD5-930FE6FB9A42" referredColumn="FFCE3C5F-B3F8-4B73-FB2C-6E167D7F37A1"/>
+<colAssociation fkAssociation="68EF98A4-37B3-DC3F-39AF-EF8E8D158A71" referredColumn="E41CE57B-94D4-9BE3-1594-5181E87CFF98"/>
 </associations>
 </Column>
 </columns>
@@ -98,15 +110,15 @@
 <colUsage columnID="F68489F4-0868-AF6B-10F0-C219F0BDD4CF"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="442E84BB-95FA-412E-C36E-2BB8DD763B6B" name="CURSO_USUARIO_FK">
+<ind_PK_UK id="F934B6C9-8D6E-FA4A-0A5B-D8487663B540" name="CURSO_PERIODO_FK">
 <createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>FB572837-4EB8-282F-161D-2141B2A54DB4</generatorID>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>929E30BB-6AD6-53F0-AD7E-B91966813827</generatorID>
 <ownerDesignName>datamodeler</ownerDesignName>
 <indexState>Foreign Key</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="9ACEA42B-804A-1710-A606-A08FA43F6D6B"/>
+<colUsage columnID="975FBD89-F654-4E1C-870F-5EB3DE364C42"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

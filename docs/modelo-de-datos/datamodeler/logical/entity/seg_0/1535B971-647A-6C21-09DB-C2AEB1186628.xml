@@ -1,5 +1,5 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="1535B971-647A-6C21-09DB-C2AEB1186628" name="MODULO">
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="1535B971-647A-6C21-09DB-C2AEB1186628" name="GRUPO">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 04:10:24 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
@@ -37,21 +37,6 @@
 <use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
 <domain>C7CF9F7B-32DE-F91E-FBE7-CBA2E317E388</domain>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
-<Attribute name="id" id="BFDC352C-EA1A-1438-3C90-C820C3796F35">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 04:24:40 UTC</createdTime>
-<generatorID>5B93CA85-DEC0-BBBB-3726-96DF9BB6D3E5</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<engineerTo>
-<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<referedAttribute>2016D7CD-9447-213A-EAF9-0FA48F240F8B</referedAttribute>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
 </attributes>

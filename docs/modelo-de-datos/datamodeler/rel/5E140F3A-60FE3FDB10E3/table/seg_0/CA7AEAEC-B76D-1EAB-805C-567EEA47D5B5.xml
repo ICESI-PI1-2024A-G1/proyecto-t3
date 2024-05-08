@@ -44,7 +44,7 @@
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
-<ind_PK_UK id="0DD2214A-7560-A48A-3E6B-F1912A99319D" name="PERIODO_ACADEMICO_PK">
+<ind_PK_UK id="0DD2214A-7560-A48A-3E6B-F1912A99319D" name="PERIODO_PK">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>B25844DD-2D41-D50F-C5F5-73B41B08B288</generatorID>

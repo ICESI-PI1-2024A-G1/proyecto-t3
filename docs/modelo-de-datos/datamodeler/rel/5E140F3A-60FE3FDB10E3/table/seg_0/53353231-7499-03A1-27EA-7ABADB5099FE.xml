@@ -1,0 +1,102 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="53353231-7499-03A1-27EA-7ABADB5099FE" name="Estudiante">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>E2F480EC-123C-AC5F-5263-432A16C534C9</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="cedula" id="B9C76BB9-EADB-F16E-5595-4443814A977E">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>09CBE3B1-CC1E-D26B-588C-54B11FF370A0</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="D5145BE5-4BDE-9022-5DAF-C15A04845E72" referredColumn="C769C4A3-B912-168A-D531-27D9B7076B97"/>
+</associations>
+</Column>
+<Column name="codigo" id="B7162346-94F6-0404-039A-4C1F1EC21BCE">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>F60F2448-7489-572B-6D7D-9170D55C7B6B</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="PROGRAMA_codigo" id="7304A675-1E3C-1B5C-1B48-AC5EA93BA355">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>E61BFBF5-7E17-27FC-D61C-273246C6D4D0</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<structuredType>47E390DE-0671-C4B1-8428-0F45CBEE18F8</structuredType>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>10 CHAR</dataTypeSize>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="CD7DB20F-2EBD-9C0F-9409-C6A0F73D08FB" referredColumn="B84BF8F9-1918-4492-2EB4-BAE3E5D52902"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="A013C21F-2A4C-D2DC-4BF7-34C0B658BA47" name="Estudiante_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>9A57CB2C-E275-43DB-8B21-7D3926927595</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B9C76BB9-EADB-F16E-5595-4443814A977E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="1BE7D75E-48B8-55FB-D117-4793A02F38E0" name="Estudiante_PKv1">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>FA82CEBF-E9CA-0212-832E-253CDE44FD17</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B7162346-94F6-0404-039A-4C1F1EC21BCE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="067E44C9-DAF7-041E-43A4-E6F261BC3021" name="Estudiante_PERSONA_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>4C1C397B-9FDE-FC4A-5881-62A4404D8AA4</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B9C76BB9-EADB-F16E-5595-4443814A977E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="7D95189E-8D3D-AAA5-C991-26E92446C768" name="Estudiante_PROGRAMA_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>0DD8E31F-5B00-2D45-44B1-D412FD7AB654</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7304A675-1E3C-1B5C-1B48-AC5EA93BA355"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

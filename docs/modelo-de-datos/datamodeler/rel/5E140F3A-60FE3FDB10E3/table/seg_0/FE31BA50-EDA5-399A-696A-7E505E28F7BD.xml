@@ -8,21 +8,6 @@
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
-<Column name="cedula" id="B6B53F8B-BCF1-D1FA-D50A-391793877A70">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>09CBE3B1-CC1E-D26B-588C-54B11FF370A0</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<use>0</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-<isDiscriminatorColumn>true</isDiscriminatorColumn>
-<associations>
-<colAssociation fkAssociation="2A2E88E0-91B3-3671-35BC-B997BD9E2C81" referredColumn="C769C4A3-B912-168A-D531-27D9B7076B97"/>
-</associations>
-</Column>
 <Column name="numero" id="FB8506CD-8C74-6679-1689-F7167037E45F">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
@@ -72,9 +57,6 @@
 <pk>true</pk>
 <indexState>Primary Constraint</indexState>
 <isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="B6B53F8B-BCF1-D1FA-D50A-391793877A70"/>
-</indexColumnUsage>
 </ind_PK_UK>
 <ind_PK_UK id="0BB33C44-A170-5927-F568-8E10B47AADA6" name="DOCENTE_PKv1">
 <createdBy>andre</createdBy>
@@ -105,9 +87,6 @@
 <ownerDesignName>datamodeler</ownerDesignName>
 <indexState>Foreign Key</indexState>
 <isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="B6B53F8B-BCF1-D1FA-D50A-391793877A70"/>
-</indexColumnUsage>
 </ind_PK_UK>
 <ind_PK_UK id="6CEBD9D4-49C2-7C80-C52A-7598D60F94DE" name="DOCENTE_CONTRATO_FK">
 <createdBy>andre</createdBy>

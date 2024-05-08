@@ -41,8 +41,21 @@
 <previousColumn>false</previousColumn>
 <autoIncrementCycle>false</autoIncrementCycle>
 <isDiscriminatorColumn>true</isDiscriminatorColumn>
+</Column>
+<Column name="GRUPO_codigo" id="7F9144C0-58B3-8C71-5EFE-235F0A661DDB">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>E488BD79-C5E2-ADBB-3959-B180F3FB4D1C</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
 <associations>
-<colAssociation fkAssociation="8BDDFA3E-0FD3-4808-2A70-05497B0D8C41" referredColumn="364105B5-F8F1-D7A0-D79B-82BED57BB71B"/>
+<colAssociation fkAssociation="50373B2F-AEB9-9BD1-8AC9-F2CB84DA42FD" referredColumn="02FD03C5-4DC1-320A-257D-E640F7923181"/>
 </associations>
 </Column>
 </columns>
@@ -59,14 +72,15 @@
 <colUsage columnID="FFCE3C5F-B3F8-4B73-FB2C-6E167D7F37A1"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="C11181EF-C23F-69D6-0FBB-4748C1896F14" name="USUARIO_TIPO_FK">
+<ind_PK_UK id="2B11F93C-0B69-7330-8C93-0397F60F3070" name="USUARIO_GRUPO_FK">
 <createdBy>andre</createdBy>
-<createdTime>2024-03-03 14:36:37 UTC</createdTime>
+<createdTime>2024-05-08 04:00:26 UTC</createdTime>
+<generatorID>32639426-1C91-C74A-E541-86CB27A8D8E3</generatorID>
 <ownerDesignName>datamodeler</ownerDesignName>
 <indexState>Foreign Key</indexState>
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
-<colUsage columnID="1ABA9E7F-DF47-044E-DBED-2E7843614C75"/>
+<colUsage columnID="7F9144C0-58B3-8C71-5EFE-235F0A661DDB"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>
