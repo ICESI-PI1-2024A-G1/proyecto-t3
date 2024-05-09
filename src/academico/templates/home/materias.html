@@ -7,7 +7,7 @@
     <div class="mb-3">
   
     <!-- Formulario para búsqueda -->
-    <form id="search-form" method="GET" action="{% url 'programas' %}" class="form-inline">
+    <form id="search-form" method="GET" action="{% url 'materias' %}" class="form-inline">
         <div class="form-group flex-grow-1 position-relative">
             <label for="q" class="sr-only">Buscar por nombre de programa o director</label>
             <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por nombre de programa o director" />
@@ -23,11 +23,11 @@
             <select name="programa" id="filtrar_por_programa" class="form-control w-100">
                 <option value="">Todos los programas</option>
                 {% for programa in programas %}
-                <option value="{{ programa.codigo }}">{{ programa.nombre }}</option>
+                <option value="{{ programa.codigo }}" id="{{programa.nombre}} select">{{ programa.nombre }}</option>
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <button type="submit" class="btn btn-primary" id = "filtro_materias">Filtrar</button>
     </form>
 
 </div>

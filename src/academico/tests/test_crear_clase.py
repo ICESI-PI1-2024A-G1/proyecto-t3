@@ -119,7 +119,7 @@ def modalidad(db):
     """
     return mixer.blend(Modalidad)
 
-@pytest.mark.django_db
+@pytest.mark.django_dc
 def test_crear_clase_post_negativo_modalidad(autenticacion, curso, espacio, docente):
     """
     Prueba unitaria para verificar el comportamiento del método crear_clase al recibir una solicitud POST con una modalidad que no existe.
