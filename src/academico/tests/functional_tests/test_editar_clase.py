@@ -91,7 +91,7 @@ class LoginPageTestCase(BaseTestCase):
 
 
     
-    def test_crear_clase_1(self):
+    def test_editar_clase_1(self):
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
@@ -106,7 +106,7 @@ class LoginPageTestCase(BaseTestCase):
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "1")
+        curso = self.selenium.find_element(By.ID, "25")
         curso.click()
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
@@ -133,12 +133,6 @@ class LoginPageTestCase(BaseTestCase):
         editar_link = WebDriverWait(self.selenium, 10).until(EC.presence_of_element_located((By.LINK_TEXT, "Editar")))
         editar_link.click()
         
-        
-
-        
-
-
-
         self.selenium.find_element(By.NAME, "fecha_inicio").send_keys("02/20/2024")
         self.selenium.find_element(By.NAME, "fecha_inicio").send_keys(Keys.TAB)
         self.selenium.find_element(By.NAME, "fecha_inicio").send_keys("1600PM")
@@ -155,12 +149,12 @@ class LoginPageTestCase(BaseTestCase):
         actualizar_clase_button.click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/1"
+            self.selenium.current_url, self.live_server_url + "/academico/cursos/25"
         )
         self.assertIn("Clase 1", self.selenium.page_source)
 
 
-    def test_crear_clase_2(self):
+    def test_editar_clase_2(self):
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
@@ -175,7 +169,7 @@ class LoginPageTestCase(BaseTestCase):
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "4")
+        curso = self.selenium.find_element(By.ID, "28")
         curso.click()
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
@@ -201,12 +195,6 @@ class LoginPageTestCase(BaseTestCase):
         # Espera hasta que el enlace de editar esté presente y haz clic en él
         editar_link = WebDriverWait(self.selenium, 10).until(EC.presence_of_element_located((By.LINK_TEXT, "Editar")))
         editar_link.click()
-        
-        
-
-        
-
-
 
         self.selenium.find_element(By.NAME, "fecha_inicio").send_keys("02/20/2024")
         self.selenium.find_element(By.NAME, "fecha_inicio").send_keys(Keys.TAB)
@@ -224,13 +212,13 @@ class LoginPageTestCase(BaseTestCase):
         actualizar_clase_button.click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/4"
+            self.selenium.current_url, self.live_server_url + "/academico/cursos/28"
         )
         self.assertIn("Sin asignar", self.selenium.page_source)
 
     
 
-    def test_crear_clase_3(self):
+    def test_editar_clase_3(self):
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
@@ -245,7 +233,7 @@ class LoginPageTestCase(BaseTestCase):
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "9")
+        curso = self.selenium.find_element(By.ID, "31")
         curso.click()
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
@@ -288,11 +276,11 @@ class LoginPageTestCase(BaseTestCase):
         actualizar_clase_button.click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/9"
+            self.selenium.current_url, self.live_server_url + "/academico/cursos/31"
         )
         self.assertIn("juan", self.selenium.page_source)
 
-    def test_crear_clase_4(self):
+    def test_editar_clase_4(self):
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
@@ -307,7 +295,7 @@ class LoginPageTestCase(BaseTestCase):
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "10")
+        curso = self.selenium.find_element(By.ID, "34")
         curso.click()
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
@@ -352,7 +340,7 @@ class LoginPageTestCase(BaseTestCase):
         self.assertIn("La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.", self.selenium.page_source)
 
 
-    def test_crear_clase_5(self):
+    def test_editar_clase_5(self):
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
@@ -367,7 +355,7 @@ class LoginPageTestCase(BaseTestCase):
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "13")
+        curso = self.selenium.find_element(By.ID, "37")
         curso.click()
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
