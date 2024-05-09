@@ -106,7 +106,7 @@ class LoginPageTestCase(BaseTestCase):
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "46")
+        curso = self.selenium.find_element(By.ID, "63")
         curso.click()
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
@@ -156,6 +156,6 @@ class LoginPageTestCase(BaseTestCase):
 
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/46"
+            self.selenium.current_url, self.live_server_url + "/academico/cursos/63"
         )
         
