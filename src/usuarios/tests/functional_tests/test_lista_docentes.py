@@ -13,11 +13,19 @@ class TestListadoDocentes(BaseTestCase):
     contrato_select = PageElement(By.NAME, 'contrato')
 
     def setUp(self):
+        """
+        Configura el entorno de prueba configurando los datos necesarios,
+        creando un usuario e iniciando sesión.
+        """
         self.setup_data2()
         self.create_user()
         self.login()
     
     def test_listado_docentes_busqueda_por_nombre_existente_docente(self):
+        """
+        Prueba funcional que verifica el resultado correspondiente a buscar a un docente existente, en la vista de listado de docentes, 
+        por el nombre.
+        """
         self.como_lider()
 
         self.selenium.get(self.live_server_url + "/usuarios/docentes")
@@ -29,6 +37,9 @@ class TestListadoDocentes(BaseTestCase):
         self.assertNotIn(self.initial_db["docente_2"].nombre, self.selenium.page_source)
 
     def test_listado_docentes_filtrado_por_contrato(self):
+        """
+        Prueba funcional que verifica el resultado correspondiente a filtrar el listado de docentes por su tipo de contrato.
+        """
         self.como_lider()
 
         self.selenium.get(self.live_server_url + "/usuarios/docentes")
@@ -41,6 +52,10 @@ class TestListadoDocentes(BaseTestCase):
         self.assertIn("Tiempo Completo", self.selenium.page_source)
 
     def test_listado_docentes_filtrado_sin_orden(self):
+        """
+        Prueba funcional que verifica la muestra de todos los docentes que se tiene en la base de datos, pues su indicador de filtrado
+        establece que no hay orden.
+        """
         self.como_lider()
 
         self.selenium.get(self.live_server_url + "/usuarios/docentes")
@@ -52,6 +67,10 @@ class TestListadoDocentes(BaseTestCase):
         self.assertIn(self.initial_db["docente_2"].nombre, self.selenium.page_source)
 
     def test_listado_docentes_busqueda_por_cedula_existente(self):
+        """
+        Prueba funcional que verifica el resultado correspondiente a buscar a un docente existente, en la vista de listado de docentes, 
+        por la cédula.
+        """
         self.como_lider()
 
         self.selenium.get(self.live_server_url + "/usuarios/docentes")
@@ -63,6 +82,10 @@ class TestListadoDocentes(BaseTestCase):
         self.assertNotIn(self.initial_db["docente_1"].cedula, self.selenium.page_source)
 
     def test_listado_docentes_busqueda_por_nombre_docente_inexistente(self):
+        """
+        Prueba funcional que verifica el resultado correspondiente a buscar a un docente, en la vista de listado de docentes, 
+        por un nombre que no coincida con algún docente registrado.
+        """
         self.como_lider()
 
         self.selenium.get(self.live_server_url + "/usuarios/docentes")
@@ -73,6 +96,10 @@ class TestListadoDocentes(BaseTestCase):
         self.assertNotIn("docente_10", self.selenium.page_source)
 
     def test_listado_docentes_busqueda_por_docente_cedula_inexistente(self):
+        """
+        Prueba funcional que verifica el resultado correspondiente a buscar a un docente, en la vista de listado de docentes, 
+        por una cédula que no coincida con algún docente registrado.
+        """
         self.como_lider()
 
         self.selenium.get(self.live_server_url + "/usuarios/docentes")

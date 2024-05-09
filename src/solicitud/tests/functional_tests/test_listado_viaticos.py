@@ -17,11 +17,19 @@ class TestListadoDocentes(BaseTestCase):
     hospedaje_select = PageElement(By.NAME, 'hospedaje')
 
     def setUp(self):
+        """
+        Configura el entorno de prueba configurando los datos necesarios,
+        creando un usuario e iniciando sesión.
+        """
         self.setup_data4()
         self.create_user()
         self.login()
     
     def test_listado_viaticos_busqueda_por_clase_existente(self):
+        """
+        Prueba funcional que verifica el resultado correspondiente a buscar a un viatico solicitado existente, en la vista de listado de solicitud de viaticos, 
+        por el id de una clase.
+        """
         self.como_gestor()
 
         self.selenium.get(self.live_server_url + "/solicitud/viaticos")
@@ -33,6 +41,10 @@ class TestListadoDocentes(BaseTestCase):
         self.assertNotIn(str(self.initial_db["viatico_2"].clase.id), self.selenium.page_source)
 
     def test_listado_viaticos_busqueda_por_clase_inexistente(self):
+        """
+        Prueba funcional que verifica el resultado correspondiente a buscar a un viatico solicitado, en la vista de listado de solicitud de viáticos, 
+        por el id de una clase que no coincida con algún viático registrado asociado a éste.
+        """
         self.como_gestor()
 
         self.selenium.get(self.live_server_url + "/solicitud/viaticos")
@@ -44,6 +56,10 @@ class TestListadoDocentes(BaseTestCase):
 
     
     def test_listado_viaticos_filtrado_sin_orden(self):
+        """
+        Prueba funcional que verifica la muestra de todos los viaticos solicitados que se tiene en la base de datos, pues su indicador de filtrado
+        establece que no hay orden.
+        """
         self.como_gestor()
 
         self.selenium.get(self.live_server_url + "/solicitud/viaticos")
@@ -55,6 +71,10 @@ class TestListadoDocentes(BaseTestCase):
         self.assertIn(str(self.initial_db["viatico_2"].clase.id), self.selenium.page_source)
 
     def test_listado_viaticos_filtrado_por_hospedaje_true(self):
+        """
+        Prueba funcional que verifica el resultado correspondiente a filtrar el listado de viáticos solicitados por el ítem de hospedaje en true
+        (indicando que se quiere filtrar los viaticos que requirieron hospedaje)
+        """
         self.como_gestor()
 
         self.selenium.get(self.live_server_url + "/solicitud/viaticos")
@@ -68,6 +88,10 @@ class TestListadoDocentes(BaseTestCase):
         self.assertNotIn(str(self.initial_db["viatico_2"].clase.id), self.selenium.page_source)
 
     def test_listado_viaticos_busqueda_por_fecha_inexistente(self):
+        """
+        Prueba funcional que verifica el resultado correspondiente a filtrar el listado de viáticos solicitados por una fecha de solicitud,
+        el cuál no coincide con ningún viatico solicitado en esa fecha.
+        """
         self.como_gestor()
 
         self.selenium.get(self.live_server_url + "/solicitud/viaticos")
@@ -78,17 +102,24 @@ class TestListadoDocentes(BaseTestCase):
         self.assertNotIn("2022-01-15", self.selenium.page_source)
 
     def test_listado_viaticos_busqueda_por_fecha_existente(self):
-            self.como_gestor()
-            self.selenium.get(self.live_server_url + "/solicitud/viaticos")
-            self.wait_for_element(By.ID, "q2")
-            fecha_solicitud_2 = self.initial_db["viatico_2"].fecha_solicitud
-            self.date_input.send_keys(fecha_solicitud_2.strftime("%d-%m-%Y"))
-            self.img_buscar_btn.click()
-            self.wait_for_element(By.ID, "q2")
-            self.assertIn(str(self.initial_db["viatico_1"].clase.id), self.selenium.page_source)
-            self.assertIn(str(self.initial_db["viatico_2"].clase.id), self.selenium.page_source)
+        """
+        Prueba funcional que verifica el resultado correspondiente a filtrar el listado de viáticos solicitados por una fecha de solicitud existente.
+        """
+        self.como_gestor()
+        self.selenium.get(self.live_server_url + "/solicitud/viaticos")
+        self.wait_for_element(By.ID, "q2")
+        fecha_solicitud_2 = self.initial_db["viatico_2"].fecha_solicitud
+        self.date_input.send_keys(fecha_solicitud_2.strftime("%d-%m-%Y"))
+        self.img_buscar_btn.click()
+        self.wait_for_element(By.ID, "q2")
+        self.assertIn(str(self.initial_db["viatico_1"].clase.id), self.selenium.page_source)
+        self.assertIn(str(self.initial_db["viatico_2"].clase.id), self.selenium.page_source)
 
     def test_cambiar_hospedaje_a_false(self):
+        """
+        Prueba funcional que verifica el cambio exitoso del valor del atributo hospedaje en un viático a su opuesto. En este caso,
+        pasar de hospedaje en true a false.
+        """
         self.como_gestor()
         self.selenium.get(self.live_server_url + "/solicitud/viaticos")
         viatico_1_clase = str(self.initial_db["viatico_1"].clase.id)
@@ -103,6 +134,9 @@ class TestListadoDocentes(BaseTestCase):
         assert self.initial_db["viatico_1"].hospedaje == False
 
     def test_eliminar_viatico(self):
+        """
+        Prueba funcional que verifica la eliminación de un viático solicitado.
+        """
         self.como_gestor()
         self.selenium.get(self.live_server_url + "/solicitud/viaticos")
         viatico1 = self.initial_db["viatico_1"]

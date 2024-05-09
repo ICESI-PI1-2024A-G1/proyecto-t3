@@ -172,8 +172,8 @@ class BaseTestCase(SeleniumTestCase):
         self.initial_db["espacio_clase_1"] = mixer.blend(EspacioClase)
         self.initial_db["espacio_clase_2"] = mixer.blend(EspacioClase)
 
-        self.initial_db["clase_1"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_1"], espacio_asignado=self.initial_db["espacio_clase_1"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"])
-        self.initial_db["clase_2"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_2"], espacio_asignado=self.initial_db["espacio_clase_2"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"])
+        self.initial_db["clase_1"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_1"], espacio_asignado=self.initial_db["espacio_clase_1"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"], fecha_inicio="2021-01-01", fecha_fin="2021-01-01")
+        self.initial_db["clase_2"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_2"], espacio_asignado=self.initial_db["espacio_clase_2"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"], fecha_inicio="2021-01-01", fecha_fin="2021-01-01")
 
     def setup_docentes(self):
         tiempoCompleto = mixer.blend("usuarios.TipoContrato", tipo="Tiempo Completo")
