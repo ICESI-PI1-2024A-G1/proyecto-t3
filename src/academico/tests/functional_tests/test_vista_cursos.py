@@ -11,6 +11,10 @@ from usuarios.tests.functional_tests.base import BaseTestCase
 class TestVistaCursos(BaseTestCase):
 
     def setUp(self):
+        """
+        Configura el entorno de prueba configurando los datos necesarios,
+        creando un usuario e iniciando sesión.
+        """
         self.setup_data()
         self.create_user()
         self.login()
@@ -75,6 +79,10 @@ class TestVistaCursos(BaseTestCase):
 
     
     def test_cambiar_intu_generado(self):
+        """
+        Prueba funcional que verifica el cambio exitoso del valor del atributo intu generado, en un curso, a su opuesto. En este caso,
+        pasar del atributo en false a true.
+        """
         self.como_gestor()
         
         curso_id = self.initial_db["curso_1"].nrc
@@ -89,6 +97,10 @@ class TestVistaCursos(BaseTestCase):
         assert self.initial_db["curso_1"].intu_generado == True
 
     def test_cambiar_notas_entrega(self):
+        """
+        Prueba funcional que verifica el cambio exitoso del valor del atributo entrega notas, en módulo/grupo de clase, a su opuesto. En este caso,
+        pasar del atributo en false a true.
+        """
         self.como_gestor()
         
         curso_id = self.initial_db["curso_1"].nrc
@@ -104,6 +116,9 @@ class TestVistaCursos(BaseTestCase):
         assert self.initial_db["grupo_clase_1"].entrega_notas == True
 
     def test_crear_solicitud_viatico(self):
+        """
+        Prueba funcional que verifica que se haya creado una solicitud de un viático en una clase existente.
+        """
         self.como_gestor()
         
         curso_id = self.initial_db["curso_1"].nrc
@@ -143,6 +158,10 @@ class TestVistaCursos(BaseTestCase):
         assert solicitud.tiquete and solicitud.hospedaje and solicitud.alimentacion
 
     def test_intento_solicitud_viatico_sin_items(self):
+        """
+        Prueba funcional que verifica que no se haya creado una solicitud de un viático en una clase existente, cuando no se elige ningún item
+        en la solicitud a crear.
+        """
         self.como_gestor()
         
         curso_id = self.initial_db["curso_1"].nrc

@@ -20,6 +20,10 @@ class TestVistaDocente(BaseTestCase):
         self.login()
 
     def test_ver_basico_docente_con_clases(self):
+        """
+        Prueba funcional que verifica que el contenido de la visualización de un docente sea correcto cuando el docente
+        tenga clases asociadas a él
+        """
         self.como_lider()
 
         periodo = self.initial_db["periodo_1"].semestre
@@ -36,6 +40,10 @@ class TestVistaDocente(BaseTestCase):
         
 
     def test_ver_basico_docente_sin_clases(self):
+        """
+        Prueba funcional que verifica que el contenido de la visualización de un docente sea correcto cuando el docente
+        no tenga clases asociadas a él
+        """
         self.como_lider()
 
         periodo = self.initial_db["periodo_2"].semestre
@@ -51,6 +59,10 @@ class TestVistaDocente(BaseTestCase):
         self.assertIn("No hay clases programados para este periodo", self.selenium.page_source)
 
     def test_docente_con_periodo_erroneo(self):
+        """
+        Prueba funcional que verifica la muestra de una vista tipo 404 cuando se ingrese un periodo inexistente, en la base
+        de datos, en la url que dirige a la vista de un docente.
+        """
         self.como_lider()
 
         cedula= self.initial_db["docente_1"].cedula
@@ -60,6 +72,10 @@ class TestVistaDocente(BaseTestCase):
         self.assertIn("404", self.selenium.page_source)
     
     def test_docente_con_cedula_erroneo(self):
+        """
+        Prueba funcional que verifica la muestra de una vista tipo 404 cuando se ingrese una cédula de un docente inexistente, en la base
+        de datos, en la url que dirige a la vista de un docente.
+        """
         self.como_lider()
 
         periodo = self.initial_db["periodo_2"].semestre
