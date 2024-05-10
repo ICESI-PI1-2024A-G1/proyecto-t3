@@ -100,17 +100,22 @@ class MateriasTestCase(BaseTestCase):
         # Llenar el formulario y enviar
         self.username.send_keys("user")
         self.password.send_keys("user")
+        self.wait_for_element(By.ID, "submit")
         self.submit.click()
         
         # Buscar listado de sidebar
+        self.wait_for_element(By.ID, "Materias posgrado btn")
         self.lista_materias.click()
         
+        self.wait_for_element(By.ID, "filtrar_por_programa")
         self.filtrar_por_programa.click()
         
          # Seleccionar el programa correcto de la lista desplegable
         
+        self.wait_for_element(By.ID, "Programa 1 select")
         self.programa1.click()
         
+        self.wait_for_element(By.CSS_SELECTOR, 'button[type="submit"]')
         self.filtrar_btn.click()
         
 
@@ -127,17 +132,21 @@ class MateriasTestCase(BaseTestCase):
         # Llenar el formulario y enviar
         self.username.send_keys("user")
         self.password.send_keys("user")
+        self.wait_for_element(By.ID, "submit")
         self.submit.click()
         
         # Buscar listado de sidebar
+        self.wait_for_element(By.ID, "Materias posgrado btn")
         self.lista_materias.click()
         
+        self.wait_for_element(By.ID, "filtrar_por_programa")
         self.filtrar_por_programa.click()
         
          # Seleccionar el programa correcto de la lista desplegable
-        
+        self.wait_for_element(By.ID, "Programa 2 select")
         self.programa2.click()
         
+        self.wait_for_element(By.CSS_SELECTOR, 'button[type="submit"]')
         self.filtrar_btn.click()
         
 
@@ -155,11 +164,14 @@ class MateriasTestCase(BaseTestCase):
         # Llenar el formulario y enviar
         self.username.send_keys("user")
         self.password.send_keys("user")
+        self.wait_for_element(By.ID, "submit")
         self.submit.click()
         
         # Buscar listado de sidebar
+        self.wait_for_element(By.ID, "Materias posgrado btn")
         self.lista_materias.click()
         
+        self.wait_for_element(By.CSS_SELECTOR, 'button[type="submit"]')
         self.filtrar_btn.click()
         
 
