@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 from unittest import skipUnless
 
 from django.conf import settings
@@ -405,11 +406,11 @@ class LoginPageTestCase(BaseTestCase):
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
-        self.selenium.find_element(By.NAME, "start_day").send_keys("20/02/2024")
+        self.selenium.find_element(By.NAME, "start_day").send_keys("1/02/2024")
         self.selenium.find_element(By.NAME, "start_day").send_keys(Keys.TAB)
         self.selenium.find_element(By.NAME, "start_day").send_keys("1600PM")
 
-        self.selenium.find_element(By.NAME, "end_day").send_keys("22/02/024")
+        self.selenium.find_element(By.NAME, "end_day").send_keys("3/02/024")
         self.selenium.find_element(By.NAME, "end_day").send_keys(Keys.TAB)
         self.selenium.find_element(By.NAME, "end_day").send_keys("1800PM")
 
@@ -420,6 +421,7 @@ class LoginPageTestCase(BaseTestCase):
 
         # Hacer clic en el botón de envío
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
+        time.sleep(5)
 
         self.assertEqual(
             self.selenium.current_url, self.live_server_url + "/academico/cursos/22"
