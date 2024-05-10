@@ -77,10 +77,13 @@ class ControlPermisosTestCase(BaseTestCase):
         PageElement(By.CSS_SELECTOR, 'button[class="btn btn-secondary dropdown-toggle"]').click()
         PageElement(By.CSS_SELECTOR, 'a[onclick="changeRolTo(\'usuario_1\',\'Lider\')"]').click()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
+        
+        self.wait_for_element(By.CSS_SELECTOR, 'button[class="btn btn-secondary dropdown-toggle"]')
         assert User.objects.get(username="usuario_1").groups.filter(name="lideres").exists()
 
         PageElement(By.CSS_SELECTOR, 'button[class="btn btn-secondary dropdown-toggle"]').click()
         PageElement(By.CSS_SELECTOR, 'a[onclick="changeRolTo(\'usuario_1\',\'Gestor\')"]').click()
         self.selenium.get(self.live_server_url + "/usuarios/administrador")
 
+        self.wait_for_element(By.CSS_SELECTOR, 'button[class="btn btn-secondary dropdown-toggle"]')
         assert User.objects.get(username="usuario_1").groups.filter(name="gestores").exists()

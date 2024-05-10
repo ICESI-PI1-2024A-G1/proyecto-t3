@@ -2,11 +2,11 @@ from datetime import datetime
 from unittest import skipUnless
 
 from django.conf import settings
-from selenium.webdriver.common.keys import Keys
 from django.contrib.auth.models import User
 from django_selenium_test import PageElement, SeleniumTestCase
 from mixer.backend.django import mixer
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -15,7 +15,8 @@ from academico.models import (Clase, Curso, Departamento, Director, Docente,
                               MallaCurricular, Materia, Modalidad, Periodo,
                               Programa, TipoDeMateria, TipoDePrograma)
 from academico.views import crear_clase, eliminar_clase
-from usuarios.models import Ciudad, Persona, Usuario, Contrato, EstadoDocente, TipoContrato, EstadoContrato
+from usuarios.models import (Ciudad, Contrato, EstadoContrato, EstadoDocente,
+                             Persona, TipoContrato, Usuario)
 from usuarios.tests.functional_tests.base import BaseTestCase
 
 
@@ -404,11 +405,11 @@ class LoginPageTestCase(BaseTestCase):
 
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
-        self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
+        self.selenium.find_element(By.NAME, "start_day").send_keys("20/02/2024")
         self.selenium.find_element(By.NAME, "start_day").send_keys(Keys.TAB)
         self.selenium.find_element(By.NAME, "start_day").send_keys("1600PM")
 
-        self.selenium.find_element(By.NAME, "end_day").send_keys("02/22/2024")
+        self.selenium.find_element(By.NAME, "end_day").send_keys("22/02/024")
         self.selenium.find_element(By.NAME, "end_day").send_keys(Keys.TAB)
         self.selenium.find_element(By.NAME, "end_day").send_keys("1800PM")
 
