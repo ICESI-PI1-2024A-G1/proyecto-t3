@@ -106,8 +106,7 @@ class MateriasTestCase(BaseTestCase):
         self.filtrar_por_programa.click()
         
          # Seleccionar el programa correcto de la lista desplegable
-        
-        self.programa1.click()
+        Select(self.filtrar_por_programa).select_by_index(1)
         
         self.filtrar_btn.click()
         

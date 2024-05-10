@@ -54,21 +54,6 @@
 <domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="id1" id="5772CE01-14EC-D4DD-6E9C-49699DD0FBC4">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 04:24:49 UTC</createdTime>
-<generatorID>749C3F7C-B29A-EEDF-65C5-76A114B4C6C7</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<engineerTo>
-<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<referedAttribute>E8290441-7536-0192-5B97-BC4BB38CBFEC</referedAttribute>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="8FEC3DC1-5E18-F5C4-8103-4BDC4A837407" name="PERMISO PK">

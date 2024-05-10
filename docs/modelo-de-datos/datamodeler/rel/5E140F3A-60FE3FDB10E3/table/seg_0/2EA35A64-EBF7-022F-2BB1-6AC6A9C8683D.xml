@@ -8,22 +8,7 @@
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
-<Column name="id" id="713488D6-9D5B-A480-22B9-CFA69A121C21">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>0E57E46B-7EC1-7554-CF0A-517D69A2DBE9</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-<isDiscriminatorColumn>true</isDiscriminatorColumn>
-<associations>
-<colAssociation fkAssociation="CCFDBE9D-8342-E7BA-462F-35F649CEA41D" referredColumn="ED4DC21D-F742-5BD0-E51C-4BF9CA4FA4DD"/>
-</associations>
-</Column>
-<Column name="id1" id="7750B7E4-4A7C-FDE8-A0C8-1A82FB339745">
+<Column name="id2" id="7750B7E4-4A7C-FDE8-A0C8-1A82FB339745">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>283E8614-C607-C41F-3A31-EBDA2478CCA8</generatorID>
@@ -33,22 +18,6 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
-</Column>
-<Column name="ESPACIO_id" id="FD317BBF-40FC-7489-260E-CD3D421E83E6">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>D821F114-2C7C-5427-32E6-C09479D43ED7</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<nullsAllowed>true</nullsAllowed>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<previousColumn>false</previousColumn>
-<autoIncrementCycle>false</autoIncrementCycle>
-<associations>
-<colAssociation fkAssociation="087AF9A4-00CF-A2E0-3311-2EA550C92416" referredColumn="907B50B0-FAD5-FD6E-6B96-FB96667600B3"/>
-</associations>
 </Column>
 <Column name="fecha_inicio" id="5A101BB8-0586-A78A-E3D1-E2F3A3747B15">
 <createdBy>andre</createdBy>
@@ -80,9 +49,6 @@
 <pk>true</pk>
 <indexState>Primary Constraint</indexState>
 <isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="713488D6-9D5B-A480-22B9-CFA69A121C21"/>
-</indexColumnUsage>
 </ind_PK_UK>
 <ind_PK_UK id="BF2FA065-AD6A-57EF-5188-BCD60711CE55" name="SOLICITUD_ESPACIO_PKv1">
 <createdBy>andre</createdBy>
@@ -102,20 +68,6 @@
 <ownerDesignName>datamodeler</ownerDesignName>
 <indexState>Foreign Key</indexState>
 <isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="713488D6-9D5B-A480-22B9-CFA69A121C21"/>
-</indexColumnUsage>
-</ind_PK_UK>
-<ind_PK_UK id="D149D398-64F5-22F1-3B78-4EAB76B9F9FC" name="SOLICITUD_ESPACIO_ESPACIO_FK">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>3044F903-5E47-A43F-0FA6-A6B9441DDB30</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<indexState>Foreign Key</indexState>
-<isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="FD317BBF-40FC-7489-260E-CD3D421E83E6"/>
-</indexColumnUsage>
 </ind_PK_UK>
 </indexes>
 </Table>
