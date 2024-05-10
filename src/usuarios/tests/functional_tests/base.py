@@ -96,7 +96,7 @@ class BaseTestCase(SeleniumTestCase):
     def setup_data5(self):
         self.initial_db = {}
         self.setup_roles()
-        self.setup_materias()
+        self.setup_materias3()
 
     
         
