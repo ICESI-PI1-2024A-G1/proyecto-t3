@@ -96,6 +96,7 @@ class BaseTestCase(SeleniumTestCase):
     def setup_data5(self):
         self.initial_db = {}
         self.setup_roles()
+        self.setup_programas()
         self.setup_materias3()
 
     
@@ -228,13 +229,15 @@ class BaseTestCase(SeleniumTestCase):
         self.initial_db["departamento_3"] = mixer.blend(Departamento)
         self.initial_db["departamento_4"] = mixer.blend(Departamento)
         
-        self.initial_db["materia_1"] = mixer.blend(Materia, creditos=1, Departamento=self.initial_db["departamento_1"].codigo)
-        self.initial_db["materia_2"] = mixer.blend(Materia, creditos=2, Departamento=self.initial_db["departamento_2"].codigo)
-        self.initial_db["materia_3"] = mixer.blend(Materia, creditos=2, Departamento=self.initial_db["departamento_3"].codigo)
-        self.initial_db["materia_4"] = mixer.blend(Materia, creditos=1, Departamento=self.initial_db["departamento_3"].codigo)
+        self.initial_db["materia_1"] = mixer.blend(Materia, creditos=1)
+        self.initial_db["materia_2"] = mixer.blend(Materia, creditos=2)
+        self.initial_db["materia_3"] = mixer.blend(Materia, creditos=2)
+        self.initial_db["materia_4"] = mixer.blend(Materia, creditos=1)
 
         self.initial_db["periodo_1"] = mixer.blend(Periodo, semestre="2021-1")
         self.initial_db["periodo_2"] = mixer.blend(Periodo, semestre="2021-2")
+
+        self.initial_db["programa_3"] = mixer.blend(Programa)
 
         mixer.blend(MallaCurricular, programa=self.initial_db["programa_1"], materia=self.initial_db["materia_1"], periodo=self.initial_db["periodo_1"], semestre=1)
         mixer.blend(MallaCurricular, programa=self.initial_db["programa_1"], materia=self.initial_db["materia_2"], periodo=self.initial_db["periodo_1"], semestre=1)
