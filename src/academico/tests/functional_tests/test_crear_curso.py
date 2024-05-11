@@ -37,7 +37,7 @@ class LoginPageTestCase(BaseTestCase):
 
 
 
-    def test_crear_curso_2(self):
+    def test_crear_curso_min(self):
         self.como_lider()
 
             # Navegar a la página de creación de clase
@@ -56,6 +56,66 @@ class LoginPageTestCase(BaseTestCase):
         self.assertIn("Grupo", self.selenium.page_source)
         self.assertIn("NRC", self.selenium.page_source)
         self.assertIn("Cupos:1", self.selenium.page_source)
+        
+    def test_crear_curso_max(self):
+        self.como_lider()
+
+            # Navegar a la página de creación de clase
+        self.selenium.get(self.live_server_url + '/academico/materias/' + str(self.initial_db["materia_1"].codigo) + '/'+self.initial_db["periodo_1"].semestre)
+        
+        self.wait_for_element(By.ID, "Ncurso")
+        self.submit.click()
+        self.wait_for_element(By.ID, "cantidad_de_cupos")
+        cupos = PageElement(By.ID, "cantidad_de_cupos")
+        cupos.click()
+        cupos.send_keys(35)
+        self.wait_for_element(By.ID, 'C-curso')
+        submit2 = PageElement(By.ID, 'C-curso')
+        submit2.click()
+        time.sleep(5)
+        self.assertIn("Grupo", self.selenium.page_source)
+        self.assertIn("NRC", self.selenium.page_source)
+        self.assertIn("Cupos:35", self.selenium.page_source)
+        
+    def test_crear_curso_negativo(self):
+        self.como_lider()
+
+            # Navegar a la página de creación de clase
+        self.selenium.get(self.live_server_url + '/academico/materias/' + str(self.initial_db["materia_1"].codigo) + '/'+self.initial_db["periodo_1"].semestre)
+        
+        self.wait_for_element(By.ID, "Ncurso")
+        self.submit.click()
+        self.wait_for_element(By.ID, "cantidad_de_cupos")
+        cupos = PageElement(By.ID, "cantidad_de_cupos")
+        cupos.click()
+        cupos.send_keys(-1)
+        self.wait_for_element(By.ID, 'C-curso')
+        submit2 = PageElement(By.ID, 'C-curso')
+        submit2.click()
+        time.sleep(5)
+        self.assertNotIn("Grupo", self.selenium.page_source)
+        self.assertNotIn("NRC", self.selenium.page_source)
+        self.assertNotIn("Cupos:-1", self.selenium.page_source)
+        
+    def test_crear_curso_extremo(self):
+        self.como_lider()
+
+            # Navegar a la página de creación de clase
+        self.selenium.get(self.live_server_url + '/academico/materias/' + str(self.initial_db["materia_1"].codigo) + '/'+self.initial_db["periodo_1"].semestre)
+        
+        self.wait_for_element(By.ID, "Ncurso")
+        self.submit.click()
+        self.wait_for_element(By.ID, "cantidad_de_cupos")
+        cupos = PageElement(By.ID, "cantidad_de_cupos")
+        cupos.click()
+        cupos.send_keys(1000)
+        self.wait_for_element(By.ID, 'C-curso')
+        submit2 = PageElement(By.ID, 'C-curso')
+        submit2.click()
+        time.sleep(5)
+        self.assertNotIn("Grupo", self.selenium.page_source)
+        self.assertNotIn("NRC", self.selenium.page_source)
+        self.assertNotIn("Cupos:1000", self.selenium.page_source)
 
 
         
