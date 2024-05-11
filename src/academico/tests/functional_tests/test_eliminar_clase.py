@@ -27,7 +27,35 @@ class LoginPageTestCase(BaseTestCase):
     grupos = PageElement(By.ID, "Materias posgrado btn")
 
     def setUp(self):
+        """
+        Método de configuración para las pruebas.
 
+        Este método se ejecuta antes de cada prueba y se utiliza para configurar cualquier estado o datos necesarios para las pruebas.
+
+        En este método, se crean varios objetos en la base de datos que se utilizan en las pruebas. Estos incluyen:
+
+        - Un usuario con el nombre de usuario "user" y la contraseña "user", que es miembro del grupo "gestores".
+        - Una persona y un usuario asociado a esa persona.
+        - Una ciudad llamada "Cali".
+        - Una facultad llamada "Facultad A".
+        - Un director llamado "juan".
+        - Un estado de solicitud llamado "Aprobado".
+        - Un tipo de programa llamado "Maestria".
+        - Un programa con el código "P1" y el nombre "Programa 1".
+        - Un periodo con el semestre '202401' y fechas de inicio y fin actuales.
+        - Un departamento con el código 1 y el nombre "Departamento 1".
+        - Un tipo de materia con el tipo "1".
+        - Una materia con el código 1, el nombre "Materia" y 3 créditos.
+        - Tres cursos con los grupos '4', '5' y '6', todos con un cupo de 10 y asociados a la materia y el periodo creados anteriormente.
+        - Cuatro espacios de tipo "Salon" con capacidades de "200", "30", "200" y "5".
+        - Tres modalidades con la metodología "Presencial".
+        - Una ciudad con el id 100 y el nombre "Boyaca".
+        - Un estado de docente llamado "Activo".
+        - Un tipo de contrato llamado "Contrato de prestación de servicios".
+        - Un estado de contrato llamado "Activo".
+        - Un contrato con el código "1" y la fecha de elaboración "2023-01-01".
+        - Un docente llamado "juan".
+        """
         self.user = User.objects.create_user("user", "user@example.com", "user")
         grupo = mixer.blend("auth.Group", name="gestores")
         self.user.groups.add(grupo)
@@ -93,6 +121,12 @@ class LoginPageTestCase(BaseTestCase):
 
     
     def test_eliminar_clase_1(self):
+
+        """
+        Esta clase va guiada a probar la funcionalidad de eliminar una clase de un curso
+
+        Para este caso se busca eliminar una clase donde solamente hay una clase usando la funcionalidad del dropdown
+        """
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
@@ -151,6 +185,12 @@ class LoginPageTestCase(BaseTestCase):
 
 
     def test_eliminar_clase_2(self):
+
+        """
+        Esta clase va guiada a probar la funcionalidad de eliminar una clase de un curso
+
+        Para este caso se busca eliminar varias clases usando la funcionalidad de seleccionar todas las clase y iliminar todo el modulo completo
+        """
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
