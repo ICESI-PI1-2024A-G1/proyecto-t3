@@ -65,7 +65,7 @@ class LoginPageTestCase(BaseTestCase):
         materia = Materia.objects.create(codigo=1, nombre="Materia", creditos=3, departamento=departamento, tipo_de_materia=tipo_materia)
         
 
-        curso = Curso.objects.create(grupo = '4', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
+        self.curso = Curso.objects.create(grupo = '4', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
         curso = Curso.objects.create(grupo = '5', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
         curso = Curso.objects.create(grupo = '6', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
 
@@ -102,13 +102,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-
-        curso = self.selenium.find_element(By.ID, "1")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
         
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -128,7 +130,7 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/1"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", self.selenium.page_source)
 
@@ -144,15 +146,17 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
         
-        curso = self.selenium.find_element(By.ID, "4")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         
         curso.click()
        
-
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
         
 
@@ -179,7 +183,7 @@ class LoginPageTestCase(BaseTestCase):
         
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/4"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Modulo de clases 1", self.selenium.page_source)
         
@@ -195,13 +199,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-        
-        curso = self.selenium.find_element(By.ID, "9")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -222,7 +228,7 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/9"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", "Clase 16", self.selenium.page_source)
     
@@ -236,13 +242,16 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "10")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -262,7 +271,7 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/10"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", self.selenium.page_source)
 
@@ -276,13 +285,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-        
-        curso = self.selenium.find_element(By.ID, "13")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -302,7 +313,7 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/13"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", self.selenium.page_source)
 
@@ -316,13 +327,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-
-        curso = self.selenium.find_element(By.ID, "16")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -342,7 +355,7 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/16"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", self.selenium.page_source)
     
@@ -356,13 +369,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-
-        curso = self.selenium.find_element(By.ID, "19")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -382,7 +397,7 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/19"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.", self.selenium.page_source)
 
@@ -396,13 +411,16 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "22")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("20/02/2024")
@@ -422,7 +440,7 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/22"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("La duración de la clase no puede ser mayor a 24 horas", self.selenium.page_source)    
     
