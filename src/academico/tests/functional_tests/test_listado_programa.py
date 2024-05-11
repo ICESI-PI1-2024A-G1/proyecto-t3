@@ -34,16 +34,6 @@ class TestListadoProgramas(BaseTestCase):
 
         Esta prueba simula el comportamiento de un líder que realiza una búsqueda de programas por el nombre de un director existente.
         Se espera que la página de resultados muestre únicamente los programas asociados al director buscado y no muestre los programas asociados a otros directores.
-
-        Steps:
-        1. Iniciar sesión como líder.
-        2. Acceder a la página de programas.
-        3. Esperar a que aparezca el campo de búsqueda.
-        4. Ingresar el nombre del director en el campo de búsqueda.
-        5. Hacer clic en el botón de búsqueda.
-        6. Esperar a que aparezca nuevamente el campo de búsqueda.
-        7. Verificar que el nombre del director buscado se encuentre en el código fuente de la página.
-        8. Verificar que el nombre de otros directores no se encuentre en el código fuente de la página.
         """
         self.como_lider()
 
