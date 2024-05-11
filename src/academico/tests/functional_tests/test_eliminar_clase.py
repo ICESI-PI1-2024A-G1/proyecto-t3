@@ -1,13 +1,13 @@
+import time
 from datetime import datetime
 from unittest import skipUnless
-import time
 
 from django.conf import settings
-from selenium.webdriver.common.keys import Keys
 from django.contrib.auth.models import User
 from django_selenium_test import PageElement, SeleniumTestCase
 from mixer.backend.django import mixer
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -16,7 +16,8 @@ from academico.models import (Clase, Curso, Departamento, Director, Docente,
                               MallaCurricular, Materia, Modalidad, Periodo,
                               Programa, TipoDeMateria, TipoDePrograma)
 from academico.views import crear_clase, eliminar_clase
-from usuarios.models import Ciudad, Persona, Usuario, Contrato, EstadoDocente, TipoContrato, EstadoContrato
+from usuarios.models import (Ciudad, Contrato, EstadoContrato, EstadoDocente,
+                             Persona, TipoContrato, Usuario)
 from usuarios.tests.functional_tests.base import BaseTestCase
 
 
@@ -26,7 +27,35 @@ class LoginPageTestCase(BaseTestCase):
     grupos = PageElement(By.ID, "Materias posgrado btn")
 
     def setUp(self):
+        """
+        Método de configuración para las pruebas.
 
+        Este método se ejecuta antes de cada prueba y se utiliza para configurar cualquier estado o datos necesarios para las pruebas.
+
+        En este método, se crean varios objetos en la base de datos que se utilizan en las pruebas. Estos incluyen:
+
+        - Un usuario con el nombre de usuario "user" y la contraseña "user", que es miembro del grupo "gestores".
+        - Una persona y un usuario asociado a esa persona.
+        - Una ciudad llamada "Cali".
+        - Una facultad llamada "Facultad A".
+        - Un director llamado "juan".
+        - Un estado de solicitud llamado "Aprobado".
+        - Un tipo de programa llamado "Maestria".
+        - Un programa con el código "P1" y el nombre "Programa 1".
+        - Un periodo con el semestre '202401' y fechas de inicio y fin actuales.
+        - Un departamento con el código 1 y el nombre "Departamento 1".
+        - Un tipo de materia con el tipo "1".
+        - Una materia con el código 1, el nombre "Materia" y 3 créditos.
+        - Tres cursos con los grupos '4', '5' y '6', todos con un cupo de 10 y asociados a la materia y el periodo creados anteriormente.
+        - Cuatro espacios de tipo "Salon" con capacidades de "200", "30", "200" y "5".
+        - Tres modalidades con la metodología "Presencial".
+        - Una ciudad con el id 100 y el nombre "Boyaca".
+        - Un estado de docente llamado "Activo".
+        - Un tipo de contrato llamado "Contrato de prestación de servicios".
+        - Un estado de contrato llamado "Activo".
+        - Un contrato con el código "1" y la fecha de elaboración "2023-01-01".
+        - Un docente llamado "juan".
+        """
         self.user = User.objects.create_user("user", "user@example.com", "user")
         grupo = mixer.blend("auth.Group", name="gestores")
         self.user.groups.add(grupo)
@@ -65,7 +94,7 @@ class LoginPageTestCase(BaseTestCase):
         materia = Materia.objects.create(codigo=1, nombre="Materia", creditos=3, departamento=departamento, tipo_de_materia=tipo_materia)
         
 
-        curso = Curso.objects.create(grupo = '4', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
+        self.curso = Curso.objects.create(grupo = '4', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
         curso = Curso.objects.create(grupo = '5', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
         curso = Curso.objects.create(grupo = '6', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
 
@@ -92,6 +121,12 @@ class LoginPageTestCase(BaseTestCase):
 
     
     def test_eliminar_clase_1(self):
+
+        """
+        Esta clase va guiada a probar la funcionalidad de eliminar una clase de un curso
+
+        Para este caso se busca eliminar una clase donde solamente hay una clase usando la funcionalidad del dropdown
+        """
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
@@ -102,13 +137,16 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "40")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
         
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -124,11 +162,12 @@ class LoginPageTestCase(BaseTestCase):
         # Hacer clic en el botón de envío
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "[id^=class_group]")
         modulos = self.selenium.find_elements(By.CSS_SELECTOR, "[id^=class_group]")
         modulos[0].click()
         dropdown_button = WebDriverWait(self.selenium, 10).until(EC.presence_of_element_located((By.ID, "dropdownMenuButton")))
         dropdown_button.click()
-        time.sleep(2)
+        time.sleep(5)
         # Espera hasta que el enlace de editar esté presente y haz clic en él
         eliminar_link = WebDriverWait(self.selenium, 10).until(EC.presence_of_element_located((By.LINK_TEXT, "Eliminar")))
         eliminar_link.click()
@@ -139,13 +178,19 @@ class LoginPageTestCase(BaseTestCase):
 
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/40"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("No hay clases creadas para este curso", self.selenium.page_source)
     
 
 
     def test_eliminar_clase_2(self):
+
+        """
+        Esta clase va guiada a probar la funcionalidad de eliminar una clase de un curso
+
+        Para este caso se busca eliminar varias clases usando la funcionalidad de seleccionar todas las clase y iliminar todo el modulo completo
+        """
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
@@ -156,13 +201,16 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "43")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
         
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -179,6 +227,7 @@ class LoginPageTestCase(BaseTestCase):
         # Hacer clic en el botón de envío
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "[id^=class_group]")
         modulos = self.selenium.find_elements(By.CSS_SELECTOR, "[id^=class_group]")
         modulos[0].click()
 
@@ -195,6 +244,6 @@ class LoginPageTestCase(BaseTestCase):
 
         alert = self.selenium.switch_to.alert
         alert.accept()
-        time.sleep(3)
+        time.sleep(5)
 
         self.assertIn("No hay clases creadas para este curso", self.selenium.page_source)

@@ -1,4 +1,5 @@
 from time import sleep
+
 from django_selenium_test import PageElement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -9,6 +10,9 @@ from usuarios.tests.functional_tests.base import BaseTestCase
 
 
 class TestVistaCursos(BaseTestCase):
+    """
+    Clase de prueba para la visualización de los cursos.
+    """
 
     def setUp(self):
         """
@@ -20,21 +24,31 @@ class TestVistaCursos(BaseTestCase):
         self.login()
 
     def test_informacion_basica_curso(self):
-        self.como_lider()
-        
-        curso_id = self.initial_db["curso_1"].nrc
-        self.selenium.get(self.live_server_url + f"/academico/cursos/{curso_id}")
+            """
+            Prueba que verifica la visualización de la información básica de un curso en la página de detalles del curso.
 
-        self.wait_for_element(By.CSS_SELECTOR, "h1.card-title")
+            Esta prueba simula el comportamiento de un líder al acceder a la página de detalles de un curso específico.
+            Verifica que la página muestre correctamente la información básica del curso, como el NRC, el grupo, el cupo,
+            el nombre de la materia y el semestre.
+            """
+            self.como_lider()
+            
+            curso_id = self.initial_db["curso_1"].nrc
+            self.selenium.get(self.live_server_url + f"/academico/cursos/{curso_id}")
 
-        # Información básica del curso
-        self.assertIn(str(self.initial_db["curso_1"].nrc), self.selenium.page_source)
-        self.assertIn(str(self.initial_db["curso_1"].grupo), self.selenium.page_source)
-        self.assertIn(str(self.initial_db["curso_1"].cupo), self.selenium.page_source)
-        self.assertIn(self.initial_db["materia_1"].nombre, self.selenium.page_source)
-        self.assertIn(self.initial_db["periodo_1"].semestre, self.selenium.page_source)
+            self.wait_for_element(By.CSS_SELECTOR, "h1.card-title")
+
+            # Información básica del curso
+            self.assertIn(str(self.initial_db["curso_1"].nrc), self.selenium.page_source)
+            self.assertIn(str(self.initial_db["curso_1"].grupo), self.selenium.page_source)
+            self.assertIn(str(self.initial_db["curso_1"].cupo), self.selenium.page_source)
+            self.assertIn(self.initial_db["materia_1"].nombre, self.selenium.page_source)
+            self.assertIn(self.initial_db["periodo_1"].semestre, self.selenium.page_source)
 
     def test_docentes_asignados(self):
+        """
+        Prueba que verifica que se muestren los docentes asignados al curso en la vista de cursos.
+        """
         self.como_lider()
         
         curso_id = self.initial_db["curso_1"].nrc
@@ -46,6 +60,9 @@ class TestVistaCursos(BaseTestCase):
         self.assertIn(self.initial_db["docente_1"].nombre, self.selenium.page_source)
 
     def test_boton_solicitar_salones(self):
+        """
+        Prueba que verifica la presencia y visibilidad del botón de solicitar salones en la vista de un curso.
+        """
         self.como_lider()
         curso_id = self.initial_db["curso_1"].nrc
         self.selenium.get(self.live_server_url + f"/academico/cursos/{curso_id}")
@@ -56,6 +73,12 @@ class TestVistaCursos(BaseTestCase):
         self.assertTrue(boton_solicitar_salones.is_displayed())
 
     def test_visualizar_clases(self):
+        """
+        Prueba que verifica la visualización de las clases de un curso en la interfaz de usuario.
+
+        Esta prueba simula el comportamiento de un líder de curso al acceder a la página de un curso específico.
+        Se verifica que se muestren correctamente las clases del curso, incluyendo el edificio, número de aula y nombre del docente.
+        """
         self.como_lider()
         curso_id = self.initial_db["curso_1"].nrc
         self.selenium.get(self.live_server_url + f"/academico/cursos/{curso_id}")
@@ -68,6 +91,9 @@ class TestVistaCursos(BaseTestCase):
 
 
     def test_card_clase(self):
+        """
+        Prueba que verifica la presencia del título "Clases" en la página de detalles de un curso.
+        """
         self.como_lider()
         
         curso_id = self.initial_db["curso_1"].nrc

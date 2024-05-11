@@ -27,6 +27,35 @@ class LoginPageTestCase(BaseTestCase):
     grupos = PageElement(By.ID, "Materias posgrado btn")
 
     def setUp(self):
+        """
+    Método de configuración para las pruebas.
+
+    Este método se ejecuta antes de cada prueba y se utiliza para configurar cualquier estado o datos necesarios para las pruebas.
+
+    En este método, se crean varios objetos en la base de datos que se utilizan en las pruebas. Estos incluyen:
+
+    - Un usuario con el nombre de usuario "user" y la contraseña "user", que es miembro del grupo "gestores".
+    - Una persona y un usuario asociado a esa persona.
+    - Una ciudad llamada "Cali".
+    - Una facultad llamada "Facultad A".
+    - Un director llamado "juan".
+    - Un estado de solicitud llamado "Aprobado".
+    - Un tipo de programa llamado "Maestria".
+    - Un programa con el código "P1" y el nombre "Programa 1".
+    - Un periodo con el semestre '202401' y fechas de inicio y fin actuales.
+    - Un departamento con el código 1 y el nombre "Departamento 1".
+    - Un tipo de materia con el tipo "1".
+    - Una materia con el código 1, el nombre "Materia" y 3 créditos.
+    - Tres cursos con los grupos '4', '5' y '6', todos con un cupo de 10 y asociados a la materia y el periodo creados anteriormente.
+    - Cuatro espacios de tipo "Salon" con capacidades de "200", "30", "200" y "5".
+    - Tres modalidades con la metodología "Presencial".
+    - Una ciudad con el id 100 y el nombre "Boyaca".
+    - Un estado de docente llamado "Activo".
+    - Un tipo de contrato llamado "Contrato de prestación de servicios".
+    - Un estado de contrato llamado "Activo".
+    - Un contrato con el código "1" y la fecha de elaboración "2023-01-01".
+    - Un docente llamado "juan".
+    """
 
         self.user = User.objects.create_user("user", "user@example.com", "user")
         grupo = mixer.blend("auth.Group", name="gestores")
@@ -66,7 +95,7 @@ class LoginPageTestCase(BaseTestCase):
         materia = Materia.objects.create(codigo=1, nombre="Materia", creditos=3, departamento=departamento, tipo_de_materia=tipo_materia)
         
 
-        curso = Curso.objects.create(grupo = '4', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
+        self.curso = Curso.objects.create(grupo = '4', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
         curso = Curso.objects.create(grupo = '5', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
         curso = Curso.objects.create(grupo = '6', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
 
@@ -93,7 +122,28 @@ class LoginPageTestCase(BaseTestCase):
 
     
     def test_crear_clase_1(self):
-    # Iniciar sesión primero
+        """
+    Prueba la creación de una clase en la aplicación.
+
+    Esta prueba sigue los siguientes pasos:
+
+    1. Inicia sesión en la aplicación con el nombre de usuario y la contraseña "user".
+    2. Navega a la página de materias.
+    3. Selecciona la primera materia de la lista.
+    4. Selecciona el curso con el NRC correspondiente.
+    5. Abre el formulario de creación de clase.
+    6. Rellena el formulario con los siguientes datos:
+        - Fecha y hora de inicio: 02/20/2024 a las 16:00 PM
+        - Fecha y hora de fin: 02/20/2024 a las 18:00 PM
+        - Tipo de espacio: 1
+        - Modalidad de clase: 1
+        - Docente de clase: "juan"
+    7. Hace clic en el botón de envío para crear la clase.
+    8. Verifica que la URL actual es la página del curso.
+    9. Verifica que "Clase 1" está presente en el código fuente de la página, lo que indica que la clase se creó correctamente.
+
+    Si todos estos pasos se completan sin errores, la prueba pasará.
+    """
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
         self.selenium.find_element(By.NAME, "password").send_keys("user")
@@ -103,13 +153,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-
-        curso = self.selenium.find_element(By.ID, "1")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
         
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -129,12 +181,17 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/1"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", self.selenium.page_source)
 
 
     def test_crear_clase_2(self):
+        """
+    Prueba la creación de una segunda clase en la aplicación.
+
+    Descripcion: Esta prueba varia en parametros de una clase y da un resultado positivo en creacion
+    """
     # Iniciar sesión primero
         self.selenium.get(self.live_server_url)
         self.selenium.find_element(By.NAME, "username").send_keys("user")
@@ -145,15 +202,17 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
         
-        curso = self.selenium.find_element(By.ID, "4")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         
         curso.click()
        
-
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
         
 
@@ -180,7 +239,7 @@ class LoginPageTestCase(BaseTestCase):
         
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/4"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Modulo de clases 1", self.selenium.page_source)
         
@@ -188,6 +247,12 @@ class LoginPageTestCase(BaseTestCase):
 
     
     def test_crear_clase_3(self):
+        """
+        Prueba la creación de una tercera clase en la aplicación.
+        Descripcion: Esta prueba varia en parametros de una clase y da un resultado positivo en creacion
+        
+        """
+
         self.selenium.get(self.live_server_url + '/login')
         self.selenium.find_element(By.NAME, "username").send_keys("user")
         self.selenium.find_element(By.NAME, "password").send_keys("user")
@@ -196,13 +261,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-        
-        curso = self.selenium.find_element(By.ID, "9")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -223,12 +290,19 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/9"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", "Clase 16", self.selenium.page_source)
     
     
     def test_crear_clase_4(self):
+        """
+        Prueba la creación de una quinta clase en la aplicación.
+
+        Esta prueba tiene un diseño preeliminar variando ciertos datos, pero en este caso, el docente de la clase es "juan".
+
+        Si todos estos pasos se completan sin errores, la prueba pasará.
+        """
         self.selenium.get(self.live_server_url + '/login')
         self.selenium.find_element(By.NAME, "username").send_keys("user")
         self.selenium.find_element(By.NAME, "password").send_keys("user")
@@ -237,13 +311,16 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "10")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -263,12 +340,19 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/10"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", self.selenium.page_source)
 
     
     def test_crear_clase_5(self):
+        """
+        Prueba la creación de una quinta clase en la aplicación.
+
+        Esta prueba sigue los mismos pasos que la prueba 4, pero en este caso, el docente de la clase es "juan".
+
+        Si todos estos pasos se completan sin errores, la prueba pasará.
+        """
         self.selenium.get(self.live_server_url + '/login')
         self.selenium.find_element(By.NAME, "username").send_keys("user")
         self.selenium.find_element(By.NAME, "password").send_keys("user")
@@ -277,13 +361,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-        
-        curso = self.selenium.find_element(By.ID, "13")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -303,12 +389,19 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/13"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", self.selenium.page_source)
 
     
     def test_crear_clase_6(self):
+        """
+        Prueba la creación de una sexta clase en la aplicación.
+
+        Esta prueba sigue los mismos pasos que la prueba 5, pero en este caso, el campo del docente de la clase se deja vacío.
+
+        Si todos estos pasos se completan sin errores, la prueba pasará.
+        """
         self.selenium.get(self.live_server_url + '/login')
         self.selenium.find_element(By.NAME, "username").send_keys("user")
         self.selenium.find_element(By.NAME, "password").send_keys("user")
@@ -317,13 +410,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-
-        curso = self.selenium.find_element(By.ID, "16")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -343,12 +438,19 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/16"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("Clase 1", self.selenium.page_source)
     
     
     def test_crear_clase_7(self):
+        """
+        Prueba la creación de una séptima clase en la aplicación.
+
+        Esta prueba sigue los mismos pasos que la prueba 6, pero en este caso, la hora de finalización de la clase es anterior a la hora de inicio. Se espera que la aplicación muestre un mensaje de error indicando que la hora de inicio no puede ser posterior a la hora de finalización.
+
+        Si todos estos pasos se completan sin errores, la prueba pasará.
+        """
         self.selenium.get(self.live_server_url + '/login')
         self.selenium.find_element(By.NAME, "username").send_keys("user")
         self.selenium.find_element(By.NAME, "password").send_keys("user")
@@ -357,13 +459,15 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
-
-        curso = self.selenium.find_element(By.ID, "19")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("02/20/2024")
@@ -383,12 +487,19 @@ class LoginPageTestCase(BaseTestCase):
         self.selenium.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/19"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("La fecha/hora de inicio no puede ser posterior a la fecha/hora de finalización.", self.selenium.page_source)
 
     
     def test_crear_clase_8(self):
+        """
+        Prueba la creación de una octava clase en la aplicación.
+
+        Esta prueba sigue los mismos pasos que la prueba 7, pero en este caso, la duración de la clase es mayor a 24 horas. Se espera que la aplicación muestre un mensaje de error indicando que la duración de la clase no puede ser mayor a 24 horas.
+
+        Si todos estos pasos se completan sin errores, la prueba pasará.
+        """ 
         self.selenium.get(self.live_server_url + '/login')
         self.selenium.find_element(By.NAME, "username").send_keys("user")
         self.selenium.find_element(By.NAME, "password").send_keys("user")
@@ -397,13 +508,16 @@ class LoginPageTestCase(BaseTestCase):
 
         # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias')
+        self.wait_for_element(By.CSS_SELECTOR, "tbody tr")
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
         
 
-        curso = self.selenium.find_element(By.ID, "22")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
+        self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
         self.selenium.find_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]").click()
 
         self.selenium.find_element(By.NAME, "start_day").send_keys("1/02/2024")
@@ -424,7 +538,7 @@ class LoginPageTestCase(BaseTestCase):
         time.sleep(5)
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/22"
+            self.selenium.current_url, self.live_server_url + f"/academico/cursos/{self.curso.nrc}"
         )
         self.assertIn("La duración de la clase no puede ser mayor a 24 horas", self.selenium.page_source)    
     
