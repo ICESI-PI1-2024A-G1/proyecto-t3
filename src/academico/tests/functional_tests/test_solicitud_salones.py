@@ -63,7 +63,7 @@ class LoginPageTestCase(BaseTestCase):
         tipo_materia = TipoDeMateria.objects.create(tipo="1")
         materia = Materia.objects.create(codigo=1, nombre="Materia", creditos=3, departamento=departamento, tipo_de_materia=tipo_materia)
 
-        curso = Curso.objects.create(grupo = '4', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
+        self.curso = Curso.objects.create(grupo = '4', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
         curso = Curso.objects.create(grupo = '5', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
         curso = Curso.objects.create(grupo = '6', cupo = 10, materia_id=materia.codigo, periodo_id=periodo.semestre)
 
@@ -98,8 +98,8 @@ class LoginPageTestCase(BaseTestCase):
         materias = self.selenium.find_elements(By.CSS_SELECTOR, "tbody tr")
         materias[0].click()
 
-        self.wait_for_element(By.ID, "63")
-        curso = self.selenium.find_element(By.ID, "63")
+        self.wait_for_element(By.ID, self.curso.nrc)
+        curso = self.selenium.find_element(By.ID, self.curso.nrc)
         curso.click()
 
         self.wait_for_element(By.CSS_SELECTOR, "a[onclick=\"show()\"]")
@@ -134,7 +134,6 @@ class LoginPageTestCase(BaseTestCase):
 
         # Haz clic en el botón
         boton_solicitud.click()
-        
 
         # Espera hasta que la alerta esté presente
         WebDriverWait(self.selenium, 10).until(EC.alert_is_present())
@@ -144,5 +143,6 @@ class LoginPageTestCase(BaseTestCase):
         alert.accept()
 
         self.assertEqual(
-            self.selenium.current_url, self.live_server_url + "/academico/cursos/63"
+            self.selenium.current_url,
+            self.live_server_url + f"/academico/cursos/{self.curso.nrc}",
         )
