@@ -24,6 +24,9 @@ class MateriasTestCase(BaseTestCase):
     filtro_submit = PageElement(By.ID, "filtrar_materias")
 
     def setUp(self):
+        """
+        Configura el entorno de prueba creando datos necesarios, un usuario y realizando el inicio de sesión.
+        """
         self.setup_data5()
         self.create_user()
         self.login()
@@ -32,6 +35,16 @@ class MateriasTestCase(BaseTestCase):
         
 
     def test_filtrado_positivo_lista_filtrada(self):
+        """
+        Prueba la funcionalidad de filtrado positivo cuando la lista está filtrada según un departamento.
+        
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        
         self.como_lider()
 
         self.selenium.get(self.live_server_url)
@@ -54,6 +67,15 @@ class MateriasTestCase(BaseTestCase):
         self.assertIn(self.initial_db["materia_1"].departamento.nombre, self.selenium.page_source)
         
     def test_filtrado_positivo_lista_Vacia(self):
+        """
+        Prueba la funcionalidad de filtrado positivo cuando la lista está filtrada y resulta vacia.
+        
+        Args:
+            None
+
+        Returns:
+            None
+        """
         self.como_lider()
 
         self.selenium.get(self.live_server_url)
@@ -76,6 +98,15 @@ class MateriasTestCase(BaseTestCase):
         self.assertNotIn(self.initial_db["materia_4"].departamento.nombre, self.selenium.page_source)
         
     def test_filtrado_positivo_no_filtrada(self):
+        """
+        Prueba la funcionalidad de filtrado positivo cuando la lista no está filtrada.
+        
+        Args:
+            None
+
+        Returns:
+            None
+        """
         self.como_lider()
 
         self.selenium.get(self.live_server_url)
