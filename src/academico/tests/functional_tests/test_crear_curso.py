@@ -42,7 +42,7 @@ class LoginPageTestCase(BaseTestCase):
 
             # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias/' + str(self.initial_db["materia_1"].codigo) + '/'+self.initial_db["periodo_1"].semestre)
-        time.sleep(1000)
+        time.sleep(100)
         
         self.submit.click()
         cupos = PageElement(By.ID, "cantidad_de_cupos")
@@ -50,6 +50,7 @@ class LoginPageTestCase(BaseTestCase):
         cupos.send_keys(1)
         submit2 = PageElement(By.VALUE, "Crear curso")
         submit2.click()
+        time.sleep(100)
 
 
 
