@@ -24,7 +24,7 @@ from usuarios.tests.functional_tests.base import BaseTestCase
 class LoginPageTestCase(BaseTestCase):
 
     grupos = PageElement(By.ID, "Materias posgrado btn")
-    submit = PageElement(By.CLASS_NAME, "btn btn-primary mt-2")
+    submit = PageElement(By.ID, "Ncurso")
     
 
     def setUp(self):
@@ -42,12 +42,14 @@ class LoginPageTestCase(BaseTestCase):
 
             # Navegar a la página de creación de clase
         self.selenium.get(self.live_server_url + '/academico/materias/' + str(self.initial_db["materia_1"].codigo) + '/'+self.initial_db["periodo_1"].semestre)
-        time.sleep(100)
         
+        self.wait_for_element(By.ID, "Ncurso")
         self.submit.click()
+        self.wait_for_element(By.ID, "cantidad_de_cupos")
         cupos = PageElement(By.ID, "cantidad_de_cupos")
         cupos.click()
         cupos.send_keys(1)
+        self.wait_for_element(By.VALUE, "Crear curso")
         submit2 = PageElement(By.VALUE, "Crear curso")
         submit2.click()
         time.sleep(100)
