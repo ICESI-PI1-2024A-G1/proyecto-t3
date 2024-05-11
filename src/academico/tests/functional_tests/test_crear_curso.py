@@ -118,6 +118,7 @@ class LoginPageTestCase(BaseTestCase):
         self.assertNotIn("Cupos:1000", self.selenium.page_source)
 
 
+
         
 
 
