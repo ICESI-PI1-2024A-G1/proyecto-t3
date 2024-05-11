@@ -49,11 +49,13 @@ class LoginPageTestCase(BaseTestCase):
         cupos = PageElement(By.ID, "cantidad_de_cupos")
         cupos.click()
         cupos.send_keys(1)
-        self.wait_for_element(By.VALUE, "Crear curso")
-        submit2 = PageElement(By.VALUE, "Crear curso")
+        self.wait_for_element(By.ID, 'C-curso')
+        submit2 = PageElement(By.ID, 'C-curso')
         submit2.click()
-        time.sleep(100)
-
+        time.sleep(5)
+        self.assertIn("Grupo", self.selenium.page_source)
+        self.assertIn("NRC", self.selenium.page_source)
+        self.assertIn("Cupos:1", self.selenium.page_source)
 
 
         
