@@ -7,6 +7,9 @@ from usuarios.tests.functional_tests.base import BaseTestCase
 
 
 class CrearUsuarioTestCase(BaseTestCase):
+    """
+    Clase de prueba que contiene casos de prueba relacionados con la creación de usuarios.
+    """
 
     nuevo_usuario_btn = PageElement(By.CSS_SELECTOR, 'a[onclick="show()"]')
     cedula_input = PageElement(By.ID, 'cedula')
@@ -30,6 +33,15 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.login()
 
     def test_positivo_crear_nuevo_usuario_lider(self):
+        """
+        Prueba la creación exitosa de un nuevo usuario con el rol de líder.
+
+        Esta prueba verifica que se pueda crear un nuevo usuario con el rol de líder de manera exitosa.
+        Se simula el comportamiento de un administrador que accede a la página de creación de usuarios,
+        ingresa los datos requeridos y realiza el proceso de creación. Luego, se verifica que el usuario
+        haya sido creado correctamente y se muestre en la lista de usuarios.
+
+        """
         self.como_administrador() 
         self.selenium.get(self.live_server_url + "/administrador/crear-usuario")
         
@@ -49,6 +61,15 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.assertIn('Juan Pérez', self.selenium.page_source)
 
     def test_positivo_crear_nuevo_usuario_gestor(self):
+        """
+        Prueba la creación exitosa de un nuevo usuario con el rol de gestor.
+
+        Esta prueba verifica que se pueda crear un nuevo usuario con el rol de gestor de manera exitosa.
+        Se simula el comportamiento de un administrador que accede a la página de creación de usuarios,
+        ingresa los datos requeridos y realiza el proceso de creación. Luego, se verifica que el usuario
+        haya sido creado correctamente y que aparezca en la lista de usuarios.
+
+        """
         self.como_administrador() 
         self.selenium.get(self.live_server_url + "/administrador/crear-usuario")
         
@@ -68,6 +89,14 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.assertIn('Daniela Rodriguez', self.selenium.page_source)
 
     def test_negativo_crear_nuevo_usuario_email_invalido(self):
+        """
+        Prueba la creación de un nuevo usuario con un correo electrónico inválido.
+
+        Esta prueba verifica el comportamiento del sistema al intentar crear un nuevo usuario
+        con un correo electrónico inválido. Se espera que el sistema no permita la creación del
+        usuario y que se muestre un mensaje de error adecuado.
+
+        """
         self.como_administrador()
         self.selenium.get(self.live_server_url + "/administrador/crear-usuario")
 
@@ -87,6 +116,14 @@ class CrearUsuarioTestCase(BaseTestCase):
         self.assertNotIn('Sara Gomez', self.selenium.page_source)
 
     def test_negativo_crear_nuevo_usuario_cedula_invalida(self):
+        """
+        Prueba la creación de un nuevo usuario con una cédula inválida.
+
+        Esta prueba verifica el comportamiento del sistema al intentar crear un nuevo usuario con una cédula inválida.
+        Se asegura de que el sistema no permita la creación del usuario y que se muestre un mensaje de error adecuado.
+        Además, se verifica que el usuario no aparezca en la lista de usuarios y que la página de administración de usuarios se cargue correctamente.
+
+        """
         self.como_administrador()
         self.selenium.get(self.live_server_url + "/administrador/crear-usuario")
 
