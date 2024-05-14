@@ -103,6 +103,54 @@
 <colAssociation fkAssociation="78A6F0B2-2E91-E8F1-6A51-F190F0C5FABB" referredColumn="907B50B0-FAD5-FD6E-6B96-FB96667600B3"/>
 </associations>
 </Column>
+<Column name="ESPACIOv1_id" id="0E490FD1-519E-1FBA-A64F-261A79F2E4E0">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>02871937-14A2-4DBE-4984-D6A29A29C887</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="763E1D4A-A76A-6421-B097-E03C504FB267" referredColumn="F910BCE5-430A-4E89-6521-E563C12F0885"/>
+</associations>
+</Column>
+<Column name="MODULO_CLASE_id" id="F3A52E48-40D5-848E-B80C-BB6DF6CCD594">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>F52946AD-0C2B-9614-D62E-2C5C1608A187</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="C631C886-D076-697A-5E19-815BF9DD2D59" referredColumn="BEB3218D-D8A2-C0EB-D564-1509AADF3B42"/>
+</associations>
+</Column>
+<Column name="VIATICO_id" id="0E46378C-EEB7-ACD4-93D6-A9BBAD98DCCA">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>0C31374F-6355-F736-D21F-E541BB11FCD4</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="64CB3053-D052-A149-EFC7-30C579498764" referredColumn="218C1BB4-96C9-F2E6-53BB-4402353351F5"/>
+</associations>
+</Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
 <ind_PK_UK id="BC6CB565-338F-4E69-FC5E-09B554E96AD8" name="CLASE_PK">
@@ -148,6 +196,39 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="637F0C27-DF96-8CA1-DA18-DA8AC3CE5BD7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="08850306-B290-9B10-90B8-32BBABE61862" name="CLASE_ESPACIOv1_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>13324F3F-BE7F-1B84-C3A0-B905D15AF65D</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0E490FD1-519E-1FBA-A64F-261A79F2E4E0"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="9E387712-A7BB-6A1A-914A-05F745720DC6" name="CLASE_MODULO_CLASE_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>D2EDBDB7-D9B0-2C82-4B69-8E260D5E0D38</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F3A52E48-40D5-848E-B80C-BB6DF6CCD594"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="6980E81E-BA44-670E-FB3A-5378202ED820" name="CLASE_VIATICO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:26 UTC</createdTime>
+<generatorID>9A8B7567-CCB2-927A-BCB7-C5F236D0A536</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0E46378C-EEB7-ACD4-93D6-A9BBAD98DCCA"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

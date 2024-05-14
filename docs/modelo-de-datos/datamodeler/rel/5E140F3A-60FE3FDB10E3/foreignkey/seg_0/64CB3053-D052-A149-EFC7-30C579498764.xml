@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="64CB3053-D052-A149-EFC7-30C579498764" containerWithKeyObject="7DB36A41-D42A-63CD-6CD6-ECBB7C13C958" localFKIndex="6980E81E-BA44-670E-FB3A-5378202ED820" name="CLASE_VIATICO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:26 UTC</createdTime>
+<generatorID>9A8B7567-CCB2-927A-BCB7-C5F236D0A536</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<referredTableLongName>VIATICO</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>B6B6AF4A-AD1B-7163-72EE-DC7A5148D20C</referredTableID>
+<keyObject>993CAB80-5440-35F4-CE3A-501E7C86B6E4</keyObject>
+<referredKeyID>993CAB80-5440-35F4-CE3A-501E7C86B6E4</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>id</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -1,0 +1,57 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="1F4223C8-42CC-3DC8-6697-E7B49FB7B1C2" name="Relation_56">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:26 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="CLASE_id" id="07C740CA-0675-22FF-369F-0A58E5D206A6">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:26 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="9F47D05E-1C7C-1DA7-DA9F-CEB7A2B5C3F3" referredColumn="A73ED138-CE0B-95D3-39F5-723ECDC11344"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="414DF5B4-2C6E-51B9-82F2-2A61B672F16B" name="Relation_56_PK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:26 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="07C740CA-0675-22FF-369F-0A58E5D206A6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="D603C336-21F5-EEF9-19D2-19F17EC1E8F8" name="Relation_56_CLASE_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:26 UTC</createdTime>
+<generatorID>E4106EA9-5D26-D9A5-5D26-058D8A3AE87B</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="07C740CA-0675-22FF-369F-0A58E5D206A6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="52EA1A0C-A12D-01D3-3AB2-DC70BFB4C97F" name="Relation_56_SOLICITUD_ESPACIO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:26 UTC</createdTime>
+<generatorID>E4106EA9-5D26-D9A5-5D26-058D8A3AE87B</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+</ind_PK_UK>
+</indexes>
+</Table>

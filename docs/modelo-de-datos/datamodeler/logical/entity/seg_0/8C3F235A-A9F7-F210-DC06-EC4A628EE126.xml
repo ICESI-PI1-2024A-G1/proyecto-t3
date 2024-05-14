@@ -66,21 +66,6 @@
 <domain>BBAE8FE6-F616-570E-BD4B-56C95934DB1E</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="nrc" id="6853789A-46D1-A541-BD06-77F373C1A58A">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-01 23:05:05 UTC</createdTime>
-<generatorID>83EC4C98-A30C-A3B6-CCA3-6C927B8627FA</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<engineerTo>
-<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
-</engineerTo>
-<nullsAllowed>true</nullsAllowed>
-<referedAttribute>728C0686-BA07-EC40-4995-D5D3CA51EDB7</referedAttribute>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="id1" id="B7114E98-D86B-E24D-20E0-26B9D9BD5506">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-01 23:06:52 UTC</createdTime>
@@ -106,6 +91,51 @@
 </engineerTo>
 <nullsAllowed>true</nullsAllowed>
 <referedAttribute>319F3558-7D0D-E88C-4A4E-98FC50CE9F62</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id3" id="02871937-14A2-4DBE-4984-D6A29A29C887">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 03:43:38 UTC</createdTime>
+<generatorID>13324F3F-BE7F-1B84-C3A0-B905D15AF65D</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>A77B770F-7392-DAD2-A51E-3433FA5A81E5</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id4" id="F52946AD-0C2B-9614-D62E-2C5C1608A187">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 03:45:55 UTC</createdTime>
+<generatorID>D2EDBDB7-D9B0-2C82-4B69-8E260D5E0D38</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>AC551CBC-7F18-F6E5-D4BF-D9FDF4DBBB50</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="id5" id="0C31374F-6355-F736-D21F-E541BB11FCD4">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 03:53:08 UTC</createdTime>
+<generatorID>9A8B7567-CCB2-927A-BCB7-C5F236D0A536</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>19803BDA-5B83-8770-7AC0-90941822BC19</referedAttribute>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
 <logicalDatatype>LOGDT011</logicalDatatype>
