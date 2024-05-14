@@ -1,5 +1,5 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="2FEA8BE4-1B35-437E-2DD6-3159D04D2F8F" name="MATERIA_PROGRAMA">
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="2FEA8BE4-1B35-437E-2DD6-3159D04D2F8F" name="MALLA_CURRICULAR">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 19:26:19 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
@@ -57,7 +57,7 @@
 <logicalDatatype>LOGDT024</logicalDatatype>
 <dataTypeSize>10 CHAR</dataTypeSize>
 <domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
+<ownDataTypeParameters>10 CHAR,,</ownDataTypeParameters>
 </Attribute>
 <Attribute name="codigo1" id="4E132A29-56D6-C3EB-C402-1633783C2B29">
 <createdBy>andre</createdBy>
@@ -74,14 +74,27 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
+<Attribute name="n_semestre" id="03F64B71-2A93-E721-D83B-F8F21405AD79">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 03:49:41 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
 <identifier id="22B62092-ADD4-1BE7-01CE-C3FF3CA1B8A3" name="MATERIA_PROGRAMA PK">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 19:27:35 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
+<shouldEngineer>false</shouldEngineer>
 <engineerTo>
-<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="false"/>
 </engineerTo>
 <pk>true</pk>
 <usedAttributes>

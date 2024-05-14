@@ -66,19 +66,32 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="identificacion" id="43624358-EBB0-9576-C63A-4F3CFD67FE2B">
+<Attribute name="intu_generado" id="A6BB7107-5A25-1675-ACFF-9B5619D23338">
 <createdBy>andre</createdBy>
-<createdTime>2024-03-02 19:47:50 UTC</createdTime>
-<generatorID>FB572837-4EB8-282F-161D-2141B2A54DB4</generatorID>
+<createdTime>2024-05-08 03:46:38 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="semestre" id="5CC951D3-3478-F479-D239-CCADF15B74CC">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 03:48:18 UTC</createdTime>
+<generatorID>929E30BB-6AD6-53F0-AD7E-B91966813827</generatorID>
 <ownerDesignName>datamodeler</ownerDesignName>
 <engineerTo>
 <item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
 </engineerTo>
 <nullsAllowed>true</nullsAllowed>
-<referedAttribute>95A5904D-11BF-4843-D0C3-E00A1F0E64FD</referedAttribute>
+<referedAttribute>8519DA85-6FC7-42E1-143F-4E94B4CFF7F2</referedAttribute>
 <use>0</use>
 <logicalDatatype>LOGDT024</logicalDatatype>
-<domain>20E13EDD-2953-29BA-8B4C-EC53DA2921DC</domain>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
 </attributes>

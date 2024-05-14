@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="E83FAFDF-2D5F-6A5C-D058-4900C82919DF" containerWithKeyObject="1F4223C8-42CC-3DC8-6697-E7B49FB7B1C2" localFKIndex="52EA1A0C-A12D-01D3-3AB2-DC70BFB4C97F" name="Relation_56_SOLICITUD_ESPACIO_FK">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:26 UTC</createdTime>
+<generatorID>E4106EA9-5D26-D9A5-5D26-058D8A3AE87B</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<referredTableLongName>SOLICITUD_ESPACIO</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>2EA35A64-EBF7-022F-2BB1-6AC6A9C8683D</referredTableID>
+<keyObject>40C302E7-6B6E-8690-7AC9-4EA21BB9D81E</keyObject>
+<referredKeyID>40C302E7-6B6E-8690-7AC9-4EA21BB9D81E</referredKeyID>
+<mandatory>true</mandatory>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

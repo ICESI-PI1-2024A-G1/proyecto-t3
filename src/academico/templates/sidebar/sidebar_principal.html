@@ -3,7 +3,7 @@
     <div class="pt-3 pl-3 pr-3 text-wrapper">Secciones</div>
     <div class="btn"></div>
     {% for seccion, info in side_args.items %}
-    <a class="section-button btn btn-secondary" href="{{info.url}}">
+    <a class="section-button btn btn-secondary" href="{{info.url}}" id="{{seccion}} btn">
       <div class="frame-wrapper">
         <div class="state-btn">
           <div class="state-{{info.seleccionado}}"></div>

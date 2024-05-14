@@ -58,9 +58,6 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <previousColumn>false</previousColumn>
 <autoIncrementCycle>false</autoIncrementCycle>
-<associations>
-<colAssociation fkAssociation="5491A078-3927-C872-4863-97E7C93E949B" referredColumn="91AE2B50-37F4-8549-D06B-AC2E906B242F"/>
-</associations>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
@@ -85,17 +82,6 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="5455D83A-2012-B3F7-11D0-E17ACB1AB3D3"/>
-</indexColumnUsage>
-</ind_PK_UK>
-<ind_PK_UK id="441280A0-3E3F-F2EE-4639-841743B25619" name="PERMISO_ASISTENTE_FK">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>749C3F7C-B29A-EEDF-65C5-76A114B4C6C7</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<indexState>Foreign Key</indexState>
-<isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="B5112255-F53B-919B-519A-8152AF9E6E23"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

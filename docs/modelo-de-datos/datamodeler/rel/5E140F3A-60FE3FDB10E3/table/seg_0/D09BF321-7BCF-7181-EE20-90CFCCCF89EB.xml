@@ -73,20 +73,18 @@
 <colAssociation fkAssociation="507C253C-04F2-2BBE-198D-1A228F42BF6E" referredColumn="7DE3FDED-9BEB-56BB-C75D-5109725CFD9E"/>
 </associations>
 </Column>
-<Column name="TIPO_SOLICITUD_id" id="8AB5CA9C-4339-C293-D606-8E514E1B64D6">
+<Column name="TIPO_SOLICITUDv1_id" id="47F06F0B-EA4C-B129-0701-5010386E36A8">
 <createdBy>andre</createdBy>
-<createdTime>2024-03-03 14:34:35 UTC</createdTime>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>95AF34D0-6E75-F626-0BDB-01CB6A5CFBE6</generatorID>
 <ownerDesignName>datamodeler</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <previousColumn>false</previousColumn>
 <autoIncrementCycle>false</autoIncrementCycle>
-<isDiscriminatorColumn>true</isDiscriminatorColumn>
-<associations>
-<colAssociation fkAssociation="85CC50D3-102E-1ACC-C23F-64D996B37FDB" referredColumn="CA4E6CDF-CD31-3A0F-173D-A254C5F27AFD"/>
-</associations>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
@@ -122,16 +120,6 @@
 <isSurrogateKey>false</isSurrogateKey>
 <indexColumnUsage>
 <colUsage columnID="CF3E6362-DE29-B436-F298-2662B4721F43"/>
-</indexColumnUsage>
-</ind_PK_UK>
-<ind_PK_UK id="2E6EFD14-FB19-3874-6952-C420C01CF6A9" name="SOLICITUD_TIPO_FK">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-03 14:34:35 UTC</createdTime>
-<ownerDesignName>datamodeler</ownerDesignName>
-<indexState>Foreign Key</indexState>
-<isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="8AB5CA9C-4339-C293-D606-8E514E1B64D6"/>
 </indexColumnUsage>
 </ind_PK_UK>
 </indexes>

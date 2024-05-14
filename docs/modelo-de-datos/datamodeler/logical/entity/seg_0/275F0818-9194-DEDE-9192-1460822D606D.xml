@@ -39,19 +39,19 @@
 <domain>C7CF9F7B-32DE-F91E-FBE7-CBA2E317E388</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="id" id="92C99DDC-4138-175E-ADFA-5BD325BD5BA5">
+<Attribute name="codigo" id="E488BD79-C5E2-ADBB-3959-B180F3FB4D1C">
 <createdBy>andre</createdBy>
-<createdTime>2024-03-03 14:31:19 UTC</createdTime>
-<generatorID>6E721460-4E29-C0D0-9780-1A28AAAAF6B9</generatorID>
+<createdTime>2024-05-08 03:57:06 UTC</createdTime>
+<generatorID>32639426-1C91-C74A-E541-86CB27A8D8E3</generatorID>
 <ownerDesignName>datamodeler</ownerDesignName>
 <engineerTo>
 <item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
 </engineerTo>
 <nullsAllowed>true</nullsAllowed>
-<referedAttribute>6FA19A47-A4AB-67D1-B719-1C1B86DEC28F</referedAttribute>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
+<referedAttribute>1FFD42CA-ED8B-2D63-C6A7-2D8974540F02</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
 </attributes>

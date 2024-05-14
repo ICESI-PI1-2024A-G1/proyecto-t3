@@ -1,5 +1,5 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="B6B6AF4A-AD1B-7163-72EE-DC7A5148D20C" name="CONTABLE">
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="B6B6AF4A-AD1B-7163-72EE-DC7A5148D20C" name="VIATICO">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>3CF17669-E212-6B26-7A76-58A71CCEFEA9</generatorID>
@@ -9,22 +9,7 @@
 <existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
 <parsed>true</parsed>
 <columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
-<Column name="id" id="703DDE6C-5630-F7C6-E118-B28595D9E891">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>0E57E46B-7EC1-7554-CF0A-517D69A2DBE9</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT011</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-<autoIncrementCycle>false</autoIncrementCycle>
-<isDiscriminatorColumn>true</isDiscriminatorColumn>
-<associations>
-<colAssociation fkAssociation="BDFAAEAF-4101-3FE0-7BE2-73D2CD2D479D" referredColumn="ED4DC21D-F742-5BD0-E51C-4BF9CA4FA4DD"/>
-</associations>
-</Column>
-<Column name="id1" id="218C1BB4-96C9-F2E6-53BB-4402353351F5">
+<Column name="id" id="218C1BB4-96C9-F2E6-53BB-4402353351F5">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>19803BDA-5B83-8770-7AC0-90941822BC19</generatorID>
@@ -35,26 +20,28 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="presupuesto" id="5286DBF4-F6F4-B3D2-5D0A-0F93A42ABD9D">
+<Column name="tiquete" id="5286DBF4-F6F4-B3D2-5D0A-0F93A42ABD9D">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>351E225E-D0F0-9614-BB10-224EE79E924B</generatorID>
 <ownerDesignName>datamodeler</ownerDesignName>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
-<logicalDatatype>LOGDT020</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
-<Column name="cuenta_cobro" id="61B59C65-EE1F-2986-1BFA-A2199C776E46">
+<Column name="hospedaje" id="61B59C65-EE1F-2986-1BFA-A2199C776E46">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>CCAC6508-AB2A-9383-88E5-9F8780E6580D</generatorID>
 <ownerDesignName>datamodeler</ownerDesignName>
-<use>0</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
 <autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 <Column name="TIPO_CONTABLE_id" id="61E61E61-CA2C-1B66-6F99-21493EE70A57">
@@ -69,9 +56,18 @@
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 <previousColumn>false</previousColumn>
 <autoIncrementCycle>false</autoIncrementCycle>
-<associations>
-<colAssociation fkAssociation="376B44B7-63E2-C193-34EE-5B8AE99B8773" referredColumn="9183DD0A-0898-3277-2252-9DD79EB91CA9"/>
-</associations>
+</Column>
+<Column name="alimentacion" id="978E0881-CF2B-3AA8-941A-5A26D31FCF44">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 04:00:25 UTC</createdTime>
+<generatorID>D889276E-8AC5-53DB-63A2-9D800E0FB348</generatorID>
+<ownerDesignName>datamodeler</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
 </Column>
 </columns>
 <indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
@@ -83,11 +79,8 @@
 <pk>true</pk>
 <indexState>Primary Constraint</indexState>
 <isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="703DDE6C-5630-F7C6-E118-B28595D9E891"/>
-</indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="993CAB80-5440-35F4-CE3A-501E7C86B6E4" name="SOLICITUD_CONTABLE_PKv1">
+<ind_PK_UK id="993CAB80-5440-35F4-CE3A-501E7C86B6E4" name="CONTABLE_PK">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 22:22:22 UTC</createdTime>
 <generatorID>C245F635-89B3-373C-982B-A6AD533FD6DB</generatorID>
@@ -105,20 +98,6 @@
 <ownerDesignName>datamodeler</ownerDesignName>
 <indexState>Foreign Key</indexState>
 <isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="703DDE6C-5630-F7C6-E118-B28595D9E891"/>
-</indexColumnUsage>
-</ind_PK_UK>
-<ind_PK_UK id="6802D76A-A470-17C5-A15F-3E0A1AE9304B" name="CONTABLE_TIPO_CONTABLE_FK">
-<createdBy>andre</createdBy>
-<createdTime>2024-03-02 22:22:22 UTC</createdTime>
-<generatorID>A98966F4-BD8B-E1B4-7D3D-46C46F873FD6</generatorID>
-<ownerDesignName>datamodeler</ownerDesignName>
-<indexState>Foreign Key</indexState>
-<isSurrogateKey>false</isSurrogateKey>
-<indexColumnUsage>
-<colUsage columnID="61E61E61-CA2C-1B66-6F99-21493EE70A57"/>
-</indexColumnUsage>
 </ind_PK_UK>
 </indexes>
 </Table>

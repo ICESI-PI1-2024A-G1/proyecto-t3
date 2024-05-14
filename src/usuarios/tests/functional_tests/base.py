@@ -8,8 +8,9 @@ from selenium.webdriver.common.by import By
 
 from academico.models import (Clase, Curso, Espacio, EspacioClase,
                               GrupoDeClase, MallaCurricular, Materia, Periodo,
-                              Programa)
+                              Programa, Departamento)
 from usuarios.models import Director, Docente, Persona, Usuario
+from solicitud.models import (SolicitudViatico,SolicitudEspacio,Solicitud,EstadoSolicitud,SolicitudClases)
 
 
 @skipUnless(getattr(settings, "SELENIUM_WEBDRIVERS", False), "Selenium is unconfigured")
@@ -74,6 +75,32 @@ class BaseTestCase(SeleniumTestCase):
         self.setup_materias()
         self.setup_clases()
         self.setup_roles()
+        #self.setup_docentes()
+
+    def setup_data2(self):
+        # Crear un docente de prueba
+        self.initial_db = {}
+        self.setup_roles()
+        self.setup_docentes()
+
+    def setup_data3(self):
+        self.initial_db = {}
+        self.setup_roles()
+        self.setup_materias2()
+    
+    def setup_data4(self):
+        self.initial_db = {}
+        self.setup_roles()
+        self.setup_viaticos()
+        
+    def setup_data5(self):
+        self.initial_db = {}
+        self.setup_roles()
+        self.setup_programas()
+        self.setup_materias3()
+
+    
+        
 
     def setup_roles(self):
         if not Group.objects.filter(name="lideres").exists():
@@ -153,3 +180,71 @@ class BaseTestCase(SeleniumTestCase):
 
         self.initial_db["clase_1"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_1"], espacio_asignado=self.initial_db["espacio_clase_1"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"], fecha_inicio="2021-01-01", fecha_fin="2021-01-01")
         self.initial_db["clase_2"] = mixer.blend(Clase, grupo_clases=self.initial_db["grupo_clase_2"], espacio_asignado=self.initial_db["espacio_clase_2"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"], fecha_inicio="2021-01-01", fecha_fin="2021-01-01")
+
+    def setup_docentes(self):
+        tiempoCompleto = mixer.blend("usuarios.TipoContrato", tipo="Tiempo Completo")
+        tiempoParcial = mixer.blend("usuarios.TipoContrato", tipo="Tiempo Parcial")
+        contratoA = mixer.blend("usuarios.Contrato", tipo_contrato=tiempoCompleto)
+        contratoB = mixer.blend("usuarios.Contrato", tipo_contrato=tiempoParcial)
+        mixer.blend("usuarios.TipoContrato", tipo="Contrato de Obra o Labor")
+        mixer.blend("usuarios.TipoContrato", tipo="Contrato de Aprendizaje")
+        mixer.blend("usuarios.TipoContrato", tipo="Contrato de Pretación de Servicios")
+        mixer.blend("usuarios.TipoContrato", tipo="Contrato de Práctica Laboral")
+
+        self.initial_db["docente_1"] = mixer.blend(Docente, cedula="12345", nombre="juan",contrato_codigo=contratoA)
+        self.initial_db["docente_2"] = mixer.blend(Docente, cedula="11111", nombre="ana",contrato_codigo=contratoB)
+
+    def setup_materias2(self):
+        self.setup_docentes()
+        self.initial_db["materia_1"] = mixer.blend(Materia, creditos=1)
+        self.initial_db["materia_2"] = mixer.blend(Materia, creditos=2)
+        self.initial_db["materia_3"] = mixer.blend(Materia, creditos=2)
+        self.initial_db["materia_4"] = mixer.blend(Materia, creditos=1)
+
+        self.initial_db["periodo_1"] = mixer.blend(Periodo, semestre="20211")
+        self.initial_db["periodo_2"] = mixer.blend(Periodo, semestre="20212")
+        self.setup_clases()
+    def setup_clases2(self):
+            self.initial_db["curso_1"] = mixer.blend(Curso, materia=self.initial_db["materia_1"], periodo=self.initial_db["periodo_1"])
+
+            self.initial_db["grupo_clase_1"] = mixer.blend(GrupoDeClase)
+            self.initial_db["grupo_clase_2"] = mixer.blend(GrupoDeClase)
+
+            self.initial_db["espacio_clase_1"] = mixer.blend(EspacioClase)
+            self.initial_db["espacio_clase_2"] = mixer.blend(EspacioClase)
+
+            self.initial_db["clase_1"] = mixer.blend(Clase, id="101", grupo_clases=self.initial_db["grupo_clase_1"], espacio_asignado=self.initial_db["espacio_clase_1"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"])
+            self.initial_db["clase_2"] = mixer.blend(Clase, id="102",grupo_clases=self.initial_db["grupo_clase_2"], espacio_asignado=self.initial_db["espacio_clase_2"], curso=self.initial_db["curso_1"], docente=self.initial_db["docente_1"])
+    def setup_viaticos(self):
+        self.setup_docentes()
+        self.initial_db["materia_1"] = mixer.blend(Materia, creditos=1)
+        self.initial_db["periodo_1"] = mixer.blend(Periodo, semestre="20211")
+        self.setup_clases2()
+        self.initial_db["viatico_1"] = mixer.blend(SolicitudViatico, clase=self.initial_db["clase_1"],tiquete=True,hospedaje=True, alimentacion=True)
+        self.initial_db["viatico_2"] = mixer.blend(SolicitudViatico, clase=self.initial_db["clase_2"],tiquete=False,hospedaje=False, alimentacion=True)
+
+    def setup_materias3(self):
+        self.initial_db["departamento_1"] = mixer.blend(Departamento)
+        self.initial_db["departamento_2"] = mixer.blend(Departamento)
+        self.initial_db["departamento_3"] = mixer.blend(Departamento)
+        self.initial_db["departamento_4"] = mixer.blend(Departamento)
+        
+        self.initial_db["materia_1"] = mixer.blend(Materia, creditos=1)
+        self.initial_db["materia_2"] = mixer.blend(Materia, creditos=2)
+        self.initial_db["materia_3"] = mixer.blend(Materia, creditos=2)
+        self.initial_db["materia_4"] = mixer.blend(Materia, creditos=1)
+
+        self.initial_db["periodo_1"] = mixer.blend(Periodo, semestre="2021-1")
+        self.initial_db["periodo_2"] = mixer.blend(Periodo, semestre="2021-2")
+
+        self.initial_db["programa_3"] = mixer.blend(Programa)
+
+        mixer.blend(MallaCurricular, programa=self.initial_db["programa_1"], materia=self.initial_db["materia_1"], periodo=self.initial_db["periodo_1"], semestre=1)
+        mixer.blend(MallaCurricular, programa=self.initial_db["programa_1"], materia=self.initial_db["materia_2"], periodo=self.initial_db["periodo_1"], semestre=1)
+        mixer.blend(MallaCurricular, programa=self.initial_db["programa_1"], materia=self.initial_db["materia_3"], periodo=self.initial_db["periodo_1"], semestre=2)
+
+        mixer.blend(MallaCurricular, programa=self.initial_db["programa_1"], materia=self.initial_db["materia_1"], periodo=self.initial_db["periodo_2"], semestre=1)
+        mixer.blend(MallaCurricular, programa=self.initial_db["programa_1"], materia=self.initial_db["materia_2"], periodo=self.initial_db["periodo_2"], semestre=2)
+
+        mixer.blend(MallaCurricular, programa=self.initial_db["programa_2"], materia=self.initial_db["materia_1"], periodo=self.initial_db["periodo_1"], semestre=1)
+        mixer.blend(MallaCurricular, programa=self.initial_db["programa_2"], materia=self.initial_db["materia_2"], periodo=self.initial_db["periodo_1"], semestre=1)

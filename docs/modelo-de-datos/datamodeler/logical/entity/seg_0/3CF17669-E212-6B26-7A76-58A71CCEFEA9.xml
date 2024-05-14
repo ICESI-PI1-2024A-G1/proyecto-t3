@@ -1,5 +1,5 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="3CF17669-E212-6B26-7A76-58A71CCEFEA9" name="CONTABLE">
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="3CF17669-E212-6B26-7A76-58A71CCEFEA9" name="VIATICO">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 03:14:33 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
@@ -28,7 +28,7 @@
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="presupuesto" id="351E225E-D0F0-9614-BB10-224EE79E924B">
+<Attribute name="tiquete" id="351E225E-D0F0-9614-BB10-224EE79E924B">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 03:15:02 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
@@ -37,20 +37,22 @@
 </engineerTo>
 <useDomainConstraints>false</useDomainConstraints>
 <use>1</use>
-<logicalDatatype>LOGDT020</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="cuenta_cobro" id="CCAC6508-AB2A-9383-88E5-9F8780E6580D">
+<Attribute name="hospedaje" id="CCAC6508-AB2A-9383-88E5-9F8780E6580D">
 <createdBy>andre</createdBy>
 <createdTime>2024-03-02 04:09:00 UTC</createdTime>
 <ownerDesignName>datamodeler</ownerDesignName>
 <engineerTo>
 <item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
 </engineerTo>
-<use>0</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<domain>96A2A1AE-FCD3-4A40-1007-9A2DB51DE481</domain>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
 </Attribute>
 <Attribute name="id1" id="44257404-BB2D-272C-62F2-AB5248267050">
 <createdBy>andre</createdBy>
@@ -66,6 +68,19 @@
 <use>1</use>
 <logicalDatatype>LOGDT011</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="alimentacion" id="D889276E-8AC5-53DB-63A2-9D800E0FB348">
+<createdBy>andre</createdBy>
+<createdTime>2024-05-08 03:54:41 UTC</createdTime>
+<ownerDesignName>datamodeler</ownerDesignName>
+<engineerTo>
+<item key="5E140F3A-256E-8842-CBAA-60FE3FDB10E3" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
 </Attribute>
 </attributes>
 <identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
