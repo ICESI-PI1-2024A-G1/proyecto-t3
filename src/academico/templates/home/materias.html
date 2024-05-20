@@ -9,8 +9,8 @@
     <!-- Formulario para búsqueda -->
     <form id="search-form" method="GET" action="{% url 'materias' %}" class="form-inline">
         <div class="form-group flex-grow-1 position-relative">
-            <label for="q" class="sr-only">Buscar por nombre de programa o director</label>
-            <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por nombre de programa o director" />
+            <label for="q" class="sr-only">Buscar por nombre de materia o departamento</label>
+            <input type="text" name="q" id="q" class="form-control w-100 pl-4" placeholder="Buscar por nombre de materia o departamento" />
             <img src="{% static 'img/search.png' %}" alt="Buscar"
                 style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 20px; height: 20px; cursor: pointer;"
                 onclick="document.getElementById('search-form').submit();">
@@ -20,9 +20,10 @@
     <!-- Formulario para filtrado por programa -->
     <form method="GET" action="{% url 'materias' %}" class="form-inline mb-3">
         <div class="form-group flex-grow-1 mr-2">
-            <select name="programa" id="filtrar_por_programa" class="form-control w-100">
+            <select name="programa" id="filtrar_por_programa" class="form-control" style="width: 100%;">
                 <option value="">Todos los programas</option>
                 {% for programa in programas %}
+                <!---Tomar máximo los 10 primeros caracteres de programa.nombre-->
                 <option value="{{ programa.codigo }}" id="{{programa.nombre}} select">{{ programa.nombre }}</option>
                 {% endfor %}
             </select>

@@ -56,20 +56,19 @@
                       </div>
                       {% endif %}
                       {% for docente in docentes_con_clases %}
-                      <div class="col-md-6 docente-item"
-                          style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
-                          <div class="card btn-secondary linkeable" onclick="window.location.href ='/docentes/{{docente.cedula}}/{{curso.periodo.semestre}}'">
-                              <div class="card-body">
-                                  <div class="docente-info row">
-                                      <img src="{{ docente.foto }}" alt="{{ docente.nombre }}"
-                                          class="img-fluid docente-img rounded" style="max-width: 100px; height: auto;">
-                                          <div class="col">
-                                            <h5 style="margin-left: 10px;">{{ docente.nombre }}</h5>
-                                            <label class="linkeable" style="margin-left: 10px;">Número de clases: {{ docente.num_clases}}</label>
-                                          </div>
-                                  </div>
-                              </div>
-                          </div>
+                      <div class="pr-1 pl-1">
+                            <div class="card btn-secondary linkeable" onclick="window.location.href ='/docentes/{{docente.cedula}}/{{curso.periodo.semestre}}'" style="justify-content: center;">
+                                <div class="card-body">
+                                    <div class="docente-info row">
+                                        <img src="{{ docente.foto }}" alt="{{ docente.nombre }}"
+                                            class="img-fluid docente-img rounded" style="max-width: 100px; height: auto;">
+                                            <div class="col">
+                                              <h5 style="margin-left: 10px;">{{ docente.nombre }}</h5>
+                                              <label class="linkeable" style="margin-left: 10px;">Número de clases: {{ docente.num_clases}}</label>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
                       </div>
                       {% endfor %}
                   </div>
@@ -112,7 +111,7 @@
                               </div>
                               {% if user.is_gestor %}
                               
-                              <div class="row align-items-center" style="justify-content: space-between; width: 20%;" >
+                              <div class="row align-items-center options-group" style="justify-content: space-between; width: 20%;" >
                                 
                                 <h5 class="m-1 p-2">Entregó notas?
                                 <input type="checkbox"{% if grupo.0.grupo_clases.entrega_notas %}checked{% endif %} onchange="changeNota('{{curso.nrc}}','{{grupo.0.grupo_clases.id}}')">
@@ -132,12 +131,36 @@
                                 </div>
                                 {% endif %}
                               </div>
+                              <div class="dropdown dropdown-menu-width">
+                                  <button class="btn-secondary dropdown-toggle icon btn mr-3" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="{% static 'img/tuerca.png' %}" class="icon">
+                                  </button>
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                      <h5 class="m-1 p-2">Entregó notas?
+                                      <input type="checkbox"{% if grupo.0.grupo_clases.entrega_notas %}checked{% endif %} onchange="changeNota('{{curso.nrc}}','{{grupo.0.grupo_clases.id}}')">
+                                      </h5>
+                                      {% if user.is_lider %}
+                                      <a class="rounded btn-secondary p-2 linkeable ml-1" onclick="agregar_en(1,'{{grupo.0.grupo_clases.id}}')">
+                                        <img id="{{grupo.0.grupo_clases.id}}" src="{% static 'img/add.webp' %}" class="icon btn">
+                                      </a>
+                                      <a id="{{grupo.0.id}}" class="rounded btn-secondary p-2 linkeable" onclick="show_pop('{{grupo.0.id}}','{{grupo.0.fecha_inicio}}', '{{grupo.0.fecha_fin}}','{{grupo.0.espacio_asignado.id}}','{{grupo.0.espacio.id}}','{{grupo.0.modalidad.id}}' ,'{{grupo.0.docente.cedula}}',true)">
+                                        <img id="{{grupo.0.id}}" src="{% static 'img/pencil.png' %}" class="icon btn">
+                                      </a>
+                                      <a id="{{grupo.0.grupo_clases.id}}" class="rounded btn-secondary p-2 linkeable"onclick="confirmarEliminarGrupo(event, '{{grupo.0.grupo_clases.id}}')">
+                                        <img src="{% static 'img/Eliminar.png' %}" class="icon btn">
+                                      </a>
+                                      <div class="form-check p-2 mr-1">
+                                        <input id="check-grupo{{grupo.0.grupo_clases.id}}" class="form-check-input clase-checkbox" type="checkbox" name="clases" value="{{clase.id}}"  style="transform: scale(1.5);" onchange="cambiarEstadoGrupo('{{grupo.0.grupo_clases.id}}')">
+                                      </div>
+                                      {% endif %}
+                                  </div>
+                              </div>
                               {% endif %}
                             </div>
                           </div>
                           <div id="class_group{{grupo.0.grupo_clases.id}}" class="clases-container" style="display: none; flex-wrap: wrap; align-items: center; justify-content: space-between; min-width: 100%;">
                             {% for clase in grupo %}
-                            <div class="col-md-6 clase-item" style="flex-basis: calc(50% - 20px); margin-bottom: 20px;">
+                            <div class="pr-1 pl-1">
                               {%if clase.docente == None %}
                               <div class="card" style="background-color: #ffe6e6c5;">
                               {% else %}
@@ -523,7 +546,31 @@
     });
   }
 </script>
+<style>
+    .pr-1.pl-1 {
+        width: 50%;
+    }
 
+    @media (max-width: 400px) {
+        .pr-1.pl-1 {
+            width: 100%;
+        }
+    }
+    @media (min-width: 1001px) {
+        .options-group {
+            display: flex;
+          }
+          .dropdown-menu-width{
+            display: none;
+          }
+        }
+
+    @media (max-width: 1000px) {
+        .options-group {
+            display: none;
+        }
+    }
+</style>
 
 
 {% endblock %}

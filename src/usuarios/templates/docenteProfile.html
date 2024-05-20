@@ -72,7 +72,7 @@
           Periodo selecionado:
           <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
                 {% for periodo in periodos %} 
-                {% if periodo_seleccionado == periodo.semestre %}
+                {% if periodo_seleccionado.semestre == periodo.semestre %}
             <option value="{{docente.cedula}}/{{ periodo.semestre }}" selected="true">{{ periodo.semestre }}</option>
             {% else %}
             <option value="{{docente.cedula}}/{{ periodo.semestre }}">{{ periodo.semestre }}</option>

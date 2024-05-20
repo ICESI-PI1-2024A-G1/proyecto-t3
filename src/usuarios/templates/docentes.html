@@ -59,6 +59,7 @@
   </div>
 
   <!-- Tabla de docentes -->
+<div class="d-none d-md-block">
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -83,6 +84,34 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
+
+<div class="table-responsive d-md-none">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Cedula</th>
+        <th>Nombre del docente</th>
+        <th>Email</th>
+        <th>Id de contrato </th>
+        <th>Tipo de contrato</th>
+        <th>Estado del docente</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for docente in docentes %}
+      <tr class="linkeable" onclick="window.location.href='docentes/{{docente.cedula}}/202401'">
+        <td>{{ docente.cedula }}</td>
+        <td>{{ docente.nombre }}</td>
+        <td>{{ docente.email }}</td>
+        <td>{{ docente.contrato_codigo.codigo }}</td>
+        <td>{{ docente.contrato_codigo.tipo_contrato.tipo }}</td>
+        <td>{{ docente.estado.estado }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
   <!-- Paginación -->
   <div class="pagination">
