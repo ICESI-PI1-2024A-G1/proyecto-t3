@@ -24,32 +24,34 @@
             </a>
           </div>
         </div>
-        <ul class="rui-icon-menu ml-auto">
-          <li>
-            <a id="logout-btn" class="btn btn-danger" href="/logout"> Cerrar sesion </a>
-            <a
-              class="popover-region-toggle rui-topbar-special-btn rui-tooltip--bottom ml-1 mr-1"
-              data-title="Notificaciones"
-            >
-              <img src="{% static 'img/notifications_white.png' %}" />
-            </a>
-            <a
-              class="popover-region-toggle rui-topbar-special-btn rui-tooltip--bottom mr-1"
-              data-title="Mensajes"
-            >
-              <img src="{% static 'img/messages_white.png' %}" />
-            </a>
-          </li>
-          <li class="m-0">
-            <span class="userbutton"
-              ><span class="avatars"
-                ><span class="avatar current"
-                  ><span class="userinitials size-56">AP</span></span
+        <div class="inline ml-auto">
+          <a id="logout-btn" class="btn btn-danger ml-auto" href="/logout"> Cerrar sesion </a>
+          <ul class="rui-icon-menu ml-auto">
+            <li>
+              <a
+                class="popover-region-toggle rui-topbar-special-btn rui-tooltip--bottom ml-1 mr-1"
+                data-title="Notificaciones"
+              >
+                <img src="{% static 'img/notifications_white.png' %}" />
+              </a>
+              <a
+                class="popover-region-toggle rui-topbar-special-btn rui-tooltip--bottom mr-1"
+                data-title="Mensajes"
+              >
+                <img src="{% static 'img/messages_white.png' %}" />
+              </a>
+            </li>
+            <li class="m-0">
+              <span class="userbutton"
+                ><span class="avatars"
+                  ><span class="avatar current"
+                    ><span class="userinitials size-56">AP</span></span
+                  ></span
                 ></span
-              ></span
-            >
-          </li>
-        </ul>
+              >
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="row mb-0">
