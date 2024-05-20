@@ -32,52 +32,102 @@
         </div>
     {% endif %}
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Rol principal</th>
-                <th>Último inicio de sesión</th>
-                <th>Activo</th>
-                <th>Ajustes</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for usuario in usuarios %}
-            <tr>
-                <td>{{ usuario.persona.nombre }}</td>
-                <td>{{ usuario.email }}</td>
-                <td>{{ usuario.rol_principal }}</td>
-                <td>{{ usuario.last_login }}</td>
-                <td>
-                    <input type="checkbox" {% if usuario.is_active %} checked {% endif %} onchange="changeStateTo('{{usuario.username}}')"/>
-                </td>
-                <td>
-                    <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="{% static 'img/tuerca.png' %}" class="icon">
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Gestor')">
-                          {% if usuario.is_gestor and not usuario.is_lider %}
-                            <img src="{% static 'img/check.png' %}" class="icon">
-                          {%endif%}
-                          Gestor
-                        </a>
-                        <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Lider')">
-                            {% if usuario.is_lider %}
-                            <img src="{% static 'img/check.png' %}" class="icon">
-                            {%endif%}
-                            Líder
-                        </a>
-                      </div>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="d-none d-md-block">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol principal</th>
+                    <th>Último inicio de sesión</th>
+                    <th>Activo</th>
+                    <th>Ajustes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.persona.nombre }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.rol_principal }}</td>
+                    <td>{{ usuario.last_login }}</td>
+                    <td>
+                        <input type="checkbox" {% if usuario.is_active %} checked {% endif %} onchange="changeStateTo('{{usuario.username}}')"/>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{% static 'img/tuerca.png' %}" class="icon">
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Gestor')">
+                              {% if usuario.is_gestor and not usuario.is_lider %}
+                                <img src="{% static 'img/check.png' %}" class="icon">
+                              {%endif%}
+                              Gestor
+                            </a>
+                            <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Lider')">
+                                {% if usuario.is_lider %}
+                                <img src="{% static 'img/check.png' %}" class="icon">
+                                {%endif%}
+                                Líder
+                            </a>
+                          </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="table-responsive d-md-none">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol principal</th>
+                    <th>Último inicio de sesión</th>
+                    <th>Activo</th>
+                    <th>Ajustes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.persona.nombre }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.rol_principal }}</td>
+                    <td>{{ usuario.last_login }}</td>
+                    <td>
+                        <input type="checkbox" {% if usuario.is_active %} checked {% endif %} onchange="changeStateTo('{{usuario.username}}')"/>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{% static 'img/tuerca.png' %}" class="icon">
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Gestor')">
+                              {% if usuario.is_gestor and not usuario.is_lider %}
+                                <img src="{% static 'img/check.png' %}" class="icon">
+                              {%endif%}
+                              Gestor
+                            </a>
+                            <a class="dropdown-item" href="#" onclick="changeRolTo('{{usuario.username}}','Lider')">
+                                {% if usuario.is_lider %}
+                                <img src="{% static 'img/check.png' %}" class="icon">
+                                {%endif%}
+                                Líder
+                            </a>
+                          </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <div class = "d-flex justify-content-end">
         <a class="btn btn-primary mt-2"  onclick="show()">Nuevo usuario<img class="icon" src="{% static 'img/add.webp' %}"></a>
         {% include 'crear-usuario.html' with size="lg" popup_title="Registro de usuario" %}

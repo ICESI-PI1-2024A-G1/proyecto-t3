@@ -32,6 +32,9 @@ def materias(request):
     if request.user.is_director:
         materias = materias.filter(programas__director__cedula=request.user.usuario.persona.cedula)
         programas = programas.filter(director__cedula=request.user.usuario.persona.cedula)
+    for programa in programas:
+        ## si miden más de 10 caracteres, redondear y terminar con ...
+        programa.nombre = programa.nombre[:25] + (programa.nombre[25:] and '...')
         
 
     # Búsqueda y filtrado

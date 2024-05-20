@@ -19,7 +19,7 @@
     <div class="row align-items-center">
       <div class="col card block inner-shadow p-3 mr-2">
         <div class="row align-items-center">
-          <img class="rounded" src="{% static 'img/d_AndresFelipeGalloSarria.jpg' %}" style="width: 20%; height: 20%;">
+          <img class="rounded" src="{% static 'img/d_AndresFelipeGalloSarria.jpg' %}" style="width: 20%;">
           <div class="ml-3">
             <label class="row" style="text-align: start;"><strong>Director: </strong> &nbsp; {{ programa.director.nombre }}</label>
             <label class="row" style="text-align: start;"><strong>Email: </strong> &nbsp; {{ programa.director.email }}</label>
@@ -83,11 +83,10 @@
                   </div>
                   {% endif %}
                   {% for docente in docentes_con_clases %}
-                  <div class="col-md-6 docente-item"
-                      style="flex-basis: calc(50% - 20px); margin-right: 20px; margin-bottom: 20px;">
+                  <div class="pr-1 pl-1">
                       <div class="card btn-secondary linkeable" onclick="window.location.href ='/docentes/{{docente.cedula}}/{{periodo_seleccionado}}'">
                           <div class="card-body">
-                              <div class="docente-info row">
+                              <div class="docente-info row" style="justify-content: center;">
                                   <img src="{{ docente.foto }}" alt="{{ docente.nombre }}"
                                       class="img-fluid docente-img rounded" style="max-width: 100px; height: auto;">
                                       <div class="col">
@@ -124,7 +123,7 @@
         {% if user.is_lider%}
           <button class="btn btn-primary mr-2" onclick="show(1)">Importar malla</button>
         {% endif %}
-        Periodo selecionado:
+        Periodo seleccionado:
         <select class="custom-select mr-2" id="periodo" onchange="cambiar_periodo()">
               {% for periodo in periodos %} 
               {% if periodo_seleccionado == periodo.semestre %}
@@ -170,5 +169,15 @@
   {% endif %}  
   </div>
 </div>
-
+<style>
+      .pr-1.pl-1 {
+          width: 50%;
+      }
+  
+      @media (max-width: 400px) {
+          .pr-1.pl-1 {
+              width: 100%;
+          }
+      }
+  </style>
 {% endblock %}
